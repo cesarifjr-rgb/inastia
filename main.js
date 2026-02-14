@@ -4,6 +4,15 @@
    dark mode, cinematic text, i18n, etc.
    ============================================ */
 
+// Async Google Fonts — loaded here (not render-blocking <link>)
+// Fallback fonts with size-adjust in style.css prevent CLS
+(function () {
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap';
+    document.head.appendChild(l);
+})();
+
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { setLanguage, toggleLanguage, currentLang } from './i18n.js';
