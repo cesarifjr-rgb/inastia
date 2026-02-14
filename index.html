@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- SEO -->
+  <title>Inastia — Conciergerie de Locations Saisonnières Premium en Corse</title>
+  <meta name="description"
+    content="Inastia, votre conciergerie haut de gamme pour locations saisonnières en Corse-du-Sud. Gestion complète de votre bien, accueil des voyageurs, ménage de qualité et optimisation des revenus locatifs." />
+  <meta name="keywords"
+    content="conciergerie corse, conciergerie airbnb corse, location saisonnière corse, gestion locative porto-vecchio, conciergerie premium ghisonaccia, gestion airbnb corse-du-sud" />
+
+  <!-- Canonical & Alternate Languages -->
+  <link rel="canonical" href="https://inastia.fr/" />
+  <link rel="alternate" hreflang="fr" href="https://inastia.fr/" />
+  <link rel="alternate" hreflang="en" href="https://inastia.fr/" />
+  <link rel="alternate" hreflang="x-default" href="https://inastia.fr/" />
+
+  <!-- Geo Meta (SEO Local) -->
+  <meta name="geo.region" content="FR-2A" />
+  <meta name="geo.placename" content="Ventiseri, Corse" />
+  <meta name="geo.position" content="41.92;9.38" />
+  <meta name="ICBM" content="41.92, 9.38" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Inastia — Conciergerie Premium en Corse" />
+  <meta property="og:description"
+    content="Gestion complète et haut de gamme de votre location saisonnière en Corse. Maximisez vos revenus en toute sérénité." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://inastia.fr/" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:locale:alternate" content="en_GB" />
+  <meta property="og:site_name" content="Inastia" />
+  <meta property="og:image" content="https://inastia.fr/villa_amichi.webp" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
+
+  <!-- Preconnect & Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="preconnect" href="https://videos.pexels.com" />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Inastia",
+    "description": "Conciergerie haut de gamme pour locations saisonnières en Corse-du-Sud. Gestion complète, accueil des voyageurs, ménage de qualité et optimisation des revenus.",
+    "url": "https://inastia.fr",
+    "telephone": "+33613812550",
+    "email": "inastia.sas@gmail.com",
+    "image": "https://inastia.fr/villa_amichi.webp",
+    "priceRange": "€€€",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Lieu-dit Fiumorbo",
+      "addressLocality": "Ventiseri",
+      "postalCode": "20240",
+      "addressRegion": "Corse",
+      "addressCountry": "FR"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 41.92,
+      "longitude": 9.38
+    },
+    "areaServed": {
+      "@type": "GeoCircle",
+      "geoMidpoint": {
+        "@type": "GeoCoordinates",
+        "latitude": 41.92,
+        "longitude": 9.38
+      },
+      "geoRadius": "80000"
+    },
+    "serviceType": ["Conciergerie", "Gestion locative", "Airbnb Management", "Location saisonnière", "Property Management"],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "30",
+      "bestRating": "5"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <!-- Grain Texture Overlay -->
+  <div class="grain-overlay"></div>
+
+
+
+  <!-- Custom Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Dark Mode Toggle -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Basculer en mode sombre">
+    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+
+  <!-- ========== NAVIGATION ========== -->
+  <div class="nav-overlay" id="navOverlay"></div>
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="nav-logo">INASTIA</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#services" data-i18n="nav.services">Services</a>
+        <a href="#processus" data-i18n="nav.process">Processus</a>
+        <a href="#resultats" data-i18n="nav.results">Résultats</a>
+        <a href="#portfolio" data-i18n="nav.portfolio">Portfolio</a>
+        <a href="#temoignages" data-i18n="nav.testimonials">Témoignages</a>
+        <a href="#contact" class="nav-cta" data-i18n="nav.cta">Nous Contacter</a>
+      </div>
+      <button class="lang-toggle" id="langToggle" aria-label="Switch to English" title="English version">
+        <svg class="flag-icon flag-gb" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="22" height="11">
+          <clipPath id="s">
+            <path d="M0 0v30h60V0z" />
+          </clipPath>
+          <clipPath id="t">
+            <path d="M30 15h30v15zv15H0zH0V0zV0h30z" />
+          </clipPath>
+          <g clip-path="url(#s)">
+            <path d="M0 0v30h60V0z" fill="#012169" />
+            <path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6" />
+            <path d="M0 0l60 30m0-30L0 30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4" />
+            <path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10" />
+            <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6" />
+          </g>
+        </svg>
+        <svg class="flag-icon flag-fr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="22" height="15"
+          style="display:none">
+          <rect width="3" height="2" fill="#ED2939" />
+          <rect width="2" height="2" fill="#fff" />
+          <rect width="1" height="2" fill="#002395" />
+        </svg>
+      </button>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO (Video Background) ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <video autoplay muted loop playsinline
+        poster="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1920&q=80">
+        <source src="https://videos.pexels.com/video-files/4063586/4063586-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-label" data-i18n="hero.label">Conciergerie de locations saisonnières</p>
+      <h1 class="hero-title" id="heroTitle">
+        <span class="hero-line">L'excellence <span style="white-space:nowrap">au service</span></span>
+        <span class="hero-line">de votre <em>résidence</em></span>
+      </h1>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        Confiez-nous la gestion complète de votre bien.
+        Nous maximisons vos revenus tout en offrant une expérience inoubliable à vos voyageurs.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary interactive" data-i18n="hero.cta1">Estimer mes revenus</a>
+        <a href="#services" class="btn btn-outline interactive" data-i18n="hero.cta2">Découvrir nos services</a>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <span data-i18n="hero.scroll">Découvrir</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+
+
+  <!-- ========== SERVICES ========== -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services-header reveal">
+        <p class="section-label" data-i18n="services.label">Nos Services</p>
+        <h2 class="section-title" data-i18n="services.title">Une prise en charge<br />sur mesure</h2>
+        <p class="section-subtitle" data-i18n="services.subtitle">
+          De l'optimisation de votre annonce à l'accueil de vos voyageurs,
+          nous gérons chaque détail avec exigence.
+        </p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal reveal-delay-1 interactive">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <h3 data-i18n="services.card1.title">Gestion Complète</h3>
+          <p data-i18n="services.card1.text">Création d'annonce, photographie professionnelle, tarification dynamique et
+            gestion des réservations 24/7.
+          </p>
+        </div>
+        <div class="service-card reveal reveal-delay-2 interactive">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <h3 data-i18n="services.card2.title">Accueil des voyageurs</h3>
+          <p data-i18n="services.card2.text">Check-in personnalisé, guide de bienvenue, recommandations locales et
+            assistance durant tout le séjour.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-3 interactive">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3 data-i18n="services.card3.title">Optimisation des revenus</h3>
+          <p data-i18n="services.card3.text">Yield management intelligent, pricing dynamique et multi-diffusion sur
+            toutes les plateformes pour un taux
+            d'occupation maximal.</p>
+        </div>
+        <div class="service-card reveal reveal-delay-4 interactive">
+          <div class="service-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <h3 data-i18n="services.card4.title">Ménage de qualité</h3>
+          <p data-i18n="services.card4.text">Nettoyage hôtelier après chaque séjour, contrôle qualité rigoureux, linge
+            premium et maintenance proactive.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROCESS TIMELINE ========== -->
+  <section class="process" id="processus">
+    <div class="container">
+      <div class="process-header reveal">
+        <p class="section-label" data-i18n="process.label">Comment ça marche</p>
+        <h2 class="section-title" data-i18n="process.title">Un processus<br />simple et efficace</h2>
+        <p class="section-subtitle" data-i18n="process.subtitle">
+          De votre première prise de contact à votre première réservation, nous vous accompagnons à chaque étape.
+        </p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-progress" id="timelineProgress"></div>
+        <div class="timeline-item reveal" data-step="1">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content interactive">
+            <span class="timeline-step">01</span>
+            <h3 data-i18n="process.step1.title">Estimation Gratuite</h3>
+            <p data-i18n="process.step1.text">Nous analysons le potentiel de votre bien et vous présentons une
+              estimation précise de vos revenus
+              locatifs.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-delay-1" data-step="2">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content interactive">
+            <span class="timeline-step">02</span>
+            <h3 data-i18n="process.step2.title">Signature et Onboarding</h3>
+            <p data-i18n="process.step2.text">Contrat sans engagement, visite de votre bien, shooting photo
+              professionnel et création de vos annonces
+              optimisées.</p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-delay-2" data-step="3">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content interactive">
+            <span class="timeline-step">03</span>
+            <h3 data-i18n="process.step3.title">Mise en Ligne</h3>
+            <p data-i18n="process.step3.text">Publication simultanée sur toutes les plateformes avec tarification
+              dynamique et positionnement optimal.
+            </p>
+          </div>
+        </div>
+        <div class="timeline-item reveal reveal-delay-3" data-step="4">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content interactive">
+            <span class="timeline-step">04</span>
+            <h3 data-i18n="process.step4.title">Première Réservation</h3>
+            <p data-i18n="process.step4.text">Nous gérons l'accueil, le ménage, la communication voyageur. Vous recevez
+              vos revenus. Tout simplement.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BEFORE / AFTER SLIDER ========== -->
+  <section class="comparison" id="comparaison">
+    <div class="container">
+      <div class="comparison-header reveal">
+        <p class="section-label" data-i18n="comparison.label">L'effet Inastia</p>
+        <h2 class="section-title" data-i18n="comparison.title">Avant et après<br />notre intervention</h2>
+      </div>
+      <div class="comparison-slider reveal">
+        <div class="comparison-side comparison-before">
+          <div class="comparison-badge" data-i18n="comparison.before.badge">Sans Inastia</div>
+          <div class="comparison-metrics">
+            <div class="comparison-metric">
+              <span class="comparison-value">51%</span>
+              <span class="comparison-label" data-i18n="comparison.occupancy">Taux d'occupation</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value">1 680€</span>
+              <span class="comparison-label" data-i18n="comparison.revenue">Revenu mensuel moyen</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value">4.3</span>
+              <span class="comparison-label" data-i18n="comparison.rating">Note moyenne</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value" data-i18n="comparison.stress.value.before">Oui</span>
+              <span class="comparison-label" data-i18n="comparison.stress.label.before">Gestion stressante</span>
+            </div>
+          </div>
+        </div>
+        <div class="comparison-divider">
+          <div class="comparison-divider-line"></div>
+          <div class="comparison-divider-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="7 8 3 12 7 16"></polyline>
+              <polyline points="17 8 21 12 17 16"></polyline>
+            </svg>
+          </div>
+        </div>
+        <div class="comparison-side comparison-after">
+          <div class="comparison-badge comparison-badge-gold" data-i18n="comparison.after.badge">Avec Inastia</div>
+          <div class="comparison-metrics">
+            <div class="comparison-metric">
+              <span class="comparison-value highlight">73%</span>
+              <span class="comparison-label" data-i18n="comparison.occupancy">Taux d'occupation</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value highlight">2 100€</span>
+              <span class="comparison-label" data-i18n="comparison.revenue">Revenu mensuel moyen</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value highlight">4.94</span>
+              <span class="comparison-label" data-i18n="comparison.rating">Note moyenne</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-value highlight" data-i18n="comparison.stress.value.after">Zéro</span>
+              <span class="comparison-label" data-i18n="comparison.stress.label.after">Stress</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="comparison-disclaimer" data-i18n="comparison.disclaimer">* Moyennes constatées en Corse. Les résultats
+        varient selon le type de bien, l'emplacement, la saisonnalité, l'état du logement et les conditions du marché.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== STATISTICS ========== -->
+  <section class="stats" id="resultats">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stats-text reveal">
+          <p class="section-label" data-i18n="stats.label">Nos Résultats</p>
+          <h2 class="section-title" data-i18n="stats.title">La performance<br />au rendez-vous</h2>
+          <p class="section-subtitle" data-i18n="stats.subtitle">
+            Nos propriétaires nous font confiance parce que nous obtenons des résultats concrets et mesurables, saison
+            après saison.
+          </p>
+          <a href="#contact" class="btn btn-primary interactive" data-i18n="stats.cta">Rejoindre nos propriétaires</a>
+        </div>
+        <div class="stats-grid reveal reveal-delay-2">
+          <div class="stat-item">
+            <div class="stat-number" data-target="12">0</div>
+            <div class="stat-label" data-i18n="stats.stat1">Propriétés gérées</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="73" data-suffix="%">0</div>
+            <div class="stat-label" data-i18n="stats.stat2">Taux d'occupation</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="4.94" data-decimal="true">0</div>
+            <div class="stat-label" data-i18n="stats.stat3">Note moyenne</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="25" data-prefix="+" data-suffix="%">0</div>
+            <div class="stat-label" data-i18n="stats.stat4">Revenus vs autogestion</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LOGO TICKER ========== -->
+  <section class="logo-ticker">
+    <div class="ticker-label" data-i18n="ticker.label">Diffusion multi-plateformes</div>
+    <div class="ticker-track">
+      <div class="ticker-slide">
+        <!-- 1. Airbnb -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Airbnb">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.001 18.275c-1.353-1.697-2.148-3.184-2.413-4.457-.263-1.027-.16-1.848.291-2.465.477-.71 1.188-1.056 2.121-1.056s1.643.345 2.12 1.063c.446.61.558 1.432.286 2.465-.291 1.298-1.085 2.785-2.412 4.458zm9.601 1.14c-.185 1.246-1.034 2.28-2.2 2.783-2.253.98-4.483-.583-6.392-2.704 3.157-3.951 3.74-7.028 2.385-9.018-.795-1.14-1.933-1.695-3.394-1.695-2.944 0-4.563 2.49-3.927 5.382.37 1.565 1.352 3.343 2.917 5.332-.98 1.085-1.91 1.856-2.732 2.333-.636.344-1.245.558-1.828.609-2.679.399-4.778-2.2-3.825-4.88.132-.345.395-.98.845-1.961l.025-.053c1.464-3.178 3.242-6.79 5.285-10.795l.053-.132.58-1.116c.45-.822.635-1.19 1.351-1.643.346-.21.77-.315 1.246-.315.954 0 1.698.558 2.016 1.007.158.239.345.557.582.953l.558 1.089.08.159c2.041 4.004 3.821 7.608 5.279 10.794l.026.025.533 1.22.318.764c.243.613.294 1.222.213 1.858zm1.22-2.39c-.186-.583-.505-1.271-.9-2.094v-.03c-1.889-4.006-3.642-7.608-5.307-10.844l-.111-.163C15.317 1.461 14.468 0 12.001 0c-2.44 0-3.476 1.695-4.535 3.898l-.081.16c-1.669 3.236-3.421 6.843-5.303 10.847v.053l-.559 1.22c-.21.504-.317.768-.345.847C-.172 20.74 2.611 24 5.98 24c.027 0 .132 0 .265-.027h.372c1.75-.213 3.554-1.325 5.384-3.317 1.829 1.989 3.635 3.104 5.382 3.317h.372c.133.027.239.027.265.027 3.37.003 6.152-3.261 4.802-6.975z" />
+              </path>
+            </svg>
+          </div>
+        </div>
+        <!-- 2. Booking.com -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Booking.com">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M24 0H0v24h24ZM8.575 6.563h2.658c2.108 0 3.473 1.15 3.473 2.898 0 1.15-.575 1.82-.91 2.108l-.287.263.335.192c.815.479 1.318 1.389 1.318 2.395 0 1.988-1.51 3.257-3.857 3.257H7.449V7.713c0-.623.503-1.126 1.126-1.15zm1.7 1.868c-.479.024-.694.264-.694.79v1.893h1.676c.958 0 1.294-.743 1.294-1.365 0-.815-.503-1.318-1.318-1.318zm-.096 4.36c-.407.071-.598.31-.598.79v2.251h1.868c.934 0 1.509-.55 1.509-1.533 0-.934-.599-1.509-1.51-1.509zm7.737 2.394c.743 0 1.341.599 1.341 1.342a1.34 1.34 0 0 1-1.341 1.341 1.355 1.355 0 0 1-1.341-1.341c0-.743.598-1.342 1.34-1.342z" />
+            </svg>
+          </div>
+        </div>
+        <!-- 3. Abritel (Home Icon + Text) -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Abritel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Abritel</span>
+          </div>
+        </div>
+        <!-- 4. Vrbo (Text) -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Vrbo">
+            <span style="font-weight:800; letter-spacing:-1px;">Vrbo</span>
+          </div>
+        </div>
+        <!-- 5. Expedia -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Expedia">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19.067 0H4.933A4.94 4.94 0 0 0 0 4.933v14.134A4.932 4.932 0 0 0 4.933 24h14.134A4.932 4.932 0 0 0 24 19.067V4.933C24.01 2.213 21.797 0 19.067 0ZM7.336 19.341c0 .19-.148.337-.337.337h-2.33a.333.333 0 0 1-.337-.337v-2.33c0-.189.148-.336.337-.336H7c.19 0 .337.147.337.337zm12.121-1.486-2.308 2.298c-.169.168-.422.053-.422-.2V9.57l-6.44 6.44a.533.533 0 0 1-.421.17H8.169a.32.32 0 0 1-.338-.338v-1.697c0-.2.053-.316.169-.422l6.44-6.44H4.058c-.253 0-.369-.253-.2-.421l2.297-2.309c.137-.137.285-.232.517-.232H18.15c.854 0 1.539.686 1.539 1.54v11.478c-.01.231-.095.368-.232.516z" />
+            </svg>
+          </div>
+        </div>
+        <!-- 6. TripAdvisor -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="TripAdvisor">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.353H0l1.963 2.135a5.997 5.997 0 0 0 4.04 10.43 5.976 5.976 0 0 0 4.075-1.6L12 19.705l1.922-2.09a5.972 5.972 0 0 0 4.072 1.598 6 6 0 0 0 6-5.998 5.982 5.982 0 0 0-1.957-4.432L24 6.648h-4.35a13.573 13.573 0 0 0-7.644-2.353zM12 6.255c1.531 0 3.063.303 4.504.903C13.943 8.138 12 10.43 12 13.1c0-2.671-1.942-4.962-4.504-5.942A11.72 11.72 0 0 1 12 6.256zM6.002 9.157a4.059 4.059 0 1 1 0 8.118 4.059 4.059 0 0 1 0-8.118zm11.992.002a4.057 4.057 0 1 1 .003 8.115 4.057 4.057 0 0 1-.003-8.115zm-11.992 1.93a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256zm11.992 0a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256z" />
+            </svg>
+          </div>
+        </div>
+        <!-- 7. Le Bon Coin -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Le Bon Coin">
+            <span style="font-weight:700; color:#F56B2A;">leboncoin</span>
+          </div>
+        </div>
+        <!-- 8. Google Travel -->
+        <div class="ticker-item">
+          <div class="ticker-logo" title="Google Travel">
+            <span style="color:#4285F4; font-weight:bold;">G</span><span
+              style="color:#EA4335; font-weight:bold;">o</span><span
+              style="color:#FBBC05; font-weight:bold;">o</span><span
+              style="color:#4285F4; font-weight:bold;">g</span><span
+              style="color:#34A853; font-weight:bold;">l</span><span style="color:#EA4335; font-weight:bold;">e</span>
+          </div>
+        </div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="ticker-slide">
+        <div class="ticker-item">
+          <div class="ticker-logo"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.001 18.275c-1.353-1.697-2.148-3.184-2.413-4.457-.263-1.027-.16-1.848.291-2.465.477-.71 1.188-1.056 2.121-1.056s1.643.345 2.12 1.063c.446.61.558 1.432.286 2.465-.291 1.298-1.085 2.785-2.412 4.458zm9.601 1.14c-.185 1.246-1.034 2.28-2.2 2.783-2.253.98-4.483-.583-6.392-2.704 3.157-3.951 3.74-7.028 2.385-9.018-.795-1.14-1.933-1.695-3.394-1.695-2.944 0-4.563 2.49-3.927 5.382.37 1.565 1.352 3.343 2.917 5.332-.98 1.085-1.91 1.856-2.732 2.333-.636.344-1.245.558-1.828.609-2.679.399-4.778-2.2-3.825-4.88.132-.345.395-.98.845-1.961l.025-.053c1.464-3.178 3.242-6.79 5.285-10.795l.053-.132.58-1.116c.45-.822.635-1.19 1.351-1.643.346-.21.77-.315 1.246-.315.954 0 1.698.558 2.016 1.007.158.239.345.557.582.953l.558 1.089.08.159c2.041 4.004 3.821 7.608 5.279 10.794l.026.025.533 1.22.318.764c.243.613.294 1.222.213 1.858zm1.22-2.39c-.186-.583-.505-1.271-.9-2.094v-.03c-1.889-4.006-3.642-7.608-5.307-10.844l-.111-.163C15.317 1.461 14.468 0 12.001 0c-2.44 0-3.476 1.695-4.535 3.898l-.081.16c-1.669 3.236-3.421 6.843-5.303 10.847v.053l-.559 1.22c-.21.504-.317.768-.345.847C-.172 20.74 2.611 24 5.98 24c.027 0 .132 0 .265-.027h.372c1.75-.213 3.554-1.325 5.384-3.317 1.829 1.989 3.635 3.104 5.382 3.317h.372c.133.027.239.027.265.027 3.37.003 6.152-3.261 4.802-6.975z" />
+              </path>
+            </svg></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M24 0H0v24h24ZM8.575 6.563h2.658c2.108 0 3.473 1.15 3.473 2.898 0 1.15-.575 1.82-.91 2.108l-.287.263.335.192c.815.479 1.318 1.389 1.318 2.395 0 1.988-1.51 3.257-3.857 3.257H7.449V7.713c0-.623.503-1.126 1.126-1.15zm1.7 1.868c-.479.024-.694.264-.694.79v1.893h1.676c.958 0 1.294-.743 1.294-1.365 0-.815-.503-1.318-1.318-1.318zm-.096 4.36c-.407.071-.598.31-.598.79v2.251h1.868c.934 0 1.509-.55 1.509-1.533 0-.934-.599-1.509-1.51-1.509zm7.737 2.394c.743 0 1.341.599 1.341 1.342a1.34 1.34 0 0 1-1.341 1.341 1.355 1.355 0 0 1-1.341-1.341c0-.743.598-1.342 1.34-1.342z" />
+            </svg></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg><span>Abritel</span></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><span style="font-weight:800; letter-spacing:-1px;">Vrbo</span></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19.067 0H4.933A4.94 4.94 0 0 0 0 4.933v14.134A4.932 4.932 0 0 0 4.933 24h14.134A4.932 4.932 0 0 0 24 19.067V4.933C24.01 2.213 21.797 0 19.067 0ZM7.336 19.341c0 .19-.148.337-.337.337h-2.33a.333.333 0 0 1-.337-.337v-2.33c0-.189.148-.336.337-.336H7c.19 0 .337.147.337.337zm12.121-1.486-2.308 2.298c-.169.168-.422.053-.422-.2V9.57l-6.44 6.44a.533.533 0 0 1-.421.17H8.169a.32.32 0 0 1-.338-.338v-1.697c0-.2.053-.316.169-.422l6.44-6.44H4.058c-.253 0-.369-.253-.2-.421l2.297-2.309c.137-.137.285-.232.517-.232H18.15c.854 0 1.539.686 1.539 1.54v11.478c-.01.231-.095.368-.232.516z" />
+            </svg></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.353H0l1.963 2.135a5.997 5.997 0 0 0 4.04 10.43 5.976 5.976 0 0 0 4.075-1.6L12 19.705l1.922-2.09a5.972 5.972 0 0 0 4.072 1.598 6 6 0 0 0 6-5.998 5.982 5.982 0 0 0-1.957-4.432L24 6.648h-4.35a13.573 13.573 0 0 0-7.644-2.353zM12 6.255c1.531 0 3.063.303 4.504.903C13.943 8.138 12 10.43 12 13.1c0-2.671-1.942-4.962-4.504-5.942A11.72 11.72 0 0 1 12 6.256zM6.002 9.157a4.059 4.059 0 1 1 0 8.118 4.059 4.059 0 0 1 0-8.118zm11.992.002a4.057 4.057 0 1 1 .003 8.115 4.057 4.057 0 0 1-.003-8.115zm-11.992 1.93a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256zm11.992 0a2.128 2.128 0 0 0 0 4.256 2.128 2.128 0 0 0 0-4.256z" />
+            </svg></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><span style="font-weight:700; color:#F56B2A;">leboncoin</span></div>
+        </div>
+        <div class="ticker-item">
+          <div class="ticker-logo"><span style="color:#4285F4; font-weight:bold;">G</span><span
+              style="color:#EA4335; font-weight:bold;">o</span><span
+              style="color:#FBBC05; font-weight:bold;">o</span><span
+              style="color:#4285F4; font-weight:bold;">g</span><span
+              style="color:#34A853; font-weight:bold;">l</span><span style="color:#EA4335; font-weight:bold;">e</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PORTFOLIO ========== -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <div class="portfolio-header reveal">
+        <p class="section-label" data-i18n="portfolio.label">Portfolio</p>
+        <h2 class="section-title" data-i18n="portfolio.title">Des propriétés<br />d'exception</h2>
+        <p class="section-subtitle" data-i18n="portfolio.subtitle">
+          Un aperçu de quelques logements que nous avons le privilège de gérer.
+        </p>
+      </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-card reveal reveal-delay-1 interactive">
+          <img src="villa_amichi.webp"
+            alt="Villa d'Amichi avec piscine à Zonza, location saisonnière gérée par Inastia en Corse" loading="lazy" />
+          <div class="portfolio-card-overlay">
+            <span class="portfolio-card-tag">Villa</span>
+            <h3>Villa d'Amichi</h3>
+            <span class="portfolio-card-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Zonza, Pinarello, Corse
+            </span>
+          </div>
+        </div>
+        <div class="portfolio-card reveal reveal-delay-2 interactive">
+          <img src="residence_san_ciprianu.webp"
+            alt="Résidence San Ciprianu à Lecci, appartement en bord de mer géré par Inastia en Corse" loading="lazy" />
+          <div class="portfolio-card-overlay">
+            <span class="portfolio-card-tag">Résidence</span>
+            <h3>Résidence San Ciprianu</h3>
+            <span class="portfolio-card-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Lecci, Corse
+            </span>
+          </div>
+        </div>
+        <div class="portfolio-card reveal reveal-delay-3 interactive">
+          <img src="casa_verde.webp"
+            alt="Casa Verde, maison de caractère à Zonza gérée par la conciergerie Inastia en Corse" loading="lazy" />
+          <div class="portfolio-card-overlay">
+            <span class="portfolio-card-tag">Maison</span>
+            <h3>Casa Verde</h3>
+            <span class="portfolio-card-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              Zonza, Pinarello, Corse
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GOOGLE REVIEWS ========== -->
+  <section class="testimonials" id="temoignages">
+    <div class="container">
+      <div class="testimonials-header reveal">
+        <p class="section-label" data-i18n="reviews.label">Avis Google</p>
+        <h2 class="section-title" data-i18n="reviews.title">Ce que disent nos<br />clients</h2>
+        <div class="google-badge">
+          <div class="google-logo">
+            <span style="color:#4285F4">G</span><span style="color:#EA4335">o</span><span
+              style="color:#FBBC05">o</span><span style="color:#4285F4">g</span><span
+              style="color:#34A853">l</span><span style="color:#EA4335">e</span>
+          </div>
+          <div class="google-rating">
+            <div class="google-stars">
+              <svg viewBox="0 0 24 24" fill="#FBBC05" width="20" height="20">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <svg viewBox="0 0 24 24" fill="#FBBC05" width="20" height="20">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <svg viewBox="0 0 24 24" fill="#FBBC05" width="20" height="20">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <svg viewBox="0 0 24 24" fill="#FBBC05" width="20" height="20">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              <svg viewBox="0 0 24 24" fill="#FBBC05" width="20" height="20">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+            </div>
+            <span class="google-score">5.0</span>
+            <span class="google-count">basé sur les avis Google</span>
+          </div>
+        </div>
+      </div>
+      <div class="reviews-grid reveal">
+        <!-- REVIEW 1 — Lassalas Fanny -->
+        <a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener"
+          class="review-card interactive">
+          <div class="review-header">
+            <div class="review-avatar">F</div>
+            <div>
+              <p class="review-author">Lassalas Fanny</p>
+              <div class="review-stars">
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">Nous avons passé un séjour fabuleux malgré quelques mauvaises surprises dans le
+            logement que nous occupions grâce au personnel d'Inastia qui nous a trouvé une solution immédiatement. Ce
+            sont des personnes professionnelles, disponibles et consciencieuses. Un grand merci à eux !!</p>
+        </a>
+        <!-- REVIEW 2 — Virginie BASOGE -->
+        <a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener"
+          class="review-card interactive">
+          <div class="review-header">
+            <div class="review-avatar">V</div>
+            <div>
+              <p class="review-author">Virginie Basoge</p>
+              <div class="review-stars">
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">Super séjour. Merci à tous les membres de la famille rencontrés car c'était parfait,
+            excellente communication des les échanges préalables à la réception de la maison, puis en cours de séjour et
+            pour finir au check-out. Merci de votre gentillesse et à bientôt ! Famille Zanon / Basoge</p>
+        </a>
+        <!-- REVIEW 3 — Josephine Gowans-Eglinton -->
+        <a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener"
+          class="review-card interactive">
+          <div class="review-header">
+            <div class="review-avatar">J</div>
+            <div>
+              <p class="review-author">Josephine Gowans-Eglinton</p>
+              <div class="review-stars">
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <svg viewBox="0 0 24 24" fill="#FBBC05" width="14" height="14">
+                  <path
+                    d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <p class="review-text">La communication a été excellente pendant notre séjour en Corse. Nous avons beaucoup
+            apprécié la réactivité et l'amabilité des réponses, ainsi que l'accueil chaleureux. La villa Casa Livio
+            était magnifique et d'une propreté impeccable. Nous espérons revenir !</p>
+        </a>
+      </div>
+      <div class="reviews-cta reveal">
+        <a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener"
+          class="btn btn-outline-dark interactive">
+          Voir tous les avis sur Google
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MAP ========== -->
+  <section class="map-section" id="zone">
+    <div class="container">
+      <div class="map-inner">
+        <div class="map-text reveal">
+          <p class="section-label" data-i18n="map.label">Notre Territoire</p>
+          <h2 class="section-title" data-i18n="map.title">De Ghisonaccia<br />à Porto-Vecchio</h2>
+          <p class="section-subtitle" data-i18n="map.subtitle">
+            Notre secteur d'intervention s'étend de Ghisonaccia à Porto-Vecchio et comprend toutes les villes ci dessous
+            :
+          </p>
+          <div class="map-locations">
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Ghisonaccia</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Prunelli-di-Fiumorbo</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Ventiseri</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Solaro</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Solenzara</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Conca</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Zonza (Pinarello)</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Lecci (Saint-Cyprien)</span>
+            </div>
+            <div class="map-location-item">
+              <div class="map-location-dot"></div>
+              <span>Porto-Vecchio</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-visual reveal reveal-delay-2">
+          <div class="map-container" id="mapContainer">
+            <iframe
+              data-src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d150000!2d9.35!3d41.82!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr"
+              data-category="marketing" width="100%" height="100%" style="border:0; border-radius: 16px;"
+              allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-text reveal">
+          <p class="section-label" data-i18n="contact.label">Contact</p>
+          <h2 class="section-title" data-i18n="contact.title">Parlons de votre<br />projet</h2>
+          <p class="section-subtitle" data-i18n="contact.subtitle">
+            Que vous soyez propriétaire d'une villa, d'un appartement ou d'une maison de caractère,
+            nous avons une solution sur mesure pour vous.
+          </p>
+          <div class="contact-info">
+            <div class="contact-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+              </svg>
+              <a href="tel:+33613812550" style="color: inherit; text-decoration: none;">+33 6 13 81 25 50</a>
+            </div>
+            <div class="contact-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <a href="mailto:inastia.sas@gmail.com"
+                style="color: inherit; text-decoration: none;">inastia.sas@gmail.com</a>
+            </div>
+            <div class="contact-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span data-i18n="contact.location">Corse-du-Sud, France</span>
+            </div>
+          </div>
+        </div>
+        <form class="wizard-form reveal reveal-delay-2" id="contactForm">
+          <!-- Progress Bar -->
+          <div class="wizard-progress">
+            <div class="wizard-progress-bar" id="wizardBar" style="width:33.33%"></div>
+            <div class="wizard-steps-indicator">
+              <div class="wizard-step-dot active" data-step="1"><span>1</span> <span data-i18n="wizard.step1">Votre
+                  bien</span></div>
+              <div class="wizard-step-dot" data-step="2"><span>2</span> <span
+                  data-i18n="wizard.step2">Localisation</span></div>
+              <div class="wizard-step-dot" data-step="3"><span>3</span> <span
+                  data-i18n="wizard.step3">Coordonnées</span></div>
+            </div>
+          </div>
+
+          <!-- Step 1: Property Type -->
+          <div class="wizard-step active" data-wizard-step="1">
+            <h3 class="wizard-title" data-i18n="wizard.step1.title">Quel type de bien possédez-vous ?</h3>
+            <div class="wizard-options">
+              <label class="wizard-option interactive">
+                <input type="radio" name="propertyType" value="villa" />
+                <div class="wizard-option-card">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  </svg>
+                  <span data-i18n="wizard.villa">Villa</span>
+                </div>
+              </label>
+              <label class="wizard-option interactive">
+                <input type="radio" name="propertyType" value="appartement" />
+                <div class="wizard-option-card">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                    <path d="M9 22V12h6v10"></path>
+                    <line x1="8" y1="6" x2="8" y2="6"></line>
+                    <line x1="12" y1="6" x2="12" y2="6"></line>
+                    <line x1="16" y1="6" x2="16" y2="6"></line>
+                  </svg>
+                  <span data-i18n="wizard.apartment">Appartement</span>
+                </div>
+              </label>
+              <label class="wizard-option interactive">
+                <input type="radio" name="propertyType" value="maison" />
+                <div class="wizard-option-card">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg>
+                  <span data-i18n="wizard.house">Maison de caractère</span>
+                </div>
+              </label>
+              <label class="wizard-option interactive">
+                <input type="radio" name="propertyType" value="autre" />
+                <div class="wizard-option-card">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="16"></line>
+                    <line x1="8" y1="12" x2="16" y2="12"></line>
+                  </svg>
+                  <span data-i18n="wizard.other">Autre</span>
+                </div>
+              </label>
+            </div>
+            <div class="wizard-nav">
+              <div></div>
+              <button type="button" class="btn btn-primary interactive wizard-next" data-next="2"><span
+                  data-i18n="wizard.next">Suivant</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Location & Capacity -->
+          <div class="wizard-step" data-wizard-step="2">
+            <h3 class="wizard-title" data-i18n="wizard.step2.title">Où se situe votre bien ?</h3>
+            <div class="form-group">
+              <label for="location" data-i18n="wizard.location.label">Localisation</label>
+              <select id="location" name="location">
+                <option value="" data-i18n="wizard.location.placeholder">Sélectionnez une zone</option>
+                <option value="ghisonaccia">Ghisonaccia</option>
+                <option value="prunelli">Prunelli-di-Fiumorbo</option>
+                <option value="ventiseri">Ventiseri</option>
+                <option value="solaro">Solaro</option>
+                <option value="solenzara">Solenzara</option>
+                <option value="conca">Conca</option>
+                <option value="zonza">Zonza (Pinarello)</option>
+                <option value="lecci">Lecci (Saint-Cyprien)</option>
+                <option value="porto-vecchio">Porto-Vecchio</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bedrooms" data-i18n="wizard.bedrooms">Nombre de chambres</label>
+                <input type="number" id="bedrooms" name="bedrooms" placeholder="Ex: 3" min="1" max="20" />
+              </div>
+              <div class="form-group">
+                <label for="bathrooms" data-i18n="wizard.bathrooms">Nombre de salles de bain</label>
+                <input type="number" id="bathrooms" name="bathrooms" placeholder="Ex: 2" min="1" max="10" />
+              </div>
+              <div class="form-group">
+                <label for="surface" data-i18n="wizard.surface">Surface (m²)</label>
+                <input type="number" id="surface" name="surface" placeholder="Ex: 120" min="10" />
+              </div>
+              <div class="form-group">
+                <label for="capacity" data-i18n="wizard.capacity">Capacité d'accueil</label>
+                <input type="number" id="capacity" name="capacity" placeholder="Ex: 6 personnes" min="1" max="50" />
+              </div>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-ghost interactive wizard-prev" data-prev="1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span data-i18n="wizard.prev">Précédent</span>
+              </button>
+              <button type="button" class="btn btn-primary interactive wizard-next" data-next="3"><span
+                  data-i18n="wizard.next">Suivant</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Contact Info -->
+          <div class="wizard-step" data-wizard-step="3">
+            <h3 class="wizard-title" data-i18n="wizard.step3.title">Vos coordonnées</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName" data-i18n="wizard.firstname.label">Prénom</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Votre prénom"
+                  data-i18n-placeholder="wizard.firstname.placeholder" required />
+              </div>
+              <div class="form-group">
+                <label for="lastName" data-i18n="wizard.lastname.label">Nom</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Votre nom"
+                  data-i18n-placeholder="wizard.lastname.placeholder" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email" data-i18n="wizard.email.label">Email</label>
+                <input type="email" id="email" name="email" placeholder="votre@email.com"
+                  data-i18n-placeholder="wizard.email.placeholder" required />
+              </div>
+              <div class="form-group">
+                <label for="phone" data-i18n="wizard.phone.label">Téléphone</label>
+                <input type="tel" id="phone" name="phone" placeholder="+33 6 00 00 00 00"
+                  data-i18n-placeholder="wizard.phone.placeholder" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="message" data-i18n="wizard.message.label">Message (optionnel)</label>
+              <textarea id="message" name="message" placeholder="Parlez-nous de votre bien et de vos attentes..."
+                data-i18n-placeholder="wizard.message.placeholder" rows="3"></textarea>
+            </div>
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-ghost interactive wizard-prev" data-prev="2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span data-i18n="wizard.prev">Précédent</span>
+              </button>
+              <button type="submit" class="btn btn-primary interactive">
+                <span data-i18n="wizard.submit">Envoyer ma demande</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Success Message -->
+          <div class="wizard-success" id="wizardSuccess">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
+              stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <h3 data-i18n="wizard.success.title">Merci pour votre demande !</h3>
+            <p data-i18n="wizard.success.text">Nous vous recontacterons dans les plus brefs délais pour discuter de
+              votre projet.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">INASTIA</a>
+          <p data-i18n="footer.brand">Conciergerie de locations saisonnières haut de gamme. Nous valorisons votre
+            patrimoine et optimisons vos revenus locatifs.</p>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.services">Services</h4>
+          <a href="#services" data-i18n="footer.services.link1">Gestion complète</a>
+          <a href="#services" data-i18n="footer.services.link2">Accueil des voyageurs</a>
+          <a href="#services" data-i18n="footer.services.link3">Optimisation des revenus</a>
+          <a href="#services" data-i18n="footer.services.link4">Ménage de qualité</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.company">Entreprise</h4>
+          <a href="/about.html" data-i18n="footer.company.link1">À propos</a>
+          <a href="#portfolio" data-i18n="footer.company.link2">Portfolio</a>
+          <a href="#temoignages" data-i18n="footer.company.link3">Témoignages</a>
+          <a href="#contact" data-i18n="footer.company.link4">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4 data-i18n="footer.legal">Légal</h4>
+          <a href="/mentions-legales.html" data-i18n="footer.legal.link1">Mentions légales</a>
+          <a href="/privacy.html" data-i18n="footer.legal.link2">Politique de confidentialité</a>
+          <a href="/cgv.html" data-i18n="footer.legal.link3">CGV</a>
+          <button data-action="open-cookie-settings"
+            style="text-align:left; color:inherit; opacity:0.7; margin-top:10px; font-size:0.85rem;"
+            data-i18n="footer.cookies">Gestion des cookies</button>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span data-i18n="footer.copyright">© 2026 Inastia. Tous droits réservés.</span>
+
+
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>

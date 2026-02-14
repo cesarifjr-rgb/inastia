@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>À propos — Inastia | Conciergerie familiale en Corse</title>
+    <meta name="description"
+        content="Découvrez l'histoire d'Inastia, une conciergerie familiale en Corse dédiée à l'excellence et à l'authenticité dans la gestion de locations saisonnières.">
+
+    <!-- Canonical & Alternate Languages -->
+    <link rel="canonical" href="https://inastia.fr/about.html">
+    <link rel="alternate" hreflang="fr" href="https://inastia.fr/about.html">
+    <link rel="alternate" hreflang="en" href="https://inastia.fr/about.html">
+    <link rel="alternate" hreflang="x-default" href="https://inastia.fr/about.html">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="À propos — Inastia | Conciergerie familiale en Corse">
+    <meta property="og:description"
+        content="Une entreprise familiale au cœur de la Corse, dédiée à l'accueil et à l'hospitalité pour les propriétaires de locations saisonnières.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://inastia.fr/about.html">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Inastia">
+    <meta property="og:image" content="https://inastia.fr/corsica_oil_painting_house.webp">
+
+    <!-- Preconnect & Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <style>
+        .about-hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--bg-alt), var(--bg));
+        }
+
+        .story-section {
+            padding: 100px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .story-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .story-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            color: var(--fg-light);
+        }
+
+        .story-highlight {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin: 40px 0;
+            padding-left: 20px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .value-card {
+            background: var(--bg-alt);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation (Simplified) -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="/" class="nav-logo">INASTIA</a>
+            <div class="nav-links" style="display: flex; gap: 20px; align-items: center;">
+                <button id="langToggle" class="lang-toggle" aria-label="Passer en anglais" title="Version anglaise"
+                    style="background:none; border:none; cursor:pointer;">
+                    <svg class="flag-icon flag-gb" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="22"
+                        height="11">
+                        <clipPath id="s">
+                            <path d="M0 0v30h60V0z" />
+                        </clipPath>
+                        <clipPath id="t">
+                            <path d="M30 15h30v15zv15H0zH0V0zV0h30z" />
+                        </clipPath>
+                        <g clip-path="url(#s)">
+                            <path d="M0 0v30h60V0z" fill="#012169" />
+                            <path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6" />
+                            <path d="M0 0l60 30m0-30L0 30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4" />
+                            <path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10" />
+                            <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6" />
+                        </g>
+                    </svg>
+                    <svg class="flag-icon flag-fr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="22"
+                        height="15" style="display:none">
+                        <rect width="3" height="2" fill="#ED2939" />
+                        <rect width="2" height="2" fill="#fff" />
+                        <rect width="1" height="2" fill="#002395" />
+                    </svg>
+                </button>
+                <a href="/" class="btn-link" data-i18n="nav.back">← Retour à l'accueil</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="about-hero">
+        <div class="container">
+            <p class="section-label" data-i18n="about.hero.label">Notre Histoire</p>
+            <h1 class="hero-title" style="font-size: 3.5rem;" data-i18n="about.hero.title">Plus qu'une
+                conciergerie,<br>une histoire de famille.</h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="container">
+            <div class="story-section">
+                <div class="story-image">
+                    <!-- Placeholder, user can replace later if they have a family photo -->
+                    <img src="corsica_oil_painting_house.webp" alt="Notre vision de l'hospitalité - Villa corse"
+                        style="width: 100%; border-radius: 16px; object-fit: cover; height: 500px;">
+                </div>
+                <div class="story-text">
+                    <h2 class="section-title" style="margin-bottom: 30px;" data-i18n="about.story.title">L'origine
+                        d'Inastia</h2>
+                    <p data-i18n="about.story.p1">Tout a commencé avec une conviction simple : <strong>chaque maison a
+                            une âme</strong>, et chaque
+                        séjour en Corse devrait être inoubliable.</p>
+                    <p data-i18n="about.story.p2">Inastia n'est pas née dans un bureau, mais autour d'une table
+                        familiale. Propriétaires
+                        nous-mêmes, nous avons connu les défis de la gestion locative : le stress des arrivées tardives,
+                        la gestion du linge, l'inquiétude de confier ses clés à des inconnus.</p>
+                    <div class="story-highlight" data-i18n="about.story.highlight">
+                        "Nous avons voulu créer le service dont nous rêvions : humain, transparent et d'une exigence
+                        absolue."
+                    </div>
+                    <p data-i18n="about.story.p3">Aujourd'hui, Inastia est le fruit de cette passion commune. Une
+                        entreprise à taille humaine où
+                        chaque propriétaire est appelé par son prénom, et où chaque voyageur est reçu avec une
+                        hospitalité sincère.</p>
+                </div>
+            </div>
+
+            <div class="values-grid" style="margin-bottom: 120px;">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-serif); margin-bottom: 15px;"
+                        data-i18n="about.values.family.title">Esprit de Famille</h3>
+                    <p style="color: var(--fg-light);" data-i18n="about.values.family.text">Pas de centre d'appel
+                        impersonnel. Vous nous parlez directement.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-serif); margin-bottom: 15px;"
+                        data-i18n="about.values.excellence.title">Excellence</h3>
+                    <p style="color: var(--fg-light);" data-i18n="about.values.excellence.text">Nous ne faisons pas de
+                        compromis sur la qualité. Linge hôtelier,
+                        ménage impeccable, accueil personnalisé : nous visons le 5 étoiles.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3 style="font-family: var(--font-serif); margin-bottom: 15px;"
+                        data-i18n="about.values.transparency.title">Transparence</h3>
+                    <p style="color: var(--fg-light);" data-i18n="about.values.transparency.text">Vos revenus, vos avis
+                        voyageurs, nos interventions : tout est
+                        clair, accessible et partagé avec vous en temps réel.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 100px;">
+                <h2 class="section-title" style="margin-bottom: 30px;" data-i18n="about.join.title">Rejoignez la famille
+                    Inastia</h2>
+                <p style="color: var(--fg-light); max-width: 600px; margin: 0 auto 40px;" data-i18n="about.join.text">
+                    Que vous ayez une villa à Porto-Vecchio ou une maison de caractère à Ghisonaccia, nous serions ravis
+                    d'échanger sur votre projet.
+                </p>
+                <a href="/#contact" class="btn btn-primary" data-i18n="about.join.cta">Nous contacter</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (Simplified Reuse) -->
+    <footer style="background: var(--bg-dark); color: var(--white); padding: 60px 0; text-align: center;">
+        <div class="container">
+            <p style="opacity: 0.7; margin-bottom: 20px;">L'excellence au service de votre résidence.</p>
+            <p>&copy; 2026 Inastia. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/main.js"></script>
+</body>
+
+</html>
