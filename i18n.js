@@ -211,7 +211,7 @@ const translations = {
         "legal.mentions.hosting.title": "4. Hébergement",
         "legal.mentions.hosting.text": "Le site est hébergé par :",
         "legal.mentions.hosting.name": "Nom :",
-        "legal.mentions.hosting.tbd": "[À compléter lors du déploiement]",
+        "legal.mentions.hosting.contact": "Contact :",
 
         "legal.mentions.ip.title": "5. Propriété intellectuelle",
         "legal.mentions.ip.p1": "L'ensemble du contenu du site <strong>inastia.fr</strong> (textes, images, vidéos, logos, charte graphique, etc.) est la propriété exclusive de la SAS INASTIA ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.",
@@ -541,7 +541,7 @@ const translations = {
         "legal.mentions.hosting.title": "4. Hosting",
         "legal.mentions.hosting.text": "The site is hosted by:",
         "legal.mentions.hosting.name": "Name:",
-        "legal.mentions.hosting.tbd": "[To be completed upon deployment]",
+        "legal.mentions.hosting.contact": "Contact:",
 
         "legal.mentions.ip.title": "5. Intellectual Property",
         "legal.mentions.ip.p1": "All content on the site <strong>inastia.fr</strong> (texts, images, videos, logos, graphic charter, etc.) is the exclusive property of SAS INASTIA or its partners, and is protected by French and international laws relating to intellectual property.",
