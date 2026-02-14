@@ -169,7 +169,7 @@ button {
 
 .btn-primary {
   background: var(--accent);
-  color: var(--white);
+  color: #1A1F26;
 }
 
 .btn-primary:hover {
@@ -671,7 +671,7 @@ button {
   font-size: 1rem;
   font-weight: 700;
   color: var(--fg-light);
-  opacity: 0.5;
+  opacity: 0.7;
   letter-spacing: 1px;
   white-space: nowrap;
   transition: all var(--transition);
@@ -2182,13 +2182,13 @@ a.review-card {
   text-align: center;
   font-size: 0.8rem;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.65);
   margin-top: 28px;
   line-height: 1.5;
 }
 
 [data-theme="light"] .comparison-disclaimer {
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(0, 0, 0, 0.55);
 }
 
 /* ============================================
