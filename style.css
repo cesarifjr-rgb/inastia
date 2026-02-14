@@ -4,6 +4,25 @@
 
 /* Google Fonts loaded via <link> in HTML <head> for performance */
 
+/* Size-adjusted fallback fonts — prevent CLS during font-display: swap */
+@font-face {
+  font-family: 'Playfair Fallback';
+  src: local('Georgia');
+  size-adjust: 112%;
+  ascent-override: 84%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
 /* ---------- CSS Variables ---------- */
 :root {
   --bg: #E6E2DD;
@@ -19,8 +38,8 @@
   --white: #FFFFFF;
   --overlay: rgba(26, 31, 38, 0.55);
 
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Playfair Display', 'Playfair Fallback', Georgia, serif;
+  --font-sans: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --section-py: clamp(80px, 10vw, 140px);
   --container: 1200px;
