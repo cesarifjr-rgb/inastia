@@ -498,20 +498,94 @@ if (wizardForm) {
         });
     });
 
-    // Submit
-    wizardForm.addEventListener('submit', (e) => {
+    // Submit — sends data via Web3Forms API
+    wizardForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        steps.forEach(s => s.classList.remove('active'));
-        wizardForm.querySelector('.wizard-progress').style.display = 'none';
-        successEl.classList.add('active');
 
-        // Reset after 4s
-        setTimeout(() => {
-            successEl.classList.remove('active');
-            wizardForm.querySelector('.wizard-progress').style.display = '';
-            wizardForm.reset();
-            goToStep(1);
-        }, 4000);
+        // Validate step 3 (contact info)
+        const firstName = wizardForm.querySelector('#firstName')?.value?.trim();
+        const lastName = wizardForm.querySelector('#lastName')?.value?.trim();
+        const email = wizardForm.querySelector('#email')?.value?.trim();
+
+        if (!firstName || !lastName || !email) {
+            const emptyField = !firstName ? '#firstName' : !lastName ? '#lastName' : '#email';
+            const field = wizardForm.querySelector(emptyField);
+            if (field) {
+                field.style.outline = '2px solid #e74c3c';
+                setTimeout(() => { field.style.outline = ''; }, 2000);
+            }
+            return;
+        }
+
+        // Disable submit button & show loading
+        const submitBtn = wizardForm.querySelector('button[type="submit"]');
+        const originalBtnHTML = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span style="display:flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>Envoi en cours...</span>';
+
+        // Collect all form data
+        const propertyType = wizardForm.querySelector('input[name="propertyType"]:checked')?.value || '';
+        const location = wizardForm.querySelector('#location')?.value || '';
+        const bedrooms = wizardForm.querySelector('#bedrooms')?.value || '';
+        const bathrooms = wizardForm.querySelector('#bathrooms')?.value || '';
+        const surface = wizardForm.querySelector('#surface')?.value || '';
+        const capacity = wizardForm.querySelector('#capacity')?.value || '';
+        const phone = wizardForm.querySelector('#phone')?.value || '';
+        const message = wizardForm.querySelector('#message')?.value || '';
+
+        // Build payload for Web3Forms
+        const payload = {
+            access_key: 'c2493fbd-1271-4313-aca8-0d34d4ea12b7',
+            subject: `Nouveau lead Inastia — ${propertyType} à ${location}`,
+            from_name: `${firstName} ${lastName}`,
+            email: email,
+            phone: phone,
+            'Type de bien': propertyType,
+            'Localisation': location,
+            'Chambres': bedrooms,
+            'Salles de bain': bathrooms,
+            'Surface (m²)': surface,
+            'Capacité': capacity,
+            'Message': message || '(aucun message)',
+        };
+
+        try {
+            const response = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                // Show success
+                steps.forEach(s => s.classList.remove('active'));
+                wizardForm.querySelector('.wizard-progress').style.display = 'none';
+                successEl.classList.add('active');
+
+                // Reset after 4s
+                setTimeout(() => {
+                    successEl.classList.remove('active');
+                    wizardForm.querySelector('.wizard-progress').style.display = '';
+                    wizardForm.reset();
+                    goToStep(1);
+                }, 4000);
+            } else {
+                throw new Error(result.message || 'Erreur serveur');
+            }
+        } catch (err) {
+            // Show error inline
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'form-error';
+            errorDiv.style.cssText = 'color:#e74c3c;background:rgba(231,76,60,0.1);padding:12px 16px;border-radius:8px;margin-top:12px;font-size:0.9rem;';
+            errorDiv.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par téléphone.';
+            submitBtn.parentNode.parentNode.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
+        } finally {
+            // Restore button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHTML;
+        }
     });
 }
 

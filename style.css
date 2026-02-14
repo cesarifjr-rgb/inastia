@@ -1973,6 +1973,12 @@ a.review-card {
   display: flex;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes wizardSlideIn {
   from {
     opacity: 0;
