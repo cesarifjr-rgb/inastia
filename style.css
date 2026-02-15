@@ -950,7 +950,7 @@ button {
 
 .comparison-badge-gold {
   background: var(--accent);
-  color: var(--white);
+  color: #1A1F26;
 }
 
 .comparison-metrics {
@@ -982,7 +982,7 @@ button {
 }
 
 .comparison-after .comparison-label {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .comparison-divider {
@@ -2182,7 +2182,7 @@ a.review-card {
   text-align: center;
   font-size: 0.8rem;
   font-style: italic;
-  color: #B0B3B8;
+  color: #6B6F76;
   margin-top: 28px;
   line-height: 1.5;
 }
