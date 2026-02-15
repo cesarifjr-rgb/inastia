@@ -2182,13 +2182,13 @@ a.review-card {
   text-align: center;
   font-size: 0.8rem;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.85);
+  color: #B0B3B8;
   margin-top: 28px;
   line-height: 1.5;
 }
 
 [data-theme="light"] .comparison-disclaimer {
-  color: rgba(0, 0, 0, 0.55);
+  color: #6B6F76;
 }
 
 /* ============================================
