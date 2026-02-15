@@ -516,6 +516,9 @@ button {
   /* Prevent any clipping of ascenders/accents/swashes */
   padding: 0;
   margin-top: 0;
+  /* Ensure LCP text paints immediately — do not hide behind JS animations */
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .hero-line span {
