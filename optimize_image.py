@@ -24,4 +24,4 @@ def optimize_image(input_path, output_path, max_width=800):
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    optimize_image('residence_san_ciprianu.jfif', 'residence_san_ciprianu.webp')
+    optimize_image('Villa Lova.jfif', 'villa_lova.webp', max_width=1200)
