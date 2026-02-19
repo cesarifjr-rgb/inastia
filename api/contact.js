@@ -32,11 +32,11 @@ export default async function handler(req, res) {
 
         if (!turnstileData.success) {
             console.error('Turnstile verification failed:', turnstileData);
-            return res.status(403).json({ success: false, error: 'Turnstile: ' + JSON.stringify(turnstileData) });
+            return res.status(403).json({ success: false, error: 'Vérification anti-spam échouée. Veuillez réessayer.' });
         }
     } catch (err) {
         console.error('Turnstile network error:', err);
-        return res.status(500).json({ success: false, error: 'Turnstile network: ' + err.message });
+        return res.status(500).json({ success: false, error: 'Erreur de vérification. Veuillez réessayer.' });
     }
 
     // --- 3. Send email via Resend ---
@@ -84,8 +84,8 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
             },
             body: JSON.stringify({
-                from: 'Inastia <onboarding@resend.dev>',
-                to: process.env.CONTACT_EMAIL || 'contact@inastia.fr',
+                from: 'Inastia <noreply@inastia.fr>',
+                to: 'contact@inastia.fr',
                 reply_to: email,
                 subject: subject,
                 html: htmlBody,
@@ -96,12 +96,12 @@ export default async function handler(req, res) {
 
         if (!emailRes.ok) {
             console.error('Resend error:', emailData);
-            return res.status(500).json({ success: false, error: 'Resend: ' + JSON.stringify(emailData) });
+            return res.status(500).json({ success: false, error: 'Erreur d\'envoi. Veuillez réessayer ou nous contacter par téléphone.' });
         }
 
         return res.status(200).json({ success: true });
     } catch (err) {
         console.error('Resend network error:', err);
-        return res.status(500).json({ success: false, error: 'Network: ' + err.message });
+        return res.status(500).json({ success: false, error: 'Erreur serveur. Veuillez réessayer.' });
     }
 }
