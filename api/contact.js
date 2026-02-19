@@ -32,11 +32,11 @@ export default async function handler(req, res) {
 
         if (!turnstileData.success) {
             console.error('Turnstile verification failed:', turnstileData);
-            return res.status(403).json({ success: false, error: 'Vérification anti-spam échouée.' });
+            return res.status(403).json({ success: false, error: 'Turnstile: ' + JSON.stringify(turnstileData) });
         }
     } catch (err) {
         console.error('Turnstile network error:', err);
-        return res.status(500).json({ success: false, error: 'Erreur de vérification anti-spam.' });
+        return res.status(500).json({ success: false, error: 'Turnstile network: ' + err.message });
     }
 
     // --- 3. Send email via Resend ---
@@ -96,12 +96,12 @@ export default async function handler(req, res) {
 
         if (!emailRes.ok) {
             console.error('Resend error:', emailData);
-            return res.status(500).json({ success: false, error: 'Erreur d\'envoi de l\'email.' });
+            return res.status(500).json({ success: false, error: 'Resend: ' + JSON.stringify(emailData) });
         }
 
         return res.status(200).json({ success: true });
     } catch (err) {
         console.error('Resend network error:', err);
-        return res.status(500).json({ success: false, error: 'Erreur serveur.' });
+        return res.status(500).json({ success: false, error: 'Network: ' + err.message });
     }
 }

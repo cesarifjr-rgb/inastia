@@ -599,14 +599,14 @@ if (wizardForm) {
                     goToStep(1);
                 }, 4000);
             } else {
-                throw new Error(result.message || 'Erreur serveur');
+                throw new Error(result.error || 'Erreur serveur');
             }
         } catch (err) {
             // Show error inline
             const errorDiv = document.createElement('div');
             errorDiv.className = 'form-error';
             errorDiv.style.cssText = 'color:#e74c3c;background:rgba(231,76,60,0.1);padding:12px 16px;border-radius:8px;margin-top:12px;font-size:0.9rem;';
-            errorDiv.textContent = 'Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par téléphone.';
+            errorDiv.textContent = err.message || 'Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par téléphone.';
             submitBtn.parentNode.parentNode.appendChild(errorDiv);
             setTimeout(() => errorDiv.remove(), 5000);
         } finally {
