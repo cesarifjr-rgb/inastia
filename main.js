@@ -549,26 +549,25 @@ if (wizardForm) {
         const phone = wizardForm.querySelector('#phone')?.value || '';
         const message = wizardForm.querySelector('#message')?.value || '';
 
-        // Build payload for Web3Forms
+        // Build payload for Vercel serverless function
         const turnstileToken = wizardForm.querySelector('[name="cf-turnstile-response"]')?.value || '';
         const payload = {
-            access_key: 'c2493fbd-1271-4313-aca8-0d34d4ea12b7',
-            subject: `Nouveau lead Inastia — ${propertyType} à ${location}`,
-            from_name: `${firstName} ${lastName}`,
-            email: email,
-            phone: phone,
-            'Type de bien': propertyType,
-            'Localisation': location,
-            'Chambres': bedrooms,
-            'Salles de bain': bathrooms,
-            'Surface (m²)': surface,
-            'Capacité': capacity,
-            'Message': message || '(aucun message)',
-            'cf-turnstile-response': turnstileToken,
+            firstName,
+            lastName,
+            email,
+            phone,
+            propertyType,
+            location,
+            bedrooms,
+            bathrooms,
+            surface,
+            capacity,
+            message: message || '',
+            turnstileToken,
         };
 
         try {
-            const response = await fetch('https://api.web3forms.com/submit', {
+            const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
