@@ -370,6 +370,8 @@
   </style>
   <!-- Full stylesheet loaded async via main.js to avoid render-blocking -->
   <link rel="preload" href="/style.css" as="style" />
+  <!-- Cloudflare Turnstile (anti-spam CAPTCHA) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <!-- Schema.org -->
   <script type="application/ld+json">
@@ -1387,6 +1389,9 @@
                 </svg>
                 <span data-i18n="wizard.prev">Précédent</span>
               </button>
+              <!-- Cloudflare Turnstile widget -->
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAACfqzkKmQzM62oPC" data-theme="auto" style="margin:12px 0">
+              </div>
               <button type="submit" class="btn btn-primary interactive">
                 <span data-i18n="wizard.submit">Envoyer ma demande</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

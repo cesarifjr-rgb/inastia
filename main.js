@@ -550,6 +550,7 @@ if (wizardForm) {
         const message = wizardForm.querySelector('#message')?.value || '';
 
         // Build payload for Web3Forms
+        const turnstileToken = wizardForm.querySelector('[name="cf-turnstile-response"]')?.value || '';
         const payload = {
             access_key: 'c2493fbd-1271-4313-aca8-0d34d4ea12b7',
             subject: `Nouveau lead Inastia — ${propertyType} à ${location}`,
@@ -563,6 +564,7 @@ if (wizardForm) {
             'Surface (m²)': surface,
             'Capacité': capacity,
             'Message': message || '(aucun message)',
+            'cf-turnstile-response': turnstileToken,
         };
 
         try {
