@@ -371,7 +371,7 @@
   <!-- Full stylesheet loaded async via main.js to avoid render-blocking -->
   <link rel="preload" href="/style.css" as="style" />
   <!-- Cloudflare Turnstile (anti-spam CAPTCHA) -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
   <!-- Schema.org -->
   <script type="application/ld+json">
@@ -1380,42 +1380,42 @@
               <textarea id="message" name="message" placeholder="Parlez-nous de votre bien et de vos attentes..."
                 data-i18n-placeholder="wizard.message.placeholder" rows="3"></textarea>
             </div>
-            <div class="wizard-nav">
-              <button type="button" class="btn btn-ghost interactive wizard-prev" data-prev="2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-                <span data-i18n="wizard.prev">Précédent</span>
-              </button>
-              <!-- Cloudflare Turnstile widget -->
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAACfqzkKmQzM62oPC" data-theme="auto" style="margin:12px 0">
-              </div>
-              <button type="submit" class="btn btn-primary interactive">
-                <span data-i18n="wizard.submit">Envoyer ma demande</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </button>
-            </div>
           </div>
-
-          <!-- Success Message -->
-          <div class="wizard-success" id="wizardSuccess">
-            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
-              stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <h3 data-i18n="wizard.success.title">Merci pour votre demande !</h3>
-            <p data-i18n="wizard.success.text">Nous vous recontacterons dans les plus brefs délais pour discuter de
-              votre projet.</p>
+          <!-- Cloudflare Turnstile widget (rendered explicitly on step 3) -->
+          <div id="turnstile-container" style="margin:16px 0;display:flex;justify-content:center"></div>
+          <div class="wizard-nav">
+            <button type="button" class="btn btn-ghost interactive wizard-prev" data-prev="2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span data-i18n="wizard.prev">Précédent</span>
+            </button>
+            <button type="submit" class="btn btn-primary interactive">
+              <span data-i18n="wizard.submit">Envoyer ma demande</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
           </div>
-        </form>
       </div>
+
+      <!-- Success Message -->
+      <div class="wizard-success" id="wizardSuccess">
+        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
+          stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <h3 data-i18n="wizard.success.title">Merci pour votre demande !</h3>
+        <p data-i18n="wizard.success.text">Nous vous recontacterons dans les plus brefs délais pour discuter de
+          votre projet.</p>
+      </div>
+      </form>
+    </div>
     </div>
   </section>
 

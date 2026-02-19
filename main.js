@@ -469,6 +469,17 @@ if (wizardForm) {
         });
 
         currentStep = stepNum;
+
+        // Render Turnstile widget when arriving at step 3
+        if (stepNum === 3 && window.turnstile) {
+            const container = document.getElementById('turnstile-container');
+            if (container && !container.querySelector('iframe')) {
+                turnstile.render(container, {
+                    sitekey: '0x4AAAAAACfqzkKmQzM62oPC',
+                    theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
+                });
+            }
+        }
     }
 
     // Step validation
