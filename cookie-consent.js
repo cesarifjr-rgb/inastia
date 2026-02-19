@@ -44,6 +44,9 @@ const htmlTemplates = {
                     Gérez vos préférences de consentement pour les cookies et traceurs.
                     Le refus ne vous empêchera pas d'accéder au site, mais certains contenus (cartes, vidéos) pourraient être masqués.
                 </p>
+                <p style="font-size:0.85rem;opacity:0.7;margin-top:6px" data-i18n="cookies.modal.retention">
+                    Votre choix est conservé 6 mois. <a href="/privacy" style="color:inherit;text-decoration:underline">Politique de confidentialité</a>
+                </p>
                 
                 <div class="cookie-option">
                     <div class="cookie-option-header">
