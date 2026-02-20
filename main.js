@@ -13,12 +13,7 @@
     document.head.appendChild(l);
 })();
 
-// Async full stylesheet — critical CSS is inlined in HTML <head>
-// This loads the complete stylesheet non-render-blocking
-(function () {
-    var s = document.querySelector('link[rel="preload"][as="style"]');
-    if (s) { s.rel = 'stylesheet'; }
-})();
+// The full stylesheet is loaded asynchronously directly in index.html via media="print"
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

@@ -368,8 +368,11 @@
       }
     }
   </style>
-  <!-- Full stylesheet loaded async via main.js to avoid render-blocking -->
-  <link rel="preload" href="/style.css" as="style" />
+  <!-- Full stylesheet loaded async to avoid render-blocking -->
+  <link rel="stylesheet" href="/style.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="/style.css" />
+  </noscript>
   <!-- Cloudflare Turnstile (anti-spam CAPTCHA) -->
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 
