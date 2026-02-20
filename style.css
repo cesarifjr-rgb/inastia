@@ -41,16 +41,13 @@
   --font-serif: 'Playfair Display', 'Playfair Fallback', Georgia, serif;
   --font-sans: 'Inter', 'Inter Fallback', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --section-py: clamp(100px, 12vw, 160px);
-  /* Increased padding for more breathing room */
+  --section-py: clamp(80px, 10vw, 140px);
   --container: 1200px;
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition: 0.6s var(--ease);
-  /* Slower transitions */
-  --radius-sm: 0px;
-  /* Sharp edges */
-  --radius: 0px;
-  --radius-lg: 0px;
+  --transition: 0.4s var(--ease);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 20px;
 }
 
 /* ---------- Dark Mode ---------- */
@@ -134,13 +131,11 @@ button {
 .section-label {
   font-family: var(--font-sans);
   font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 5px;
-  /* Wider spacing */
+  font-weight: 600;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 24px;
-  /* More space below label */
+  margin-bottom: 16px;
 }
 
 .section-title {
@@ -162,31 +157,25 @@ button {
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 40px;
-  font-size: 0.85rem;
-  font-style: normal;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  gap: 10px;
+  padding: 16px 36px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   border-radius: var(--radius-sm);
   transition: all var(--transition);
   white-space: nowrap;
-  border: 1px solid transparent;
 }
 
 .btn-primary {
-  background: transparent;
-  color: var(--fg);
-  border-color: var(--fg);
+  background: var(--accent);
+  color: #1A1F26;
 }
 
 .btn-primary:hover {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: none;
-  /* Removed heavy shadow */
+  box-shadow: 0 8px 30px rgba(198, 168, 124, 0.35);
 }
 
 .btn-outline {
@@ -398,10 +387,8 @@ button {
 
 .nav-cta {
   padding: 10px 24px !important;
-  font-size: 0.75rem !important;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.82rem !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
   border-radius: var(--radius-sm) !important;
   color: var(--white) !important;
 }
@@ -417,8 +404,8 @@ button {
 }
 
 .navbar.scrolled .nav-cta {
-  border-color: var(--fg-light) !important;
-  color: var(--fg) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
 }
 
 .navbar.scrolled .nav-cta:hover {
@@ -607,12 +594,12 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.65rem;
-  letter-spacing: 4px;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  animation: float 3s ease-in-out infinite;
+  animation: float 2s ease-in-out infinite;
 }
 
 .scroll-line {
@@ -722,7 +709,7 @@ button {
 
 .services-header {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 64px;
 }
 
 .services-header .section-subtitle {
@@ -732,16 +719,16 @@ button {
 .services-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  gap: 28px;
 }
 
 .service-card {
-  background: transparent;
-  padding: 0 20px 40px 0;
-  text-align: left;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  text-align: center;
   transition: all var(--transition);
-  border: none;
-  border-bottom: 1px solid var(--border);
+  border: 1px solid transparent;
   position: relative;
   overflow: hidden;
 }
@@ -749,55 +736,59 @@ button {
 .service-card::before {
   content: '';
   position: absolute;
-  bottom: -1px;
+  top: 0;
   left: 0;
-  right: 100%;
-  height: 1px;
+  right: 0;
+  height: 3px;
   background: var(--accent);
-  transition: right 0.6s var(--ease);
+  opacity: 0;
+  transition: opacity var(--transition);
 }
 
 .service-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  border-color: var(--border);
 }
 
 .service-card:hover::before {
-  right: 0;
+  opacity: 1;
 }
 
 .service-icon {
-  width: 48px;
-  height: 48px;
-  margin: 0 0 24px 0;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--card-alt);
   color: var(--accent);
   transition: all var(--transition);
 }
 
 .service-card:hover .service-icon {
-  color: var(--fg);
-  transform: scale(1.05);
+  background: var(--accent);
+  color: var(--white);
 }
 
 .service-icon svg {
-  width: 32px;
-  height: 32px;
-  stroke-width: 1;
-  /* Thinner stroke for elegance */
+  width: 28px;
+  height: 28px;
+  stroke-width: 1.5;
 }
 
 .service-card h3 {
   font-family: var(--font-serif);
-  font-size: 1.4rem;
-  font-weight: 400;
-  margin-bottom: 16px;
-  white-space: normal;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  white-space: nowrap;
 }
 
 .service-card p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--fg-light);
   line-height: 1.7;
 }
@@ -840,8 +831,8 @@ button {
   top: 0;
   width: 2px;
   height: 0;
-  background: var(--fg);
-  transition: height 0.8s ease;
+  background: var(--accent);
+  transition: height 0.4s ease;
 }
 
 .timeline-item {
@@ -856,34 +847,34 @@ button {
 
 .timeline-dot {
   position: absolute;
-  left: 17px;
-  top: 12px;
-  width: 16px;
-  height: 16px;
-  border-radius: 0;
+  left: 14px;
+  top: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   transition: all var(--transition);
   z-index: 1;
-  transform: rotate(45deg);
-  /* Diamond shape instead of dot */
 }
 
 .timeline-item.visible .timeline-dot {
-  border-color: var(--fg);
-  background: var(--fg);
-  box-shadow: none;
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 6px rgba(198, 168, 124, 0.2);
 }
 
 .timeline-content {
-  background: transparent;
-  padding: 0 0 16px 16px;
-  border: none;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  border: 1px solid var(--border);
   transition: all var(--transition);
 }
 
 .timeline-content:hover {
   transform: translateX(8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
 }
 
 .timeline-step {
@@ -928,10 +919,9 @@ button {
   gap: 0;
   max-width: 900px;
   margin: 0 auto;
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: none;
-  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
 }
 
 .comparison-side {
@@ -950,22 +940,20 @@ button {
 
 .comparison-badge {
   display: inline-block;
-  padding: 0;
-  border-radius: 0;
+  padding: 6px 16px;
+  border-radius: 100px;
   font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 4px;
+  font-weight: 700;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  background: transparent;
+  background: var(--border);
   color: var(--fg-light);
   margin-bottom: 32px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 8px;
 }
 
 .comparison-badge-gold {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  background: var(--accent);
+  color: #1A1F26;
 }
 
 .comparison-metrics {
@@ -1126,7 +1114,7 @@ button {
 }
 
 .portfolio-card {
-  border-radius: 0;
+  border-radius: var(--radius);
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -1327,10 +1315,9 @@ button {
 
 .map-visual {
   aspect-ratio: 4/3;
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: none;
-  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 }
 
 .map-container {
