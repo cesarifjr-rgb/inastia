@@ -33,45 +33,7 @@ window.addEventListener('cookies:ui-injected', () => {
     setLanguage(currentLang);
 });
 
-// ---- Custom Cursor ----
-const cursor = document.getElementById('cursor');
-const follower = document.getElementById('cursorFollower');
-let mouseX = 0, mouseY = 0;
-let followerX = 0, followerY = 0;
 
-if (cursor && follower && window.matchMedia('(pointer: fine)').matches) {
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        cursor.style.left = mouseX + 'px';
-        cursor.style.top = mouseY + 'px';
-    });
-
-    function animateFollower() {
-        followerX += (mouseX - followerX) * 0.12;
-        followerY += (mouseY - followerY) * 0.12;
-        follower.style.left = followerX + 'px';
-        follower.style.top = followerY + 'px';
-        requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
-
-    document.querySelectorAll('.interactive, a, button').forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('active');
-            follower.classList.add('active');
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('active');
-            follower.classList.remove('active');
-        });
-    });
-
-    document.body.style.cursor = 'none';
-    document.querySelectorAll('a, button, .interactive').forEach(el => {
-        el.style.cursor = 'none';
-    });
-}
 
 // ---- Dark Mode Toggle ----
 const themeToggle = document.getElementById('themeToggle');
