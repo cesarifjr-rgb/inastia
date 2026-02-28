@@ -92,6 +92,20 @@ const translations = {
         "map.title": "De Ghisonaccia<br />à Porto-Vecchio",
         "map.subtitle": "Notre secteur d'intervention s'étend de Ghisonaccia à Porto-Vecchio et comprend toutes les villes ci-dessous :",
 
+        // FAQ
+        "faq.label": "Questions fréquentes",
+        "faq.title": "Vos questions,<br />nos réponses",
+        "faq.q1.question": "Quels services propose Inastia pour ma location saisonnière ?",
+        "faq.q1.answer": "Inastia propose une gestion complète de votre bien : création et optimisation des annonces sur Airbnb, Booking et autres plateformes, accueil personnalisé des voyageurs, ménage hôtelier après chaque séjour, linge de maison premium, maintenance préventive et tarification dynamique pour maximiser vos revenus.",
+        "faq.q2.question": "Dans quelles villes de Corse intervenez-vous ?",
+        "faq.q2.answer": "Nous intervenons sur toute la côte est de la Corse-du-Sud : Porto-Vecchio, Zonza (Pinarello), Lecci (Saint-Cyprien), Sari-Solenzara, Ventiseri, Ghisonaccia et leurs environs. Notre connaissance du terrain local nous permet d'offrir un service réactif et de proximité.",
+        "faq.q3.question": "Combien coûte une conciergerie Airbnb en Corse ?",
+        "faq.q3.answer": "Notre rémunération est basée sur une commission sur les revenus locatifs générés, sans frais fixes. Le taux dépend du niveau de services choisi et est défini dans votre contrat personnalisé. Contactez-nous pour un devis gratuit adapté à votre bien.",
+        "faq.q4.question": "Puis-je utiliser mon bien quand je le souhaite ?",
+        "faq.q4.answer": "Absolument ! Vous restez maître de votre calendrier. Vous bloquez les dates souhaitées et nous gérons les disponibilités restantes. Notre outil de gestion en ligne vous donne une visibilité totale sur les réservations, les revenus et les avis voyageurs.",
+        "faq.q5.question": "Comment Inastia se différencie des autres conciergeries ?",
+        "faq.q5.answer": "Inastia est une entreprise familiale, pas un centre d'appel. Chaque propriétaire a un interlocuteur dédié. Nous misons sur la qualité (linge hôtelier, ménage 5 étoiles) plutôt que le volume, et notre connaissance intime de la Corse-du-Sud nous permet d'offrir une expérience authentique aux voyageurs.",
+
         // Contact
         "contact.label": "Contact",
         "contact.title": "Parlons de votre<br />projet",
@@ -421,6 +435,20 @@ const translations = {
         "map.label": "Our Territory",
         "map.title": "From Ghisonaccia<br />to Porto-Vecchio",
         "map.subtitle": "Our service area extends from Ghisonaccia to Porto-Vecchio and includes all the towns below:",
+
+        // FAQ
+        "faq.label": "Frequently Asked Questions",
+        "faq.title": "Your questions,<br />our answers",
+        "faq.q1.question": "What services does Inastia offer for my seasonal rental?",
+        "faq.q1.answer": "Inastia offers complete management of your property: listing creation and optimization on Airbnb, Booking and other platforms, personalized guest welcome, hotel-grade cleaning after every stay, premium linen, preventive maintenance and dynamic pricing to maximize your income.",
+        "faq.q2.question": "In which cities in Corsica do you operate?",
+        "faq.q2.answer": "We operate throughout the east coast of South Corsica: Porto-Vecchio, Zonza (Pinarello), Lecci (Saint-Cyprien), Sari-Solenzara, Ventiseri, Ghisonaccia and their surroundings. Our local knowledge allows us to provide responsive and personalized service.",
+        "faq.q3.question": "How much does an Airbnb concierge cost in Corsica?",
+        "faq.q3.answer": "Our remuneration is based on a commission on the rental income generated, with no fixed costs. The rate depends on the level of services chosen and is defined in your personalized contract. Contact us for a free estimate tailored to your property.",
+        "faq.q4.question": "Can I use my property whenever I want?",
+        "faq.q4.answer": "Absolutely! You remain in control of your calendar. You block the dates you want and we manage the remaining availability. Our online management tool gives you full visibility on bookings, income and guest reviews.",
+        "faq.q5.question": "How does Inastia differ from other concierge services?",
+        "faq.q5.answer": "Inastia is a family business, not a call center. Each owner has a dedicated contact. We focus on quality (hotel-grade linen, 5-star cleaning) rather than volume, and our intimate knowledge of South Corsica allows us to offer an authentic experience to guests.",
 
         // Contact
         "contact.label": "Contact",
