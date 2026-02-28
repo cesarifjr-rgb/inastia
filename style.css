@@ -335,32 +335,32 @@ button {
   color: var(--fg);
 }
 
-.nav-cta {
-  padding: 10px 24px !important;
-  font-size: 0.82rem !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
-  border-radius: var(--radius-sm) !important;
-  color: var(--white) !important;
+.navbar .nav-links a.nav-cta {
+  padding: 10px 24px;
+  font-size: 0.82rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-sm);
+  color: var(--white);
 }
 
-.nav-cta:hover {
-  background: var(--white) !important;
-  color: var(--fg) !important;
-  border-color: var(--white) !important;
+.navbar .nav-links a.nav-cta:hover {
+  background: var(--white);
+  color: var(--fg);
+  border-color: var(--white);
 }
 
-.nav-cta::after {
-  display: none !important;
+.navbar .nav-links a.nav-cta::after {
+  display: none;
 }
 
-.navbar.scrolled .nav-cta {
-  border-color: var(--accent) !important;
-  color: var(--accent) !important;
+.navbar.scrolled .nav-links a.nav-cta {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.navbar.scrolled .nav-cta:hover {
-  background: var(--accent) !important;
-  color: var(--white) !important;
+.navbar.scrolled .nav-links a.nav-cta:hover {
+  background: var(--accent);
+  color: var(--white);
 }
 
 .nav-toggle {

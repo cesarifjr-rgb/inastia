@@ -1,27 +1,7 @@
 // Vercel Serverless Function — Contact Form Handler
 // Validates Cloudflare Turnstile + sends email via Resend
 
-// --- Security: HTML entity encoding to prevent injection in email body ---
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-// --- Security: Validate email format ---
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-// --- Security: Truncate string to max length ---
-function truncate(str, maxLen) {
-    if (!str) return '';
-    return String(str).slice(0, maxLen);
-}
+import { escapeHtml, isValidEmail, truncate } from '../utils.js';
 
 export default async function handler(req, res) {
     // CORS / Method guard
