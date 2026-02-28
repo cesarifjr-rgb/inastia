@@ -16,13 +16,14 @@ export default defineConfig({
         cgv: resolve(__dirname, 'cgv.html'),
       }
     },
-    // Security: minify output to strip HTML comments in production
-    minify: 'terser',
-    terserOptions: {
-      format: {
-        comments: false
-      }
-    }
+    // Security: strip comments from JS output (using esbuild, no extra dep needed)
+    minify: 'esbuild',
+    target: 'es2020'
+  },
+  esbuild: {
+    legalComments: 'none',
+    drop: ['debugger']
   }
 })
+
 
