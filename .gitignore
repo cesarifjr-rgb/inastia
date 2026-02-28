@@ -8,6 +8,14 @@ coverage
 
 # Production
 dist
+dist_test
+
+# Original unoptimized images (WebP versions are used)
+*.jfif
+
+# Utility scripts (not needed in production)
+optimize_image.py
+process_logo.py
 
 # Misc
 .DS_Store

@@ -138,7 +138,7 @@ function applyConsent() {
 }
 
 function activateMarketing() {
-    // 1. Unblock Iframes (Google Maps)
+    // Unblock Iframes (Google Maps)
     document.querySelectorAll('iframe[data-src][data-category="marketing"]').forEach(iframe => {
         if (!iframe.src) {
             iframe.src = iframe.dataset.src;
@@ -148,31 +148,6 @@ function activateMarketing() {
             }
         }
     });
-
-    // 2. Load Google Analytics (if ID is set)
-    loadGoogleAnalytics();
-}
-
-// ---- Google Analytics Helper ----
-const GA_ID = 'G-XXXXXXXXXX'; // TODO: Replace with real Measurement ID
-
-function loadGoogleAnalytics() {
-    if (window['ga-loaded']) return; // Prevent double load
-    if (GA_ID === 'G-XXXXXXXXXX') return; // Don't load if no ID
-
-    // Inject Script
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    document.head.appendChild(script);
-
-    // Init Config
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', GA_ID);
-
-
 }
 
 function deactivateMarketing() {
@@ -242,10 +217,29 @@ function showModal() {
     document.getElementById('consent-marketing').checked = marketing;
 
     modal.style.display = 'flex';
-    // Accessibility focus trap could be added here
+
+    // Accessibility: focus trap inside modal
+    const focusableEls = modal.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])');
+    const firstEl = focusableEls[0];
+    const lastEl = focusableEls[focusableEls.length - 1];
+    if (firstEl) firstEl.focus();
+
+    modal._trapHandler = (e) => {
+        if (e.key !== 'Tab') return;
+        if (e.shiftKey) {
+            if (document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+        } else {
+            if (document.activeElement === lastEl) { e.preventDefault(); firstEl.focus(); }
+        }
+        if (e.key === 'Escape') hideModal();
+    };
+    modal.addEventListener('keydown', modal._trapHandler);
 }
 
 function hideModal() {
     const modal = document.getElementById('cookie-modal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+        if (modal._trapHandler) modal.removeEventListener('keydown', modal._trapHandler);
+        modal.style.display = 'none';
+    }
 }

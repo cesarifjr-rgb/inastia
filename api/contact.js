@@ -131,7 +131,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: 'Inastia <noreply@inastia.fr>',
                 to: 'contact@inastia.fr',
-                reply_to: email,
+                reply_to: safeEmail,
                 subject: subject,
                 html: htmlBody,
             }),

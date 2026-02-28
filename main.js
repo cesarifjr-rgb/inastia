@@ -4,6 +4,14 @@
    dark mode, cinematic text, i18n, etc.
    ============================================ */
 
+// ---- Constants ----
+const FORM_RESET_DELAY_MS = 4000;
+const COUNTER_DURATION_MS = 2000;
+const ERROR_DISPLAY_MS = 5000;
+const VALIDATION_HIGHLIGHT_MS = 2000;
+const SCROLL_SETTLE_MS = 500;
+const SPINNER_HTML = '<span style="display:flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>Envoi en cours...</span>';
+
 // Async Google Fonts — loaded here (not render-blocking <link>)
 // Fallback fonts with size-adjust in style.css prevent CLS
 (function () {
@@ -359,7 +367,7 @@ function animateCounters() {
         const isDecimal = counter.dataset.decimal === 'true';
         const prefix = counter.dataset.prefix || '';
         const suffix = counter.dataset.suffix || '';
-        const duration = 2000;
+        const duration = COUNTER_DURATION_MS;
         const startTime = performance.now();
 
         function updateCounter(currentTime) {
@@ -453,7 +461,7 @@ if (wizardForm) {
                 if (options) {
                     options.style.outline = '2px solid #e74c3c';
                     options.style.borderRadius = '8px';
-                    setTimeout(() => { options.style.outline = ''; }, 2000);
+                    setTimeout(() => { options.style.outline = ''; }, VALIDATION_HIGHLIGHT_MS);
                 }
                 return false;
             }
@@ -462,7 +470,7 @@ if (wizardForm) {
             const location = wizardForm.querySelector('#location');
             if (location && !location.value) {
                 location.style.outline = '2px solid #e74c3c';
-                setTimeout(() => { location.style.outline = ''; }, 2000);
+                setTimeout(() => { location.style.outline = ''; }, VALIDATION_HIGHLIGHT_MS);
                 return false;
             }
         }
@@ -501,7 +509,7 @@ if (wizardForm) {
             const field = wizardForm.querySelector(emptyField);
             if (field) {
                 field.style.outline = '2px solid #e74c3c';
-                setTimeout(() => { field.style.outline = ''; }, 2000);
+                setTimeout(() => { field.style.outline = ''; }, VALIDATION_HIGHLIGHT_MS);
             }
             return;
         }
@@ -510,7 +518,7 @@ if (wizardForm) {
         const submitBtn = wizardForm.querySelector('button[type="submit"]');
         const originalBtnHTML = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span style="display:flex;align-items:center;gap:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>Envoi en cours...</span>';
+        submitBtn.innerHTML = SPINNER_HTML;
 
         // Collect all form data
         const propertyType = wizardForm.querySelector('input[name="propertyType"]:checked')?.value || '';
@@ -559,7 +567,7 @@ if (wizardForm) {
                     wizardForm.querySelector('.wizard-progress').style.display = '';
                     wizardForm.reset();
                     goToStep(1);
-                }, 4000);
+                }, FORM_RESET_DELAY_MS);
             } else {
                 throw new Error(result.error || 'Erreur serveur');
             }
@@ -570,7 +578,7 @@ if (wizardForm) {
             errorDiv.style.cssText = 'color:#e74c3c;background:rgba(231,76,60,0.1);padding:12px 16px;border-radius:8px;margin-top:12px;font-size:0.9rem;';
             errorDiv.textContent = err.message || 'Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par téléphone.';
             submitBtn.parentNode.parentNode.appendChild(errorDiv);
-            setTimeout(() => errorDiv.remove(), 5000);
+            setTimeout(() => errorDiv.remove(), ERROR_DISPLAY_MS);
         } finally {
             // Restore button
             submitBtn.disabled = false;
@@ -579,9 +587,6 @@ if (wizardForm) {
     });
 }
 
-// ============================================
-// SMOOTH SCROLL
-// ============================================
 // ============================================
 // SMOOTH SCROLL (Native + Hash Handling)
 // ============================================
@@ -617,7 +622,7 @@ window.addEventListener('load', () => {
                 const y = targetEl.getBoundingClientRect().top + window.pageYOffset - 80;
                 window.scrollTo({ top: y, behavior: 'smooth' });
             }
-        }, 500);
+        }, SCROLL_SETTLE_MS);
     }
 });
 
