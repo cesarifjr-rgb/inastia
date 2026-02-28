@@ -1,6 +1,28 @@
 // Vercel Serverless Function — Contact Form Handler
 // Validates Cloudflare Turnstile + sends email via Resend
 
+// --- Security: HTML entity encoding to prevent injection in email body ---
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// --- Security: Validate email format ---
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// --- Security: Truncate string to max length ---
+function truncate(str, maxLen) {
+    if (!str) return '';
+    return String(str).slice(0, maxLen);
+}
+
 export default async function handler(req, res) {
     // CORS / Method guard
     if (req.method !== 'POST') {
@@ -16,6 +38,16 @@ export default async function handler(req, res) {
     // --- 1. Validate required fields ---
     if (!firstName || !lastName || !email) {
         return res.status(400).json({ success: false, error: 'Champs obligatoires manquants.' });
+    }
+
+    // --- 1b. Validate email format ---
+    if (!isValidEmail(email)) {
+        return res.status(400).json({ success: false, error: 'Adresse email invalide.' });
+    }
+
+    // --- 1c. Enforce input length limits ---
+    if (String(firstName).length > 100 || String(lastName).length > 100 || String(email).length > 254) {
+        return res.status(400).json({ success: false, error: 'Données trop longues.' });
     }
 
     // --- 2. Verify Turnstile token server-side ---
@@ -40,7 +72,20 @@ export default async function handler(req, res) {
     }
 
     // --- 3. Send email via Resend ---
-    const subject = `Nouveau lead Inastia — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`;
+    // Sanitize all user inputs before embedding in HTML
+    const safeFirstName = escapeHtml(truncate(firstName, 100));
+    const safeLastName = escapeHtml(truncate(lastName, 100));
+    const safeEmail = escapeHtml(truncate(email, 254));
+    const safePhone = escapeHtml(truncate(phone, 30));
+    const safePropertyType = escapeHtml(truncate(propertyType, 50));
+    const safeLocation = escapeHtml(truncate(location, 100));
+    const safeBedrooms = escapeHtml(truncate(bedrooms, 5));
+    const safeBathrooms = escapeHtml(truncate(bathrooms, 5));
+    const safeSurface = escapeHtml(truncate(surface, 10));
+    const safeCapacity = escapeHtml(truncate(capacity, 5));
+    const safeMessage = escapeHtml(truncate(message, 2000));
+
+    const subject = `Nouveau lead Inastia — ${safePropertyType || 'Non précisé'} à ${safeLocation || 'Non précisé'}`;
 
     const htmlBody = `
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;border-radius:12px;overflow:hidden">
@@ -51,24 +96,24 @@ export default async function handler(req, res) {
       <div style="padding:24px 32px">
         <h2 style="color:#1a1a2e;font-size:16px;margin:0 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">👤 Contact</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
-          <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0;font-weight:600">${firstName} ${lastName}</td></tr>
-          <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${email}" style="color:#16213e">${email}</a></td></tr>
-          ${phone ? `<tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0"><a href="tel:${phone}" style="color:#16213e">${phone}</a></td></tr>` : ''}
+          <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0;font-weight:600">${safeFirstName} ${safeLastName}</td></tr>
+          <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${safeEmail}" style="color:#16213e">${safeEmail}</a></td></tr>
+          ${safePhone ? `<tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0"><a href="tel:${safePhone}" style="color:#16213e">${safePhone}</a></td></tr>` : ''}
         </table>
 
         <h2 style="color:#1a1a2e;font-size:16px;margin:24px 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">🏡 Bien</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
-          ${propertyType ? `<tr><td style="padding:6px 0;color:#666;width:140px">Type</td><td style="padding:6px 0;font-weight:600">${propertyType}</td></tr>` : ''}
-          ${location ? `<tr><td style="padding:6px 0;color:#666">Localisation</td><td style="padding:6px 0">${location}</td></tr>` : ''}
-          ${bedrooms ? `<tr><td style="padding:6px 0;color:#666">Chambres</td><td style="padding:6px 0">${bedrooms}</td></tr>` : ''}
-          ${bathrooms ? `<tr><td style="padding:6px 0;color:#666">Salles de bain</td><td style="padding:6px 0">${bathrooms}</td></tr>` : ''}
-          ${surface ? `<tr><td style="padding:6px 0;color:#666">Surface</td><td style="padding:6px 0">${surface} m²</td></tr>` : ''}
-          ${capacity ? `<tr><td style="padding:6px 0;color:#666">Capacité</td><td style="padding:6px 0">${capacity} voyageurs</td></tr>` : ''}
+          ${safePropertyType ? `<tr><td style="padding:6px 0;color:#666;width:140px">Type</td><td style="padding:6px 0;font-weight:600">${safePropertyType}</td></tr>` : ''}
+          ${safeLocation ? `<tr><td style="padding:6px 0;color:#666">Localisation</td><td style="padding:6px 0">${safeLocation}</td></tr>` : ''}
+          ${safeBedrooms ? `<tr><td style="padding:6px 0;color:#666">Chambres</td><td style="padding:6px 0">${safeBedrooms}</td></tr>` : ''}
+          ${safeBathrooms ? `<tr><td style="padding:6px 0;color:#666">Salles de bain</td><td style="padding:6px 0">${safeBathrooms}</td></tr>` : ''}
+          ${safeSurface ? `<tr><td style="padding:6px 0;color:#666">Surface</td><td style="padding:6px 0">${safeSurface} m²</td></tr>` : ''}
+          ${safeCapacity ? `<tr><td style="padding:6px 0;color:#666">Capacité</td><td style="padding:6px 0">${safeCapacity} voyageurs</td></tr>` : ''}
         </table>
 
-        ${message ? `
+        ${safeMessage ? `
         <h2 style="color:#1a1a2e;font-size:16px;margin:24px 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">💬 Message</h2>
-        <p style="background:#fff;padding:16px;border-radius:8px;border-left:4px solid #d4a853;margin:0;font-size:14px;line-height:1.6">${message}</p>
+        <p style="background:#fff;padding:16px;border-radius:8px;border-left:4px solid #d4a853;margin:0;font-size:14px;line-height:1.6">${safeMessage}</p>
         ` : ''}
       </div>
       <div style="background:#f0f0f0;padding:16px 32px;text-align:center;font-size:12px;color:#999">

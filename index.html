@@ -1204,8 +1204,8 @@
             </div>
           </div>
         </div>
-        <form class="wizard-form reveal reveal-delay-2" id="contactForm">
-          <!-- Web3Forms Honeypot (anti-spam) -->
+        <form class="wizard-form reveal reveal-delay-2" id="contactForm" action="/api/contact" method="POST">
+          <!-- Honeypot (anti-spam) -->
           <input type="checkbox" name="botcheck" class="hidden" style="display:none !important" tabindex="-1"
             autocomplete="off">
           <!-- Progress Bar -->

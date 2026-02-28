@@ -15,6 +15,14 @@ export default defineConfig({
         privacy: resolve(__dirname, 'privacy.html'),
         cgv: resolve(__dirname, 'cgv.html'),
       }
+    },
+    // Security: minify output to strip HTML comments in production
+    minify: 'terser',
+    terserOptions: {
+      format: {
+        comments: false
+      }
     }
   }
 })
+
