@@ -9,24 +9,45 @@
     <meta name="description"
         content="Mentions légales du site Inastia, conciergerie de locations saisonnières en Corse. Informations sur l'éditeur, l'hébergeur et les droits de propriété intellectuelle.">
 
-    <!-- Canonical & Alternate Languages -->
-    <link rel="canonical" href="https://inastia.fr/mentions-legales.html">
-    <link rel="alternate" hreflang="fr" href="https://inastia.fr/mentions-legales.html">
-    <link rel="alternate" hreflang="en" href="https://inastia.fr/mentions-legales.html">
+    <!-- Canonical -->
+    <link rel="canonical" href="https://inastia.fr/mentions-legales">
+    <link rel="alternate" hreflang="fr" href="https://inastia.fr/mentions-legales">
+
+    <!-- Author -->
+    <meta name="author" content="Inastia SAS">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Mentions Légales — Inastia">
     <meta property="og:description" content="Mentions légales de la conciergerie Inastia en Corse.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://inastia.fr/mentions-legales.html">
+    <meta property="og:url" content="https://inastia.fr/mentions-legales">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:site_name" content="Inastia">
+    <meta property="og:image" content="https://inastia.fr/villa_amichi.webp">
 
-    <!-- Preconnect & Google Fonts -->
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Mentions Légales — Inastia">
+    <meta name="twitter:description" content="Mentions légales de la conciergerie Inastia en Corse.">
+
+    <!-- Preconnect & Google Fonts (async preload) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+    <!-- BreadcrumbList Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://inastia.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Mentions Légales" }
+      ]
+    }
+    </script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="/style.css">
