@@ -364,7 +364,7 @@ function animateCounters() {
 
     document.querySelectorAll('.stat-number[data-target]').forEach(counter => {
         const target = parseFloat(counter.dataset.target);
-        const isDecimal = counter.dataset.decimal === 'true';
+        const decimals = counter.dataset.decimals ? parseInt(counter.dataset.decimals, 10) : (counter.dataset.decimal === 'true' ? 1 : 0);
         const prefix = counter.dataset.prefix || '';
         const suffix = counter.dataset.suffix || '';
         const duration = COUNTER_DURATION_MS;
@@ -374,10 +374,10 @@ function animateCounters() {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const ease = 1 - (1 - progress) * (1 - progress);
-            const current = isDecimal ? (target * ease).toFixed(1) : Math.floor(target * ease);
+            const current = decimals > 0 ? (target * ease).toFixed(decimals) : Math.floor(target * ease);
             counter.textContent = `${prefix}${current}${suffix}`;
             if (progress < 1) requestAnimationFrame(updateCounter);
-            else counter.textContent = `${prefix}${isDecimal ? target.toFixed(1) : target}${suffix}`;
+            else counter.textContent = `${prefix}${decimals > 0 ? target.toFixed(decimals) : target}${suffix}`;
         }
         requestAnimationFrame(updateCounter);
     });

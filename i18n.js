@@ -10,15 +10,17 @@ const translations = {
         "nav.results": "Résultats",
         "nav.portfolio": "Portfolio",
         "nav.testimonials": "Témoignages",
-        "nav.cta": "Nous Contacter",
+        "nav.cta": "Audit gratuit",
+        "nav.offers": "Formules",
+        "nav.zone": "Zones",
 
         // Hero
-        "hero.label": "Conciergerie de locations saisonnières",
-        "hero.title.line1": "L'excellence <span style=\"white-space:nowrap\">au service</span>",
-        "hero.title.line2": "de votre <em>résidence</em>",
-        "hero.subtitle": "Confiez-nous la gestion complète de votre bien. Nous maximisons vos revenus tout en offrant une expérience inoubliable à vos voyageurs.",
-        "hero.cta1": "Estimer mes revenus",
-        "hero.cta2": "Découvrir nos services",
+        "hero.label": "Conciergerie Airbnb & location saisonnière",
+        "hero.title.line1": "Conciergerie Airbnb",
+        "hero.title.line2": "en <em>Corse-du-Sud</em>",
+        "hero.subtitle": "Inastia accompagne les propriétaires de Ghisonaccia à Porto-Vecchio : annonce optimisée, voyageurs, ménage, linge, maintenance et revenus locatifs pilotés avec exigence.",
+        "hero.cta1": "Recevoir mon audit gratuit",
+        "hero.cta2": "Voir nos formules",
         "hero.scroll": "Découvrir",
 
         // Ticker
@@ -36,6 +38,40 @@ const translations = {
         "services.card3.text": "Yield management intelligent, pricing dynamique et multi-diffusion sur toutes les plateformes pour un taux d'occupation maximal.",
         "services.card4.title": "Ménage de Qualité",
         "services.card4.text": "Nettoyage hôtelier après chaque séjour, contrôle qualité rigoureux, linge premium et maintenance proactive.",
+
+
+        // Offers
+        "offers.label": "Offres propriétaires",
+        "offers.title": "Des formules claires selon votre niveau de délégation",
+        "offers.subtitle": "Commencez par un audit gratuit, puis choisissez la formule adaptée : gestion complète, prestations à la carte ou lancement de votre annonce.",
+        "offers.full.badge": "Le plus demandé",
+        "offers.full.title": "Gestion complète",
+        "offers.full.price": "Commission sur revenus locatifs",
+        "offers.full.text": "Pour les propriétaires qui veulent déléguer l'annonce, les voyageurs, le ménage, le linge, les arrivées, les départs et les imprévus.",
+        "offers.full.li1": "Création et optimisation des annonces",
+        "offers.full.li2": "Communication voyageurs et calendrier",
+        "offers.full.li3": "Coordination ménage, linge et maintenance",
+        "offers.cleaning.title": "Ménage & linge",
+        "offers.cleaning.price": "Forfait selon surface",
+        "offers.cleaning.text": "Pour les propriétaires autonomes qui veulent sécuriser la qualité entre deux séjours.",
+        "offers.cleaning.li1": "Nettoyage hôtelier après séjour",
+        "offers.cleaning.li2": "Photos de contrôle après intervention",
+        "offers.cleaning.li3": "Linge et consommables selon besoin",
+        "offers.checkin.title": "Check-in / check-out",
+        "offers.checkin.price": "À la mission",
+        "offers.checkin.text": "Pour assurer une arrivée fluide, un départ contrôlé et une présence locale rassurante.",
+        "offers.checkin.li1": "Accueil personnalisé ou autonome",
+        "offers.checkin.li2": "Contrôle du logement au départ",
+        "offers.checkin.li3": "Remontée rapide des anomalies",
+        "offers.launch.title": "Pack lancement Airbnb",
+        "offers.launch.price": "Audit + mise en ligne",
+        "offers.launch.text": "Pour transformer un logement en annonce prête à louer, avec photos, texte, prix de départ et checklist d'ouverture.",
+        "offers.launch.li1": "Audit du potentiel locatif",
+        "offers.launch.li2": "Optimisation annonce et calendrier",
+        "offers.launch.li3": "Guide voyageur et recommandations locales",
+        "offers.note.title": "Transparence :",
+        "offers.note.text": "les tarifs exacts dépendent du bien, de la saison, de la zone, du niveau de service et des prestataires nécessaires. L'audit gratuit permet de cadrer une proposition réaliste.",
+
 
         // Process
         "process.label": "Comment ça marche",
@@ -108,8 +144,8 @@ const translations = {
 
         // Contact
         "contact.label": "Contact",
-        "contact.title": "Parlons de votre<br />projet",
-        "contact.subtitle": "Que vous soyez propriétaire d'une villa, d'un appartement ou d'une maison de caractère, nous avons une solution sur mesure pour vous.",
+        "contact.title": "Recevez votre<br />audit gratuit",
+        "contact.subtitle": "Décrivez votre bien : nous revenons vers vous avec une première lecture de son potentiel locatif, des points de blocage et du niveau de gestion adapté.",
         "contact.location": "Corse-du-Sud, France",
 
         // Wizard
@@ -149,8 +185,8 @@ const translations = {
         "footer.brand": "Conciergerie de locations saisonnières haut de gamme. Nous valorisons votre patrimoine et optimisons vos revenus locatifs.",
         "footer.services": "Services",
         "footer.services.link1": "Gestion complète",
-        "footer.services.link2": "Accueil des Voyageurs",
-        "footer.services.link3": "Optimisation des Revenus",
+        "footer.services.link2": "Pack lancement Airbnb",
+        "footer.services.link3": "Audit de revenus",
         "footer.services.link4": "Ménage de Qualité",
         "footer.company": "Entreprise",
         "footer.company.link1": "À propos",
@@ -354,15 +390,17 @@ const translations = {
         "nav.results": "Results",
         "nav.portfolio": "Portfolio",
         "nav.testimonials": "Reviews",
-        "nav.cta": "Contact Us",
+        "nav.cta": "Free audit",
+        "nav.offers": "Packages",
+        "nav.zone": "Areas",
 
         // Hero
-        "hero.label": "Seasonal rental concierge",
-        "hero.title.line1": "Excellence <span style=\"white-space:nowrap\">at the service</span>",
-        "hero.title.line2": "of your <em>property</em>",
-        "hero.subtitle": "Entrust us with the complete management of your property. We maximize your income while offering an unforgettable experience to your guests.",
-        "hero.cta1": "Estimate my income",
-        "hero.cta2": "Discover our services",
+        "hero.label": "Airbnb & seasonal rental concierge",
+        "hero.title.line1": "Airbnb concierge",
+        "hero.title.line2": "in <em>South Corsica</em>",
+        "hero.subtitle": "Inastia supports owners from Ghisonaccia to Porto-Vecchio: optimized listings, guests, cleaning, linen, maintenance and rental income managed with high standards.",
+        "hero.cta1": "Get my free audit",
+        "hero.cta2": "View packages",
         "hero.scroll": "Discover",
 
         // Ticker
@@ -380,6 +418,40 @@ const translations = {
         "services.card3.text": "Smart yield management, dynamic pricing and multi-platform distribution for maximum occupancy rates.",
         "services.card4.title": "Cleaning",
         "services.card4.text": "Hotel-grade cleaning after every stay, rigorous quality control, premium linen and proactive maintenance.",
+
+
+
+        // Offers
+        "offers.label": "Owner packages",
+        "offers.title": "Clear packages for every level of delegation",
+        "offers.subtitle": "Start with a free audit, then choose the right package: full management, à la carte services or launch support.",
+        "offers.full.badge": "Most requested",
+        "offers.full.title": "Full management",
+        "offers.full.price": "Commission on rental income",
+        "offers.full.text": "For owners who want to delegate listings, guests, cleaning, linen, arrivals, departures and unexpected issues.",
+        "offers.full.li1": "Listing creation and optimization",
+        "offers.full.li2": "Guest communication and calendar",
+        "offers.full.li3": "Cleaning, linen and maintenance coordination",
+        "offers.cleaning.title": "Cleaning & linen",
+        "offers.cleaning.price": "Fixed fee based on property size",
+        "offers.cleaning.text": "For autonomous owners who want reliable quality between stays.",
+        "offers.cleaning.li1": "Hotel-grade cleaning after each stay",
+        "offers.cleaning.li2": "Post-cleaning control photos",
+        "offers.cleaning.li3": "Linen and supplies when needed",
+        "offers.checkin.title": "Check-in / check-out",
+        "offers.checkin.price": "Per mission",
+        "offers.checkin.text": "For smooth arrivals, controlled departures and reassuring local presence.",
+        "offers.checkin.li1": "Personalized or self check-in",
+        "offers.checkin.li2": "Property check at departure",
+        "offers.checkin.li3": "Fast anomaly reporting",
+        "offers.launch.title": "Airbnb launch pack",
+        "offers.launch.price": "Audit + go-live",
+        "offers.launch.text": "To turn a property into a rental-ready listing with photos, copy, initial pricing and opening checklist.",
+        "offers.launch.li1": "Rental potential audit",
+        "offers.launch.li2": "Listing and calendar optimization",
+        "offers.launch.li3": "Guest guide and local recommendations",
+        "offers.note.title": "Transparency:",
+        "offers.note.text": "exact prices depend on the property, season, area, service level and required providers. The free audit frames a realistic proposal.",
 
         // Process
         "process.label": "How it works",
@@ -452,8 +524,8 @@ const translations = {
 
         // Contact
         "contact.label": "Contact",
-        "contact.title": "Let's talk about<br />your project",
-        "contact.subtitle": "Whether you own a villa, apartment or character property, we have a tailored solution for you.",
+        "contact.title": "Get your<br />free audit",
+        "contact.subtitle": "Tell us about your property: we will come back with an initial view of its rental potential, blockers and the right management level.",
         "contact.location": "South Corsica, France",
 
         // Wizard
@@ -493,8 +565,8 @@ const translations = {
         "footer.brand": "Premium seasonal rental concierge. We enhance your property value and optimize your rental income.",
         "footer.services": "Services",
         "footer.services.link1": "Full management",
-        "footer.services.link2": "Guest welcome",
-        "footer.services.link3": "Revenue optimization",
+        "footer.services.link2": "Airbnb launch pack",
+        "footer.services.link3": "Revenue audit",
         "footer.services.link4": "Cleaning",
         "footer.company": "Company",
         "footer.company.link1": "About us",
@@ -743,6 +815,8 @@ function setLanguage(lang) {
         const line1 = translations[lang]?.['hero.title.line1'] || '';
         const line2 = translations[lang]?.['hero.title.line2'] || '';
         heroTitle.innerHTML = `<span class="hero-line">${line1}</span><span class="hero-line">${line2}</span>`;
+        const plainTitle = `${line1} ${line2}`.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+        if (plainTitle) heroTitle.setAttribute('aria-label', plainTitle);
         window.animateHeroTitle();
     }
 }
