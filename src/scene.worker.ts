@@ -35,23 +35,23 @@ function initialize(
     alpha: true,
     antialias: true,
   });
-  renderer.setClearColor(0x080f14, 0);
+  renderer.setClearColor(0xf8f3e9, 0);
   renderer.setPixelRatio(Math.min(initial.pixelRatio, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
+  renderer.toneMappingExposure = 1.05;
 
   const scene = new THREE.Scene();
   const model = new THREE.Group();
   scene.add(model);
   const camera = new THREE.OrthographicCamera(-7, 7, 6, -6, 0.1, 60);
-  camera.position.set(11, 9, 13);
+  camera.position.set(4, 2.8, 18);
   camera.lookAt(0, 0.8, 0);
-  scene.add(new THREE.HemisphereLight(0xe0f3f5, 0x657069, 2.3));
-  const sun = new THREE.DirectionalLight(0xffefd1, 4.2);
-  sun.position.set(-5, 10, 6);
+  scene.add(new THREE.HemisphereLight(0xdceef4, 0xd6c6a3, 2.4));
+  const sun = new THREE.DirectionalLight(0xfffbef, 3.4);
+  sun.position.set(-5, 7, 9);
   sun.castShadow = true;
   sun.shadow.mapSize.set(1024, 1024);
   Object.assign(sun.shadow.camera, {
@@ -66,8 +66,8 @@ function initialize(
   sun.shadow.bias = -0.0003;
   sun.shadow.radius = 3;
   scene.add(sun);
-  const rim = new THREE.DirectionalLight(0x93c6d4, 2);
-  rim.position.set(5, 5, -7);
+  const rim = new THREE.DirectionalLight(0xe5f4ff, 1.3);
+  rim.position.set(5, 3, 7);
   scene.add(rim);
 
   const materials = new Set<THREE.Material>();
@@ -128,7 +128,7 @@ function initialize(
     if (disposed || width < 1 || height < 1) return;
     renderer.setSize(width, height, false);
     const aspect = width / height;
-    const span = Math.max(5.1, 6.55 / aspect);
+    const span = Math.max(4.25, 5.25 / aspect);
     camera.left = -span * aspect;
     camera.right = span * aspect;
     camera.top = span;

@@ -1,4 +1,4 @@
-"""Render the social card using the Blender villa created by create-villa.py.
+"""Render the social card using the coastal Blender relief from create-coast.py.
 
 Run: blender --background --python scripts/render-share.py
 The source is our generated evidence file, never an open user scene.
@@ -10,16 +10,16 @@ from pathlib import Path
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT.parent / 'inastia-v2-evidence'
-SOURCE = EVIDENCE / 'inastia-villa.blend'
+EVIDENCE = ROOT.parent / 'inastia-v3-evidence'
+SOURCE = EVIDENCE / 'inastia-coast.blend'
 OUTPUT = ROOT / 'public' / 'images' / 'inastia-share.png'
 if not SOURCE.is_file():
-    raise FileNotFoundError('Run scripts/create-villa.py in Blender first.')
+    raise FileNotFoundError('Run scripts/create-coast.py in Blender first.')
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
 scene = bpy.context.scene
 camera = scene.camera
-camera.data.ortho_scale = 20.8
+camera.data.ortho_scale = 17.2
 camera.data.shift_x = -.18
 scene.render.resolution_x = 1200
 scene.render.resolution_y = 630
@@ -58,10 +58,10 @@ def emission(name, hex_color):
 
 # Film-plane background and typography are themselves Blender geometry. This keeps
 # exact sRGB colours and readable typography independent of studio illumination.
-background = emission('Card background #081418', '081418')
-white = emission('Warm white typography', 'ecefe9')
-muted = emission('Sea mist typography', '9fb9b7')
-accent = emission('Soft aqua line', '8ebdc0')
+background = emission('Card background #f8f3e9', 'f8f3e9')
+white = emission('Deep coastal blue typography', '17455b')
+muted = emission('Azure typography', '22739b')
+accent = emission('Azure editorial line', '22739b')
 scene.view_settings.view_transform = 'Standard'
 scene.view_settings.look = 'None'
 scene.view_settings.exposure = 0
@@ -107,17 +107,17 @@ def text(name, content, x, y, size, mat, face=None, spacing=1):
 
 
 x = left + .86
-text('Inastia wordmark', 'INASTIA', x, top-1.43, .72, white, bold, 1.24)
-text('Business descriptor', 'CONCIERGERIE EN CORSE', x, top-2.11, .245, muted, font, 1.13)
-text('Headline first line', 'Votre maison.', x, top-3.97, .77, white, font)
-text('Headline second line', 'L’esprit au large.', x, top-4.98, .77, white, font)
+text('Inastia wordmark', 'INASTIA', x, top-1.23, .61, white, bold, 1.24)
+text('Business descriptor', 'CONCIERGERIE EN CORSE', x, top-1.84, .205, muted, font, 1.13)
+text('Headline first line', 'Votre maison.', x, top-3.57, .64, white, font)
+text('Headline second line', 'L’esprit au large.', x, top-4.40, .64, white, font)
 text('Website address', 'inastia.fr', x, -top+1.09, .26, muted, font, 1.06)
 # A delicate graphic rule balances the intentionally spare composition.
 bpy.ops.mesh.primitive_plane_add(size=1)
 rule = bpy.context.object
 rule.name = 'Editorial aqua rule'
 rule.parent = camera
-rule.location = (x+.36,top-2.77,-7)
+rule.location = (x+.36,top-2.46,-7)
 rule.rotation_euler = (0,0,0)
 rule.scale = (.72,.018,1)
 rule.data.materials.append(accent)

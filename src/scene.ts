@@ -1,8 +1,8 @@
 import type { SceneMessage, SceneReply } from "./scene.worker";
 
 /** DOM bridge only. Blender/Three rendering and parsing live in a dedicated worker. */
-export function initVillaScene(): void {
-  const host = document.querySelector<HTMLElement>("[data-villa-scene]");
+export function initCoastScene(): void {
+  const host = document.querySelector<HTMLElement>("[data-coast-scene]");
   if (
     !host ||
     host.dataset.sceneInitialized ||
@@ -151,7 +151,7 @@ export function initVillaScene(): void {
       pixelRatio: Math.min(window.devicePixelRatio, 1.5),
       compact: compact.matches,
       active: active(),
-      url: new URL("/models/inastia-villa.glb", window.location.href).href,
+      url: new URL("/models/inastia-coast.glb", window.location.href).href,
     } satisfies SceneMessage,
     [offscreen],
   );

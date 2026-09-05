@@ -93,7 +93,7 @@ export function initMotion(): void {
             },
           });
           gsap.to(".manifesto-section h2 span", {
-            color: "#34584c",
+            color: "#1c6285",
             ease: "none",
             scrollTrigger: {
               trigger: ".manifesto-section",
@@ -143,15 +143,15 @@ export function initMotion(): void {
     void update();
   });
   void update();
-  if (document.querySelector("[data-villa-scene]")) {
+  if (document.querySelector("[data-coast-scene]")) {
     // Let the useful HTML paint before initializing the optional WebGL scene.
     requestAnimationFrame(() => {
       window.setTimeout(() => {
         void import("./scene.ts")
-          .then(({ initVillaScene }) => initVillaScene())
+          .then(({ initCoastScene }) => initCoastScene())
           .catch(() => {
             const host =
-              document.querySelector<HTMLElement>("[data-villa-scene]");
+              document.querySelector<HTMLElement>("[data-coast-scene]");
             if (host) host.dataset.sceneState = "fallback";
           });
       }, 0);

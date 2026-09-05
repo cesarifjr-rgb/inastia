@@ -344,7 +344,7 @@ test("without JavaScript, content, navigation, FAQs and direct contact remain us
   await page.goto("/");
   await expect(page.locator("h1")).toBeVisible();
   await expect(
-    page.locator("[data-villa-scene] .scene-fallback"),
+    page.locator("[data-coast-scene] .scene-fallback"),
   ).toBeVisible();
   await expect(page.locator("#motion-toggle")).toBeHidden();
   for (const section of await page.locator("[data-reveal]").all()) {

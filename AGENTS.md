@@ -18,7 +18,7 @@
 - `src/client.ts` gère l'interface ; `src/contact.ts` gère le formulaire.
 - `api/contact.js` est la fonction serveur Vercel utilisant Turnstile et Resend.
 - `src/motion.ts` pilote GSAP/pause ; `src/scene.ts` est le pont DOM ; `src/scene.worker.ts` charge/rend le GLB via Three.js et OffscreenCanvas ; `src/art.ts` fournit le repli SVG.
-- Les sources Blender sont `scripts/create-villa.py` et `scripts/render-share.py` ; le GLB est versionné, les .blend restent hors dépôt.
+- Les sources Blender sont `scripts/create-coast.py` et `scripts/render-share.py` ; le GLB est versionné, les .blend restent hors dépôt.
 
 ## Modifications
 

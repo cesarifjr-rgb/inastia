@@ -40,13 +40,13 @@ async function expectStaticFrames(scene: Locator, page: Page): Promise<void> {
   expect(await sceneFrame(scene)).toBe(first);
 }
 
-test("desktop scene renders a visible nonblank canvas when WebGL is available", async ({
+test("desktop coastal scene renders a visible nonblank canvas when WebGL is available", async ({
   page,
 }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-villa-scene]");
+  const scene = page.locator("[data-coast-scene]");
   await expect(scene).toBeVisible();
   if (!(await hasWebGL(page))) {
     await expect(scene).toHaveAttribute("data-scene-state", "fallback");
@@ -92,7 +92,7 @@ test("motion button pauses actual rendering and resumes it with the keyboard", a
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-villa-scene]");
+  const scene = page.locator("[data-coast-scene]");
   const toggle = page.locator("#motion-toggle");
   await expect(toggle).toBeVisible();
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
@@ -147,7 +147,7 @@ test("reduced-motion starts without a rendering loop and leaves content visible"
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const scene = page.locator("[data-villa-scene]");
+  const scene = page.locator("[data-coast-scene]");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
   await expect(page.locator("#motion-toggle")).toHaveAttribute(
     "aria-pressed",
@@ -194,12 +194,12 @@ test("missing OffscreenCanvas transfer support preserves the fallback and naviga
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await page.goto("/");
-  await expect(page.locator("[data-villa-scene]")).toHaveAttribute(
+  await expect(page.locator("[data-coast-scene]")).toHaveAttribute(
     "data-scene-state",
     "fallback",
   );
   await expect(page.locator("h1")).toBeVisible();
-  const fallback = page.locator("[data-villa-scene] .scene-fallback");
+  const fallback = page.locator("[data-coast-scene] .scene-fallback");
   await expect(fallback).toBeVisible();
   await expect(fallback).toHaveAttribute("aria-hidden", "true");
   expect(
@@ -233,7 +233,7 @@ OffscreenCanvas.prototype.getContext = function (type, ...args) {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  const scene = page.locator("[data-villa-scene]");
+  const scene = page.locator("[data-coast-scene]");
   await expect(scene).toHaveAttribute("data-scene-state", "fallback");
   expect(
     interceptedWorker,
@@ -306,7 +306,7 @@ test("BFCache history return resumes scene rendering and preserves pause control
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/");
-    const scene = page.locator("[data-villa-scene]");
+    const scene = page.locator("[data-coast-scene]");
     await expect(scene).toHaveAttribute("data-scene-state", "ready");
     const initialFrame = await sceneFrame(scene);
     await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(initialFrame);
