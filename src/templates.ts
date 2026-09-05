@@ -1,7 +1,17 @@
 import { readFileSync } from "node:fs";
+import { servicesFor } from "./content/services.ts";
+import { serviceArt } from "./art.ts";
 import type { Locale, PageContent } from "./content/pages.ts";
 import { header, footer, contactCallout, faq, zones } from "./components.ts";
-import { arrow, contactPath, escape, path, picture, t, type ContactIntent } from "./lib.ts";
+import {
+  arrow,
+  contactPath,
+  escape,
+  path,
+  picture,
+  t,
+  type ContactIntent,
+} from "./lib.ts";
 
 export interface DocumentOptions {
   locale: Locale;
@@ -36,40 +46,99 @@ export function document(options: DocumentOptions): string {
     description:
       "Conciergerie familiale de locations saisonnières sur la côte est de la Corse, de Ghisonaccia à Porto-Vecchio.",
   };
-  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f8f3e9"><title>${escape(title)}</title><meta name="description" content="${escape(description)}"><meta name="robots" content="${noindex ? "noindex, follow" : "index, follow"}"><link rel="canonical" href="${url}">${translated && !noindex ? `<link rel="alternate" hreflang="fr" href="https://inastia.fr/${slug}"><link rel="alternate" hreflang="en" href="https://inastia.fr/en/${slug}"><link rel="alternate" hreflang="x-default" href="https://inastia.fr/${slug}">` : ""}<meta property="og:type" content="website"><meta property="og:site_name" content="Inastia"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${locale === "fr" ? "fr_FR" : "en_GB"}"><meta property="og:image" content="https://inastia.fr/images/inastia-share.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Inastia — les clés de votre maison, le soin de votre accueil"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(title)}"><meta name="twitter:description" content="${escape(description)}"><meta name="twitter:image" content="https://inastia.fr/images/inastia-share.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preload" href="/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin><script type="application/ld+json">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script><script type="module" src="/src/client.ts"></script></head><body>${header(locale, slug)}<main id="main" tabindex="-1">${content}</main>${footer(locale)}</body></html>`;
+  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f4f7f5"><title>${escape(title)}</title><meta name="description" content="${escape(description)}"><meta name="robots" content="${noindex ? "noindex, follow" : "index, follow"}"><link rel="canonical" href="${url}">${translated && !noindex ? `<link rel="alternate" hreflang="fr" href="https://inastia.fr/${slug}"><link rel="alternate" hreflang="en" href="https://inastia.fr/en/${slug}"><link rel="alternate" hreflang="x-default" href="https://inastia.fr/${slug}">` : ""}<meta property="og:type" content="website"><meta property="og:site_name" content="Inastia"><meta property="og:title" content="${escape(title)}"><meta property="og:description" content="${escape(description)}"><meta property="og:url" content="${url}"><meta property="og:locale" content="${locale === "fr" ? "fr_FR" : "en_GB"}"><meta property="og:image" content="https://inastia.fr/images/inastia-share.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${t(locale, "Inastia — Votre location en Corse. Un relais sur place.", "Inastia — Your rental in Corsica. Local care, for you.")}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escape(title)}"><meta name="twitter:description" content="${escape(description)}"><meta name="twitter:image" content="https://inastia.fr/images/inastia-share.png"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preload" href="/fonts/space-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin><script type="application/ld+json">${JSON.stringify(schema).replace(/</g, "\\u003c")}</script><script type="module" src="/src/client.ts"></script></head><body>${header(locale, slug)}<main id="main" tabindex="-1">${content}</main>${footer(locale)}</body></html>`;
 }
 
 export function secondary(locale: Locale, page: PageContent): string {
-  const intents: Record<string, ContactIntent> = {
-    "gestion-airbnb-corse-du-sud": "gestion",
-    "pack-lancement-airbnb": "annonce",
-    "menage-airbnb-corse-du-sud": "rotation",
-    "audit-gratuit-potentiel-locatif": "audit",
-  };
-  const intent = intents[page.slug];
-  const summaryTitle = page.kind === "audit"
-    ? t(locale, "Un retour par appel ou email.", "Feedback by phone or email.")
-    : page.kind === "about"
-      ? t(locale, "Votre lien avec le terrain.", "Your connection to the ground.")
-      : t(locale, "L’accompagnement en bref.", "Your support at a glance.");
-  const summaryItems = page.kind === "audit"
-    ? [t(locale, "Une première analyse qualitative", "An initial qualitative review"), t(locale, "Les améliorations à prioriser", "The improvements to prioritise"), t(locale, "Un accompagnement adapté à vos besoins", "Support suited to your needs")]
-    : page.kind === "about"
-      ? [t(locale, "Une relation directe avec notre équipe", "A direct relationship with our team"), t(locale, "Des prestations définies avec vous", "Services agreed with you"), t(locale, "Des informations pour vos décisions", "Information to support your decisions")]
-      : page.sections.flatMap((section) => section.items ?? []).slice(0, 3);
-  const summaryNote = page.kind === "audit"
-    ? t(locale, "Gratuit, même sans annonce existante. Cette analyse ne constitue pas une prévision de revenus.", "Free, even without an existing listing. This review is not a rental income forecast.")
-    : page.kind === "about"
-      ? t(locale, "De Ghisonaccia à Porto-Vecchio. Votre adresse permet de confirmer les prestations possibles.", "From Ghisonaccia to Porto-Vecchio. Your address lets us confirm the services available.")
-      : t(locale, "Le périmètre, la durée et les frais sont précisés avant le démarrage.", "Scope, duration and costs are specified before work begins.");
+  const service = servicesFor(locale).find((item) => item.slug === page.slug);
+  const intent: ContactIntent | undefined =
+    service?.intent ?? (page.kind === "audit" ? "audit" : undefined);
+  const summaryTitle = service
+    ? t(locale, "Le partage des rôles.", "How responsibilities are shared.")
+    : page.kind === "audit"
+      ? t(
+          locale,
+          "Un retour par appel ou email.",
+          "Feedback by phone or email.",
+        )
+      : page.kind === "about"
+        ? t(
+            locale,
+            "Votre lien avec le terrain.",
+            "Your connection to the ground.",
+          )
+        : t(
+            locale,
+            "Les repères de votre secteur.",
+            "A closer look at your area.",
+          );
+  const summaryItems =
+    page.kind === "audit"
+      ? [
+          t(
+            locale,
+            "Une première analyse qualitative",
+            "An initial qualitative review",
+          ),
+          t(
+            locale,
+            "Les améliorations à prioriser",
+            "The improvements to prioritise",
+          ),
+          t(
+            locale,
+            "Un accompagnement adapté à vos besoins",
+            "Support suited to your needs",
+          ),
+        ]
+      : page.kind === "about"
+        ? [
+            t(
+              locale,
+              "Une relation directe avec notre équipe",
+              "A direct relationship with our team",
+            ),
+            t(
+              locale,
+              "Des prestations définies avec vous",
+              "Services agreed with you",
+            ),
+            t(
+              locale,
+              "Des informations pour vos décisions",
+              "Information to support your decisions",
+            ),
+          ]
+        : page.sections.map((section) => section.title);
+  const summaryNote =
+    page.kind === "audit"
+      ? t(
+          locale,
+          "Gratuit, même sans annonce existante. Cette analyse ne constitue pas une prévision de revenus.",
+          "Free, even without an existing listing. This review is not a rental income forecast.",
+        )
+      : page.kind === "about" || page.kind === "location"
+        ? t(
+            locale,
+            "De Ghisonaccia à Porto-Vecchio. Votre adresse permet de confirmer les prestations possibles.",
+            "From Ghisonaccia to Porto-Vecchio. Your address lets us confirm the services available.",
+          )
+        : t(
+            locale,
+            "Le périmètre, la durée et les frais sont précisés avant le démarrage.",
+            "Scope, duration and costs are specified before work begins.",
+          );
+  const summaryContent = service
+    ? `<dl class="summary-roles"><div><dt>${t(locale, "Vous nous confiez", "You hand over")}</dt><dd>${escape(service.delegate)}</dd></div><div><dt>${t(locale, "Vous gardez", "You keep")}</dt><dd>${escape(service.keep)}</dd></div><div><dt>${t(locale, "Le coût", "The cost")}</dt><dd>${escape(service.cost)}</dd></div></dl>`
+    : `<ul class="summary-list">${summaryItems.map((item) => `<li>${escape(item)}</li>`).join("")}</ul>`;
   const propertyCaption =
     page.image === "villa_lova"
       ? "Cala Lova · Cala d’Oro"
       : page.image === "casa_verde"
         ? "Casa Verde · Pinarello"
         : "Villa d’Amichi · Pinarello";
-  return `<section class="page-hero"><div class="page-hero-copy"><nav class="breadcrumb" aria-label="${t(locale, "Fil d’Ariane", "Breadcrumb")}"><a href="${path(locale)}">${t(locale, "Accueil", "Home")}</a><span aria-hidden="true">/</span><span>${escape(page.eyebrow)}</span></nav><p class="eyebrow">${escape(page.eyebrow)}</p><h1>${escape(page.heading)}</h1><p class="lead">${escape(page.intro)}</p><a class="button" href="${contactPath(locale, intent)}">${page.kind === "audit" ? t(locale, "Demander mon audit gratuit", "Request my free review") : t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a></div><aside class="page-summary"><p class="eyebrow">${t(locale, "POUR VOTRE BIEN", "FOR YOUR PROPERTY")}</p><h2>${summaryTitle}</h2><ul class="summary-list">${summaryItems.map((item) => `<li>${escape(item)}</li>`).join("")}</ul><p class="summary-note">${summaryNote}</p><figure class="page-property">${picture(page.image, page.imageAlt)}<figcaption>${propertyCaption}<br>${t(locale, "Une maison de notre portfolio", "A home from our portfolio")}</figcaption></figure></aside></section>
-  <section class="section"><div class="container page-sections"><nav class="page-aside" aria-label="${t(locale, "Dans cette page", "On this page")}"><p class="eyebrow">${t(locale, "L’essentiel", "At a glance")}</p>${page.sections.map((section, index) => `<a href="#section-${index + 1}">${escape(section.title)}</a>`).join("")}</nav><div>${page.sections.map((section, index) => `<section class="editorial-section" data-reveal id="section-${index + 1}"><h2>${escape(section.title)}</h2><p>${escape(section.text)}</p>${section.items?.length ? `<ul>${section.items.map((item) => `<li>${escape(item)}</li>`).join("")}</ul>` : ""}</section>`).join("")}<nav class="related-links" aria-label="${t(locale, "À découvrir aussi", "Explore more")}">${page.kind === "location" ? `<a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a><a href="${path(locale, "menage-airbnb-corse-du-sud")}">${t(locale, "Accueil et rotation séjour", "Guest welcome and changeovers")}</a>` : zones.map(([name, slug]) => `<a href="${path(locale, slug)}">${name}</a>`).join("")}</nav></div></div></section>${faq(locale, page.faq)}${contactCallout(locale)}`;
+  return `<section class="page-hero frontier-page page-${page.kind}"><div class="page-hero-copy"><nav class="breadcrumb" aria-label="${t(locale, "Fil d’Ariane", "Breadcrumb")}"><a href="${path(locale)}">${t(locale, "Accueil", "Home")}</a><span aria-hidden="true">/</span><span>${escape(page.eyebrow)}</span></nav><p class="eyebrow">${escape(page.eyebrow)}</p><h1>${escape(page.heading)}</h1><p class="lead">${escape(page.intro)}</p><a class="button" href="${contactPath(locale, intent)}">${page.kind === "audit" ? t(locale, "Demander mon audit gratuit", "Request my free review") : t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a></div><aside class="page-summary">${service ? `<span class="summary-index" aria-hidden="true">${String(service.index + 1).padStart(2, "0")}</span><div class="page-service-art" aria-hidden="true">${serviceArt(service.index)}</div>` : ""}<p class="eyebrow">${t(locale, "POUR VOTRE BIEN", "FOR YOUR PROPERTY")}</p><h2>${summaryTitle}</h2>${summaryContent}<p class="summary-note">${summaryNote}</p><figure class="page-property">${picture(page.image, page.imageAlt)}<figcaption>${propertyCaption}<br>${t(locale, "Une maison de notre portfolio", "A home from our portfolio")}</figcaption></figure></aside></section>
+  <section class="section"><div class="container page-sections"><nav class="page-aside" aria-label="${t(locale, "Dans cette page", "On this page")}"><p class="eyebrow">${t(locale, "L’essentiel", "At a glance")}</p>${page.sections.map((section, index) => `<a href="#section-${index + 1}">${escape(section.title)}</a>`).join("")}</nav><div>${page.sections.map((section, index) => `<section class="editorial-section" data-reveal id="section-${index + 1}">${/^\s*\d+[.)]/.test(section.title) ? "" : `<span class="editorial-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>`}<h2>${escape(section.title)}</h2><p>${escape(section.text)}</p>${section.items?.length ? `<ul>${section.items.map((item) => `<li>${escape(item)}</li>`).join("")}</ul>` : ""}</section>`).join("")}<nav class="related-links" aria-label="${t(locale, "À découvrir aussi", "Explore more")}">${page.kind === "location" ? `<a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a><a href="${path(locale, "menage-airbnb-corse-du-sud")}">${t(locale, "Accueil et rotation séjour", "Guest welcome and changeovers")}</a>` : zones.map(([name, slug]) => `<a href="${path(locale, slug)}">${name}</a>`).join("")}</nav></div></div></section>${faq(locale, page.faq)}${contactCallout(locale)}`;
 }
 
 export function legal(slug: string): string {
@@ -94,7 +163,7 @@ export function contact(locale: Locale): string {
     maxlength = 100,
   ): string =>
     `<div class="field ${full ? "field-full" : ""}"><label for="${name}">${label}${required ? " *" : ""}</label><input id="${name}" name="${name}" type="${type}" ${required ? "required" : ""} ${autocomplete ? `autocomplete="${autocomplete}"` : ""} maxlength="${maxlength}"></div>`;
-  return `<div class="container contact-layout"><div class="contact-intro"><nav class="breadcrumb" aria-label="${t(locale, "Fil d’Ariane", "Breadcrumb")}"><a href="${path(locale)}">${t(locale, "Accueil", "Home")}</a><span aria-hidden="true">/</span><span>Contact</span></nav><p class="eyebrow">${t(locale, "VOTRE PROJET COMMENCE ICI", "YOUR PLANS START HERE")}</p><h1 id="contact-title">${t(locale, "Parlons de votre bien.", "Let’s talk about your property.")}</h1><p class="lead">${t(locale, "Indiquez votre commune et votre besoin. Notre équipe vous répondra par appel ou par email.", "Tell us your town and what you need. Our team will respond by phone or email.")}</p><div class="contact-direct"><a href="tel:+33613812550">+33 6 13 81 25 50</a><a href="mailto:contact@inastia.fr">contact@inastia.fr</a><p>${t(locale, "De Ghisonaccia à Porto-Vecchio.<br>Une conciergerie familiale, ancrée en Corse.", "From Ghisonaccia to Porto-Vecchio.<br>A family-run service, rooted in Corsica.")}</p></div></div>
+  return `<div class="container contact-layout"><div class="contact-intro"><nav class="breadcrumb" aria-label="${t(locale, "Fil d’Ariane", "Breadcrumb")}"><a href="${path(locale)}">${t(locale, "Accueil", "Home")}</a><span aria-hidden="true">/</span><span>Contact</span></nav><p class="eyebrow">${t(locale, "VOTRE PROJET COMMENCE ICI", "YOUR PLANS START HERE")}</p><h1 id="contact-title">${t(locale, "Parlons de votre bien.", "Let’s talk about your property.")}</h1><p class="lead">${t(locale, "Indiquez votre commune et votre besoin. Notre équipe vous répondra par appel ou par email.", "Tell us your town and what you need. Our team will respond by phone or email.")}</p><div class="contact-direct"><a href="tel:+33613812550">+33 6 13 81 25 50</a><a href="mailto:contact@inastia.fr">contact@inastia.fr</a><p>${t(locale, "De Ghisonaccia à Porto-Vecchio.<br> Une conciergerie familiale, ancrée en Corse.", "From Ghisonaccia to Porto-Vecchio.<br> A family-run service, rooted in Corsica.")}</p></div></div>
   <form id="contact-form" class="contact-form" data-locale="${locale}" method="post" action="/api/contact"><h2 id="contact-form-title">${t(locale, "Votre demande", "Your enquiry")}</h2><p class="form-note">${t(locale, "Les champs marqués d’un * sont obligatoires.", "Fields marked * are required.")}</p><div class="form-grid">
   <div class="field field-full"><label for="contact-intent">${t(locale, "Votre besoin", "What do you need?")}</label><select id="contact-intent" name="intent"><option value="">${t(locale, "Échanger sur mon projet", "Discuss my project")}</option><option value="audit">${t(locale, "Audit gratuit", "Free property review")}</option><option value="gestion">${t(locale, "Gestion complète", "Full management")}</option><option value="annonce">${t(locale, "Lancement et gestion d’annonce", "Listing launch and management")}</option><option value="rotation">${t(locale, "Accueil et rotation", "Guest welcome and changeovers")}</option></select></div>
   <div class="field"><label for="propertyType">${t(locale, "Type de bien", "Property type")} *</label><select id="propertyType" name="propertyType" required><option value="">${t(locale, "Choisir", "Select")}</option><option value="Villa">Villa</option><option value="Appartement">${t(locale, "Appartement", "Apartment")}</option><option value="Maison">${t(locale, "Maison", "House")}</option><option value="Autre">${t(locale, "Autre", "Other")}</option></select></div>

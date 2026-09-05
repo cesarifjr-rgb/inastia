@@ -1,6 +1,11 @@
-import "./styles.css";
+import "./base.css";
+import "./service-art.css";
+import "./frontier.css";
+import "./motion.css";
 import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
+import { initOrientation } from "./orientation-client.ts";
+import { initPortfolio } from "./portfolio-client.ts";
 
 const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
 const menu = document.querySelector<HTMLElement>("#mobile-menu");
@@ -73,4 +78,6 @@ matchMedia("(min-width:1024px)").addEventListener("change", (event) => {
   if (event.matches) closeMenu();
 });
 initContact();
+initOrientation();
+initPortfolio();
 initMotion();

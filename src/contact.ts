@@ -108,6 +108,131 @@ export function initContact(): void {
   let pending = false;
   let completed = false;
 
+  const fields = Array.from(
+    form.querySelectorAll<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >(".field input, .field select, .field textarea"),
+  );
+  const fieldErrors = new Map<HTMLElement, HTMLElement>();
+  const summary = document.createElement("div");
+  summary.className = "form-errors";
+  summary.id = "contact-errors";
+  summary.setAttribute("role", "alert");
+  summary.setAttribute("aria-atomic", "true");
+  summary.hidden = true;
+  form.querySelector(".form-grid")?.before(summary);
+  let validationStarted = false;
+  let errorSignature = "";
+  const requiredMessages: Record<string, string> =
+    locale === "fr"
+      ? {
+          propertyType: "Choisissez le type de bien.",
+          location: "Indiquez la commune de votre bien.",
+          firstName: "Indiquez votre prénom.",
+          lastName: "Indiquez votre nom.",
+          email: "Indiquez votre adresse email.",
+        }
+      : {
+          propertyType: "Choose the property type.",
+          location: "Enter the town where your property is located.",
+          firstName: "Enter your first name.",
+          lastName: "Enter your last name.",
+          email: "Enter your email address.",
+        };
+
+  function validateField(field: (typeof fields)[number]): boolean {
+    let message = "";
+    if (field.required && !field.value.trim()) {
+      message =
+        requiredMessages[field.name] ??
+        (locale === "fr" ? "Renseignez ce champ." : "Complete this field.");
+    } else if (field.validity.typeMismatch) {
+      message =
+        locale === "fr"
+          ? "Saisissez une adresse email complète, par exemple nom@exemple.fr."
+          : "Enter a complete email address, for example name@example.com.";
+    } else if (!field.validity.valid) {
+      message =
+        locale === "fr"
+          ? "Vérifiez la valeur saisie dans ce champ."
+          : "Check the value entered in this field.";
+    }
+    let error = fieldErrors.get(field);
+    if (message && !error) {
+      error = document.createElement("p");
+      error.id = `${field.id}-error`;
+      error.className = "field-error";
+      field.after(error);
+      fieldErrors.set(field, error);
+    }
+    const descriptions = (field.getAttribute("aria-describedby") ?? "")
+      .split(/\s+/)
+      .filter(Boolean)
+      .filter((id) => id !== error?.id);
+    if (message) {
+      error!.textContent = message;
+      error!.hidden = false;
+      field.setAttribute("aria-invalid", "true");
+      descriptions.push(error!.id);
+    } else {
+      if (error) error.hidden = true;
+      field.removeAttribute("aria-invalid");
+    }
+    if (descriptions.length)
+      field.setAttribute("aria-describedby", descriptions.join(" "));
+    else field.removeAttribute("aria-describedby");
+    return !message;
+  }
+
+  function updateErrorSummary(): void {
+    const invalid = fields.filter(
+      (field) => field.getAttribute("aria-invalid") === "true",
+    );
+    const signature = invalid
+      .map((field) => `${field.id}:${fieldErrors.get(field)?.textContent}`)
+      .join("|");
+    if (signature === errorSignature) return;
+    errorSignature = signature;
+    summary.replaceChildren();
+    summary.hidden = invalid.length === 0;
+    if (!invalid.length) return;
+    const heading = document.createElement("p");
+    heading.textContent =
+      locale === "fr"
+        ? `Veuillez corriger ${invalid.length === 1 ? "le champ indiqué" : `les ${invalid.length} champs indiqués`} avant l’envoi.`
+        : `Please correct ${invalid.length === 1 ? "the highlighted field" : `the ${invalid.length} highlighted fields`} before sending.`;
+    const list = document.createElement("ul");
+    for (const field of invalid) {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `#${field.id}`;
+      link.textContent = `${field.labels?.[0]?.textContent?.replace(/\s*\*\s*$/, "").trim() ?? field.name} : ${fieldErrors.get(field)!.textContent}`;
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        field.focus();
+      });
+      item.append(link);
+      list.append(item);
+    }
+    summary.append(heading, list);
+  }
+
+  function validateForm(): boolean {
+    validationStarted = true;
+    const invalid = fields.filter((field) => !validateField(field));
+    updateErrorSummary();
+    invalid[0]?.focus();
+    return invalid.length === 0;
+  }
+
+  for (const field of fields) {
+    field.addEventListener("input", () => {
+      if (!validationStarted || pending || completed) return;
+      validateField(field);
+      updateErrorSummary();
+    });
+  }
+
   function announce(message: string, state: string, focus = false): void {
     status!.textContent = message;
     status!.dataset.state = state;
@@ -194,7 +319,7 @@ export function initContact(): void {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (pending || completed || !form.reportValidity()) return;
+    if (pending || completed || !validateForm()) return;
     try {
       await loadWidget();
     } catch {
@@ -295,4 +420,7 @@ export function initContact(): void {
     announce("", "ready");
     form.querySelector<HTMLElement>('[name="firstName"]')?.focus();
   });
+  // Native HTML constraints remain the fallback if JavaScript does not run.
+  // Enhance only after the submit and inline-validation handlers are installed.
+  form.noValidate = true;
 }

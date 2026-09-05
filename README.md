@@ -4,115 +4,89 @@ Site vitrine de la conciergerie familiale Inastia, sur la côte est de la Corse,
 
 - Site : [inastia.fr](https://inastia.fr)
 - Dépôt : [cesarifjr-rgb/inastia](https://github.com/cesarifjr-rgb/inastia)
-- Hébergement : projet Vercel `inastia`, avec intégration Git existante.
+- Hébergement existant : projet Vercel `inastia`, domaines et intégration Git à conserver.
+- Travail Design Frontier : branche isolée `codex/design-frontier`, référence de départ `900c977`.
 
 ## Développement
 
-Node.js 24 et npm sont requis. Depuis la racine du dépôt :
+Node.js 24 et npm sont requis. Depuis la racine :
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Le serveur démarre sur `http://127.0.0.1:3100`. La commande génère les pages avant de lancer Vite. Après modification d'un template ou d'un contenu TypeScript, relancer `npm run generate` pour actualiser les HTML ; le CSS et le JavaScript client bénéficient du rechargement Vite.
+Vite écoute sur `http://127.0.0.1:3100`. Après une modification de contenu ou de template TypeScript, exécuter `npm run generate` ; les styles et scripts client bénéficient du rechargement Vite. Ne pas éditer `.generated/` ou `dist/` : ces dossiers sont produits depuis les sources.
 
 ## Architecture
 
-```text
-src/content/pages.ts       Contenus des pages secondaires FR/EN
-src/content/legal/         Fragments juridiques français
-src/home.ts                Accueil FR/EN en sept sections
-src/reviews.ts             Extraits Google statiques, sources et date de relevé
-src/components.ts          Navigation, footer, FAQ et appels à contact
-src/templates.ts           Documents, pages secondaires et formulaire
-src/lib.ts                 Helpers d'URL, échappement et images
-scripts/generate.ts        Génération HTML, sitemap et robots.txt
-.generated/                HTML intermédiaires, non versionnés
-src/client.ts              Navigation et comportements d'interface
-src/art.ts                 Illustrations SVG/CSS et hospitalityArt(locale) FR/EN
-src/motion.ts              GSAP, pause CSS et visibilité de l’illustration
-src/contact.ts             Vérification anti-spam et états du formulaire
-src/styles.css             Styles et tokens
-api/contact.js             Fonction Vercel : validation, Turnstile, Resend
-scripts/render-share.ts    Carte sociale PNG depuis le SVG via Sharp
-public/                    Images, polices locales, licences et PDF légal
-```
+| Source | Responsabilité |
+|---|---|
+| `src/content/pages.ts` / `src/content/legal/` | Pages secondaires FR/EN et fragments légaux français |
+| `src/content/services.ts` | `servicesFor(locale)`, résumés communs des trois accompagnements |
+| `src/home.ts`, `src/components.ts`, `src/templates.ts` | Composition de l’accueil, éléments partagés et documents |
+| `src/atlas.ts` | Atlas d’accueil et de territoire ; données et licences dans [geography.md](docs/design-frontier/geography.md) |
+| `src/orientation.ts`, `src/orientation-client.ts` | Guide facultatif à quatre radios et recommandations explicites |
+| `src/portfolio.ts`, `src/portfolio-client.ts` | Trois photographies réelles ; dialogue natif et état de navigation par fragment |
+| `src/reviews.ts` | Extraits voyageurs statiques, sources et date du relevé Google |
+| `src/base.css` | Reset, polices et règles communes |
+| `src/frontier.css` | Tokens et compositions de la direction Atlas de proximité |
+| `src/art.ts`, `src/service-art.css` | Trois illustrations de services d’origine et leur style ; ancien `hospitalityArt` conservé provisoirement mais hors hero courant |
+| `src/motion.ts`, `src/motion.css` | Mouvement natif CSS et IntersectionObserver, pause, visibilité et cycle de page ; aucune bibliothèque GSAP |
+| `src/client.ts`, `src/contact.ts` | Initialisation, navigation et validation du formulaire avec erreurs associées aux champs |
+| `src/lib.ts` | URL, échappement et images |
+| `scripts/generate.ts` | HTML, sitemap et robots.txt |
+| `scripts/assets.ts`, `scripts/render-share.ts` | Variantes photos/polices et image sociale |
+| `api/contact.js` | Fonction Vercel : validation, Turnstile et Resend |
 
-Les templates TypeScript génèrent du HTML statique ; Vite 8 compile ensuite les 28 documents vers `dist/` (27 pages indexables et une 404). Les 14 URL françaises historiques sont conservées, avec une page contact supplémentaire et 12 équivalents anglais sous `/en/`. Les trois pages légales restent en français ; les liens anglais le précisent. Les URL sans extension reposent sur `cleanUrls` dans `vercel.json`.
+Vite compile 28 documents : **27 pages indexables et une 404**. Les routes historiques sont conservées, avec 12 pages en anglais sous `/en/`. Les trois pages légales restent françaises et les liens anglais l’indiquent. Canonical et hreflang sont générés avec les pages ; `cleanUrls` dans `vercel.json` permet les URL sans extension.
 
-Ne pas modifier `.generated/` ou `dist/` directement. Les sources de contenu, les templates et les scripts de génération font autorité.
+## Contenu, images et interactions
 
-## Images et polices
+La direction actuelle associe un atlas local, des comparatifs ouverts et une typographie éditoriale. L’équipe reste présentée collectivement. Les communes servent de repères, sans polygone de disponibilité : l’adresse du bien confirme les prestations possibles. Le guide est optionnel ; le comparatif reste complet sans JavaScript. La galerie utilise `showModal()` lorsqu’il est disponible, avec fermeture clavier, retour du focus et synchronisation historique ; sans JavaScript, les liens ouvrent les photographies.
 
-Les variantes AVIF/WebP à 240, 480, 800 et 1200 pixels sont versionnées dans `public/images/`. Les originaux `villa_amichi.webp`, `villa_lova.webp` et `casa_verde.webp` restent à la racine. Après une modification d'original, exécuter manuellement :
+Les originaux `villa_amichi.webp`, `casa_verde.webp`, `villa_lova.webp` restent à la racine. Le dernier représente **Cala Lova**, à Cala d’Oro / Solenzara ; l’identifiant interne ne change pas son nom affiché. Après modification autorisée d’un original :
 
 ```sh
 npm run assets
 ```
 
-Ce script régénère les variantes photographiques, les polices locales Space Grotesk/Manrope et leurs licences depuis les paquets Fontsource. Il ne tourne pas à chaque build. Conserver les licences de `public/fonts/`. L’image sociale est produite séparément par le script TypeScript décrit ci-dessous.
-
-## Illustration d’accueil et image sociale
-
-La palette claire sable, ciel et mer et l’illustration d’accueil sont conservées : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. L’accueil suit sept sections : proposition et contact, comparaison des accompagnements, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Les photographies des biens restent discrètes.
-
-L’équipe est présentée collectivement, conformément au choix actuel de ne pas publier de prénoms. Le suivi d’une rotation décrit le processus annoncé ; il ne constitue pas un cas client ni un document de mission réelle. Les extraits Google de `src/reviews.ts` sont des avis de voyageurs conservés dans leur langue d’origine, avec auteur, date de séjour et lien source. La note globale porte sa date de relevé, le 5 septembre 2026. Ces contenus sont statiques : vérifier manuellement les sources avant de les actualiser ; ne pas les présenter comme une synchronisation Google ni comme des témoignages propriétaires.
-
-La fonction `hospitalityArt(locale)` de `src/art.ts` génère le SVG intégré au HTML en français ou en anglais. Le site ne nécessite ni modèle 3D, ni WebGL, ni Blender. Les preuves des anciennes scènes restent hors dépôt.
-
-Pour régénérer l’image sociale depuis la racine :
+Le script produit les variantes AVIF/WebP 240, 480, 800 et 1200 px et copie les polices locales Space Grotesk/Manrope et leurs licences dans `public/fonts/`. Il ne tourne pas à chaque build. Pour la carte sociale Atlas 1200 × 630, générée manuellement avec Sharp :
 
 ```sh
 npx tsx scripts/render-share.ts
 ```
 
-Ce script réutilise le SVG français, le compose avec le texte de la carte et produit `public/images/inastia-share.png` en 1200 × 630 avec Sharp. La génération est manuelle et ne fait pas partie du build Vercel.
+La carte sociale reprend le contour cartographique sourcé, pas l’ancien SVG `hospitalityArt`. Conserver les sources/licences cartographiques et vérifier l’image produite. Cette génération est séparée du build.
 
-`src/motion.ts` charge GSAP/ScrollTrigger pour les entrées et révélations. Les mouvements de la clé, du porte-clés et des vagues sont définis en CSS. Le bouton « Animations » permet la pause/reprise ; `prefers-reduced-motion` initialise la pause, avec reprise explicite possible. Un observateur de visibilité et les événements de page suspendent les mouvements de l’illustration hors écran, lorsque l’onglet est masqué et pendant une suspension BFCache. Ils reprennent selon l’état courant au retour. Sans JavaScript, le contenu HTML et le SVG restent disponibles. L’illustration est décorative et ne porte aucune information indispensable.
+Les avis de `src/reviews.ts` sont des extraits de **voyageurs**, dans leur langue d’origine, avec auteur et lien source. La note globale est un relevé statique du 5 septembre 2026. Toute actualisation nécessite une vérification manuelle ; aucune synchronisation Google n’est revendiquée. Les étapes de soin décrivent le processus annoncé, pas une mission client réelle.
 
-## Formulaire et configuration
+## Contact et secrets
 
-`contactPath(locale, intent)` conserve le motif choisi dans l’URL de contact : `audit`, `gestion`, `annonce` ou `rotation`. Le formulaire présente ce motif dans un sélecteur modifiable ; l’audit adapte le titre, le bouton et le message de réussite. Le motif est transmis avec la demande. Le premier audit gratuit est restitué par appel ou par email, sans délai garanti ni promesse de rapport écrit. L’aide du projet reste visible pendant la saisie ; téléphone et projet restent facultatifs.
+`contactPath(locale, intent)` transmet uniquement un besoin public : `audit`, `gestion`, `annonce` ou `rotation`. Le sélecteur reste modifiable. Ne placer aucune coordonnée personnelle dans une URL, un fragment ou le stockage navigateur. Téléphone et projet sont facultatifs ; les erreurs sont reliées aux champs et le résumé permet d’y revenir au clavier.
 
-`api/contact.js` vérifie les données et le jeton Cloudflare Turnstile avant d'envoyer via Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`. `src/contact.ts` charge Turnstile à l'interaction et gère chargement, erreur, expiration, succès et nouvel envoi.
+Le premier audit est gratuit, qualitatif et restitué par appel ou email, sans prévision de revenus ni délai garanti. `api/contact.js` vérifie les données et le jeton Turnstile avant l’envoi Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`.
 
-Les variables serveur nécessaires sont `RESEND_API_KEY` et `TURNSTILE_SECRET_KEY` ; voir `.env.example`. Les configurer dans les environnements Vercel concernés. Ne jamais exposer les valeurs dans le code client, les logs ou Git. Le domaine d'expédition Resend et les domaines autorisés Turnstile doivent correspondre à l'environnement utilisé.
+Variables serveur : `RESEND_API_KEY` et `TURNSTILE_SECRET_KEY` (voir `.env.example`). Ne jamais afficher ni versionner leurs valeurs. Garder les domaines Resend/Turnstile adaptés à l’environnement. Vite dev/preview ne sert pas les fonctions Vercel : les tests locaux utilisent des simulations et ne prouvent pas la délivrabilité. Aucune clé réelle n’est nécessaire pour ces simulations.
 
-Vite dev/preview ne sert pas les fonctions Vercel. Les tests locaux du formulaire simulent les services ; ils ne prouvent pas la délivrabilité réelle. Ne pas ajouter de clé réelle pour faire fonctionner les tests simulés.
-
-## Vérifications
+## Vérification et livraison
 
 ```sh
 npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run preview
+npm run preview -- --host 127.0.0.1 --port 4100 --strictPort
 ```
 
-Avec le preview actif sur `http://127.0.0.1:4100`, dans un autre terminal :
+Dans un autre terminal, après le build et avec la prévisualisation stable :
 
 ```sh
 npm run test:e2e
 ```
 
-Playwright utilise Chrome installé sur la machine. Les tests couvrent notamment les routes, liens, métadonnées, images, navigation, accessibilité et états simulés du formulaire. La configuration ne démarre pas le serveur automatiquement.
+Playwright utilise Chrome installé et ne démarre pas le serveur. Ne pas régénérer les pages ou reconstruire pendant une passe navigateur. Les scénarios locaux du formulaire interceptent les services ; les suites de mutation du formulaire sont ignorées sur une `BASE_URL` distante. Un contrôle distant ne constitue jamais une autorisation d’envoi réel.
 
-Pour contrôler un déploiement depuis PowerShell :
+La prévisualisation est autorisée dans cette mission ; **la publication en production ne l’est pas encore**. Ne pas fusionner vers `main`, promouvoir ou redéployer implicitement : l’intégration Git peut déclencher une publication. Conserver le projet Vercel et les domaines, ne pas forcer de push. Le responsable principal coordonne toute livraison ou retour en production après autorisation explicite.
 
-```powershell
-$env:BASE_URL = 'https://inastia.fr'
-npm run test:e2e
-Remove-Item Env:BASE_URL
-```
-
-Sur une URL distante, les tests de mutation du formulaire sont ignorés. Aucun résultat de QA n'est présumé par cette documentation : exécuter les vérifications pour la révision à livrer et distinguer tests simulés et contrôles réels.
-
-## Livraison
-
-Travailler sur `codex/inastia-redesign` pour la refonte, puis utiliser une branche `codex/…` pour les évolutions suivantes. Relire les modifications et vérifier la version avant intégration à `main`. L'intégration Git du projet Vercel `inastia` assure le déploiement ; conserver cette liaison et les domaines existants. Ne pas forcer de push.
-
-Après chaque release, effectuer un contrôle production : domaines, accueil mobile/desktop, pages de services, liens FR/EN, contact, images, métadonnées et erreurs navigateur. Vérifier l'état du déploiement et les journaux serveur si nécessaire. Un envoi réel de formulaire doit être explicitement autorisé et identifié comme test.
-
-La direction graphique et ses tokens sont décrits dans [docs/design-system.md](docs/design-system.md).
+Voir [maintenance et retour arrière](docs/design-frontier/maintenance.md), [design system](docs/design-system.md), [direction](docs/design-frontier/direction.md) et [revue interne du parcours](docs/design-frontier/user-review.md). Les rapports distinguent contrôles terminés et vérifications encore en cours ; leur présence ne vaut pas validation finale de la révision à publier.

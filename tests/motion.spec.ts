@@ -118,10 +118,13 @@ test("all three service illustrations move, stop with pause and respect reduced 
   await toggle.focus();
   await page.keyboard.press("Enter");
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  for (const element of artwork) await expectKeyMoving(element);
+  for (const element of artwork) {
+    await element.locator("..").scrollIntoViewIfNeeded();
+    await expectKeyMoving(element);
+  }
 });
 
-test("hospitality SVG visibly animates with CSS and makes no canvas, worker or model requests", async ({
+test("Atlas SVG remains visible and service art animates with CSS and makes no canvas, worker or model requests", async ({
   page,
 }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -136,25 +139,26 @@ test("hospitality SVG visibly animates with CSS and makes no canvas, worker or m
   });
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
-  const scene = page.locator("[data-hospitality-scene]");
-  const illustration = scene.locator("svg.hospitality-illustration");
+  const scene = page.locator(".service-art-1");
+  const illustration = page.locator(".frontier-hero .atlas-silhouette");
   await expect(illustration).toBeVisible();
   expect(
     await illustration
       .locator("path, rect, circle, ellipse, polygon, line")
       .count(),
   ).toBeGreaterThan(0);
+  await scene.scrollIntoViewIfNeeded();
   await expect(scene).toHaveAttribute("data-illustration-active", "true");
-  await expectKeyMoving(scene.locator(".welcome-key").first());
+  await expectKeyMoving(scene.locator(".orbit-one"));
   await expect(page.locator("canvas")).toHaveCount(0);
   expect(workers).toEqual([]);
   expect(modelRequests).toEqual([]);
   expect(errors).toEqual([]);
   await page.evaluate(() => document.fonts.ready);
   const screenshot = await illustration.screenshot({
-    path: `${screenshotDirectory}/motion-hospitality-desktop.png`,
+    path: `${screenshotDirectory}/motion-atlas-desktop.png`,
   });
-  await testInfo.attach("hospitality-illustration", {
+  await testInfo.attach("atlas-illustration", {
     body: screenshot,
     contentType: "image/png",
   });
@@ -166,9 +170,10 @@ test("motion button freezes the actual CSS animation and resumes it with the key
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-hospitality-scene]");
-  const key = scene.locator(".welcome-key").first();
+  const scene = page.locator(".service-art-1");
+  const key = scene.locator(".orbit-one");
   const toggle = page.locator("#motion-toggle");
+  await scene.scrollIntoViewIfNeeded();
   await expect(scene).toHaveAttribute("data-illustration-active", "true");
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await expectKeyMoving(key);
@@ -209,8 +214,8 @@ test("reduced-motion starts static, permits explicit CSS motion and pauses again
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const scene = page.locator("[data-hospitality-scene]");
-  const key = scene.locator(".welcome-key").first();
+  const scene = page.locator(".service-art-1");
+  const key = scene.locator(".orbit-one");
   const toggle = page.locator("#motion-toggle");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
@@ -225,6 +230,7 @@ test("reduced-motion starts static, permits explicit CSS motion and pauses again
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
   await scene.scrollIntoViewIfNeeded();
+  await scene.scrollIntoViewIfNeeded();
   await expect(scene).toHaveAttribute("data-illustration-active", "true");
   await expectKeyMoving(key);
   await toggle.click();
@@ -233,7 +239,7 @@ test("reduced-motion starts static, permits explicit CSS motion and pauses again
   await expectKeyPaused(key, page);
 });
 
-test("without JavaScript the hospitality SVG remains visible and service/contact navigation works", async ({
+test("without JavaScript the mobile hero and service/contact navigation remain usable", async ({
   browser,
   baseURL,
 }) => {
@@ -247,10 +253,14 @@ test("without JavaScript the hospitality SVG remains visible and service/contact
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/");
-    const scene = page.locator("[data-hospitality-scene]");
-    await expect(scene.locator("svg.hospitality-illustration")).toBeVisible();
-    await expect(scene.locator(".welcome-key").first()).toBeVisible();
-    await expectKeyPaused(scene.locator(".welcome-key").first(), page);
+    const scene = page.locator(".service-art-1");
+    // The decorative atlas is intentionally omitted from the mobile layout.
+    await expect(page.locator(".frontier-hero .atlas-silhouette")).toBeHidden();
+    await expect(page.locator("h1")).toBeVisible();
+    await expect(page.locator(".hero-actions .button")).toBeVisible();
+    await scene.scrollIntoViewIfNeeded();
+    await expect(scene.locator(".orbit-one")).toBeVisible();
+    await expectKeyPaused(scene.locator(".orbit-one"), page);
     await expect(page.locator("canvas")).toHaveCount(0);
     await expect(page.locator("#motion-toggle")).toBeHidden();
     for (const selector of [
@@ -264,12 +274,12 @@ test("without JavaScript the hospitality SVG remains visible and service/contact
       await expectKeyPaused(artwork, page);
     }
     await page
-      .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
+      .locator('main a[href="/gestion-airbnb-corse-du-sud"]:visible')
       .first()
       .click();
     await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
     await expect(page.locator("h1")).toBeVisible();
-    await page.locator('main a[href="/contact?intent=gestion"]').first().click();
+    await page.locator('main a[href="/contact?intent=gestion"]:visible').first().click();
     await expect(page).toHaveURL(/\/contact\?intent=gestion$/);
     await expect(page.locator("#contact-form")).toBeVisible();
     await expect(
@@ -281,14 +291,15 @@ test("without JavaScript the hospitality SVG remains visible and service/contact
   }
 });
 
-test("hospitality animation suspends outside the viewport and resumes on return", async ({
+test("service animation suspends outside the viewport and resumes on return", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-hospitality-scene]");
-  const key = scene.locator(".welcome-key").first();
+  const scene = page.locator(".service-art-1");
+  const key = scene.locator(".orbit-one");
+  await scene.scrollIntoViewIfNeeded();
   await scene.scrollIntoViewIfNeeded();
   await expect(scene).toHaveAttribute("data-illustration-active", "true");
   await expectKeyMoving(key);
@@ -296,6 +307,7 @@ test("hospitality animation suspends outside the viewport and resumes on return"
   await expect(scene).toHaveAttribute("data-illustration-active", "false");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
   await expectKeyPaused(key, page);
+  await scene.scrollIntoViewIfNeeded();
   await scene.scrollIntoViewIfNeeded();
   await expect(scene).toHaveAttribute("data-illustration-active", "true");
   await expectKeyMoving(key);
@@ -356,15 +368,16 @@ test("BFCache history return resumes native CSS animation and preserves pause co
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/");
-    const scene = page.locator("[data-hospitality-scene]");
-    const key = scene.locator(".welcome-key").first();
-    await expect(scene).toHaveAttribute("data-illustration-active", "true");
+    const scene = page.locator(".service-art-1");
+    const key = scene.locator(".orbit-one");
+    await scene.scrollIntoViewIfNeeded();
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
     await expectKeyMoving(key);
     const documentId = await page.evaluate(
       () => (window as HistoryProbeWindow).__inastiaHistoryProbe.documentId,
     );
     await page
-      .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
+      .locator('main a[href="/gestion-airbnb-corse-du-sud"]:visible')
       .first()
       .click();
     await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
@@ -382,7 +395,8 @@ test("BFCache history return resumes native CSS animation and preserves pause co
       restored.restoredFromCache,
       "pageshow.persisted must confirm a real BFCache restoration",
     ).toBe(true);
-    await expect(scene).toHaveAttribute("data-illustration-active", "true");
+    await scene.scrollIntoViewIfNeeded();
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
     await expectKeyMoving(key);
     const returned = await keySnapshot(key);
     const toggle = page.locator("#motion-toggle");

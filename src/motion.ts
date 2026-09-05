@@ -2,43 +2,80 @@ export function initMotion(): void {
   const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const toggle = document.querySelector<HTMLButtonElement>("#motion-toggle");
-  const hero = document.querySelector(".hero-copy");
-  let paused = reduced.matches;
-  let cleanup: (() => void) | undefined;
-  let generation = 0;
-  const illustration = document.querySelector<HTMLElement>(
-    "[data-hospitality-scene]",
+  const hero = document.querySelector<SVGElement>(
+    ".frontier-hero .atlas-silhouette",
   );
-  let illustrationVisible = false;
+  const illustrations: (HTMLElement | SVGElement)[] = [
+    ...document.querySelectorAll<HTMLElement>(".service-art"),
+    ...(hero ? [hero] : []),
+  ];
+  const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
+  const visible = new Set<Element>();
+  const lifecycle = new AbortController();
+  let paused = reduced.matches;
   let suspended = false;
-  function updateIllustration(): void {
-    if (illustration) {
+
+  function updateIllustrations(): void {
+    const documentActive = !document.hidden && !suspended;
+    root.dataset.motionActive = String(documentActive && !paused);
+    for (const illustration of illustrations) {
       illustration.dataset.illustrationActive = String(
-        illustrationVisible && !document.hidden && !suspended,
+        visible.has(illustration) && documentActive && !paused,
       );
     }
-  }
-  const illustrationObserver = illustration
-    ? new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0];
-          illustrationVisible =
-            !!entry?.isIntersecting && entry.intersectionRatio > 0;
-          updateIllustration();
-        },
-        { threshold: 0.001 },
-      )
-    : undefined;
-  if (illustration) {
-    updateIllustration();
-    illustrationObserver?.observe(illustration);
-    document.addEventListener("visibilitychange", updateIllustration);
+    if (
+      hero &&
+      visible.has(hero) &&
+      documentActive &&
+      !hero.dataset.motionEntry
+    ) {
+      // A reduced-motion or history-restored first view is already complete.
+      hero.dataset.motionEntry =
+        paused || window.scrollY > 30 ? "done" : "running";
+    }
   }
 
-  async function update(): Promise<void> {
-    const current = ++generation;
-    cleanup?.();
-    cleanup = undefined;
+  const illustrationObserver =
+    "IntersectionObserver" in window
+      ? new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting && entry.intersectionRatio > 0)
+                visible.add(entry.target);
+              else visible.delete(entry.target);
+            }
+            updateIllustrations();
+          },
+          { threshold: 0.001 },
+        )
+      : undefined;
+
+  function reveal(element: HTMLElement, animate: boolean): void {
+    if (element.dataset.motionRevealed) return;
+    element.dataset.motionRevealed = "true";
+    element.dataset.motionEntry = animate ? "running" : "done";
+    element.classList.add("is-visible");
+  }
+
+  const revealObserver =
+    "IntersectionObserver" in window
+      ? new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting || entry.intersectionRatio <= 0)
+                continue;
+              reveal(
+                entry.target as HTMLElement,
+                !paused && !document.hidden && !suspended,
+              );
+              revealObserver?.unobserve(entry.target);
+            }
+          },
+          { rootMargin: "0px 0px -6% 0px", threshold: 0 },
+        )
+      : undefined;
+
+  function update(): void {
     root.dataset.motion = paused ? "paused" : "running";
     toggle?.setAttribute("aria-pressed", String(paused));
     toggle?.setAttribute(
@@ -47,99 +84,96 @@ export function initMotion(): void {
     );
     const icon = toggle?.querySelector(".motion-icon");
     if (icon) icon.textContent = paused ? "▷" : "Ⅱ";
+    updateIllustrations();
     window.dispatchEvent(
       new CustomEvent("inastia:motion", { detail: { paused } }),
     );
-    const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
-    if (paused) {
-      targets.forEach((element) => element.classList.add("is-visible"));
-      return;
-    }
-    if (!hero && targets.length === 0) return;
-    try {
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-      ]);
-      if (current !== generation || paused) return;
-      gsap.registerPlugin(ScrollTrigger);
-      const context = gsap.context(() => {
-        // Keep the title readable immediately; only the illustration enters gently.
-        if (hero && window.scrollY < 30) {
-          gsap.fromTo(
-            ".hero-visual",
-            { y: 12, opacity: 1 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.22,
-              ease: "power2.out",
-              clearProps: "all",
-            },
-          );
-        }
-        targets.forEach((element) => {
-          // Already visible content is never hidden on a pause/resume transition.
-          if (element.classList.contains("is-visible")) return;
-          gsap.fromTo(
-            element,
-            { y: 12, opacity: 1 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.22,
-              ease: "power3.out",
-              scrollTrigger: { trigger: element, start: "top 94%", once: true },
-              onStart: () => element.classList.add("is-visible"),
-              clearProps: "transform,opacity",
-            },
-          );
-        });
-      });
-      const onFocus = (event: FocusEvent): void => {
-        if (!(event.target instanceof HTMLElement)) return;
-        const block = event.target.closest<HTMLElement>("[data-reveal]");
-        if (block) {
-          gsap.killTweensOf(block);
-          gsap.set(block, { clearProps: "transform,opacity" });
-          block.classList.add("is-visible");
-        }
-      };
-      document.addEventListener("focusin", onFocus);
-      cleanup = () => {
-        context.revert();
-        document.removeEventListener("focusin", onFocus);
-      };
-    } catch {
-      // Static HTML remains the functional fallback if an optional animation fails to load.
-      targets.forEach((element) => element.classList.add("is-visible"));
-    }
   }
-  toggle?.addEventListener("click", () => {
-    paused = !paused;
-    void update();
+
+  for (const illustration of illustrations) {
+    illustration.dataset.illustrationActive = "false";
+    illustrationObserver?.observe(illustration);
+  }
+  for (const target of targets) {
+    if (revealObserver) revealObserver.observe(target);
+    else reveal(target, false);
+    target.addEventListener(
+      "animationend",
+      (event) => {
+        if (
+          event.target === target &&
+          event.animationName === "frontier-reveal"
+        ) {
+          target.dataset.motionEntry = "done";
+        }
+      },
+      { signal: lifecycle.signal },
+    );
+  }
+  hero?.addEventListener(
+    "animationend",
+    (event) => {
+      if (event.animationName !== "atlas-enter") return;
+      hero.dataset.motionEntry = "done";
+      hero.dataset.illustrationActive = "false";
+      visible.delete(hero);
+      illustrationObserver?.unobserve(hero);
+    },
+    { signal: lifecycle.signal },
+  );
+
+  document.addEventListener(
+    "focusin",
+    (event) => {
+      if (!(event.target instanceof Element)) return;
+      const target = event.target.closest<HTMLElement>("[data-reveal]");
+      if (!target) return;
+      reveal(target, false);
+      target.dataset.motionEntry = "done";
+      revealObserver?.unobserve(target);
+    },
+    { signal: lifecycle.signal },
+  );
+  document.addEventListener("visibilitychange", updateIllustrations, {
+    signal: lifecycle.signal,
   });
-  reduced.addEventListener("change", () => {
-    paused = reduced.matches;
-    void update();
-  });
-  void update();
-  window.addEventListener("pagehide", (event) => {
-    suspended = true;
-    updateIllustration();
-    if (!event.persisted) {
-      illustrationObserver?.disconnect();
-      document.removeEventListener("visibilitychange", updateIllustration);
-    }
-    generation++;
-    cleanup?.();
-    cleanup = undefined;
-  });
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
+  toggle?.addEventListener(
+    "click",
+    () => {
+      paused = !paused;
+      update();
+    },
+    { signal: lifecycle.signal },
+  );
+  reduced.addEventListener(
+    "change",
+    () => {
+      paused = reduced.matches;
+      update();
+    },
+    { signal: lifecycle.signal },
+  );
+  window.addEventListener(
+    "pagehide",
+    (event) => {
+      suspended = true;
+      updateIllustrations();
+      if (!event.persisted) {
+        illustrationObserver?.disconnect();
+        revealObserver?.disconnect();
+        lifecycle.abort();
+      }
+    },
+    { signal: lifecycle.signal },
+  );
+  window.addEventListener(
+    "pageshow",
+    (event) => {
+      if (!event.persisted) return;
       suspended = false;
-      updateIllustration();
-      void update();
-    }
-  });
+      update();
+    },
+    { signal: lifecycle.signal },
+  );
+  update();
 }

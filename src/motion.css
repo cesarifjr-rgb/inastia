@@ -1,0 +1,40 @@
+/* Imported after the visual styles. Content is visible before enhancement. */
+@keyframes atlas-enter {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes frontier-reveal {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.frontier-hero .atlas-silhouette[data-motion-entry="running"] {
+  animation: atlas-enter 720ms cubic-bezier(0.2, 0.7, 0.2, 1) both paused;
+}
+[data-reveal][data-motion-entry="running"] {
+  animation: frontier-reveal 200ms ease-out both paused;
+}
+html[data-motion-active="true"] [data-reveal][data-motion-entry="running"],
+html[data-motion-active="true"]
+  .frontier-hero
+  .atlas-silhouette[data-motion-entry="running"][data-illustration-active="true"] {
+  animation-play-state: running;
+}
+/* Override the legacy unconditional running selectors without discarding phase. */
+html[data-motion="running"]
+  .service-art
+  :is(.orbit-one, .listing-front, .art-key-spark) {
+  animation-play-state: paused;
+}
+html[data-motion="running"]
+  .service-art[data-illustration-active="true"]
+  :is(.orbit-one, .listing-front, .art-key-spark) {
+  animation-play-state: running;
+}

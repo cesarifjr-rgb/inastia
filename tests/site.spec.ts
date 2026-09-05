@@ -349,9 +349,8 @@ test("without JavaScript, content, navigation, FAQs and direct contact remain us
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("h1")).toBeVisible();
-  await expect(
-    page.locator("[data-hospitality-scene] svg.hospitality-illustration"),
-  ).toBeVisible();
+  await expect(page.locator(".frontier-hero .atlas-silhouette")).toBeHidden();
+  await expect(page.locator(".hero-actions .button")).toBeVisible();
   await expect(page.locator("#motion-toggle")).toBeHidden();
   for (const section of await page.locator("[data-reveal]").all()) {
     await expect(section).toBeVisible();

@@ -1,48 +1,52 @@
 # Direction graphique Inastia
 
-La direction conserve la palette claire sable, ciel et mer et l’illustration d’accueil : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. La hiérarchie donne désormais la priorité aux accompagnements, aux responsabilités et au premier contact.
+**Atlas de proximité** est la direction Design Frontier : fond clair, bleu profond, carte de Corse sourcée, comparatifs ouverts et pages éditoriales. La proposition reste celle d’une conciergerie familiale pour propriétaires. La carte aide à se repérer ; elle ne représente pas une disponibilité garantie.
 
-## Tokens
+## Sources et tokens
 
-Source de vérité : `src/styles.css`, bloc `:root`.
+`src/client.ts` importe dans cet ordre `base.css`, `service-art.css`, `frontier.css`, puis `motion.css`. Le reset et les éléments communs restent dans `base.css`. Les tokens et compositions courants sont dans `src/frontier.css`, bloc `:root` ; l’ancien `styles.css` a été supprimé.
 
 | Token | Valeur | Usage |
 |---|---|---|
-| `--sand` | `#f8f3e9` | Fond principal sable |
-| `--surface` | `#fffaf3` | Surfaces de cartes |
-| `--surface-up` | `#e7f0f4` | Surfaces secondaires bleutées |
-| `--ink` | `#17455b` | Texte principal |
-| `--blue` | `#1c6285` | Accent et commandes |
-| `--muted` | `#566973` | Texte secondaire |
-| `--line` | `#c7d4d6` | Séparateurs |
-| `--paper` | `#dfeef4` | Sections ciel clair |
-| `--gutter` | `clamp(24px,4.5vw,88px)` | Marges fluides |
-| `--max` | `1280px` | Largeur des conteneurs |
+| `--sand` | `#f4f7f5` | Fond principal |
+| `--surface` | `#ffffff` | Surface claire |
+| `--surface-up` | `#e8f0f1` | Surface secondaire |
+| `--ink` | `#123e52` | Texte principal |
+| `--blue` | `#145b80` | Commandes |
+| `--muted` | `#48636e` | Texte secondaire |
+| `--line` | `#a4bdc5` | Séparateurs |
+| `--paper` | `#deedf0` | Sections bleutées |
+| `--accent` | `#a94b28` | Accent et focus |
+| `--gutter` | `clamp(20px, 4.5vw, 88px)` | Marges |
+| `--max` | `1520px` | Largeur maximale |
+| `--radius` | `2px` | Angles des commandes |
+| `--space-section` | `clamp(56px, 6.5vw, 112px)` | Rythme vertical |
+| `--motion-short` / `--motion-enter` | `180ms` / `720ms` | Durées de référence |
 
-Space Grotesk compose les titres ; Manrope porte paragraphes et commandes. Les fontes variables WOFF2 sont locales et leurs licences sont conservées dans `public/fonts/`. Les accents de titres utilisent la couleur, sans italique. Garder des contrastes lisibles sur les fonds clairs et vérifier les commandes, légendes et champs après chaque changement de palette.
+Space Grotesk compose les titres et Manrope le corps. Les accents éditoriaux utilisent Georgia/Times en italique ; aucune police serif distante n’est chargée. Les fontes variables WOFF2 sont locales et leurs licences restent dans `public/fonts/`. Vérifier contraste, focus, labels et états d’erreur après toute modification de palette ; la couleur seule ne suffit pas à exprimer une erreur ou une sélection.
 
-## Composition
+## Composition et composants
 
-L’accueil comporte sept sections : hero explicite et action, trois accompagnements comparables, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Le manifeste autonome est absorbé. Les cartes conservent leurs illustrations animées : maison en orbite, fiche d’annonce et clé dorée. Elles nomment l’offre, puis ce qui est confié, conservé et à chiffrer ; les rubriques s’alignent en subgrid à partir de 1024 px. En dessous, les cartes sont empilées et les illustrations sont réduites sur mobile.
+L’accueil articule proposition/atlas, choix de délégation, équipe, territoire, maisons et soin, avis voyageurs, premier échange, FAQ et contact. Les trois offres utilisent des lignes éditoriales : identité et illustration à gauche, responsabilités et coût à droite sur grand écran ; empilement sur téléphone. Les trois illustrations d’origine (maison, annonce, clé) sont fournies par `serviceArt(service.index)` et `service-art.css`. Leur index stable conserve l’association à l’offre lors d’un réordonnancement.
 
-La présentation familiale reste collective, sans prénom ni portrait non autorisé. Les maisons gardent leurs noms et localisations réels. Le bloc de suivi expose les étapes du service ; ne pas le présenter comme une preuve de mission attribuée à une maison. Les avis Google sont explicitement des extraits de voyageurs, sourcés et statiques, avec date du relevé global. Ils éclairent l’accueil vécu, sans démontrer à eux seuls le suivi propriétaire.
+`servicesFor(locale)` alimente les résumés d’accueil et d’offre. Chaque offre précise ce qui est confié, conservé et à convenir financièrement. Le guide `orientation.ts` est une aide facultative : `fieldset`/`legend`, quatre labels de radios, une colonne mobile et deux colonnes bureau. Les labels doivent revenir à la ligne sans troncature. La réponse comporte motif, réserve et liens ; elle ne remplace pas le comparatif statique.
 
-Les pages secondaires associent le hero typographique à un résumé concret des prestations et une petite photo légendée, puis un sommaire, des sections et une FAQ. Le résumé remplace la grande illustration de service. Sur mobile, les colonnes se superposent. Le corps principal est à 16 px, les labels et aides utiles à 13–14 px ; le H1 d’accueil est limité à 80 px sur grand écran et 40–48 px sur mobile.
+`heroAtlas` et `territoryAtlas` dans `src/atlas.ts` utilisent `public/images/corsica-outline.svg`. Les repères sont des centres communaux, distincts des lieux-dits présents dans les libellés. Les liens HTML restent accessibles sans carte interactive. Les sources Natural Earth et geo.api.gouv.fr, leur date et leurs licences sont documentées dans [geography.md](design-frontier/geography.md).
 
-Le contact rapproche les champs de l’introduction. Le motif choisi reste visible et modifiable ; le parcours audit précise une restitution par appel ou email. Conserver l’aide permanente, les états d’envoi et la place réservée à l’antispam. Les champs utilisent un fond opaque `#fffefb`, une bordure `#657b88` et une aide `#566973`. Vérifier les contrastes et la lisibilité des états réels après toute évolution.
+Le portfolio expose trois vrais biens. Un dialogue natif agrandit la photographie ; nom et localisation restent visibles, Échap ferme et le focus revient au lien. L’historique utilise des fragments de bien, sans données personnelles. Sans JavaScript, le lien pointe directement vers la photographie. Cette galerie ne promet ni disponibilité ni réservation.
 
-## Motion et rendu statique
+Les pages secondaires combinent titre, résumé, photographie légendée, sommaire, sections et FAQ. Les services conservent leur illustration et le partage des rôles ; audit, équipe et territoire ont des résumés adaptés. Les titres déjà numérotés ne reçoivent pas d’index décoratif supplémentaire. Les colonnes s’empilent sur mobile.
 
-`src/art.ts` fournit `serviceArt(index)` pour les trois offres et `hospitalityArt(locale)` pour le hero FR/EN. Les illustrations sont intégrées au HTML et restent visibles et statiques sans JavaScript. Elles sont décoratives : les labels et le texte HTML portent le message métier. Les mouvements des offres suivent le même bouton de pause et la même préférence de réduction des animations que le hero.
+Le contact garde le besoin choisi modifiable, les aides persistantes et les champs facultatifs explicites. Les erreurs de `contact.ts` associent message et champ avec `aria-describedby`/`aria-invalid`, proposent un résumé de navigation et permettent la correction sans perdre les données. Les états de succès reposent sur une réponse confirmée, pas sur une simple animation.
 
-`src/motion.ts` gère GSAP/ScrollTrigger, la pause/reprise et la visibilité. Le CSS anime le porte-clés, la clé et les vagues lorsque l’illustration est active. La préférence `prefers-reduced-motion` initialise une pause ; l’utilisateur peut explicitement reprendre. Respecter cet état, la suspension hors écran/onglet masqué et la reprise BFCache. Une capture fixe ne démontre pas la qualité temporelle du mouvement.
+## Mouvement et repli statique
 
-## Sources et régénération
+`motion.ts` utilise IntersectionObserver et le cycle de page ; `motion.css` définit entrées, pause et mouvements CSS. Aucune dépendance GSAP/ScrollTrigger n’est requise. Le bouton Animations, la préférence reduced-motion, la visibilité des illustrations, l’onglet masqué et `pageshow` participent à l’état courant. Ne pas ajouter un moteur parallèle pour une nouvelle section : réutiliser `data-reveal` lorsque pertinent et vérifier le repli sans JavaScript.
 
-- Modifier le SVG source dans `src/art.ts` et maintenir les libellés FR/EN ensemble.
-- `npx tsx scripts/render-share.ts` réutilise le SVG français et génère `public/images/inastia-share.png` en 1200 × 630 via Sharp. Cette image est statique ; sa génération est manuelle.
-- Le site ne nécessite ni modèle GLB, ni Three.js, ni Blender. Les anciennes preuves Blender restent hors dépôt.
-- Les photographies originales `villa_amichi.webp`, `casa_verde.webp`, `villa_lova.webp` représentent respectivement Villa d’Amichi / Pinarello-Zonza, Casa Verde / Pinarello-Zonza et Cala Lova / Cala d’Oro-Solenzara.
-- `npm run assets` génère leurs variantes AVIF/WebP à 240, 480, 800 et 1200 pixels et copie les polices/licences. Il ne régénère pas l’image sociale.
+Les textes, cartes et photographies restent disponibles sans animation. L’ancien `hospitalityArt` de `art.ts` est conservé provisoirement ; il ne constitue plus le hero ni la carte sociale. Le PNG 1200 × 630 est généré par `npx tsx scripts/render-share.ts` à partir de l’atlas et du contour sourcé, puis inspecté séparément. Une image fixe ne démontre pas la qualité temporelle du mouvement.
 
-Conserver les localisations réelles des photographies. Le porte-clés et le décor sont des illustrations. Le discours reste celui d’une conciergerie familiale : ne pas inventer technologie, résultats, avis ou couverture géographique pour accompagner l’esthétique.
+## Contenu et maintenance
+
+Ne pas inventer portraits, prix, délais, résultats ou données de mission pour compléter une composition. Les avis sont statiques, sourcés, datés et attribués aux voyageurs. Les originaux représentent Villa d’Amichi (Pinarello/Zonza), Casa Verde (Pinarello/Zonza) et Cala Lova (Cala d’Oro/Solenzara). `npm run assets` génère les variantes et copie les licences ; il ne régénère pas l’image sociale.
+
+Les procédures de modification et de retour arrière sont dans [maintenance.md](design-frontier/maintenance.md). Les constats du parcours sont dans [user-review.md](design-frontier/user-review.md) : revue interne, périmètre explicite et vérification finale de livraison à distinguer des passes intermédiaires.
