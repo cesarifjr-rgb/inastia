@@ -23,9 +23,13 @@ test.beforeEach(async ({ page }) => {
     Object.assign(window, {
       turnstile: {
         render: (
-          _container: HTMLElement,
-          options: { callback: (token: string) => void },
+          container: HTMLElement,
+          options: { callback: (token: string) => void; size: string },
         ) => {
+          const widget = document.createElement("div");
+          widget.style.width = options.size === "compact" ? "150px" : "300px";
+          widget.style.height = options.size === "compact" ? "140px" : "65px";
+          container.append(widget);
           window.__solveChallenge = () => options.callback("local-test-token");
           return "test-widget";
         },
@@ -53,6 +57,7 @@ for (const locale of ["fr", "en"] as const) {
       page,
     }) => {
       let requests = 0;
+      await page.setViewportSize({ width: 375, height: 812 });
       await page.route("**/api/contact", async (route) => {
         requests += 1;
         await route.fulfill({ json: { success: true } });
@@ -71,6 +76,8 @@ for (const locale of ["fr", "en"] as const) {
           .evaluate((form: HTMLFormElement) => form.checkValidity()),
       ).toBe(false);
       await fillContact(page);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth))
+        .toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toContainText(
         locale === "fr" ? "Veuillez effectuer" : "Please complete",

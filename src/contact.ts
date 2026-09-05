@@ -3,6 +3,7 @@ interface TurnstileAPI {
     container: HTMLElement,
     options: {
       sitekey: string;
+      size: "compact";
       language: "fr" | "en";
       callback: (token: string) => void;
       "expired-callback": () => void;
@@ -94,6 +95,7 @@ export function initContact(): void {
           if (!window.turnstile) throw new Error("Challenge unavailable");
           widgetId = window.turnstile.render(container!, {
             sitekey: "0x4AAAAAACfqzkKmQzM62oPC",
+            size: "compact",
             language: locale,
             callback: (value) => {
               token = value;
