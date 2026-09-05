@@ -63,6 +63,45 @@ export function initContact(): void {
   form.dataset.initialized = "true";
   const locale = form.dataset.locale === "en" ? "en" : "fr";
   const copy = messages[locale];
+  const intent = form.querySelector<HTMLSelectElement>("#contact-intent");
+  const intents = ["audit", "gestion", "annonce", "rotation"];
+  const initialIntent =
+    new URLSearchParams(location.search).get("intent") ?? "";
+  if (intent)
+    intent.value = intents.includes(initialIntent) ? initialIntent : "";
+  function updateIntent(): void {
+    const audit = intent?.value === "audit";
+    const title = document.querySelector("#contact-title");
+    const label = document.querySelector("#submit-contact-label");
+    if (title)
+      title.textContent =
+        locale === "fr"
+          ? audit
+            ? "Votre audit gratuit."
+            : "Parlons de votre bien."
+          : audit
+            ? "Your free property review."
+            : "Let’s talk about your property.";
+    if (label)
+      label.textContent =
+        locale === "fr"
+          ? audit
+            ? "Demander mon audit gratuit"
+            : "Envoyer ma demande"
+          : audit
+            ? "Request my free property review"
+            : "Send my enquiry";
+    document
+      .querySelectorAll<HTMLAnchorElement>(".language-link")
+      .forEach((link) => {
+        const url = new URL(link.href);
+        if (intent?.value) url.searchParams.set("intent", intent.value);
+        else url.searchParams.delete("intent");
+        link.href = url.href;
+      });
+  }
+  intent?.addEventListener("change", updateIntent);
+  updateIntent();
   let token = "";
   let widgetId: string | undefined;
   let scriptPromise: Promise<void> | undefined;
@@ -175,6 +214,7 @@ export function initContact(): void {
     const fields = new FormData(form);
     const payload: Record<string, string> = { turnstileToken: token };
     for (const name of [
+      "intent",
       "firstName",
       "lastName",
       "email",
@@ -211,8 +251,18 @@ export function initContact(): void {
       }
       completed = true;
       form.reset();
+      if (intent) intent.value = payload.intent ?? "";
+      updateIntent();
       if (reset) reset.hidden = false;
-      announce(copy.success, "success", true);
+      announce(
+        payload.intent === "audit"
+          ? locale === "fr"
+            ? "Votre demande d’audit gratuit a bien été envoyée. Notre équipe vous répondra par appel ou par email."
+            : "Your free property review request has been sent. Our team will respond by phone or email."
+          : copy.success,
+        "success",
+        true,
+      );
     } catch {
       announce(
         controller.signal.aborted ? copy.timeout : copy.error,

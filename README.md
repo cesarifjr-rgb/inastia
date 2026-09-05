@@ -22,7 +22,8 @@ Le serveur démarre sur `http://127.0.0.1:3100`. La commande génère les pages 
 ```text
 src/content/pages.ts       Contenus des pages secondaires FR/EN
 src/content/legal/         Fragments juridiques français
-src/home.ts                Accueil FR/EN
+src/home.ts                Accueil FR/EN en sept sections
+src/reviews.ts             Extraits Google statiques, sources et date de relevé
 src/components.ts          Navigation, footer, FAQ et appels à contact
 src/templates.ts           Documents, pages secondaires et formulaire
 src/lib.ts                 Helpers d'URL, échappement et images
@@ -54,7 +55,9 @@ Ce script régénère les variantes photographiques, les polices locales Space G
 
 ## Illustration d’accueil et image sociale
 
-La V4 conserve la structure et la palette claire sable, ciel et mer. Le hero illustre l’accueil et la remise des clés : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. Les photographies des biens restent discrètes. Le texte décrit une conciergerie familiale réelle.
+La palette claire sable, ciel et mer et l’illustration d’accueil sont conservées : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. L’accueil suit sept sections : proposition et contact, comparaison des accompagnements, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Les photographies des biens restent discrètes.
+
+L’équipe est présentée collectivement, conformément au choix actuel de ne pas publier de prénoms. Le suivi d’une rotation décrit le processus annoncé ; il ne constitue pas un cas client ni un document de mission réelle. Les extraits Google de `src/reviews.ts` sont des avis de voyageurs conservés dans leur langue d’origine, avec auteur, date de séjour et lien source. La note globale porte sa date de relevé, le 5 septembre 2026. Ces contenus sont statiques : vérifier manuellement les sources avant de les actualiser ; ne pas les présenter comme une synchronisation Google ni comme des témoignages propriétaires.
 
 La fonction `hospitalityArt(locale)` de `src/art.ts` génère le SVG intégré au HTML en français ou en anglais. Le site ne nécessite ni modèle 3D, ni WebGL, ni Blender. Les preuves des anciennes scènes restent hors dépôt.
 
@@ -69,6 +72,8 @@ Ce script réutilise le SVG français, le compose avec le texte de la carte et p
 `src/motion.ts` charge GSAP/ScrollTrigger pour les entrées et révélations. Les mouvements de la clé, du porte-clés et des vagues sont définis en CSS. Le bouton « Animations » permet la pause/reprise ; `prefers-reduced-motion` initialise la pause, avec reprise explicite possible. Un observateur de visibilité et les événements de page suspendent les mouvements de l’illustration hors écran, lorsque l’onglet est masqué et pendant une suspension BFCache. Ils reprennent selon l’état courant au retour. Sans JavaScript, le contenu HTML et le SVG restent disponibles. L’illustration est décorative et ne porte aucune information indispensable.
 
 ## Formulaire et configuration
+
+`contactPath(locale, intent)` conserve le motif choisi dans l’URL de contact : `audit`, `gestion`, `annonce` ou `rotation`. Le formulaire présente ce motif dans un sélecteur modifiable ; l’audit adapte le titre, le bouton et le message de réussite. Le motif est transmis avec la demande. Le premier audit gratuit est restitué par appel ou par email, sans délai garanti ni promesse de rapport écrit. L’aide du projet reste visible pendant la saisie ; téléphone et projet restent facultatifs.
 
 `api/contact.js` vérifie les données et le jeton Cloudflare Turnstile avant d'envoyer via Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`. `src/contact.ts` charge Turnstile à l'interaction et gère chargement, erreur, expiration, succès et nouvel envoi.
 

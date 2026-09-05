@@ -64,28 +64,15 @@ export function initMotion(): void {
       if (current !== generation || paused) return;
       gsap.registerPlugin(ScrollTrigger);
       const context = gsap.context(() => {
-        // The first impression opens like a composition; no scrolling is intercepted.
+        // Keep the title readable immediately; only the illustration enters gently.
         if (hero && window.scrollY < 30) {
           gsap.fromTo(
-            ".hero-copy h1 > span",
-            { y: 48, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1.05,
-              stagger: 0.1,
-              ease: "power3.out",
-              clearProps: "all",
-            },
-          );
-          gsap.fromTo(
             ".hero-visual",
-            { y: 24, opacity: 0 },
+            { y: 12, opacity: 1 },
             {
               y: 0,
               opacity: 1,
-              duration: 1.4,
-              delay: 0.1,
+              duration: 0.22,
               ease: "power2.out",
               clearProps: "all",
             },
@@ -96,11 +83,11 @@ export function initMotion(): void {
           if (element.classList.contains("is-visible")) return;
           gsap.fromTo(
             element,
-            { y: 35, opacity: 0 },
+            { y: 12, opacity: 1 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.8,
+              duration: 0.22,
               ease: "power3.out",
               scrollTrigger: { trigger: element, start: "top 94%", once: true },
               onStart: () => element.classList.add("is-visible"),
@@ -108,40 +95,6 @@ export function initMotion(): void {
             },
           );
         });
-        if (document.querySelector(".manifesto-orb")) {
-          gsap.to(".manifesto-orb", {
-            y: 120,
-            rotation: -8,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".manifesto-section",
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-          });
-          gsap.to(".manifesto-section h2 span", {
-            color: "#1c6285",
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".manifesto-section",
-              start: "top 70%",
-              end: "center 50%",
-              scrub: 1,
-            },
-          });
-          gsap.to(".presence-art svg", {
-            x: 100,
-            y: -40,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".presence-section",
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-          });
-        }
       });
       const onFocus = (event: FocusEvent): void => {
         if (!(event.target instanceof HTMLElement)) return;

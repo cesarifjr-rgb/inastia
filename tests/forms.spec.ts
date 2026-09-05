@@ -53,6 +53,88 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
+    for (const intent of ["audit", "gestion", "annonce", "rotation"]) {
+      test(`preserves ${intent} from query through a simulated confirmation`, async ({
+        page,
+      }) => {
+        let payload: Record<string, string> | undefined;
+        await page.route("**/api/contact", async (route) => {
+          payload = route.request().postDataJSON();
+          await route.fulfill({ json: { success: true } });
+        });
+        await page.goto(`${path}?intent=${intent}`);
+        await expect(page.locator("#contact-intent")).toHaveValue(intent);
+        await expect(page.locator(".language-link")).toHaveAttribute(
+          "href",
+          new RegExp(`intent=${intent}`),
+        );
+        if (intent === "audit") {
+          await expect(page.locator("#contact-title")).toContainText(
+            locale === "fr" ? "audit gratuit" : "free property review",
+          );
+          await expect(page.locator("#submit-contact-label")).toContainText(
+            locale === "fr" ? "audit gratuit" : "free property review",
+          );
+        }
+        await fillContact(page);
+        await expect(page.locator("#message-help")).toBeVisible();
+        await expect(page.locator("#message")).toHaveAttribute(
+          "aria-describedby",
+          "message-help",
+        );
+        await page.evaluate(() => window.__solveChallenge());
+        await page.locator("#submit-contact").click();
+        await expect(page.locator("#form-status")).toHaveAttribute(
+          "data-state",
+          "success",
+        );
+        expect(payload?.intent).toBe(intent);
+        await expect(page.locator("#contact-intent")).toHaveValue(intent);
+        if (intent === "audit")
+          await expect(page.locator("#form-status")).toContainText(
+            locale === "fr" ? "audit gratuit" : "free property review",
+          );
+      });
+    }
+
+    test("invalid intent falls back to generic and can be changed before sending", async ({
+      page,
+    }) => {
+      let payload: Record<string, string> | undefined;
+      await page.route("**/api/contact", async (route) => {
+        payload = route.request().postDataJSON();
+        await route.fulfill({ json: { success: true } });
+      });
+      await page.goto(`${path}?intent=%3Cscript%3E`);
+      await expect(page.locator("#contact-intent")).toHaveValue("");
+      await expect(page.locator("#contact-title")).toHaveText(
+        locale === "fr"
+          ? "Parlons de votre bien."
+          : "Let’s talk about your property.",
+      );
+      await page.locator("#contact-intent").selectOption("audit");
+      await expect(page.locator(".language-link")).toHaveAttribute(
+        "href",
+        /intent=audit/,
+      );
+      await page.locator(".language-link").click();
+      await expect(page).toHaveURL(
+        new RegExp(
+          `${locale === "fr" ? "/en/contact" : "/contact"}\\?intent=audit$`,
+        ),
+      );
+      await expect(page.locator("#contact-intent")).toHaveValue("audit");
+      await page.locator("#contact-intent").selectOption("rotation");
+      await fillContact(page);
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute(
+        "data-state",
+        "success",
+      );
+      expect(payload?.intent).toBe("rotation");
+    });
+
     test("required fields and absent challenge prevent sending", async ({
       page,
     }) => {
@@ -76,8 +158,11 @@ for (const locale of ["fr", "en"] as const) {
           .evaluate((form: HTMLFormElement) => form.checkValidity()),
       ).toBe(false);
       await fillContact(page);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth))
-        .toBeLessThanOrEqual(await page.evaluate(() => document.documentElement.clientWidth));
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth),
+      ).toBeLessThanOrEqual(
+        await page.evaluate(() => document.documentElement.clientWidth),
+      );
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toContainText(
         locale === "fr" ? "Veuillez effectuer" : "Please complete",
@@ -99,7 +184,7 @@ for (const locale of ["fr", "en"] as const) {
         });
         await route.fulfill({ json: { success: true } });
       });
-      await page.goto(path);
+      await page.goto(`${path}?intent=gestion`);
       await fillContact(page);
       await page.evaluate(() => window.__solveChallenge());
       await page.locator("#submit-contact").click();
@@ -120,6 +205,7 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#firstName")).toBeFocused();
       await expect(page.locator("#submit-contact")).toBeEnabled();
       await expect(page.locator("#form-reset")).toBeHidden();
+      await expect(page.locator("#contact-intent")).toHaveValue("gestion");
       expect(requests).toBe(1);
     });
 
@@ -131,7 +217,7 @@ for (const locale of ["fr", "en"] as const) {
         requests += 1;
         await route.fulfill({ status: 500, json: { success: false } });
       });
-      await page.goto(path);
+      await page.goto(`${path}?intent=audit`);
       await fillContact(page);
       await page.evaluate(() => window.__solveChallenge());
       await page.locator("#submit-contact").click();
@@ -146,6 +232,7 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#message")).toHaveValue(
         "Local automated test; never delivered.",
       );
+      await expect(page.locator("#contact-intent")).toHaveValue("audit");
       expect(await page.evaluate(() => window.__challengeResetCount)).toBe(1);
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toContainText(

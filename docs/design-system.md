@@ -1,6 +1,6 @@
-# Direction graphique Inastia V4
+# Direction graphique Inastia
 
-La V4 conserve la structure et la palette claire sable, ciel et mer : grands titres, trois cartes de services, présentation familiale, portfolio discret et parcours vers le contact. Le hero montre une illustration de l’accueil : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer.
+La direction conserve la palette claire sable, ciel et mer et l’illustration d’accueil : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. La hiérarchie donne désormais la priorité aux accompagnements, aux responsabilités et au premier contact.
 
 ## Tokens
 
@@ -17,15 +17,19 @@ Source de vérité : `src/styles.css`, bloc `:root`.
 | `--line` | `#c7d4d6` | Séparateurs |
 | `--paper` | `#dfeef4` | Sections ciel clair |
 | `--gutter` | `clamp(24px,4.5vw,88px)` | Marges fluides |
-| `--max` | `1600px` | Largeur des conteneurs |
+| `--max` | `1280px` | Largeur des conteneurs |
 
 Space Grotesk compose les titres ; Manrope porte paragraphes et commandes. Les fontes variables WOFF2 sont locales et leurs licences sont conservées dans `public/fonts/`. Les accents de titres utilisent la couleur, sans italique. Garder des contrastes lisibles sur les fonds clairs et vérifier les commandes, légendes et champs après chaque changement de palette.
 
 ## Composition
 
-Le hero associe une promesse courte et une illustration de la remise des clés, sans photographie dominante. Le manifeste alterne avec trois cartes de services, une présentation familiale, un portfolio en lignes compactes, une méthode et les zones locales. Les symboles maison, annonce et clé illustrent les prestations réelles, en cohérence avec l’illustration du hero.
+L’accueil comporte sept sections : hero explicite et action, trois accompagnements comparables, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Le manifeste autonome est absorbé. Les cartes nomment d’abord l’offre, puis ce qui est confié, conservé et à chiffrer. Leurs icônes restent compactes ; les rubriques s’alignent en subgrid à partir de 1024 px. En dessous, les cartes sont empilées.
 
-Les pages secondaires partagent un hero typographique, une illustration de service et une petite photo légendée, puis un sommaire, des sections et une FAQ. Le formulaire et les pages légales utilisent la même palette claire. Sur mobile, les colonnes se superposent ; les titres doivent garder les marges communes.
+La présentation familiale reste collective, sans prénom ni portrait non autorisé. Les maisons gardent leurs noms et localisations réels. Le bloc de suivi expose les étapes du service ; ne pas le présenter comme une preuve de mission attribuée à une maison. Les avis Google sont explicitement des extraits de voyageurs, sourcés et statiques, avec date du relevé global. Ils éclairent l’accueil vécu, sans démontrer à eux seuls le suivi propriétaire.
+
+Les pages secondaires associent le hero typographique à un résumé concret des prestations et une petite photo légendée, puis un sommaire, des sections et une FAQ. Le résumé remplace la grande illustration de service. Sur mobile, les colonnes se superposent. Le corps principal est à 16 px, les labels et aides utiles à 13–14 px ; le H1 d’accueil est limité à 80 px sur grand écran et 40–48 px sur mobile.
+
+Le contact rapproche les champs de l’introduction. Le motif choisi reste visible et modifiable ; le parcours audit précise une restitution par appel ou email. Conserver l’aide permanente, les états d’envoi et la place réservée à l’antispam. Les champs utilisent un fond opaque `#fffefb`, une bordure `#657b88` et une aide `#566973`. Vérifier les contrastes et la lisibilité des états réels après toute évolution.
 
 ## Motion et rendu statique
 

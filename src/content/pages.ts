@@ -281,8 +281,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
         {
-          title: "Votre annonce et vos réservations",
-          text: "Nous créons ou améliorons l’annonce, suivons les disponibilités et ajustons les prix selon la saison. Vos séjours personnels sont intégrés au calendrier ; la communication voyageurs accompagne les réservations.",
+          title: "Ce que vous confiez : annonce et séjours",
+          text: "Nous créons ou améliorons l’annonce, suivons les disponibilités et ajustons les prix selon la saison. Nous coordonnons la communication voyageurs, les arrivées, le ménage, le linge et les clés dans le périmètre convenu.",
           items: [
             "Création ou optimisation d’annonce",
             "Suivi des prix et disponibilités",
@@ -290,12 +290,12 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Le séjour, dans ses détails",
-          text: "Accueil, linge, ménage et clés sont coordonnés autour des arrivées et des départs. Les besoins de maintenance sont signalés et les interventions convenues sont suivies. Vous êtes sollicité pour les décisions qui vous reviennent.",
+          title: "Ce que vous gardez : vos séjours et vos décisions",
+          text: "Vos périodes personnelles sont intégrées au calendrier. Les besoins de maintenance vous sont signalés ; nous suivons les interventions convenues et vous sollicitons pour les décisions qui vous reviennent.",
         },
         {
-          title: "Un accord clair avant de commencer",
-          text: "Votre proposition précise les prestations, la commission sur les revenus locatifs et les frais éventuels. La durée et les modalités figurent au contrat. Vous savez ce que vous confiez et dans quelles conditions.",
+          title: "Commission, frais et durée à convenir",
+          text: "Votre proposition précise les prestations, la commission sur les revenus locatifs et les frais éventuels. La durée et les modalités figurent au contrat. Ce cadre est défini avant le démarrage.",
         },
       ],
       faq: [
@@ -323,28 +323,28 @@ export const pages: Record<Locale, PageContent[]> = {
       description:
         "Organisez vos rotations avec Inastia : ménage, linge, check-in, check-out et contrôles du logement, sur la côte est de la Corse.",
       eyebrow: "Accueil & rotation séjour",
-      heading: "Vous réservez. Nous préparons l’accueil.",
+      heading: "Vous gérez les réservations. Nous préparons l’accueil.",
       intro:
         "Vous souhaitez garder la gestion de vos annonces et réservations ? Confiez-nous le relais entre deux séjours : ménage, linge, arrivée, départ et contrôle du logement, selon vos besoins.",
       image: "casa_verde",
       imageAlt: "Casa Verde, à Pinarello, Zonza",
       sections: [
         {
-          title: "Une rotation adaptée au bien",
-          text: "Surface, chambres, accès : nous définissons les passages à partir de votre logement. Le ménage, le linge et les consommables sont précisés dans la proposition, avec leur prise en charge et leur coût.",
+          title: "Ce que vous confiez : la préparation entre deux séjours",
+          text: "Ménage, linge, consommables, remise des clés et consignes : nous préparons les passages selon vos besoins. L’accueil personnalisé ou autonome est organisé en amont, avec les informations utiles à l’arrivée et au départ.",
           items: [
             "Ménage après séjour",
             "Linge selon les besoins convenus",
-            "Suivi des consommables",
+            "Accueil et contrôle du logement",
           ],
         },
         {
-          title: "Des arrivées organisées",
-          text: "Accueil personnalisé ou autonome, remise des clés et consignes : le fonctionnement est préparé en amont. Les voyageurs disposent des informations nécessaires pour accéder à la maison et organiser leur départ.",
+          title: "Ce que vous gardez : annonce, réservations et décisions",
+          text: "Vous conservez la gestion de l’annonce et des réservations. Une checklist et des photos de fin d’intervention documentent la préparation. Nous vous signalons les anomalies constatées pour que vous puissiez décider des suites nécessaires.",
         },
         {
-          title: "Un passage documenté",
-          text: "Une checklist et des photos de fin d’intervention permettent de suivre la préparation. Nous vous remontons les anomalies constatées afin de décider des suites lorsqu’une intervention est nécessaire.",
+          title: "Prestations et coût à convenir",
+          text: "La proposition tient compte de la surface, du nombre de chambres, des accès et des prestations souhaitées. Le ménage, le linge et les consommables y sont précisés, avec leur prise en charge et leur coût. Votre calendrier permet d’organiser les passages.",
         },
       ],
       faq: [
@@ -379,12 +379,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa Lova, à Cala d’Oro, Solenzara",
       sections: [
         {
-          title: "Identifier les priorités",
-          text: "Nous examinons la présentation, les équipements et les informations utiles au séjour. L’audit permet de distinguer ce qui est prêt et ce qui mérite d’être travaillé avant la mise en ligne.",
-        },
-        {
-          title: "Préparer une annonce claire",
-          text: "Le titre et le texte mettent en avant les atouts réels du logement. Les prix de départ, les disponibilités et les règles complètent une présentation qui aide les voyageurs à choisir.",
+          title: "Ce que vous confiez : préparer et ajuster l’annonce",
+          text: "Nous examinons la présentation et les équipements du logement, puis préparons ou améliorons l’annonce. Le titre, le texte, les règles de séjour, les prix de départ et les disponibilités s’appuient sur les atouts réels de votre bien.",
           items: [
             "Création ou amélioration de l’annonce",
             "Texte et règles de séjour",
@@ -392,8 +388,12 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Continuer après la publication",
-          text: "Le suivi de la visibilité, du calendrier et des premiers retours permet d’ajuster l’annonce. Nous définissons ensemble le périmètre et la durée de cet accompagnement.",
+          title: "Ce qui reste à organiser : l’accueil et les rotations",
+          text: "Cette offre porte sur l’annonce. L’accueil, le ménage et les rotations font l’objet d’une offre dédiée, qui peut compléter votre accompagnement. Le niveau de délégation se définit selon les tâches que vous souhaitez conserver.",
+        },
+        {
+          title: "Suivi, durée et coût à convenir",
+          text: "Après publication, le suivi de la visibilité, du calendrier et des premiers retours permet d’ajuster l’annonce. Nous définissons ensemble le périmètre et la durée de ce suivi ; les prestations et leur coût sont précisés dans la proposition.",
         },
       ],
       faq: [
@@ -428,16 +428,16 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, une maison accompagnée par Inastia à Pinarello",
       sections: [
         {
-          title: "Comprendre ce que vous confiez",
-          text: "Une maison compte autant pour les souvenirs qu’elle abrite que pour les séjours qu’elle accueille. Nous prenons le temps de comprendre vos attentes, vos habitudes et les détails auxquels vous tenez.",
+          title: "Définir ce que vous souhaitez déléguer",
+          text: "Inastia est une entreprise familiale, née de notre expérience de propriétaires. Le premier échange porte sur votre logement, sa commune et votre organisation actuelle. Vos attentes et vos périodes personnelles permettent de définir l’accompagnement.",
         },
         {
-          title: "Se parler directement",
-          text: "Inastia est une entreprise familiale à taille humaine. Vous échangez directement avec nous pour définir l’accompagnement et suivre votre bien. La relation commence par savoir à qui vous vous adressez.",
+          title: "Échanger directement sur le suivi de votre bien",
+          text: "Vous échangez avec nous pour organiser les prestations convenues et suivre votre logement. Nous vous signalons les points qui demandent une décision : anomalie constatée, besoin de maintenance ou intervention à prévoir.",
         },
         {
-          title: "Être attentif, concrètement",
-          text: "Préparer le logement, transmettre les bonnes consignes, suivre une demande : notre manière d’accueillir prend forme dans ces gestes. De Ghisonaccia à Porto-Vecchio, nous les coordonnons pour les propriétaires et leurs voyageurs.",
+          title: "Coordonner la préparation et l’accueil",
+          text: "Préparer le logement, transmettre les consignes et suivre les demandes font partie des tâches que nous coordonnons selon votre accompagnement. Nous sommes installés à Travo, à Ventiseri ; l’adresse de votre bien permet de confirmer les prestations possibles entre Ghisonaccia et Porto-Vecchio.",
         },
       ],
       faq: [
@@ -465,28 +465,28 @@ export const pages: Record<Locale, PageContent[]> = {
       description:
         "Recevez une première analyse qualitative de votre bien en Corse : annonce, positionnement et priorités. Demandez votre audit gratuit à Inastia.",
       eyebrow: "Audit gratuit",
-      heading: "Votre projet mérite un premier regard.",
+      heading: "Identifiez les priorités de votre location.",
       intro:
-        "Avant de changer d’organisation ou de lancer votre location, faisons le point. Notre audit gratuit identifie les priorités de votre bien et vous aide à choisir ce que vous souhaitez déléguer.",
+        "Un premier audit gratuit et qualitatif pour repérer les points à travailler et choisir votre accompagnement. Cette analyse ne constitue pas une prévision de revenus.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
         {
-          title: "Partir de votre situation",
-          text: "La commune, le type de logement et sa capacité donnent le contexte. Si l’annonce existe, nous examinons sa présentation, ses équipements, ses prix et ses avis pour repérer les freins visibles à la réservation.",
+          title: "1. Présenter votre bien et votre situation",
+          text: "Indiquez la commune, le type de logement, la capacité d’accueil et votre organisation actuelle. Ajoutez le lien de l’annonce si elle existe. Ces informations nous permettent d’étudier votre demande dans notre secteur, de Ghisonaccia à Porto-Vecchio.",
         },
         {
-          title: "Repartir avec des priorités",
-          text: "Vous recevez une première analyse qualitative et des recommandations sur l’annonce, les prix ou l’expérience de séjour. L’objectif est de guider vos choix d’accompagnement ; cette analyse ne constitue pas une prévision de revenus.",
+          title: "2. Identifier les points à travailler",
+          text: "À partir des informations sur votre bien et de l’annonce disponible, nous examinons la présentation, les équipements, les prix et les avis. Nous vous présentons cette première analyse qualitative par appel ou par email pour guider vos choix.",
           items: [
             "Points à améliorer en priorité",
-            "Recommandations adaptées au bien",
+            "Recommandations sur l’annonce ou l’expérience de séjour",
             "Orientation vers l’accompagnement utile",
           ],
         },
         {
-          title: "Quelques informations pour commencer",
-          text: "Indiquez la commune, le type de bien, la capacité d’accueil et votre situation actuelle. Un lien vers l’annonce complète utilement votre demande. Nous étudions ces éléments pour les biens de notre secteur, de Ghisonaccia à Porto-Vecchio.",
+          title: "3. Choisir la suite de l’accompagnement",
+          text: "Si vous souhaitez ensuite confier des prestations à Inastia, nous en précisons le périmètre, le coût et les conditions dans une proposition distincte. Le premier audit reste une analyse qualitative ; il ne garantit pas de revenus locatifs.",
         },
       ],
       faq: [
@@ -774,8 +774,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
         {
-          title: "Your listing and bookings",
-          text: "We create or improve the listing, manage availability and adjust pricing through the season. Your own stays are included in the calendar, with guest communication alongside bookings.",
+          title: "What you delegate: listings and stays",
+          text: "We create or improve your listing, manage availability and adjust prices through the season. We coordinate guest communication, arrivals, cleaning, linen and keys within the agreed scope.",
           items: [
             "Listing creation or improvement",
             "Pricing and availability management",
@@ -783,12 +783,12 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "The details of each stay",
-          text: "Arrivals, linen, cleaning and keys are coordinated around stays. Maintenance needs are reported and agreed work is followed up. Decisions that belong to you are brought to your attention.",
+          title: "What you keep: your stays and decisions",
+          text: "Your personal stays are included in the calendar. We report maintenance needs, follow up on agreed work and bring decisions that belong to you to your attention.",
         },
         {
-          title: "Clear terms before we begin",
-          text: "Your proposal sets out services, commission on rental income and any additional fees. Duration and terms are specified in the contract. You know what you are handing over and on what basis.",
+          title: "Commission, fees and duration to agree",
+          text: "Your proposal sets out the services, commission on rental income and any additional fees. Duration and terms are specified in the contract. This framework is agreed before the service begins.",
         },
       ],
       faq: [
@@ -823,21 +823,21 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde in Pinarello, Zonza",
       sections: [
         {
-          title: "A changeover that fits the property",
-          text: "Floor area, bedrooms and access determine the work required. Cleaning, linen and supplies are set out in the proposal, with the scope and cost of each service.",
+          title: "What you delegate: preparing for the next stay",
+          text: "Cleaning, linen, supplies, keys and instructions: we plan visits around your needs. Personal or self check-in is arranged in advance, with the information guests need for arrival and departure.",
           items: [
             "Cleaning after each stay",
             "Linen according to agreed needs",
-            "Monitoring supplies",
+            "Guest arrivals and property checks",
           ],
         },
         {
-          title: "Arrivals planned in advance",
-          text: "Personal or self check-in, keys and instructions: the arrangements are prepared ahead of time. Guests have the details they need to access the home and organise their departure.",
+          title: "What you keep: listings, bookings and decisions",
+          text: "You continue to manage your listing and reservations. A checklist and photographs record the completed preparations. We report issues found so you can decide what further work is needed.",
         },
         {
-          title: "A documented visit",
-          text: "A checklist and photographs record the completed preparations. We report issues found so you can decide what happens next when further work is needed.",
+          title: "Services and cost to agree",
+          text: "The proposal takes account of floor area, bedrooms, access and the services requested. It specifies cleaning, linen and supplies, with the scope and cost of each. Your booking calendar helps us plan the visits.",
         },
       ],
       faq: [
@@ -872,12 +872,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa Lova in Cala d’Oro, Solenzara",
       sections: [
         {
-          title: "Identify what matters first",
-          text: "We review the presentation, amenities and useful guest information. The assessment separates what is ready from what needs attention before the listing goes live.",
-        },
-        {
-          title: "Create a clear listing",
-          text: "The title and copy highlight the property’s real strengths. Initial prices, availability and house rules complete a presentation that helps guests choose.",
+          title: "What you delegate: preparing and updating the listing",
+          text: "We review the property’s presentation and amenities, then prepare or improve the listing. Its title, copy, house rules, initial prices and availability reflect your home’s real strengths.",
           items: [
             "Listing creation or improvement",
             "Copy and house rules",
@@ -885,8 +881,12 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Keep working after publication",
-          text: "Reviewing visibility, availability and early feedback helps guide adjustments. We agree the scope and duration of this support together.",
+          title: "What still needs arranging: arrivals and changeovers",
+          text: "This service focuses on the listing. Guest arrivals, cleaning and changeovers are a separate offer that can complement your support. The level of delegation depends on the tasks you want to keep.",
+        },
+        {
+          title: "Ongoing support, duration and cost to agree",
+          text: "After publication, reviewing visibility, availability and early feedback helps guide adjustments. We agree the scope and duration of this support together; the services and their cost are set out in the proposal.",
         },
       ],
       faq: [
@@ -921,16 +921,16 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, a home supported by Inastia in Pinarello",
       sections: [
         {
-          title: "Understand what you are entrusting",
-          text: "A home matters for the memories it holds as well as the guests it welcomes. We take time to understand your expectations, your habits and the details you care about.",
+          title: "Agree what you want to delegate",
+          text: "Inastia is a family-run company that grew from our own experience as owners. The first conversation covers your property, its location and your current arrangements. Your expectations and personal stays help define the support.",
         },
         {
-          title: "Speak to us directly",
-          text: "Inastia is a small, family-run company. You speak directly with us to define the support and follow your property. The relationship starts with knowing who you are talking to.",
+          title: "Speak directly about your property",
+          text: "You speak with us to organise the agreed services and follow your home. We report matters that need a decision, such as an issue found, a maintenance need or work to arrange.",
         },
         {
-          title: "Care in practical details",
-          text: "Preparing the house, sharing clear instructions, following up on a request: this is how our approach to hospitality takes shape. From Ghisonaccia to Porto-Vecchio, we coordinate these details for owners and guests.",
+          title: "Coordinate preparation and guest arrivals",
+          text: "Preparing the home, sharing instructions and following up on requests are tasks we coordinate within your chosen support. We are based in Travo, Ventiseri; your property’s address helps us confirm the services available between Ghisonaccia and Porto-Vecchio.",
         },
       ],
       faq: [
@@ -958,28 +958,28 @@ export const pages: Record<Locale, PageContent[]> = {
       description:
         "Get an initial qualitative review of your Corsican property: listing, positioning and priorities. Request your free rental review from Inastia.",
       eyebrow: "Free rental review",
-      heading: "A fresh look at your rental plans.",
+      heading: "Identify the priorities for your rental.",
       intro:
-        "Before changing your arrangements or launching your rental, let’s take stock. Our free review identifies your property’s priorities and helps you choose what to hand over.",
+        "A free initial qualitative review to identify what needs attention and help you choose the right support. This assessment is not a rental income forecast.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
         {
-          title: "Start with where you are",
-          text: "The municipality, property type and guest capacity give us context. If a listing exists, we review its presentation, amenities, prices and reviews to identify visible obstacles to bookings.",
+          title: "1. Tell us about your property and plans",
+          text: "Share the municipality, property type, guest capacity and current arrangements. Add a link to the listing if one exists. These details let us consider your request within our area, from Ghisonaccia to Porto-Vecchio.",
         },
         {
-          title: "Leave with clear priorities",
-          text: "You receive an initial qualitative assessment and recommendations on the listing, pricing or guest experience. It helps guide your choice of support; it is not a rental income forecast.",
+          title: "2. Identify what needs attention",
+          text: "Using your property details and any available listing, we review the presentation, amenities, prices and reviews. We share this initial qualitative assessment by phone or email to help guide your choices.",
           items: [
             "Priority areas for improvement",
-            "Property-specific recommendations",
+            "Recommendations on the listing or guest experience",
             "Guidance on useful support",
           ],
         },
         {
-          title: "A few details to begin",
-          text: "Share the municipality, property type, guest capacity and current arrangements. Include your listing link if available. We review these details for homes in our area, from Ghisonaccia to Porto-Vecchio.",
+          title: "3. Choose your next steps",
+          text: "If you then wish to arrange services with Inastia, a separate proposal sets out their scope, cost and terms. The initial review remains a qualitative assessment; it does not guarantee rental income.",
         },
       ],
       faq: [

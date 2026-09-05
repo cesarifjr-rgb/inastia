@@ -56,6 +56,11 @@ describe("contact API (all external requests mocked)", () => {
     { ...valid, phone: {} },
     { ...valid, message: "a".repeat(2001) },
     { ...valid, email: "bad email" },
+    { ...valid, intent: "<script>bad</script>" },
+    { ...valid, intent: "constructor" },
+    { ...valid, intent: "__proto__" },
+    { ...valid, intent: ["audit"] },
+    { ...valid, intent: "unknown" },
   ])("rejects malformed input %# before provider calls", async (body) => {
     const res = await request(body);
     expect(res.status).toHaveBeenCalledWith(400);
@@ -162,4 +167,27 @@ describe("contact API (all external requests mocked)", () => {
     expect(mail.html).not.toContain("<img src=x>");
     expect(mail.subject).not.toMatch(/[\r\n]/);
   });
+
+  it.each([
+    [undefined, "Demande générale"],
+    ["", "Demande générale"],
+    ["audit", "Audit gratuit"],
+    ["gestion", "Gestion complète"],
+    ["annonce", "Lancement et gestion d’annonce"],
+    ["rotation", "Accueil et rotation"],
+  ])(
+    "includes the validated intent %s in the mocked email",
+    async (intent, label) => {
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+      fetch.mockResolvedValueOnce({ ok: true });
+      const res = await request({ ...valid, intent });
+      expect(res.status).toHaveBeenCalledWith(200);
+      const mail = JSON.parse(fetch.mock.calls[1][1].body);
+      expect(mail.html).toContain("Motif de la demande");
+      expect(mail.html).toContain(label);
+    },
+  );
 });

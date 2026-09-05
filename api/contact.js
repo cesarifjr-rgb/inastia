@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     }
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
-        surface: 10, capacity: 5, message: 2000, turnstileToken: 2048 };
+        surface: 10, capacity: 5, message: 2000, intent: 20, turnstileToken: 2048 };
     const input = {};
     for (const [key, limit] of Object.entries(limits)) {
         const value = req.body[key];
@@ -40,8 +40,19 @@ export default async function handler(req, res) {
     const {
         firstName, lastName, email, phone,
         propertyType, location, bedrooms, bathrooms,
-        surface, capacity, message, turnstileToken
+        surface, capacity, message, intent, turnstileToken
     } = input;
+
+    const intentLabels = new Map([
+        ['', 'Demande générale'],
+        ['audit', 'Audit gratuit'],
+        ['gestion', 'Gestion complète'],
+        ['annonce', 'Lancement et gestion d’annonce'],
+        ['rotation', 'Accueil et rotation'],
+    ]);
+    if (!intentLabels.has(intent)) {
+        return res.status(400).json({ success: false, error: 'Motif de demande invalide.' });
+    }
 
     // --- 1. Validate required fields ---
     if (!firstName || !lastName || !email) {
@@ -93,6 +104,7 @@ export default async function handler(req, res) {
     const safeSurface = escapeHtml(truncate(surface, 10));
     const safeCapacity = escapeHtml(truncate(capacity, 5));
     const safeMessage = escapeHtml(truncate(message, 2000));
+    const safeIntent = escapeHtml(intentLabels.get(intent));
 
     const subject = `Nouveau lead Inastia — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
 
@@ -105,6 +117,7 @@ export default async function handler(req, res) {
       <div style="padding:24px 32px">
         <h2 style="color:#1a1a2e;font-size:16px;margin:0 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">👤 Contact</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr><td style="padding:6px 0;color:#666">Motif de la demande</td><td style="padding:6px 0;font-weight:600">${safeIntent}</td></tr>
           <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0;font-weight:600">${safeFirstName} ${safeLastName}</td></tr>
           <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${safeEmail}" style="color:#16213e">${safeEmail}</a></td></tr>
           ${safePhone ? `<tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0"><a href="tel:${safePhone}" style="color:#16213e">${safePhone}</a></td></tr>` : ''}
