@@ -82,7 +82,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "Une arrivée à organiser, du linge à préparer, une intervention à suivre. Nous prenons le relais sur le terrain pour que votre location continue à accueillir, même quand vous êtes ailleurs.",
       image: "villa_lova",
-      imageAlt: "Villa Lova, à Cala d’Oro, Solenzara",
+      imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
       sections: [
         {
           title: "Partir de votre logement",
@@ -229,7 +229,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "Depuis Travo, à Ventiseri, nous accompagnons les propriétaires autour de Ghisonaccia et de Prunelli-di-Fiumorbo. Une présence locale pour suivre le logement, préparer les séjours et vous tenir informé.",
       image: "villa_lova",
-      imageAlt: "Villa Lova, une maison du portfolio Inastia à Solenzara",
+      imageAlt: "Cala Lova, une maison du portfolio Inastia à Solenzara",
       sections: [
         {
           title: "Connaître la maison pour la suivre",
@@ -376,7 +376,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "La mise en location commence avant la publication. Nous vous aidons à présenter votre logement, fixer les règles de séjour et préparer le calendrier, puis à ajuster l’annonce après son lancement.",
       image: "villa_lova",
-      imageAlt: "Villa Lova, à Cala d’Oro, Solenzara",
+      imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
       sections: [
         {
           title: "Ce que vous confiez : préparer et ajuster l’annonce",
@@ -575,7 +575,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "An arrival to arrange, linen to prepare, maintenance to follow up. We take care of the work on the ground so your rental can keep welcoming guests while you are elsewhere.",
       image: "villa_lova",
-      imageAlt: "Villa Lova in Cala d’Oro, Solenzara",
+      imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
       sections: [
         {
           title: "Start with the property",
@@ -722,7 +722,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "Based in Travo, Ventiseri, we support owners around Ghisonaccia and Prunelli-di-Fiumorbo. Local help to look after the property, prepare stays and keep you informed.",
       image: "villa_lova",
-      imageAlt: "Villa Lova, an Inastia portfolio home in Solenzara",
+      imageAlt: "Cala Lova, an Inastia portfolio home in Solenzara",
       sections: [
         {
           title: "Know the home before planning the work",
@@ -869,7 +869,7 @@ export const pages: Record<Locale, PageContent[]> = {
       intro:
         "Launching a rental starts before publication. We help you present your home, set house rules and prepare the calendar, then adjust the listing after it goes live.",
       image: "villa_lova",
-      imageAlt: "Villa Lova in Cala d’Oro, Solenzara",
+      imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
       sections: [
         {
           title: "What you delegate: preparing and updating the listing",

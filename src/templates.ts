@@ -64,7 +64,7 @@ export function secondary(locale: Locale, page: PageContent): string {
       : t(locale, "Le périmètre, la durée et les frais sont précisés avant le démarrage.", "Scope, duration and costs are specified before work begins.");
   const propertyCaption =
     page.image === "villa_lova"
-      ? "Villa Lova · Cala d’Oro"
+      ? "Cala Lova · Cala d’Oro"
       : page.image === "casa_verde"
         ? "Casa Verde · Pinarello"
         : "Villa d’Amichi · Pinarello";
