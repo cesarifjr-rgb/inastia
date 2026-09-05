@@ -20,7 +20,7 @@ for (const name of ["villa_amichi", "villa_lova", "casa_verde"]) {
     ]);
   }
 }
-// The social image is rendered from the Blender source by scripts/render-share.py.
+// The social image is generated from the vector illustration by scripts/render-share.ts.
 await mkdir("public/fonts", { recursive: true });
 for (const [family, file] of [
   ["space-grotesk", "space-grotesk-latin-wght-normal.woff2"],

@@ -1,7 +1,7 @@
 import type { Locale } from "./content/pages.ts";
 import { arrow, path, picture, t } from "./lib.ts";
 import { contactCallout, faq, zones } from "./components.ts";
-import { contours, serviceArt, coastFallback } from "./art.ts";
+import { contours, serviceArt, hospitalityArt } from "./art.ts";
 
 export function home(locale: Locale): string {
   const services =
@@ -181,7 +181,7 @@ export function home(locale: Locale): string {
       <div class="hero-copy"><h1><span>${t(locale, "Votre maison.", "Your home.")}</span><span>${t(locale, "L’esprit", "A little more")}</span><span class="hero-accent">${t(locale, "au large.", "freedom.")}</span></h1>
       <p class="hero-description">${t(locale, "Les clés sont en Corse. Vous êtes où vous voulez. Annonce, voyageurs, ménage, linge : Inastia prend le relais sur votre location.", "Your keys are in Corsica. You are wherever you want to be. Listings, guests, cleaning and linen: Inastia takes care of your rental’s day to day.")}</p>
       <div class="hero-actions"><a class="button" href="${path(locale, "contact")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a><span class="hero-cta-note">${t(locale, "Premier audit gratuit", "Free initial property review")}</span></div></div>
-      <div class="hero-visual"><span class="scene-label-top">${t(locale, "ENTRE CIEL ET MER.", "BETWEEN SKY AND SEA.")}</span><div class="coast-scene" data-coast-scene data-scene-state="loading" data-scene-frame="0" aria-hidden="true">${coastFallback}</div><span class="scene-label-bottom">${t(locale, "L’HOSPITALITÉ CORSE, TOUT SIMPLEMENT.", "CORSICAN HOSPITALITY, SIMPLY.")}</span><p class="scene-caption">${t(locale, "Une évocation du littoral corse", "An impression of the Corsican coast")}</p></div>
+      <div class="hero-visual" data-hospitality-scene data-illustration-active="false"><span class="scene-label-top">${t(locale, "VOUS NOUS CONFIEZ LES CLÉS.", "YOUR KEYS. OUR CARE.")}</span>${hospitalityArt(locale)}<span class="scene-label-bottom">${t(locale, "PRÉPARER. ACCUEILLIR. PRENDRE SOIN.", "PREPARE. WELCOME. TAKE CARE.")}</span></div>
     </div>
     <div class="hero-bottom container"><a class="scroll-cue" href="#services"><span aria-hidden="true">↓</span>${t(locale, "Découvrir l’accompagnement", "Explore our services")}</a><p class="territory-note">${t(locale, "De Ghisonaccia à Porto-Vecchio", "From Ghisonaccia to Porto-Vecchio")}</p><button id="motion-toggle" type="button" aria-pressed="false" aria-label="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-pause="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-play="${t(locale, "Reprendre les animations", "Resume animations")}"><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="motion-label">${t(locale, "Animations", "Animations")}</span></button></div>
   </section>

@@ -482,30 +482,54 @@ summary:focus-visible,
   margin-right: -30px;
   min-width: 0;
 }
-.coast-scene {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-.coast-scene canvas {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.8s;
-}
-.coast-scene[data-scene-state="ready"] canvas {
-  opacity: 1;
-}
-.scene-fallback {
-  position: absolute;
-  inset: 0;
+.hospitality-illustration {
   width: 100%;
   height: 100%;
-  transition: opacity 0.6s;
+  display: block;
+  overflow: visible;
 }
-.coast-scene[data-scene-state="ready"] .scene-fallback {
-  opacity: 0;
-  pointer-events: none;
+.welcome-fob {
+  transform-origin: 365px 194px;
+  animation: fob-sway 10s ease-in-out infinite paused;
+}
+.welcome-key {
+  transform-origin: 471px 210px;
+  animation: key-sway 8s ease-in-out infinite paused;
+}
+.welcome-tide {
+  animation: tide-drift 14s ease-in-out infinite paused;
+}
+html[data-motion="running"]
+  [data-illustration-active="true"]
+  .hospitality-motion {
+  animation-play-state: running;
+}
+@keyframes fob-sway {
+  0%,
+  100% {
+    transform: rotate(-1.5deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+@keyframes key-sway {
+  0%,
+  100% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-4deg);
+  }
+}
+@keyframes tide-drift {
+  0%,
+  100% {
+    transform: translateX(-12px);
+  }
+  50% {
+    transform: translateX(16px);
+  }
 }
 
 .scene-label,
@@ -2296,9 +2320,7 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
     height: 360px;
     margin: 4px -14px 0 -14px;
   }
-  .coast-scene {
-    inset: -10px -10px 0;
-  }
+
   .scene-label-top {
     top: 15px;
     left: auto;
@@ -2939,7 +2961,7 @@ html[data-motion="paused"] {
 html[data-motion="paused"] *,
 html[data-motion="paused"] *::before,
 html[data-motion="paused"] *::after {
-  animation: none !important;
+  animation-play-state: paused !important;
   transition: none !important;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2949,7 +2971,7 @@ html[data-motion="paused"] *::after {
   html:not([data-motion="running"]) *,
   html:not([data-motion="running"]) *::before,
   html:not([data-motion="running"]) *::after {
-    animation: none !important;
+    animation-play-state: paused !important;
     transition: none !important;
   }
 }

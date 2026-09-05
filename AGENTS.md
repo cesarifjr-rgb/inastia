@@ -17,8 +17,8 @@
 - Ne jamais corriger directement `.generated/` ou `dist/`.
 - `src/client.ts` gère l'interface ; `src/contact.ts` gère le formulaire.
 - `api/contact.js` est la fonction serveur Vercel utilisant Turnstile et Resend.
-- `src/motion.ts` pilote GSAP/pause ; `src/scene.ts` est le pont DOM ; `src/scene.worker.ts` charge/rend le GLB via Three.js et OffscreenCanvas ; `src/art.ts` fournit le repli SVG.
-- Les sources Blender sont `scripts/create-coast.py` et `scripts/render-share.py` ; le GLB est versionné, les .blend restent hors dépôt.
+- `src/art.ts` fournit `hospitalityArt(locale)`, illustration SVG FR/EN intégrée au HTML ; `src/motion.ts` pilote GSAP, la pause CSS et la visibilité de l’illustration.
+- `npx tsx scripts/render-share.ts` génère la carte sociale PNG depuis le SVG avec Sharp. Le site ne nécessite pas de Blender ni de rendu 3D.
 
 ## Modifications
 
@@ -31,7 +31,7 @@
 - Utiliser les photos existantes sans changer leur identité ni leur localisation.
 - Régénérer les assets avec `npm run assets` seulement si nécessaire.
 - Conserver les licences des polices locales dans `public/fonts/`.
-- Respecter le clavier, les focus visibles, les labels, reduced-motion et la pause des animations. La préférence système initialise la pause, avec reprise explicite possible. Préserver le repli SVG sans Worker/OffscreenCanvas/WebGL, la suspension hors écran/onglet masqué et la reprise BFCache.
+- Respecter le clavier, les focus visibles, les labels, reduced-motion et la pause des animations. La préférence système initialise la pause, avec reprise explicite possible. Préserver le SVG visible sans JavaScript, la suspension de ses mouvements hors écran/onglet masqué et la reprise BFCache.
 
 ## Vérification
 

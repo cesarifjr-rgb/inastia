@@ -315,20 +315,26 @@ test("reduced-motion preference disables decorative movement and smooth scrollin
   await page.goto("/");
   const motion = await page.evaluate(() => ({
     smooth: getComputedStyle(document.documentElement).scrollBehavior,
-    moving: [...document.querySelectorAll("*")]
+    moving: document
+      .getAnimations()
+      .filter((animation) => animation.playState === "running")
+      .map((animation) =>
+        animation instanceof CSSAnimation
+          ? animation.animationName
+          : animation.id,
+      ),
+    transitions: [...document.querySelectorAll("*")]
       .filter((element) => {
         const style = getComputedStyle(element);
-        return (
-          style.animationName !== "none" ||
-          style.transitionDuration
-            .split(",")
-            .some((value) => parseFloat(value) > 0)
-        );
+        return style.transitionDuration
+          .split(",")
+          .some((value) => parseFloat(value) > 0);
       })
       .map((element) => element.tagName),
   }));
   expect(motion.smooth).toBe("auto");
   expect(motion.moving).toEqual([]);
+  expect(motion.transitions).toEqual([]);
 });
 
 test("without JavaScript, content, navigation, FAQs and direct contact remain usable", async ({
@@ -344,7 +350,7 @@ test("without JavaScript, content, navigation, FAQs and direct contact remain us
   await page.goto("/");
   await expect(page.locator("h1")).toBeVisible();
   await expect(
-    page.locator("[data-coast-scene] .scene-fallback"),
+    page.locator("[data-hospitality-scene] svg.hospitality-illustration"),
   ).toBeVisible();
   await expect(page.locator("#motion-toggle")).toBeHidden();
   for (const section of await page.locator("[data-reveal]").all()) {

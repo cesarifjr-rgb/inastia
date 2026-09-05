@@ -1,6 +1,5 @@
 import { test, expect, chromium } from "@playwright/test";
 import type { Page, Locator } from "@playwright/test";
-import sharp from "sharp";
 import { mkdirSync } from "node:fs";
 
 const screenshotDirectory = ".codex-work/screenshots";
@@ -13,110 +12,145 @@ type HistoryProbeWindow = typeof window & {
   };
 };
 
-async function sceneFrame(scene: Locator): Promise<number> {
-  const value = await scene.getAttribute("data-scene-frame");
-  expect(value, "The scene exposes an actual rendered frame count").toMatch(
-    /^\d+$/,
+async function keySnapshot(key: Locator) {
+  return key.evaluate((element) => ({
+    transform: getComputedStyle(element).transform,
+    animations: element.getAnimations().map((animation) => ({
+      name:
+        animation instanceof CSSAnimation
+          ? animation.animationName
+          : animation.id,
+      css: animation instanceof CSSAnimation,
+      state: animation.playState,
+      time:
+        typeof animation.currentTime === "number"
+          ? animation.currentTime
+          : null,
+      continuous: animation.effect?.getTiming().iterations === Infinity,
+    })),
+  }));
+}
+
+async function expectKeyMoving(key: Locator): Promise<void> {
+  await expect
+    .poll(async () => {
+      const snapshot = await keySnapshot(key);
+      return snapshot.animations.some(
+        (animation) =>
+          animation.css &&
+          animation.continuous &&
+          animation.state === "running" &&
+          animation.time !== null,
+      );
+    })
+    .toBe(true);
+  const first = await keySnapshot(key);
+  const running = first.animations.find(
+    (animation) =>
+      animation.css && animation.continuous && animation.state === "running",
   );
-  return Number(value);
+  expect(running).toBeDefined();
+  await expect
+    .poll(async () => {
+      const next = await keySnapshot(key);
+      return (
+        next.animations.find((animation) => animation.name === running!.name)
+          ?.time ?? 0
+      );
+    })
+    .toBeGreaterThan((running!.time ?? 0) + 50);
+  await expect
+    .poll(async () => (await keySnapshot(key)).transform)
+    .not.toBe(first.transform);
 }
 
-async function hasWebGL(page: Page): Promise<boolean> {
-  return page.evaluate(() => {
-    const context = document.createElement("canvas").getContext("webgl2");
-    const supported = context !== null;
-    context?.getExtension("WEBGL_lose_context")?.loseContext();
-    return supported;
-  });
+async function expectKeyPaused(key: Locator, page: Page): Promise<void> {
+  await expect
+    .poll(
+      async () =>
+        (await keySnapshot(key)).animations.filter(
+          (animation) => animation.state === "running",
+        ).length,
+    )
+    .toBe(0);
+  // The browser may finish an already queued frame while CSS receives the new
+  // state. Sampling over multiple rendering intervals detects a surviving loop.
+  await page.waitForTimeout(100);
+  const before = await keySnapshot(key);
+  expect(
+    before.animations.length,
+    "Pause must preserve the native CSS animation",
+  ).toBeGreaterThan(0);
+  await page.waitForTimeout(350);
+  const after = await keySnapshot(key);
+  expect(after.transform).toBe(before.transform);
+  expect(after.animations).toEqual(before.animations);
 }
 
-async function expectStaticFrames(scene: Locator, page: Page): Promise<void> {
-  // Let any frame already queued at the time of the action settle, then sample
-  // across several normal rendering intervals. Waiting is necessary here:
-  // an immediate equality assertion would not detect a running animation loop.
-  await page.waitForTimeout(120);
-  const first = await sceneFrame(scene);
-  await page.waitForTimeout(450);
-  expect(await sceneFrame(scene)).toBe(first);
-}
-
-test("desktop coastal scene renders a visible nonblank canvas when WebGL is available", async ({
+test("hospitality SVG visibly animates with CSS and makes no canvas, worker or model requests", async ({
   page,
 }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
-  const scene = page.locator("[data-coast-scene]");
-  await expect(scene).toBeVisible();
-  if (!(await hasWebGL(page))) {
-    await expect(scene).toHaveAttribute("data-scene-state", "fallback");
-    testInfo.annotations.push({
-      type: "environment",
-      description:
-        "Browser has no WebGL2; fallback checked. Live rendering is covered only on WebGL2-capable runs.",
-    });
-    await expect(page.locator("h1")).toBeVisible();
-    return;
-  }
-  await expect(scene).toHaveAttribute("data-scene-state", "ready");
-  const canvas = scene.locator("canvas");
-  await expect(canvas).toHaveCount(1);
-  await expect(canvas).toBeVisible();
-  const first = await sceneFrame(scene);
-  await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(first);
-  const dimensions = await canvas.evaluate((element) => ({
-    width: (element as HTMLCanvasElement).width,
-    height: (element as HTMLCanvasElement).height,
-  }));
-  expect(dimensions.width).toBeGreaterThan(100);
-  expect(dimensions.height).toBeGreaterThan(100);
-  // Inspect a browser screenshot, rather than readPixels after the WebGL buffer
-  // was cleared. This works without enabling preserveDrawingBuffer in the app.
-  const screenshot = await canvas.screenshot({
-    path: `${screenshotDirectory}/motion-scene-desktop.png`,
+  const workers: string[] = [];
+  const modelRequests: string[] = [];
+  const errors: string[] = [];
+  page.on("worker", (worker) => workers.push(worker.url()));
+  page.on("request", (request) => {
+    if (/\.(glb|gltf)(?:[?#]|$)|scene\.worker/i.test(request.url()))
+      modelRequests.push(request.url());
   });
-  const stats = await sharp(screenshot).removeAlpha().stats();
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  const scene = page.locator("[data-hospitality-scene]");
+  const illustration = scene.locator("svg.hospitality-illustration");
+  await expect(illustration).toBeVisible();
   expect(
-    Math.max(...stats.channels.map((channel) => channel.stdev)),
-    "The canvas must contain visibly varied pixels, not a blank solid surface",
-  ).toBeGreaterThan(5);
-  await testInfo.attach("rendered-scene", {
+    await illustration
+      .locator("path, rect, circle, ellipse, polygon, line")
+      .count(),
+  ).toBeGreaterThan(0);
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
+  await expectKeyMoving(scene.locator(".welcome-key").first());
+  await expect(page.locator("canvas")).toHaveCount(0);
+  expect(workers).toEqual([]);
+  expect(modelRequests).toEqual([]);
+  expect(errors).toEqual([]);
+  await page.evaluate(() => document.fonts.ready);
+  const screenshot = await illustration.screenshot({
+    path: `${screenshotDirectory}/motion-hospitality-desktop.png`,
+  });
+  await testInfo.attach("hospitality-illustration", {
     body: screenshot,
     contentType: "image/png",
   });
 });
 
-test("motion button pauses actual rendering and resumes it with the keyboard", async ({
+test("motion button freezes the actual CSS animation and resumes it with the keyboard", async ({
   page,
-}, testInfo) => {
+}) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-coast-scene]");
+  const scene = page.locator("[data-hospitality-scene]");
+  const key = scene.locator(".welcome-key").first();
   const toggle = page.locator("#motion-toggle");
-  await expect(toggle).toBeVisible();
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
-  const webgl = await hasWebGL(page);
-  await expect(scene).toHaveAttribute(
-    "data-scene-state",
-    webgl ? "ready" : "fallback",
-  );
-  if (webgl) {
-    const initial = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(initial);
-  } else {
-    testInfo.annotations.push({
-      type: "environment",
-      description:
-        "No WebGL2: pause/resume UI checked, rendering-loop assertions unavailable.",
-    });
-  }
+  await expectKeyMoving(key);
+  const beforePause = await keySnapshot(key);
   await toggle.click();
   await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
-  if (webgl) await expectStaticFrames(scene, page);
-  const runningAnimations = await page.evaluate(
+  await expectKeyPaused(key, page);
+  const paused = await keySnapshot(key);
+  expect(paused.animations.map((animation) => animation.name)).toEqual(
+    beforePause.animations.map((animation) => animation.name),
+  );
+  expect(paused.animations[0]!.time).toBeGreaterThanOrEqual(
+    beforePause.animations[0]!.time!,
+  );
+  const runningContinuousAnimations = await page.evaluate(
     () =>
       document
         .getAnimations()
@@ -126,126 +160,101 @@ test("motion button pauses actual rendering and resumes it with the keyboard", a
             animation.effect?.getTiming().iterations === Infinity,
         ).length,
   );
-  expect(
-    runningAnimations,
-    "Pause must also stop continuous CSS or Web Animations",
-  ).toBe(0);
+  expect(runningContinuousAnimations).toBe(0);
   await toggle.focus();
   await page.keyboard.press("Enter");
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
   await scene.scrollIntoViewIfNeeded();
-  if (webgl) {
-    const paused = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(paused);
-  }
+  await expectKeyMoving(key);
 });
 
-test("reduced-motion starts without a rendering loop and leaves content visible", async ({
+test("reduced-motion starts static, permits explicit CSS motion and pauses again", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const scene = page.locator("[data-coast-scene]");
+  const scene = page.locator("[data-hospitality-scene]");
+  const key = scene.locator(".welcome-key").first();
+  const toggle = page.locator("#motion-toggle");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
-  await expect(page.locator("#motion-toggle")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await expect(scene).toHaveAttribute("data-scene-state", /^(ready|fallback)$/);
-  if ((await scene.getAttribute("data-scene-state")) === "ready")
-    await expectStaticFrames(scene, page);
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expectKeyPaused(key, page);
   await expect(page.locator("h1")).toBeVisible();
   for (const section of await page.locator("[data-reveal]").all()) {
     await section.scrollIntoViewIfNeeded();
     await expect(section).toHaveCSS("opacity", "1");
     await expect(section).toHaveCSS("visibility", "visible");
   }
-  const toggle = page.locator("#motion-toggle");
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
   await scene.scrollIntoViewIfNeeded();
-  if ((await scene.getAttribute("data-scene-state")) === "ready") {
-    const beforeResume = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(beforeResume);
-  }
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
+  await expectKeyMoving(key);
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
-  if ((await scene.getAttribute("data-scene-state")) === "ready")
-    await expectStaticFrames(scene, page);
+  await expectKeyPaused(key, page);
 });
 
-test("missing OffscreenCanvas transfer support preserves the fallback and navigation", async ({
-  page,
+test("without JavaScript the hospitality SVG remains visible and service/contact navigation works", async ({
+  browser,
+  baseURL,
 }) => {
-  await page.addInitScript(() => {
-    Object.defineProperty(
-      HTMLCanvasElement.prototype,
-      "transferControlToOffscreen",
-      {
-        configurable: true,
-        value: undefined,
-      },
-    );
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    viewport: { width: 375, height: 812 },
+    baseURL,
   });
-  const pageErrors: string[] = [];
-  page.on("pageerror", (error) => pageErrors.push(error.message));
-  await page.goto("/");
-  await expect(page.locator("[data-coast-scene]")).toHaveAttribute(
-    "data-scene-state",
-    "fallback",
-  );
-  await expect(page.locator("h1")).toBeVisible();
-  const fallback = page.locator("[data-coast-scene] .scene-fallback");
-  await expect(fallback).toBeVisible();
-  await expect(fallback).toHaveAttribute("aria-hidden", "true");
-  expect(
-    await fallback
-      .locator("path, rect, polygon, line, circle, ellipse")
-      .count(),
-  ).toBeGreaterThan(0);
-  await page.locator('main a[href="/contact"]').first().click();
-  await expect(page).toHaveURL(/\/contact$/);
-  await expect(page.locator("#contact-form")).toBeVisible();
-  expect(pageErrors).toEqual([]);
+  try {
+    const page = await context.newPage();
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto("/");
+    const scene = page.locator("[data-hospitality-scene]");
+    await expect(scene.locator("svg.hospitality-illustration")).toBeVisible();
+    await expect(scene.locator(".welcome-key").first()).toBeVisible();
+    await expectKeyPaused(scene.locator(".welcome-key").first(), page);
+    await expect(page.locator("canvas")).toHaveCount(0);
+    await expect(page.locator("#motion-toggle")).toBeHidden();
+    await page
+      .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
+    await expect(page.locator("h1")).toBeVisible();
+    await page.locator('main a[href="/contact"]').first().click();
+    await expect(page).toHaveURL(/\/contact$/);
+    await expect(page.locator("#contact-form")).toBeVisible();
+    await expect(
+      page.locator('noscript a[href="mailto:contact@inastia.fr"]'),
+    ).toBeVisible();
+    expect(errors).toEqual([]);
+  } finally {
+    await context.close();
+  }
 });
 
-test("WebGL context failure inside the scene worker preserves the fallback and navigation", async ({
+test("hospitality animation suspends outside the viewport and resumes on return", async ({
   page,
 }) => {
-  let interceptedWorker = false;
-  await page.route("**/scene.worker-*.js", async (route) => {
-    const response = await route.fetch();
-    expect(response.ok()).toBe(true);
-    // A main-window HTMLCanvasElement override cannot affect an OffscreenCanvas
-    // inside a worker. Inject the failed capability into the actual worker scope.
-    const failure = `const originalContext = OffscreenCanvas.prototype.getContext;
-OffscreenCanvas.prototype.getContext = function (type, ...args) {
-  if (["webgl", "webgl2", "experimental-webgl"].includes(type)) return null;
-  return originalContext.call(this, type, ...args);
-};\n`;
-    interceptedWorker = true;
-    await route.fulfill({ response, body: failure + (await response.text()) });
-  });
-  const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/");
-  const scene = page.locator("[data-coast-scene]");
-  await expect(scene).toHaveAttribute("data-scene-state", "fallback");
-  expect(
-    interceptedWorker,
-    "The real compiled worker must have received the failed WebGL context",
-  ).toBe(true);
-  await expect(scene.locator(".scene-fallback")).toBeVisible();
-  await expect(scene.locator("canvas")).toHaveCount(0);
-  await expect(page.locator("h1")).toBeVisible();
-  await page.locator('main a[href="/contact"]').first().click();
-  await expect(page).toHaveURL(/\/contact$/);
-  await expect(page.locator("#contact-form")).toBeVisible();
-  expect(errors).toEqual([]);
+  const scene = page.locator("[data-hospitality-scene]");
+  const key = scene.locator(".welcome-key").first();
+  await scene.scrollIntoViewIfNeeded();
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
+  await expectKeyMoving(key);
+  await page.locator(".site-footer").scrollIntoViewIfNeeded();
+  await expect(scene).toHaveAttribute("data-illustration-active", "false");
+  await expect(page.locator("html")).toHaveAttribute("data-motion", "running");
+  await expectKeyPaused(key, page);
+  await scene.scrollIntoViewIfNeeded();
+  await expect(scene).toHaveAttribute("data-illustration-active", "true");
+  await expectKeyMoving(key);
 });
 
 test("scrolling reveals editorial sections instead of leaving hidden content", async ({
@@ -276,11 +285,9 @@ test("scrolling reveals editorial sections instead of leaving hidden content", a
   }
 });
 
-test("BFCache history return resumes scene rendering and preserves pause controls", async ({
+test("BFCache history return resumes native CSS animation and preserves pause controls", async ({
   baseURL,
 }, testInfo) => {
-  // The standard Playwright Chromium launch disables BFCache. A separate
-  // browser without that flag is required to test an actual persisted return.
   const browser = await chromium.launch({
     channel: "chrome",
     ignoreDefaultArgs: ["--disable-back-forward-cache"],
@@ -298,22 +305,20 @@ test("BFCache history return resumes scene rendering and preserves pause control
         restoredFromCache: false,
       };
       window.addEventListener("pageshow", (event) => {
-        if (event.persisted) {
+        if (event.persisted)
           probeWindow.__inastiaHistoryProbe.restoredFromCache = true;
-        }
       });
     });
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/");
-    const scene = page.locator("[data-coast-scene]");
-    await expect(scene).toHaveAttribute("data-scene-state", "ready");
-    const initialFrame = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(initialFrame);
+    const scene = page.locator("[data-hospitality-scene]");
+    const key = scene.locator(".welcome-key").first();
+    await expect(scene).toHaveAttribute("data-illustration-active", "true");
+    await expectKeyMoving(key);
     const documentId = await page.evaluate(
       () => (window as HistoryProbeWindow).__inastiaHistoryProbe.documentId,
     );
-
     await page
       .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
       .first()
@@ -333,15 +338,14 @@ test("BFCache history return resumes scene rendering and preserves pause control
       restored.restoredFromCache,
       "pageshow.persisted must confirm a real BFCache restoration",
     ).toBe(true);
-    await expect(scene).toHaveAttribute("data-scene-state", "ready");
-    const returnedFrame = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(returnedFrame);
-
+    await expect(scene).toHaveAttribute("data-illustration-active", "true");
+    await expectKeyMoving(key);
+    const returned = await keySnapshot(key);
     const toggle = page.locator("#motion-toggle");
     await toggle.click();
     await expect(toggle).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
-    await expectStaticFrames(scene, page);
+    await expectKeyPaused(key, page);
     await toggle.focus();
     await page.keyboard.press("Enter");
     await expect(toggle).toHaveAttribute("aria-pressed", "false");
@@ -350,15 +354,13 @@ test("BFCache history return resumes scene rendering and preserves pause control
       "running",
     );
     await scene.scrollIntoViewIfNeeded();
-    const pausedFrame = await sceneFrame(scene);
-    await expect.poll(() => sceneFrame(scene)).toBeGreaterThan(pausedFrame);
+    await expectKeyMoving(key);
     expect(errors).toEqual([]);
     await testInfo.attach("bfcache-restoration", {
       body: JSON.stringify({
         ...restored,
-        returnedFrame,
-        pausedFrame,
-        resumedFrame: await sceneFrame(scene),
+        returned,
+        resumed: await keySnapshot(key),
       }),
       contentType: "application/json",
     });

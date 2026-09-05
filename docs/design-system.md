@@ -1,6 +1,6 @@
-# Direction graphique Inastia V3
+# Direction graphique Inastia V4
 
-La V3 conserve la structure de la V2 appréciée par le propriétaire : grands titres, trois cartes de services, présentation familiale, portfolio discret et parcours vers le contact. La palette devient claire, inspirée de la plage, du sable et du ciel. Le hero montre un relief côtier animé — soleil, mer et dunes — sans bâtiment ni villa 3D.
+La V4 conserve la structure et la palette claire sable, ciel et mer : grands titres, trois cartes de services, présentation familiale, portfolio discret et parcours vers le contact. Le hero montre une illustration de l’accueil : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer.
 
 ## Tokens
 
@@ -23,22 +23,22 @@ Space Grotesk compose les titres ; Manrope porte paragraphes et commandes. Les f
 
 ## Composition
 
-Le hero associe une promesse courte et un horizon côtier illustré, sans photographie dominante. Le manifeste alterne avec trois cartes de services, une présentation familiale, un portfolio en lignes compactes, une méthode et les zones locales. Les symboles maison, annonce et clé illustrent les prestations réelles, indépendamment du paysage du hero.
+Le hero associe une promesse courte et une illustration de la remise des clés, sans photographie dominante. Le manifeste alterne avec trois cartes de services, une présentation familiale, un portfolio en lignes compactes, une méthode et les zones locales. Les symboles maison, annonce et clé illustrent les prestations réelles, en cohérence avec l’illustration du hero.
 
 Les pages secondaires partagent un hero typographique, une illustration de service et une petite photo légendée, puis un sommaire, des sections et une FAQ. Le formulaire et les pages légales utilisent la même palette claire. Sur mobile, les colonnes se superposent ; les titres doivent garder les marges communes.
 
-## Motion et repli
+## Motion et rendu statique
 
-`src/art.ts` fournit les illustrations CSS/SVG et le paysage statique de repli ; `src/motion.ts` gère GSAP et la pause/reprise. `src/scene.ts` fait le lien avec le DOM. `src/scene.worker.ts` charge/analyse le GLB et effectue le rendu Three.js dans un Web Worker avec OffscreenCanvas, limité à 30 images par seconde sur mobile.
+`src/art.ts` fournit les illustrations CSS/SVG et la fonction `hospitalityArt(locale)` pour le hero FR/EN. Le SVG est intégré au HTML et reste visible sans JavaScript. Il est décoratif : les labels et le texte HTML portent le message métier.
 
-La 3D est décorative. Garder le contenu HTML visible sans JavaScript, le SVG de repli et la mention indiquant un paysage illustré. La préférence `prefers-reduced-motion` initialise une pause ; l’utilisateur peut explicitement reprendre. Respecter cet état, la suspension hors écran/onglet masqué et la reprise BFCache. Sans Worker, OffscreenCanvas ou WebGL, ou après un échec de chargement/rendu, revenir au SVG. Une capture fixe ne démontre pas la qualité temporelle du mouvement.
+`src/motion.ts` gère GSAP/ScrollTrigger, la pause/reprise et la visibilité. Le CSS anime le porte-clés, la clé et les vagues lorsque l’illustration est active. La préférence `prefers-reduced-motion` initialise une pause ; l’utilisateur peut explicitement reprendre. Respecter cet état, la suspension hors écran/onglet masqué et la reprise BFCache. Une capture fixe ne démontre pas la qualité temporelle du mouvement.
 
 ## Sources et régénération
 
-- `blender --background --python scripts/create-coast.py` crée une scène côtière neuve, sans lire une scène utilisateur, et exporte le GLB versionné `public/models/inastia-coast.glb`.
-- Le fichier source `inastia-coast.blend` et les rendus de travail restent dans `../inastia-v3-evidence/`, hors dépôt.
-- Après cette génération, `blender --background --python scripts/render-share.py` ouvre la source créée et produit `public/images/inastia-share.png`, en 1200 × 630. La carte sociale reprend le relief côtier, le sable et le soleil.
+- Modifier le SVG source dans `src/art.ts` et maintenir les libellés FR/EN ensemble.
+- `npx tsx scripts/render-share.ts` réutilise le SVG français et génère `public/images/inastia-share.png` en 1200 × 630 via Sharp. Cette image est statique ; sa génération est manuelle.
+- Le site ne nécessite ni modèle GLB, ni Three.js, ni Blender. Les anciennes preuves Blender restent hors dépôt.
 - Les photographies originales `villa_amichi.webp`, `casa_verde.webp`, `villa_lova.webp` représentent respectivement Villa d’Amichi / Pinarello-Zonza, Casa Verde / Pinarello-Zonza et Villa Lova / Cala d’Oro-Solenzara.
-- `npm run assets` génère leurs variantes AVIF/WebP à 240, 480, 800 et 1200 pixels et copie les polices/licences. Il ne régénère ni la 3D ni l’image sociale.
+- `npm run assets` génère leurs variantes AVIF/WebP à 240, 480, 800 et 1200 pixels et copie les polices/licences. Il ne régénère pas l’image sociale.
 
-Conserver les localisations réelles des photographies. Le relief côtier est une illustration, pas une photographie d’une plage précise. Le discours reste celui d’une conciergerie familiale : ne pas inventer technologie, résultats, avis ou couverture géographique pour accompagner l’esthétique.
+Conserver les localisations réelles des photographies. Le porte-clés et le décor sont des illustrations. Le discours reste celui d’une conciergerie familiale : ne pas inventer technologie, résultats, avis ou couverture géographique pour accompagner l’esthétique.

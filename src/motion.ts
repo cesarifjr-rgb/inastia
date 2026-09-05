@@ -6,6 +6,34 @@ export function initMotion(): void {
   let paused = reduced.matches;
   let cleanup: (() => void) | undefined;
   let generation = 0;
+  const illustration = document.querySelector<HTMLElement>(
+    "[data-hospitality-scene]",
+  );
+  let illustrationVisible = false;
+  let suspended = false;
+  function updateIllustration(): void {
+    if (illustration) {
+      illustration.dataset.illustrationActive = String(
+        illustrationVisible && !document.hidden && !suspended,
+      );
+    }
+  }
+  const illustrationObserver = illustration
+    ? new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          illustrationVisible =
+            !!entry?.isIntersecting && entry.intersectionRatio > 0;
+          updateIllustration();
+        },
+        { threshold: 0.001 },
+      )
+    : undefined;
+  if (illustration) {
+    updateIllustration();
+    illustrationObserver?.observe(illustration);
+    document.addEventListener("visibilitychange", updateIllustration);
+  }
 
   async function update(): Promise<void> {
     const current = ++generation;
@@ -143,26 +171,22 @@ export function initMotion(): void {
     void update();
   });
   void update();
-  if (document.querySelector("[data-coast-scene]")) {
-    // Let the useful HTML paint before initializing the optional WebGL scene.
-    requestAnimationFrame(() => {
-      window.setTimeout(() => {
-        void import("./scene.ts")
-          .then(({ initCoastScene }) => initCoastScene())
-          .catch(() => {
-            const host =
-              document.querySelector<HTMLElement>("[data-coast-scene]");
-            if (host) host.dataset.sceneState = "fallback";
-          });
-      }, 0);
-    });
-  }
-  window.addEventListener("pagehide", () => {
+  window.addEventListener("pagehide", (event) => {
+    suspended = true;
+    updateIllustration();
+    if (!event.persisted) {
+      illustrationObserver?.disconnect();
+      document.removeEventListener("visibilitychange", updateIllustration);
+    }
     generation++;
     cleanup?.();
     cleanup = undefined;
   });
   window.addEventListener("pageshow", (event) => {
-    if (event.persisted) void update();
+    if (event.persisted) {
+      suspended = false;
+      updateIllustration();
+      void update();
+    }
   });
 }

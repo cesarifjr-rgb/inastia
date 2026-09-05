@@ -29,14 +29,13 @@ src/lib.ts                 Helpers d'URL, échappement et images
 scripts/generate.ts        Génération HTML, sitemap et robots.txt
 .generated/                HTML intermédiaires, non versionnés
 src/client.ts              Navigation et comportements d'interface
-src/art.ts                 Illustrations SVG/CSS et repli statique du paysage côtier
-src/motion.ts              Animations GSAP et commande pause/reprise
-src/scene.ts               Pont DOM : visibilité, taille, pause et cycle de page
-src/scene.worker.ts        Three.js / GLTF et rendu OffscreenCanvas en Web Worker
+src/art.ts                 Illustrations SVG/CSS et hospitalityArt(locale) FR/EN
+src/motion.ts              GSAP, pause CSS et visibilité de l’illustration
 src/contact.ts             Vérification anti-spam et états du formulaire
 src/styles.css             Styles et tokens
 api/contact.js             Fonction Vercel : validation, Turnstile, Resend
-public/                    Images, modèle GLB, polices locales, licences et PDF légal
+scripts/render-share.ts    Carte sociale PNG depuis le SVG via Sharp
+public/                    Images, polices locales, licences et PDF légal
 ```
 
 Les templates TypeScript génèrent du HTML statique ; Vite 8 compile ensuite les 28 documents vers `dist/` (27 pages indexables et une 404). Les 14 URL françaises historiques sont conservées, avec une page contact supplémentaire et 12 équivalents anglais sous `/en/`. Les trois pages légales restent en français ; les liens anglais le précisent. Les URL sans extension reposent sur `cleanUrls` dans `vercel.json`.
@@ -51,22 +50,23 @@ Les variantes AVIF/WebP à 240, 480, 800 et 1200 pixels sont versionnées dans `
 npm run assets
 ```
 
-Ce script régénère les variantes photographiques, les polices locales Space Grotesk/Manrope et leurs licences depuis les paquets Fontsource. Il ne tourne pas à chaque build. Conserver les licences de `public/fonts/`. L’image sociale est produite séparément par Blender.
+Ce script régénère les variantes photographiques, les polices locales Space Grotesk/Manrope et leurs licences depuis les paquets Fontsource. Il ne tourne pas à chaque build. Conserver les licences de `public/fonts/`. L’image sociale est produite séparément par le script TypeScript décrit ci-dessous.
 
-## Paysage côtier 3D et image sociale
+## Illustration d’accueil et image sociale
 
-La V3 conserve la structure de la V2 et utilise une palette claire sable, ciel et mer. Le hero présente un relief côtier illustré : soleil, horizon marin et dunes, sans bâtiment. Les photographies des biens restent discrètes. Le texte décrit une conciergerie familiale réelle, sans promesse technologique fictive.
+La V4 conserve la structure et la palette claire sable, ciel et mer. Le hero illustre l’accueil et la remise des clés : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. Les photographies des biens restent discrètes. Le texte décrit une conciergerie familiale réelle.
 
-La source reproductible du modèle est `scripts/create-coast.py`. Avec Blender disponible dans le PATH, depuis la racine :
+La fonction `hospitalityArt(locale)` de `src/art.ts` génère le SVG intégré au HTML en français ou en anglais. Le site ne nécessite ni modèle 3D, ni WebGL, ni Blender. Les preuves des anciennes scènes restent hors dépôt.
+
+Pour régénérer l’image sociale depuis la racine :
 
 ```sh
-blender --background --python scripts/create-coast.py
-blender --background --python scripts/render-share.py
+npx tsx scripts/render-share.ts
 ```
 
-La première commande crée une scène neuve et exporte `public/models/inastia-coast.glb`, versionné. Elle enregistre aussi `inastia-coast.blend` et un rendu dans le dossier voisin `../inastia-v3-evidence/`, hors dépôt. La seconde ouvre ce fichier généré et produit `public/images/inastia-share.png` en 1200 × 630, ainsi que sa scène .blend dans le même dossier externe. Elle nécessite donc la première génération ; si Node est disponible, Sharp compacte ensuite le PNG. Ces commandes sont manuelles et ne font pas partie du build Vercel.
+Ce script réutilise le SVG français, le compose avec le texte de la carte et produit `public/images/inastia-share.png` en 1200 × 630 avec Sharp. La génération est manuelle et ne fait pas partie du build Vercel.
 
-`src/motion.ts` charge GSAP/ScrollTrigger et initialise la scène optionnelle. `src/scene.ts` est un petit pont DOM ; le chargement du GLB, son analyse GLTF et le rendu Three.js sont exécutés dans `src/scene.worker.ts`, avec OffscreenCanvas. Le rendu mobile est limité à 30 images par seconde. Le bouton « Animations » permet la pause/reprise : la préférence système `prefers-reduced-motion` initialise la pause, mais l’utilisateur peut explicitement reprendre. La boucle s’arrête hors écran, lorsque l’onglet est masqué ou pendant une suspension en cache arrière/avant (BFCache), puis reprend selon l’état courant au retour. Si Worker, OffscreenCanvas ou WebGL manquent, ou si le chargement/rendu échoue, le SVG de repli conserve l’illustration. Sans JavaScript, le contenu HTML et le SVG restent disponibles. La 3D est décorative et ne porte aucune information indispensable.
+`src/motion.ts` charge GSAP/ScrollTrigger pour les entrées et révélations. Les mouvements de la clé, du porte-clés et des vagues sont définis en CSS. Le bouton « Animations » permet la pause/reprise ; `prefers-reduced-motion` initialise la pause, avec reprise explicite possible. Un observateur de visibilité et les événements de page suspendent les mouvements de l’illustration hors écran, lorsque l’onglet est masqué et pendant une suspension BFCache. Ils reprennent selon l’état courant au retour. Sans JavaScript, le contenu HTML et le SVG restent disponibles. L’illustration est décorative et ne porte aucune information indispensable.
 
 ## Formulaire et configuration
 
