@@ -14,6 +14,11 @@ export function header(locale: Locale, slug: string): string {
     locale === "fr" ? "en" : "fr",
     ["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "" : slug,
   );
+  const motionButton =
+    slug &&
+    !["contact", "privacy", "cgv", "mentions-legales", "404"].includes(slug)
+      ? `<button id="motion-toggle" class="header-motion" type="button" aria-pressed="false" aria-label="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-pause="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-play="${t(locale, "Reprendre les animations", "Resume animations")}"><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="motion-label">${t(locale, "Animations", "Motion")}</span></button>`
+      : "";
   return `<a class="skip-link" href="#main">${t(locale, "Aller au contenu", "Skip to content")}</a>
   <header class="site-header"><div class="header-inner">
     <a class="wordmark" href="${path(locale)}">INASTIA <span class="brand-detail">CONCIERGERIE · CORSE</span></a>
@@ -23,7 +28,7 @@ export function header(locale: Locale, slug: string): string {
       <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
     </nav>
-    <div class="header-actions"><a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
+    <div class="header-actions">${motionButton}<a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
       <a class="button button-small header-cta" href="${path(locale, "contact")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-open-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-close-label="${t(locale, "Fermer le menu", "Close menu")}"><span></span><span></span></button>
     </div>
@@ -54,12 +59,12 @@ export function footer(locale: Locale): string {
 }
 
 export function contactCallout(locale: Locale): string {
-  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${t(locale, "Tout commence par une conversation", "It starts with a conversation")}</p><h2>${t(locale, "Et si nous parlions<br><em>de votre maison ?</em>", "Let’s talk about<br><em>your home.</em>")}</h2></div><div class="callout-action"><p>${t(locale, "Un premier regard sur votre bien, vos envies et le bon niveau d’accompagnement. Notre audit est gratuit.", "A first look at your property, your plans and the right level of support. Our property review is free.")}</p><a class="button button-cream" href="${path(locale, "contact")}">${t(locale, "Demander mon audit gratuit", "Request my free review")}${arrow}</a><a class="callout-phone" href="tel:+33613812550">${t(locale, "Ou appelez-nous au", "Or call us on")} +33 6 13 81 25 50</a></div></div></section>`;
+  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${t(locale, "Tout commence par une conversation", "It starts with a conversation")}</p><h2>${t(locale, "La suite ?<br><em>On l’écrit ensemble.</em>", "What’s next?<br><em>Let’s shape it together.</em>")}</h2></div><div class="callout-action"><p>${t(locale, "Votre maison a du potentiel. Commençons par en parler. Un premier audit gratuit, des pistes concrètes et un accompagnement qui vous ressemble.", "Your home has potential. Let’s start there. A free first review, practical ideas and support that fits the way you want to rent.")}</p><a class="button button-cream" href="${path(locale, "contact")}">${t(locale, "Demander mon audit gratuit", "Request my free review")}${arrow}</a><a class="callout-phone" href="tel:+33613812550">${t(locale, "Ou appelez-nous au", "Or call us on")} +33 6 13 81 25 50</a></div></div></section>`;
 }
 
 export function faq(
   locale: Locale,
   items: { question: string; answer: string }[],
 ): string {
-  return `<section class="section faq-section" id="faq"><div class="container faq-grid"><div><p class="eyebrow">${t(locale, "Avant de vous lancer", "Before you get started")}</p><h2>${t(locale, "Vos questions,<br><em>tout simplement.</em>", "Your questions,<br><em>simply answered.</em>")}</h2><a class="text-link" href="${path(locale, "contact")}">${t(locale, "Une autre question ? Échangeons.", "Another question? Let’s talk.")}${arrow}</a></div><div class="faq-list">${items.map(({ question, answer }) => `<details><summary>${escape(question)}<span aria-hidden="true">+</span></summary><div class="faq-answer"><p>${escape(answer)}</p></div></details>`).join("")}</div></div></section>`;
+  return `<section class="section faq-section" id="faq"><div class="container faq-grid"><div><p class="eyebrow">${t(locale, "Avant de vous lancer", "Before you get started")}</p><h2>${t(locale, "Tout se précise.<br><em>Même les détails.</em>", "Clear answers.<br><em>Down to the details.</em>")}</h2><a class="text-link" href="${path(locale, "contact")}">${t(locale, "Une autre question ? Échangeons.", "Another question? Let’s talk.")}${arrow}</a></div><div class="faq-list">${items.map(({ question, answer }) => `<details><summary>${escape(question)}<span aria-hidden="true">+</span></summary><div class="faq-answer"><p>${escape(answer)}</p></div></details>`).join("")}</div></div></section>`;
 }

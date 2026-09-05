@@ -20,5 +20,9 @@ export function picture(
   className = "",
   priority = false,
 ): string {
-  return `<picture class="${className}"><source type="image/avif" srcset="/images/${name}-480.avif 480w, /images/${name}-800.avif 800w, /images/${name}-1200.avif 1200w" sizes="${priority ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 1024px) 50vw, 100vw"}"><img src="/images/${name}-800.webp" srcset="/images/${name}-480.webp 480w, /images/${name}-800.webp 800w, /images/${name}-1200.webp 1200w" sizes="${priority ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 1024px) 50vw, 100vw"}" alt="${escape(alt)}" width="1200" height="805" ${priority ? 'fetchpriority="high" loading="eager"' : 'loading="lazy"'} decoding="async"></picture>`;
+  const sizes =
+    className === "property-thumb"
+      ? "(min-width:1024px) 160px, (min-width:700px) 120px, 77px"
+      : "95px";
+  return `<picture class="${className}"><source type="image/avif" srcset="/images/${name}-240.avif 240w, /images/${name}-480.avif 480w, /images/${name}-800.avif 800w, /images/${name}-1200.avif 1200w" sizes="${sizes}"><img src="/images/${name}-240.webp" srcset="/images/${name}-240.webp 240w, /images/${name}-480.webp 480w, /images/${name}-800.webp 800w, /images/${name}-1200.webp 1200w" sizes="${sizes}" alt="${escape(alt)}" width="1200" height="805" ${priority ? 'fetchpriority="high" loading="eager"' : 'loading="lazy"'} decoding="async"></picture>`;
 }

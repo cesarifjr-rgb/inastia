@@ -3,7 +3,7 @@ import { mkdir, copyFile } from "node:fs/promises";
 
 await mkdir("public/images", { recursive: true });
 for (const name of ["villa_amichi", "villa_lova", "casa_verde"]) {
-  for (const width of [480, 800, 1200]) {
+  for (const width of [240, 480, 800, 1200]) {
     const input = sharp(`${name}.webp`).resize({
       width,
       withoutEnlargement: true,
@@ -20,14 +20,10 @@ for (const name of ["villa_amichi", "villa_lova", "casa_verde"]) {
     ]);
   }
 }
-await sharp("villa_amichi.webp")
-  .resize(1200, 630, { fit: "cover" })
-  .jpeg({ quality: 85 })
-  .toFile("public/images/inastia-share.jpg");
+// The social image is rendered from the Blender source by scripts/render-share.py.
 await mkdir("public/fonts", { recursive: true });
 for (const [family, file] of [
-  ["cormorant-garamond", "cormorant-garamond-latin-wght-normal.woff2"],
-  ["cormorant-garamond", "cormorant-garamond-latin-wght-italic.woff2"],
+  ["space-grotesk", "space-grotesk-latin-wght-normal.woff2"],
   ["manrope", "manrope-latin-wght-normal.woff2"],
 ]) {
   await copyFile(
@@ -35,7 +31,7 @@ for (const [family, file] of [
     `public/fonts/${file}`,
   );
 }
-for (const family of ["cormorant-garamond", "manrope"]) {
+for (const family of ["space-grotesk", "manrope"]) {
   await copyFile(
     `node_modules/@fontsource-variable/${family}/LICENSE`,
     `public/fonts/${family}-LICENSE.txt`,

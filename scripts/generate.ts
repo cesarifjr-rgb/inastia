@@ -37,8 +37,8 @@ for (const locale of ["fr", "en"] as const) {
     "",
     t(
       locale,
-      "Inastia — Votre maison, l’esprit libre | Conciergerie en Corse",
-      "Inastia — Your home, peace of mind | Property care in Corsica",
+      "Inastia — Votre maison. L’esprit au large. | Conciergerie en Corse",
+      "Inastia — Your home. A little more freedom. | Property care in Corsica",
     ),
     t(
       locale,

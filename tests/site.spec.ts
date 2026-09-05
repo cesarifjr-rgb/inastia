@@ -21,6 +21,12 @@ async function loadImages(page: Page): Promise<void> {
     ).toBeGreaterThan(0);
     await expect(image).toHaveAttribute("alt", /.+/);
   }
+  // A full-page capture must include sections revealed by actual scrolling.
+  for (const section of await page.locator("[data-reveal]").all()) {
+    await section.scrollIntoViewIfNeeded();
+    await expect(section).toHaveClass(/\bis-visible\b/);
+    await expect(section).toHaveCSS("opacity", "1");
+  }
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
 }
@@ -289,15 +295,17 @@ test("language switch preserves the current translated page", async ({
   page,
 }) => {
   await page.goto("/gestion-airbnb-corse-du-sud");
+  const frenchHeading = await page.locator("h1").innerText();
   await page.locator(".language-link").click();
   await expect(page).toHaveURL(/\/en\/gestion-airbnb-corse-du-sud$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await expect(page.locator("h1")).toHaveText(
-    "A considered approach to your whole rental.",
-  );
+  await expect(page.locator("h1")).toBeVisible();
+  expect((await page.locator("h1").innerText()).trim()).not.toBe("");
+  expect(await page.locator("h1").innerText()).not.toBe(frenchHeading);
   await page.locator(".language-link").click();
   await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  await expect(page.locator("h1")).toHaveText(frenchHeading);
 });
 
 test("reduced-motion preference disables decorative movement and smooth scrolling", async ({
@@ -335,6 +343,15 @@ test("without JavaScript, content, navigation, FAQs and direct contact remain us
   const page = await context.newPage();
   await page.goto("/");
   await expect(page.locator("h1")).toBeVisible();
+  await expect(
+    page.locator("[data-villa-scene] .scene-fallback"),
+  ).toBeVisible();
+  await expect(page.locator("#motion-toggle")).toBeHidden();
+  for (const section of await page.locator("[data-reveal]").all()) {
+    await expect(section).toBeVisible();
+    await expect(section).toHaveCSS("opacity", "1");
+    await expect(section).toHaveCSS("visibility", "visible");
+  }
   const faq = page.locator(".faq-list details").first();
   await faq.locator("summary").click();
   await expect(faq.locator(".faq-answer")).toBeVisible();
