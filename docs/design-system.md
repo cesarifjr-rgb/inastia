@@ -23,7 +23,7 @@ Space Grotesk compose les titres ; Manrope porte paragraphes et commandes. Les f
 
 ## Composition
 
-L’accueil comporte sept sections : hero explicite et action, trois accompagnements comparables, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Le manifeste autonome est absorbé. Les cartes nomment d’abord l’offre, puis ce qui est confié, conservé et à chiffrer. Leurs icônes restent compactes ; les rubriques s’alignent en subgrid à partir de 1024 px. En dessous, les cartes sont empilées.
+L’accueil comporte sept sections : hero explicite et action, trois accompagnements comparables, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Le manifeste autonome est absorbé. Les cartes conservent leurs illustrations animées : maison en orbite, fiche d’annonce et clé dorée. Elles nomment l’offre, puis ce qui est confié, conservé et à chiffrer ; les rubriques s’alignent en subgrid à partir de 1024 px. En dessous, les cartes sont empilées et les illustrations sont réduites sur mobile.
 
 La présentation familiale reste collective, sans prénom ni portrait non autorisé. Les maisons gardent leurs noms et localisations réels. Le bloc de suivi expose les étapes du service ; ne pas le présenter comme une preuve de mission attribuée à une maison. Les avis Google sont explicitement des extraits de voyageurs, sourcés et statiques, avec date du relevé global. Ils éclairent l’accueil vécu, sans démontrer à eux seuls le suivi propriétaire.
 
@@ -33,7 +33,7 @@ Le contact rapproche les champs de l’introduction. Le motif choisi reste visib
 
 ## Motion et rendu statique
 
-`src/art.ts` fournit les illustrations CSS/SVG et la fonction `hospitalityArt(locale)` pour le hero FR/EN. Le SVG est intégré au HTML et reste visible sans JavaScript. Il est décoratif : les labels et le texte HTML portent le message métier.
+`src/art.ts` fournit `serviceArt(index)` pour les trois offres et `hospitalityArt(locale)` pour le hero FR/EN. Les illustrations sont intégrées au HTML et restent visibles et statiques sans JavaScript. Elles sont décoratives : les labels et le texte HTML portent le message métier. Les mouvements des offres suivent le même bouton de pause et la même préférence de réduction des animations que le hero.
 
 `src/motion.ts` gère GSAP/ScrollTrigger, la pause/reprise et la visibilité. Le CSS anime le porte-clés, la clé et les vagues lorsque l’illustration est active. La préférence `prefers-reduced-motion` initialise une pause ; l’utilisateur peut explicitement reprendre. Respecter cet état, la suspension hors écran/onglet masqué et la reprise BFCache. Une capture fixe ne démontre pas la qualité temporelle du mouvement.
 

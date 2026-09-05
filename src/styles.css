@@ -1810,14 +1810,22 @@ html[data-motion] #motion-toggle {
   top: calc(-1 * var(--header));
 }
 /* Motion is opt-in through the controller; the unenhanced page stays fully visible. */
-html[data-motion="running"] .orbit-one {
+.orbit-one {
   animation: orbit-drift 9s ease-in-out infinite;
+  animation-play-state: paused;
 }
-html[data-motion="running"] .listing-front {
+.listing-front {
   animation: listing-float 6s ease-in-out infinite;
+  animation-play-state: paused;
 }
-html[data-motion="running"] .art-key-spark {
+.art-key-spark {
   animation: star-turn 14s linear infinite;
+  animation-play-state: paused;
+}
+html[data-motion="running"] .orbit-one,
+html[data-motion="running"] .listing-front,
+html[data-motion="running"] .art-key-spark {
+  animation-play-state: running;
 }
 html[data-motion="running"] .presence-signal > div {
   animation: signal-expand 5s ease-out infinite;
@@ -1888,15 +1896,23 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
   font-size: 14px;
 }
 .service-card-heading {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  height: 180px;
   margin-bottom: 20px;
 }
-.service-icon {
-  width: 36px;
-  height: 36px;
-  color: var(--blue);
+.service-card-heading .service-number {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.service-card-heading .service-art {
+  width: 220px;
+  height: 200px;
+  margin: 0;
+  transform: scale(0.85);
 }
 .service-scope {
   display: grid;
@@ -2540,6 +2556,12 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
   }
   .service-card {
     border-radius: 8px;
+  }
+  .service-card-heading {
+    height: 150px;
+  }
+  .service-card-heading .service-art {
+    transform: scale(0.75);
   }
   .service-card-top {
     justify-content: flex-start;

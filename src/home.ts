@@ -1,7 +1,7 @@
 import type { Locale } from "./content/pages.ts";
 import { arrow, contactPath, path, picture, t } from "./lib.ts";
 import { contactCallout, faq, zones } from "./components.ts";
-import { hospitalityArt } from "./art.ts";
+import { hospitalityArt, serviceArt } from "./art.ts";
 import { reviews } from "./reviews.ts";
 
 export function home(locale: Locale): string {
@@ -14,7 +14,6 @@ export function home(locale: Locale): string {
       cost: t(locale, "Commission sur les revenus locatifs. Prestations et frais précisés au devis.", "Commission on rental income. Services and additional costs specified in the proposal."),
       slug: "gestion-airbnb-corse-du-sud",
       link: t(locale, "Voir la gestion complète", "Explore full management"),
-      icon: '<path d="m4 11 8-7 8 7v9H4zM9 20v-7h6v7"/>',
     },
     {
       title: t(locale, "Lancement et gestion d’annonce", "Listing launch and management"),
@@ -24,7 +23,6 @@ export function home(locale: Locale): string {
       cost: t(locale, "Périmètre, durée du suivi et coût définis dans la proposition.", "Scope, duration of support and cost set out in the proposal."),
       slug: "pack-lancement-airbnb",
       link: t(locale, "Voir le suivi d’annonce", "Explore listing support"),
-      icon: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/>',
     },
     {
       title: t(locale, "Accueil et rotation séjour", "Guest welcome and changeovers"),
@@ -34,7 +32,6 @@ export function home(locale: Locale): string {
       cost: t(locale, "Selon le logement et les passages. Linge et consommables détaillés au devis.", "Based on the home and visits. Linen and supplies detailed in the proposal."),
       slug: "menage-airbnb-corse-du-sud",
       link: t(locale, "Voir l’accueil et les rotations", "Explore guest welcome and changeovers"),
-      icon: '<circle cx="8" cy="8" r="4"/><path d="m11 11 9 9M16 16l3-3M18 18l3-3"/>',
     },
   ];
   const questions = [
@@ -89,7 +86,7 @@ export function home(locale: Locale): string {
   </section>
   <section class="section services-section" id="services"><span id="formules" class="anchor-target" aria-hidden="true"></span><span id="comparaison" class="anchor-target" aria-hidden="true"></span><div class="container">
     <div class="section-heading" data-reveal><div><p class="eyebrow">${t(locale, "01 — VOTRE ACCOMPAGNEMENT", "01 — YOUR SUPPORT")}</p><h2>${t(locale, "Vous choisissez<br><em>ce que vous déléguez.</em>", "Choose what<br><em>you hand over.</em>")}</h2></div><p>${t(locale, "Tout confier, améliorer votre annonce ou trouver un relais entre les séjours. Comparez ce que chaque accompagnement prend en charge.", "Hand over the day to day, improve your listing or find local support between stays. Compare what each service covers.")}</p></div>
-    <div class="service-grid">${services.map((service, index) => `<article class="service-card" data-reveal><div class="service-card-heading"><span class="service-number">0${index + 1}</span><svg class="service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">${service.icon}</svg></div><h3>${service.title}</h3><p class="service-audience">${service.audience}</p><dl class="service-scope"><div><dt>${t(locale, "Vous nous confiez", "You hand over")}</dt><dd>${service.delegate}</dd></div><div><dt>${t(locale, "Vous gardez", "You keep")}</dt><dd>${service.keep}</dd></div><div><dt>${t(locale, "Le coût", "The cost")}</dt><dd>${service.cost}</dd></div></dl><a class="service-card-link" href="${path(locale, service.slug)}">${service.link}${arrow}</a></article>`).join("")}</div>
+    <div class="service-grid">${services.map((service, index) => `<article class="service-card" data-reveal><div class="service-card-heading"><span class="service-number">0${index + 1}</span>${serviceArt(index)}</div><h3>${service.title}</h3><p class="service-audience">${service.audience}</p><dl class="service-scope"><div><dt>${t(locale, "Vous nous confiez", "You hand over")}</dt><dd>${service.delegate}</dd></div><div><dt>${t(locale, "Vous gardez", "You keep")}</dt><dd>${service.keep}</dd></div><div><dt>${t(locale, "Le coût", "The cost")}</dt><dd>${service.cost}</dd></div></dl><a class="service-card-link" href="${path(locale, service.slug)}">${service.link}${arrow}</a></article>`).join("")}</div>
   </div></section>
   <section class="presence-section"><div class="container">
     <div class="presence-grid"><div class="presence-heading" data-reveal><p class="eyebrow">${t(locale, "02 — UNE ÉQUIPE FAMILIALE", "02 — A FAMILY TEAM")}</p><h2>${t(locale, "Votre maison.<br><em>Notre présence.</em>", "Your home.<br><em>Our local care.</em>")}</h2></div><div class="presence-copy" data-reveal><p class="presence-lead">${t(locale, "Vous échangez directement avec l’équipe Inastia.", "You speak directly with the Inastia team.")}</p><p>${t(locale, "Propriétaires nous-mêmes, nous connaissons les questions que pose le fait de confier ses clés. Nous définissons les prestations avec vous, coordonnons les passages et vous signalons les points qui demandent une décision.", "As owners ourselves, we understand the questions that come with handing over your keys. We agree the services with you, coordinate visits and flag the points that need your decision.")}</p><a class="text-link" href="${path(locale, "about")}">${t(locale, "Découvrir notre façon de travailler", "Discover how we work")}${arrow}</a></div></div>

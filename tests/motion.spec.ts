@@ -87,6 +87,40 @@ async function expectKeyPaused(key: Locator, page: Page): Promise<void> {
   expect(after.animations).toEqual(before.animations);
 }
 
+test("all three service illustrations move, stop with pause and respect reduced motion", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const artwork = [
+    page.locator(".service-card .service-art-1 .orbit-one"),
+    page.locator(".service-card .service-art-2 .listing-front"),
+    page.locator(".service-card .service-art-3 .art-key-spark"),
+  ];
+  for (const element of artwork) {
+    await element.locator("..").scrollIntoViewIfNeeded();
+    await expect(element).toBeVisible();
+    await expectKeyMoving(element);
+  }
+  const toggle = page.locator("#motion-toggle");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  for (const element of artwork) await expectKeyPaused(element, page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
+  for (const element of artwork) {
+    await element.scrollIntoViewIfNeeded();
+    await expect(element).toBeVisible();
+    await expectKeyPaused(element, page);
+  }
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  for (const element of artwork) await expectKeyMoving(element);
+});
+
 test("hospitality SVG visibly animates with CSS and makes no canvas, worker or model requests", async ({
   page,
 }, testInfo) => {
@@ -219,14 +253,24 @@ test("without JavaScript the hospitality SVG remains visible and service/contact
     await expectKeyPaused(scene.locator(".welcome-key").first(), page);
     await expect(page.locator("canvas")).toHaveCount(0);
     await expect(page.locator("#motion-toggle")).toBeHidden();
+    for (const selector of [
+      ".service-art-1 .orbit-one",
+      ".service-art-2 .listing-front",
+      ".service-art-3 .art-key-spark",
+    ]) {
+      const artwork = page.locator(`.service-card ${selector}`);
+      await artwork.scrollIntoViewIfNeeded();
+      await expect(artwork).toBeVisible();
+      await expectKeyPaused(artwork, page);
+    }
     await page
       .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
       .first()
       .click();
     await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
     await expect(page.locator("h1")).toBeVisible();
-    await page.locator('main a[href="/contact"]').first().click();
-    await expect(page).toHaveURL(/\/contact$/);
+    await page.locator('main a[href="/contact?intent=gestion"]').first().click();
+    await expect(page).toHaveURL(/\/contact\?intent=gestion$/);
     await expect(page.locator("#contact-form")).toBeVisible();
     await expect(
       page.locator('noscript a[href="mailto:contact@inastia.fr"]'),
