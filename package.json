@@ -4,17 +4,36 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "generate": "tsx scripts/generate.ts",
+    "assets": "tsx scripts/assets.ts",
+    "dev": "npm run generate && vite",
+    "build": "npm run typecheck && npm run generate && vite build",
     "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
-    "vite": "^6.1.0",
+    "@axe-core/playwright": "^4.13.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.4.1",
+    "eslint": "^10.10.0",
+    "lighthouse": "^13.4.1",
+    "sharp": "^0.35.4",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.69.0",
+    "vite": "^8.2.2",
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "gsap": "^3.14.2"
+    "@fontsource-variable/cormorant-garamond": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
   }
 }

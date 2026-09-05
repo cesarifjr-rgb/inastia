@@ -1,5 +1,5 @@
-# Inastia — Conciergerie de locations saisonnières
 User-agent: *
 Allow: /
+Disallow: /api/
 
 Sitemap: https://inastia.fr/sitemap.xml

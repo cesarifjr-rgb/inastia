@@ -9,11 +9,39 @@ export default async function handler(req, res) {
         return res.status(405).json({ success: false, error: 'Method not allowed' });
     }
 
+    // Browser submissions must come from this deployment (including previews).
+    const origin = req.headers?.origin;
+    if (origin) {
+        try {
+            const host = req.headers?.host;
+            if (!host || new URL(origin).host !== host) {
+                return res.status(403).json({ success: false, error: 'Origine non autorisée.' });
+            }
+        } catch {
+            return res.status(403).json({ success: false, error: 'Origine non autorisée.' });
+        }
+    }
+
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+        return res.status(400).json({ success: false, error: 'Données invalides.' });
+    }
+    const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
+        propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
+        surface: 10, capacity: 5, message: 2000, turnstileToken: 2048 };
+    const input = {};
+    for (const [key, limit] of Object.entries(limits)) {
+        const value = req.body[key];
+        if (value !== undefined && (typeof value !== 'string' || value.length > limit)) {
+            return res.status(400).json({ success: false, error: 'Données invalides ou trop longues.' });
+        }
+        input[key] = (value || '').trim();
+    }
+
     const {
         firstName, lastName, email, phone,
         propertyType, location, bedrooms, bathrooms,
         surface, capacity, message, turnstileToken
-    } = req.body;
+    } = input;
 
     // --- 1. Validate required fields ---
     if (!firstName || !lastName || !email) {
@@ -25,14 +53,17 @@ export default async function handler(req, res) {
         return res.status(400).json({ success: false, error: 'Adresse email invalide.' });
     }
 
-    // --- 1c. Enforce input length limits ---
-    if (String(firstName).length > 100 || String(lastName).length > 100 || String(email).length > 254) {
-        return res.status(400).json({ success: false, error: 'Données trop longues.' });
+    if (!turnstileToken) {
+        return res.status(403).json({ success: false, error: 'Veuillez effectuer la vérification anti-spam.' });
+    }
+    if (!process.env.TURNSTILE_SECRET_KEY || !process.env.RESEND_API_KEY) {
+        return res.status(503).json({ success: false, error: 'Service temporairement indisponible.' });
     }
 
     // --- 2. Verify Turnstile token server-side ---
     try {
         const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            signal: AbortSignal.timeout(10000),
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -42,12 +73,10 @@ export default async function handler(req, res) {
         });
         const turnstileData = await turnstileRes.json();
 
-        if (!turnstileData.success) {
-            console.error('Turnstile verification failed:', turnstileData);
+        if (!turnstileRes.ok || turnstileData.success !== true) {
             return res.status(403).json({ success: false, error: 'Vérification anti-spam échouée. Veuillez réessayer.' });
         }
-    } catch (err) {
-        console.error('Turnstile network error:', err);
+    } catch {
         return res.status(500).json({ success: false, error: 'Erreur de vérification. Veuillez réessayer.' });
     }
 
@@ -65,7 +94,7 @@ export default async function handler(req, res) {
     const safeCapacity = escapeHtml(truncate(capacity, 5));
     const safeMessage = escapeHtml(truncate(message, 2000));
 
-    const subject = `Nouveau lead Inastia — ${safePropertyType || 'Non précisé'} à ${safeLocation || 'Non précisé'}`;
+    const subject = `Nouveau lead Inastia — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
 
     const htmlBody = `
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;border-radius:12px;overflow:hidden">
@@ -103,6 +132,7 @@ export default async function handler(req, res) {
 
     try {
         const emailRes = await fetch('https://api.resend.com/emails', {
+            signal: AbortSignal.timeout(10000),
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,22 +141,18 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: 'Inastia <noreply@inastia.fr>',
                 to: 'contact@inastia.fr',
-                reply_to: safeEmail,
+                reply_to: email,
                 subject: subject,
                 html: htmlBody,
             }),
         });
 
-        const emailData = await emailRes.json();
-
         if (!emailRes.ok) {
-            console.error('Resend error:', emailData);
             return res.status(500).json({ success: false, error: 'Erreur d\'envoi. Veuillez réessayer ou nous contacter par téléphone.' });
         }
 
         return res.status(200).json({ success: true });
-    } catch (err) {
-        console.error('Resend network error:', err);
+    } catch {
         return res.status(500).json({ success: false, error: 'Erreur serveur. Veuillez réessayer.' });
     }
 }
