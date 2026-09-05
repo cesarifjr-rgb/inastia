@@ -264,12 +264,13 @@ test("without JavaScript the hospitality SVG remains visible and service/contact
       await expectKeyPaused(artwork, page);
     }
     await page
-      .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
+      .locator('main a[href^="/gestion-airbnb-corse-du-sud#section-"]')
       .first()
       .click();
-    await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
+    await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud#section-\d$/);
     await expect(page.locator("h1")).toBeVisible();
-    await page.locator('main a[href="/contact?intent=gestion"]').first().click();
+    await page.locator('main a[href="/contact?intent=gestion"]').first().focus();
+    await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/\/contact\?intent=gestion$/);
     await expect(page.locator("#contact-form")).toBeVisible();
     await expect(
@@ -364,10 +365,10 @@ test("BFCache history return resumes native CSS animation and preserves pause co
       () => (window as HistoryProbeWindow).__inastiaHistoryProbe.documentId,
     );
     await page
-      .locator('main a[href="/gestion-airbnb-corse-du-sud"]')
+      .locator('main a[href^="/gestion-airbnb-corse-du-sud#section-"]')
       .first()
       .click();
-    await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud$/);
+    await expect(page).toHaveURL(/\/gestion-airbnb-corse-du-sud#section-\d$/);
     await expect(page.locator("h1")).toBeVisible();
     await page.goBack({ waitUntil: "commit" });
     await expect(page).toHaveURL(new URL("/", baseURL).href);

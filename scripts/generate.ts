@@ -1,10 +1,16 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, rm } from "node:fs/promises";
 import { pages } from "../src/content/pages.ts";
 import type { Locale } from "../src/content/pages.ts";
 import { document, secondary, legal, contact } from "../src/templates.ts";
 import { home } from "../src/home.ts";
 import { path, t } from "../src/lib.ts";
 
+// Remove only obsolete generated offer files; Vercel preserves their URLs as redirects.
+for (const prefix of ["", "/en"]) {
+  for (const slug of ["pack-lancement-airbnb", "menage-airbnb-corse-du-sud"]) {
+    await rm(`.generated${prefix}/${slug}.html`, { force: true });
+  }
+}
 const urls: string[] = [];
 async function output(
   locale: Locale,
@@ -42,8 +48,8 @@ for (const locale of ["fr", "en"] as const) {
     ),
     t(
       locale,
-      "Conciergerie familiale en Corse, de Ghisonaccia à Porto-Vecchio. Gestion locative, lancement d’annonce, accueil, ménage et linge. Parlons de votre bien.",
-      "Family-run holiday rental management in Corsica, from Ghisonaccia to Porto-Vecchio. Listings, guest welcome, cleaning and linen. Tell us about your home.",
+      "Gestion complète de votre location en Corse, de Ghisonaccia à Porto-Vecchio. Une conciergerie familiale pour votre annonce, vos voyageurs et le suivi sur place.",
+      "Full management of your holiday rental in Corsica, from Ghisonaccia to Porto-Vecchio. A family-run service for your listing, guests and local care.",
     ),
     home(locale),
   );

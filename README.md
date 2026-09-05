@@ -22,7 +22,7 @@ Le serveur démarre sur `http://127.0.0.1:3100`. La commande génère les pages 
 ```text
 src/content/pages.ts       Contenus des pages secondaires FR/EN
 src/content/legal/         Fragments juridiques français
-src/home.ts                Accueil FR/EN en sept sections
+src/home.ts                Accueil FR/EN : gestion complète en trois volets
 src/reviews.ts             Extraits Google statiques, sources et date de relevé
 src/components.ts          Navigation, footer, FAQ et appels à contact
 src/templates.ts           Documents, pages secondaires et formulaire
@@ -33,13 +33,17 @@ src/client.ts              Navigation et comportements d'interface
 src/art.ts                 Illustrations SVG/CSS et hospitalityArt(locale) FR/EN
 src/motion.ts              GSAP, pause CSS et visibilité de l’illustration
 src/contact.ts             Vérification anti-spam et états du formulaire
-src/styles.css             Styles et tokens
+src/styles.css             Styles et tokens de la version sauvegardée
+src/management.css         Composition de l’offre unique
+src/management-art.ts      Illustration de maison et textes FR/EN
+src/management-art.css     Scène SVG/CSS en volume et sélection des volets
+src/management-art-client.ts Visibilité, pause et cycle de page de la scène
 api/contact.js             Fonction Vercel : validation, Turnstile, Resend
 scripts/render-share.ts    Carte sociale PNG depuis le SVG via Sharp
 public/                    Images, polices locales, licences et PDF légal
 ```
 
-Les templates TypeScript génèrent du HTML statique ; Vite 8 compile ensuite les 28 documents vers `dist/` (27 pages indexables et une 404). Les 14 URL françaises historiques sont conservées, avec une page contact supplémentaire et 12 équivalents anglais sous `/en/`. Les trois pages légales restent en français ; les liens anglais le précisent. Les URL sans extension reposent sur `cleanUrls` dans `vercel.json`.
+Les templates TypeScript génèrent du HTML statique ; Vite 8 compile 24 documents vers `dist/` : 23 pages indexables (10 FR, 10 EN et trois pages légales FR) et une 404. Les anciennes routes `/pack-lancement-airbnb` et `/menage-airbnb-corse-du-sud`, ainsi que leurs équivalents `/en/`, sont redirigées de façon permanente vers la page de gestion complète dans la même langue. Elles ne sont plus générées ni listées dans le sitemap ; `scripts/generate.ts` retire uniquement leurs anciens HTML intermédiaires. `vercel.json` fait autorité pour les redirections ; Vite dev/preview les reproduit localement. Leur contrôle final reste à effectuer sur l’hébergement. Les trois pages légales restent en français ; les liens anglais le précisent. Les URL sans extension reposent sur `cleanUrls` dans `vercel.json`.
 
 Ne pas modifier `.generated/` ou `dist/` directement. Les sources de contenu, les templates et les scripts de génération font autorité.
 
@@ -55,7 +59,7 @@ Ce script régénère les variantes photographiques, les polices locales Space G
 
 ## Illustration d’accueil et image sociale
 
-La palette claire sable, ciel et mer et l’illustration d’accueil sont conservées : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. L’accueil suit sept sections : proposition et contact, comparaison des accompagnements, équipe et territoire, maisons et suivi des rotations avec avis voyageurs, cadre du premier échange, FAQ, puis appel à contact. Les photographies des biens restent discrètes.
+La palette claire sable, ciel et mer et l’illustration d’accueil sont conservées : porte-clés Inastia, clé et détails de soin devant une arche ciel/mer. L’accueil présente une seule offre de gestion complète, puis ses trois volets : annonce, voyageurs et maison. Les illustrations expliquent les composantes d’un même accompagnement ; elles ne proposent pas de services séparés. Une nouvelle scène SVG/CSS en volume complète le hero existant, avant l’équipe, le territoire, les maisons, le suivi, les avis, le premier échange et le contact. Les photographies des biens restent discrètes.
 
 L’équipe est présentée collectivement, conformément au choix actuel de ne pas publier de prénoms. Le suivi d’une rotation décrit le processus annoncé ; il ne constitue pas un cas client ni un document de mission réelle. Les extraits Google de `src/reviews.ts` sont des avis de voyageurs conservés dans leur langue d’origine, avec auteur, date de séjour et lien source. La note globale porte sa date de relevé, le 5 septembre 2026. Ces contenus sont statiques : vérifier manuellement les sources avant de les actualiser ; ne pas les présenter comme une synchronisation Google ni comme des témoignages propriétaires.
 
@@ -73,7 +77,7 @@ Ce script réutilise le SVG français, le compose avec le texte de la carte et p
 
 ## Formulaire et configuration
 
-`contactPath(locale, intent)` conserve le motif choisi dans l’URL de contact : `audit`, `gestion`, `annonce` ou `rotation`. Le formulaire présente ce motif dans un sélecteur modifiable ; l’audit adapte le titre, le bouton et le message de réussite. Le motif est transmis avec la demande. Le premier audit gratuit est restitué par appel ou par email, sans délai garanti ni promesse de rapport écrit. L’aide du projet reste visible pendant la saisie ; téléphone et projet restent facultatifs.
+`contactPath(locale, intent)` conserve le motif choisi dans l’URL de contact : `audit` ou `gestion`. L’interface propose également un échange général. Les anciennes valeurs `annonce` et `rotation` reviennent à ce choix neutre côté client ; l’API continue à accepter ces anciens payloads pour compatibilité, sans proposer d’offres partielles. Le formulaire présente ce motif dans un sélecteur modifiable ; l’audit adapte le titre, le bouton et le message de réussite. Le motif est transmis avec la demande. Le premier audit gratuit est restitué par appel ou par email, sans délai garanti ni promesse de rapport écrit. L’aide du projet reste visible pendant la saisie ; téléphone et projet restent facultatifs.
 
 `api/contact.js` vérifie les données et le jeton Cloudflare Turnstile avant d'envoyer via Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`. `src/contact.ts` charge Turnstile à l'interaction et gère chargement, erreur, expiration, succès et nouvel envoi.
 
@@ -111,8 +115,12 @@ Sur une URL distante, les tests de mutation du formulaire sont ignorés. Aucun r
 
 ## Livraison
 
-Travailler sur `codex/inastia-redesign` pour la refonte, puis utiliser une branche `codex/…` pour les évolutions suivantes. Relire les modifications et vérifier la version avant intégration à `main`. L'intégration Git du projet Vercel `inastia` assure le déploiement ; conserver cette liaison et les domaines existants. Ne pas forcer de push.
+La demande actuelle est réalisée sur `codex/gestion-complete`, dans le worktree `C:/Users/Admin/Documents/inastia-gestion-complete`, à partir de la version sauvegardée `900c977`. L’utilisateur a demandé de rétablir ce style et de ne conserver que la gestion complète ; le responsable principal coordonne la publication après validation. Le projet précédent `C:/Users/Admin/Documents/inastia-design-frontier` reste distinct : ne pas y reprendre les règles Atlas pour cette version. Relire les modifications et vérifier la version avant intégration à `main`. L'intégration Git du projet Vercel `inastia` assure le déploiement ; conserver cette liaison et les domaines existants. Ne pas forcer de push.
 
 Après chaque release, effectuer un contrôle production : domaines, accueil mobile/desktop, pages de services, liens FR/EN, contact, images, métadonnées et erreurs navigateur. Vérifier l'état du déploiement et les journaux serveur si nécessaire. Un envoi réel de formulaire doit être explicitement autorisé et identifié comme test.
+
+Pour modifier le contenu, éditer `src/home.ts` et `src/content/pages.ts` en FR/EN ; les quatre sections de gestion détaillent annonce/calendrier, voyageurs, préparation/signalement et décisions/coûts. Modifier `management-art.ts` et son CSS pour la scène, sans réécrire le moteur de mouvement pour un simple changement de texte. Les frais, le linge et les prestations restent à convenir ; aucune inclusion automatique dans la commission. Les trois fragments juridiques conservent les clauses historiques, même si elles mentionnent plusieurs prestations.
+
+La référence `900c977` et la sauvegarde vérifiée `C:/Users/Admin/Documents/Inastia-Sauvegardes/Inastia-2026-09-05_18-58-Cala-Lova.zip` permettent de retrouver l’ancien style et ses contenus. Préparer tout retour dans un dossier ou worktree séparé, comparer les changements et faire coordonner la réversion ou le redéploiement par le responsable principal ; aucun reset destructif ni force-push. Les mesures et preuves de baseline du dossier Frontier restent historiques : ne pas les réécrire comme résultats de cette version.
 
 La direction graphique et ses tokens sont décrits dans [docs/design-system.md](docs/design-system.md).

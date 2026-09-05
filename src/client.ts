@@ -1,6 +1,9 @@
 import "./styles.css";
+import "./management.css";
+import "./management-art.css";
 import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
+import { initManagementArt } from "./management-art-client.ts";
 
 const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
 const menu = document.querySelector<HTMLElement>("#mobile-menu");
@@ -74,3 +77,4 @@ matchMedia("(min-width:1024px)").addEventListener("change", (event) => {
 });
 initContact();
 initMotion();
+initManagementArt();

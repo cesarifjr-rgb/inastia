@@ -1,0 +1,56 @@
+/* Three parts of the same full-management service, in the restored design. */
+.management-pillar .management-pillar-list {
+  list-style: none;
+  margin: 6px 0 30px;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.management-pillar-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.management-pillar-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+.management-agreement {
+  margin-top: 36px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 16px;
+}
+.management-agreement dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin: 0 0 28px;
+}
+.management-agreement dt {
+  font-family: var(--display);
+  font-size: 21px;
+  letter-spacing: -0.035em;
+  margin-bottom: 10px;
+}
+.management-agreement dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+@media (max-width: 699px) {
+  .management-pillar .management-pillar-list { font-size: 13px; }
+  .management-agreement { margin-top: 24px; padding: 24px 20px; }
+  .management-agreement dl { grid-template-columns: 1fr; gap: 24px; }
+  .management-agreement dt { font-size: 20px; }
+  .management-agreement .button { width: 100%; }
+}

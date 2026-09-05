@@ -4,8 +4,6 @@ for (const prefix of ["", "/en"]) {
   test(`service and audit CTAs preserve the chosen request ${prefix || "FR"}`, async ({ page }) => {
     for (const [slug, intent] of [
       ["gestion-airbnb-corse-du-sud", "gestion"],
-      ["pack-lancement-airbnb", "annonce"],
-      ["menage-airbnb-corse-du-sud", "rotation"],
       ["audit-gratuit-potentiel-locatif", "audit"],
     ] as const) {
       await page.goto(`${prefix}/${slug}`);

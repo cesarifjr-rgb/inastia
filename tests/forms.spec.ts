@@ -53,8 +53,9 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
-    for (const intent of ["audit", "gestion", "annonce", "rotation"]) {
-      test(`preserves ${intent} from query through a simulated confirmation`, async ({
+    for (const intent of ["audit", "gestion", "annonce", "rotation", ""]) {
+      const expectedIntent = ["audit", "gestion"].includes(intent) ? intent : "";
+      test(`${intent && !expectedIntent ? `legacy ${intent} falls back to generic` : `preserves ${intent || "generic"}`} through a simulated confirmation`, async ({
         page,
       }) => {
         let payload: Record<string, string> | undefined;
@@ -62,11 +63,15 @@ for (const locale of ["fr", "en"] as const) {
           payload = route.request().postDataJSON();
           await route.fulfill({ json: { success: true } });
         });
-        await page.goto(`${path}?intent=${intent}`);
-        await expect(page.locator("#contact-intent")).toHaveValue(intent);
+        await page.goto(intent ? `${path}?intent=${intent}` : path);
+        await expect(page.locator("#contact-intent")).toHaveValue(expectedIntent);
+        expect(await page.locator("#contact-intent option").evaluateAll(options => options.map(option => (option as HTMLOptionElement).value))).toEqual(["", "audit", "gestion"]);
         await expect(page.locator(".language-link")).toHaveAttribute(
           "href",
-          new RegExp(`intent=${intent}`),
+          new URL(`${locale === "fr" ? "/en/contact" : "/contact"}${expectedIntent ? `?intent=${expectedIntent}` : ""}`, base).href,
+        );
+        if (!expectedIntent) await expect(page.locator("#contact-title")).toHaveText(
+          locale === "fr" ? "Parlons de votre bien." : "Let\u2019s talk about your property.",
         );
         if (intent === "audit") {
           await expect(page.locator("#contact-title")).toContainText(
@@ -88,8 +93,8 @@ for (const locale of ["fr", "en"] as const) {
           "data-state",
           "success",
         );
-        expect(payload?.intent).toBe(intent);
-        await expect(page.locator("#contact-intent")).toHaveValue(intent);
+        expect(payload?.intent).toBe(expectedIntent);
+        await expect(page.locator("#contact-intent")).toHaveValue(expectedIntent);
         if (intent === "audit")
           await expect(page.locator("#form-status")).toContainText(
             locale === "fr" ? "audit gratuit" : "free property review",
@@ -110,7 +115,7 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#contact-title")).toHaveText(
         locale === "fr"
           ? "Parlons de votre bien."
-          : "Let’s talk about your property.",
+          : "Let\u2019s talk about your property.",
       );
       await page.locator("#contact-intent").selectOption("audit");
       await expect(page.locator(".language-link")).toHaveAttribute(
@@ -124,7 +129,7 @@ for (const locale of ["fr", "en"] as const) {
         ),
       );
       await expect(page.locator("#contact-intent")).toHaveValue("audit");
-      await page.locator("#contact-intent").selectOption("rotation");
+      await page.locator("#contact-intent").selectOption("gestion");
       await fillContact(page);
       await page.evaluate(() => window.__solveChallenge());
       await page.locator("#submit-contact").click();
@@ -132,7 +137,7 @@ for (const locale of ["fr", "en"] as const) {
         "data-state",
         "success",
       );
-      expect(payload?.intent).toBe("rotation");
+      expect(payload?.intent).toBe("gestion");
     });
 
     test("required fields and absent challenge prevent sending", async ({

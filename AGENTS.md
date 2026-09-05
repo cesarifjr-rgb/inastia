@@ -11,7 +11,8 @@
 
 - Node.js 24, TypeScript, génération HTML statique et Vite 8.
 - Modifier les contenus dans `src/content/pages.ts` et les fragments juridiques dans `src/content/legal/`.
-- Modifier les templates dans `src/home.ts`, `src/components.ts` et `src/templates.ts`.
+- Modifier les templates dans `src/home.ts`, `src/components.ts` et `src/templates.ts`. La gestion complète est la seule offre ; annonce, voyageurs et maison en sont les volets. L’audit gratuit reste une première étape.
+- `src/management.css` adapte la composition. `management-art.ts`, `management-art.css` et `management-art-client.ts` portent la scène SVG/CSS en volume, ses textes FR/EN et sa suspension selon visibilité/pause. Conserver le hero `hospitalityArt` et le style sauvegardé.
 - `scripts/generate.ts` écrit `.generated/`, le sitemap et robots.txt.
 - Vite compile les documents générés vers `dist/`.
 - Ne jamais corriger directement `.generated/` ou `dist/`.
@@ -24,10 +25,11 @@
 
 - Définir le résultat attendu et faire le changement le plus simple possible.
 - Respecter le style existant ; éviter les refontes sans rapport avec la demande.
-- Garder les 14 routes françaises historiques et leurs liens compatibles.
+- Conserver 23 pages indexables (10 FR, 10 EN, trois légales FR) et la 404. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
 - Maintenir les pages FR/EN en parallèle, avec canonical et hreflang cohérents.
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
-- Conserver les coordonnées, le lien médiateur et les informations légales sourcées.
+- Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.
+- Les nouveaux liens et le sélecteur utilisent seulement les intents audit/gestion, plus échange général. Les anciens intents annonce/rotation restent acceptés par l’API pour compatibilité ; aucun tarif ou périmètre ne doit en être déduit.
 - Utiliser les photos existantes sans changer leur identité ni leur localisation.
 - Régénérer les assets avec `npm run assets` seulement si nécessaire.
 - Conserver les licences des polices locales dans `public/fonts/`.
@@ -46,7 +48,8 @@
 
 ## Livraison et secrets
 
-- Branche de refonte : `codex/inastia-redesign` ; autres branches de travail : `codex/…`.
+- Branche actuelle : `codex/gestion-complete`, fondée sur `900c977`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur porte sur le retour au style sauvegardé avec la gestion complète seule ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
+- Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.
 - Garder les clés Resend/Turnstile côté serveur, sans les afficher dans les sorties.

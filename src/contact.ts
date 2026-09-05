@@ -64,7 +64,7 @@ export function initContact(): void {
   const locale = form.dataset.locale === "en" ? "en" : "fr";
   const copy = messages[locale];
   const intent = form.querySelector<HTMLSelectElement>("#contact-intent");
-  const intents = ["audit", "gestion", "annonce", "rotation"];
+  const intents = ["audit", "gestion"];
   const initialIntent =
     new URLSearchParams(location.search).get("intent") ?? "";
   if (intent)

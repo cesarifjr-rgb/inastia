@@ -10,7 +10,7 @@ export const escape = (value: string): string =>
   );
 export const path = (locale: Locale, slug = ""): string =>
   `${locale === "en" ? "/en/" : "/"}${slug}`;
-export type ContactIntent = "audit" | "gestion" | "annonce" | "rotation";
+export type ContactIntent = "audit" | "gestion";
 export const contactPath = (locale: Locale, intent?: ContactIntent): string =>
   `${path(locale, "contact")}${intent ? `?intent=${intent}` : ""}`;
 export const t = (locale: Locale, fr: string, en: string): string =>

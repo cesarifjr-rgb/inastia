@@ -46,9 +46,13 @@ async function noOverflow(page: Page): Promise<void> {
   );
 }
 
-test("sitemap has 27 distinct published routes", () => {
-  expect(routes).toHaveLength(27);
-  expect(new Set(routes).size).toBe(27);
+test("sitemap has 23 distinct published routes and excludes redirected offers", () => {
+  expect(routes).toHaveLength(23);
+  expect(new Set(routes).size).toBe(23);
+  for (const prefix of ["", "/en"]) {
+    expect(routes).not.toContain(`${prefix}/pack-lancement-airbnb`);
+    expect(routes).not.toContain(`${prefix}/menage-airbnb-corse-du-sud`);
+  }
 });
 
 for (const route of routes) {
@@ -125,6 +129,9 @@ for (const route of routes) {
     const imageResponse = await request.get(new URL(ogImage!).pathname);
     expect(imageResponse.status()).toBe(200);
     expect(imageResponse.headers()["content-type"]).toMatch(/^image\//);
+    // Every published page must lead to the single management offer; historical
+    // standalone slugs remain redirects only and are not advertised in the UI.
+    await expect(page.locator('a[href*="/pack-lancement-airbnb"], a[href*="/menage-airbnb-corse-du-sud"], a[href*="intent=annonce"], a[href*="intent=rotation"]')).toHaveCount(0);
     await loadImages(page);
     await noOverflow(page);
     const name =

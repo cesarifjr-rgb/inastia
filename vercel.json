@@ -2,6 +2,12 @@
   "cleanUrls": true,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/pack-lancement-airbnb", "destination": "/gestion-airbnb-corse-du-sud", "permanent": true },
+    { "source": "/menage-airbnb-corse-du-sud", "destination": "/gestion-airbnb-corse-du-sud", "permanent": true },
+    { "source": "/en/pack-lancement-airbnb", "destination": "/en/gestion-airbnb-corse-du-sud", "permanent": true },
+    { "source": "/en/menage-airbnb-corse-du-sud", "destination": "/en/gestion-airbnb-corse-du-sud", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",

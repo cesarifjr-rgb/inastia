@@ -25,7 +25,7 @@ export const pages: Record<Locale, PageContent[]> = {
       eyebrow: "Porto-Vecchio",
       heading: "Votre location avance. Même à distance.",
       intro:
-        "À Porto-Vecchio, louer votre maison ne devrait pas occuper toutes vos journées. Annonce, voyageurs, passages sur place : Inastia coordonne ce que vous souhaitez déléguer, avec un suivi clair pour vous.",
+        "À Porto-Vecchio, louer votre maison ne devrait pas occuper toutes vos journées. Notre gestion complète relie l’annonce, les voyageurs et la coordination sur place, dans un périmètre défini avec vous.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, une maison du portfolio Inastia à Pinarello",
       sections: [
@@ -76,11 +76,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Conciergerie à Solenzara et Sari-Solenzara | Inastia",
       description:
-        "À Solenzara, Inastia organise votre location saisonnière : lancement, accueil, ménage, linge et suivi local. Un accompagnement adapté à votre maison.",
+        "Gestion complète de location saisonnière à Solenzara : annonce, voyageurs et coordination locale, selon les prestations convenues pour votre maison.",
       eyebrow: "Solenzara · Sari-Solenzara",
       heading: "À Solenzara, votre relais sur place.",
       intro:
-        "Une arrivée à organiser, du linge à préparer, une intervention à suivre. Nous prenons le relais sur le terrain pour que votre location continue à accueillir, même quand vous êtes ailleurs.",
+        "Une annonce à suivre, une arrivée à organiser, une maison à préparer. À Solenzara, notre gestion complète coordonne la location et les prestations sur place dans le cadre convenu avec vous.",
       image: "villa_lova",
       imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
       sections: [
@@ -99,14 +99,14 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Prendre le relais au bon moment",
-          text: "Première mise en location ou annonce déjà active : nous partons de votre situation. Nous pouvons préparer l’annonce et le guide voyageur, ou coordonner les séjours selon le niveau de délégation retenu.",
+          text: "Première mise en location ou annonce déjà active : nous partons de votre situation pour préparer la gestion complète. Le suivi de l’annonce, le guide voyageur et la coordination des séjours s’inscrivent dans un même accompagnement, dont le périmètre est convenu avec vous.",
         },
       ],
       faq: [
         {
           question: "Pouvez-vous préparer une première mise en location ?",
           answer:
-            "Oui. Notre accompagnement au lancement comprend l’audit du logement, la création ou l’amélioration de l’annonce, le calendrier et les règles de séjour.",
+            "Oui. Le premier audit gratuit permet de faire le point sur votre logement. La préparation de l’annonce, du calendrier et des règles de séjour peut ensuite être organisée dans le cadre de la gestion complète, selon les prestations convenues.",
         },
         {
           question: "Qui suit les petits travaux ?",
@@ -114,9 +114,10 @@ export const pages: Record<Locale, PageContent[]> = {
             "Nous pouvons signaler et coordonner les besoins de maintenance dans le cadre des prestations convenues. Les interventions et leurs coûts sont à préciser selon le besoin.",
         },
         {
-          question: "Puis-je confier seulement les rotations de séjour ?",
+          question:
+            "Comment les rotations s’intègrent-elles à la gestion complète ?",
           answer:
-            "Oui, l’accueil et les rotations constituent une offre dédiée. Nous en définissons les modalités selon le logement et votre calendrier.",
+            "Nous les coordonnons avec les réservations et les arrivées dans le cadre de la gestion complète. Les passages, le ménage, le linge et les consommables sont précisés dans la proposition, avec leurs coûts.",
         },
       ],
     },
@@ -125,11 +126,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Conciergerie à Zonza et Pinarello | Inastia",
       description:
-        "Accueil voyageurs, ménage, linge et gestion de location à Zonza et Pinarello. Inastia accompagne les propriétaires de maisons et villas à distance.",
+        "Gestion complète de location à Zonza et Pinarello. Inastia coordonne l’annonce, les voyageurs et les prestations convenues pour votre maison.",
       eyebrow: "Zonza · Pinarello",
       heading: "À Pinarello, votre maison bien entourée.",
       intro:
-        "Accueillir dans une villa familiale, c’est penser aux chambres, aux clés, aux consignes et aux demandes pendant le séjour. Inastia suit ces détails avec vous, pour que la distance pèse moins sur votre quotidien.",
+        "Accueillir dans une villa familiale, c’est penser aux chambres, aux clés, aux consignes et aux demandes pendant le séjour. Notre gestion complète relie ces détails au suivi de l’annonce et des réservations, selon le périmètre convenu.",
       image: "casa_verde",
       imageAlt: "Casa Verde, à Pinarello, Zonza",
       sections: [
@@ -148,7 +149,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Une présence quand il le faut",
-          text: "Clés, consommables, petite réparation : nous coordonnons les besoins sur place dans le périmètre défini ensemble. Le suivi de l’annonce et des prix peut compléter cette présence au fil de la saison.",
+          text: "Le suivi de l’annonce, des prix et du calendrier est relié à la coordination sur place dans notre gestion complète. Clés, consommables ou petite réparation : les besoins, les prestations et leurs coûts sont définis ensemble, et les interventions qui demandent votre décision vous sont signalées.",
         },
       ],
       faq: [
@@ -174,11 +175,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Conciergerie à Lecci et Saint-Cyprien | Inastia",
       description:
-        "Inastia coordonne annonces, accueil, ménage et linge à Lecci et Saint-Cyprien. Préparez votre saison avec un accompagnement local adapté à votre bien.",
+        "Gestion complète à Lecci et Saint-Cyprien : annonce, réservations et coordination des séjours. Un périmètre et des coûts définis pour votre bien.",
       eyebrow: "Lecci · Saint-Cyprien",
       heading: "Votre bien prêt. Vos séjours suivis.",
       intro:
-        "À Lecci et Saint-Cyprien, la qualité d’une location se joue avant et pendant le séjour. Nous relions l’annonce, l’accueil et la préparation du logement pour vous aider à déléguer avec des repères clairs.",
+        "À Lecci et Saint-Cyprien, la qualité d’une location se joue avant et pendant le séjour. Notre gestion complète relie l’annonce, les réservations, l’accueil et la préparation du logement dans le cadre défini ensemble.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, une maison du portfolio Inastia à Pinarello",
       sections: [
@@ -197,7 +198,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Votre calendrier, vos choix",
-          text: "Vos périodes personnelles font partie de l’organisation. Vous choisissez ce que vous gardez en main : les réservations avec un relais pour les rotations, le suivi d’annonce ou la gestion complète.",
+          text: "Vos périodes personnelles font partie du calendrier de location. Dans notre gestion complète, nous coordonnons les réservations et les séjours ; vous conservez les décisions qui vous reviennent concernant votre maison. Les prestations et leurs coûts sont définis avant le démarrage.",
         },
       ],
       faq: [
@@ -212,9 +213,9 @@ export const pages: Record<Locale, PageContent[]> = {
             "Oui. L’accueil personnalisé ou autonome est défini selon le logement et son organisation. Nous préparons les consignes nécessaires aux voyageurs.",
         },
         {
-          question: "Dois-je choisir la gestion complète ?",
+          question: "Que gardez-vous en main avec la gestion complète ?",
           answer:
-            "Non. Nous proposons aussi le lancement et le suivi d’annonce, ainsi que l’accueil et les rotations. Le choix dépend des tâches que vous souhaitez conserver.",
+            "Vous gardez vos séjours personnels et les décisions qui vous reviennent. Nous suivons l’annonce, les réservations et la coordination locale dans le périmètre convenu ; les prestations, le linge et les frais sont détaillés dans la proposition.",
         },
       ],
     },
@@ -223,11 +224,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Conciergerie à Ghisonaccia et Ventiseri | Inastia",
       description:
-        "Une conciergerie locale à Ghisonaccia, Ventiseri et Prunelli-di-Fiumorbo : annonces, ménage, linge et suivi de location avec Inastia.",
+        "Gestion complète de location à Ghisonaccia, Ventiseri et Prunelli-di-Fiumorbo : annonce, voyageurs et suivi local avec Inastia.",
       eyebrow: "Ghisonaccia · Ventiseri · Prunelli-di-Fiumorbo",
       heading: "Proche de votre bien. Présent pour vous.",
       intro:
-        "Depuis Travo, à Ventiseri, nous accompagnons les propriétaires autour de Ghisonaccia et de Prunelli-di-Fiumorbo. Une présence locale pour suivre le logement, préparer les séjours et vous tenir informé.",
+        "Depuis Travo, à Ventiseri, nous proposons la gestion complète de locations autour de Ghisonaccia et de Prunelli-di-Fiumorbo. Nous coordonnons l’annonce, les séjours et les prestations convenues, tout en vous tenant informé.",
       image: "villa_lova",
       imageAlt: "Cala Lova, une maison du portfolio Inastia à Solenzara",
       sections: [
@@ -270,32 +271,51 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "gestion-airbnb-corse-du-sud",
       kind: "service",
-      title: "Gestion de location saisonnière en Corse | Inastia",
+      title: "Gestion complète de location saisonnière en Corse | Inastia",
       description:
-        "Confiez le suivi de votre location à Inastia : annonces, calendrier, voyageurs et coordination sur place, de Ghisonaccia à Porto-Vecchio.",
+        "Gestion complète de votre location en Corse : annonce, calendrier, voyageurs et coordination locale, dans un cadre défini avec vous.",
       eyebrow: "Gestion complète",
       heading: "Déléguez le quotidien. Gardez la main.",
       intro:
-        "Une location réunit beaucoup de tâches. Inastia coordonne l’annonce, les voyageurs et les prestations sur place pour vous rendre du temps, tout en vous laissant la visibilité sur votre bien.",
+        "Inastia vous accompagne en gestion complète, de l’annonce au suivi des séjours. Nous coordonnons les réservations, les échanges voyageurs et les prestations sur place dans le périmètre convenu. Vous conservez vos séjours personnels et les décisions qui vous reviennent.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
         {
-          title: "Ce que vous confiez : annonce et séjours",
-          text: "Nous créons ou améliorons l’annonce, suivons les disponibilités et ajustons les prix selon la saison. Nous coordonnons la communication voyageurs, les arrivées, le ménage, le linge et les clés dans le périmètre convenu.",
+          title: "Une annonce préparée, un calendrier suivi",
+          text: "Nous créons ou améliorons votre annonce à partir des atouts réels du logement : présentation, équipements, règles de séjour et informations pratiques. Nous suivons les réservations et les disponibilités, puis ajustons les prix selon la saison. Vos périodes personnelles sont prises en compte dans le calendrier.",
           items: [
-            "Création ou optimisation d’annonce",
-            "Suivi des prix et disponibilités",
-            "Communication voyageurs et suivi des avis",
+            "Création ou amélioration de l’annonce",
+            "Suivi des réservations, des prix et des disponibilités",
+            "Prise en compte de vos séjours personnels",
           ],
         },
         {
-          title: "Ce que vous gardez : vos séjours et vos décisions",
-          text: "Vos périodes personnelles sont intégrées au calendrier. Les besoins de maintenance vous sont signalés ; nous suivons les interventions convenues et vous sollicitons pour les décisions qui vous reviennent.",
+          title: "Des échanges qui accompagnent les voyageurs",
+          text: "Avant l’arrivée, nous préparons les consignes d’accès et les informations utiles au séjour. Nous coordonnons l’accueil, suivons les échanges voyageurs et les demandes pendant leur séjour dans le cadre convenu. Le suivi des avis complète cette attention portée à leur expérience.",
+          items: [
+            "Consignes du logement et guide voyageur",
+            "Communication avant et pendant le séjour",
+            "Organisation des arrivées et des départs",
+          ],
         },
         {
-          title: "Commission, frais et durée à convenir",
-          text: "Votre proposition précise les prestations, la commission sur les revenus locatifs et les frais éventuels. La durée et les modalités figurent au contrat. Ce cadre est défini avant le démarrage.",
+          title: "Préparer la maison et vous signaler les besoins",
+          text: "Le calendrier permet d’organiser les clés, le ménage, le linge et les contrôles entre deux séjours. La checklist et les photos de fin d’intervention documentent la préparation prévue. Nous vous signalons les anomalies et les besoins de maintenance, puis coordonnons les interventions convenues. Le ménage, le linge, les consommables et les interventions sont précisés dans la proposition, avec leur périmètre et leurs coûts ; ils ne sont pas automatiquement compris dans la commission.",
+          items: [
+            "Préparation et contrôles selon les prestations convenues",
+            "Checklist et photos de fin d’intervention",
+            "Signalement des anomalies et coordination des suites convenues",
+          ],
+        },
+        {
+          title: "Vos décisions, dans un cadre défini ensemble",
+          text: "Vous gardez vos périodes d’usage personnel et les décisions qui vous reviennent concernant votre bien. Avant le démarrage, la proposition précise les prestations, la commission sur les revenus locatifs et les frais éventuels ; la durée et les modalités figurent au contrat. L’adresse du logement permet de confirmer la prise en charge. Un premier audit gratuit, qualitatif et restitué par appel ou email, permet de préparer cet échange sans prévoir de revenus locatifs.",
+          items: [
+            "Vos séjours personnels et vos décisions préservés",
+            "Commission, prestations et frais précisés dans la proposition",
+            "Durée et modalités définies au contrat",
+          ],
         },
       ],
       faq: [
@@ -314,103 +334,10 @@ export const pages: Record<Locale, PageContent[]> = {
           answer:
             "Non. La commission et les frais éventuels dépendent du bien, de la zone, de la saison et des services retenus. Une proposition personnalisée précise le coût et les conditions.",
         },
-      ],
-    },
-    {
-      slug: "menage-airbnb-corse-du-sud",
-      kind: "service",
-      title: "Ménage, linge et accueil voyageurs en Corse | Inastia",
-      description:
-        "Organisez vos rotations avec Inastia : ménage, linge, check-in, check-out et contrôles du logement, sur la côte est de la Corse.",
-      eyebrow: "Accueil & rotation séjour",
-      heading: "Vous gérez les réservations. Nous préparons l’accueil.",
-      intro:
-        "Vous souhaitez garder la gestion de vos annonces et réservations ? Confiez-nous le relais entre deux séjours : ménage, linge, arrivée, départ et contrôle du logement, selon vos besoins.",
-      image: "casa_verde",
-      imageAlt: "Casa Verde, à Pinarello, Zonza",
-      sections: [
         {
-          title: "Ce que vous confiez : la préparation entre deux séjours",
-          text: "Ménage, linge, consommables, remise des clés et consignes : nous préparons les passages selon vos besoins. L’accueil personnalisé ou autonome est organisé en amont, avec les informations utiles à l’arrivée et au départ.",
-          items: [
-            "Ménage après séjour",
-            "Linge selon les besoins convenus",
-            "Accueil et contrôle du logement",
-          ],
-        },
-        {
-          title: "Ce que vous gardez : annonce, réservations et décisions",
-          text: "Vous conservez la gestion de l’annonce et des réservations. Une checklist et des photos de fin d’intervention documentent la préparation. Nous vous signalons les anomalies constatées pour que vous puissiez décider des suites nécessaires.",
-        },
-        {
-          title: "Prestations et coût à convenir",
-          text: "La proposition tient compte de la surface, du nombre de chambres, des accès et des prestations souhaitées. Le ménage, le linge et les consommables y sont précisés, avec leur prise en charge et leur coût. Votre calendrier permet d’organiser les passages.",
-        },
-      ],
-      faq: [
-        {
-          question: "Puis-je garder la gestion de mes réservations ?",
+          question: "Le ménage, le linge et les consommables sont-ils inclus ?",
           answer:
-            "Oui. Cette offre permet de confier l’accueil et les rotations tout en conservant la gestion de l’annonce et des réservations.",
-        },
-        {
-          question: "Le linge est-il systématiquement inclus ?",
-          answer:
-            "Le linge et les consommables sont définis selon vos besoins dans la proposition. Leur prise en charge et leur coût sont précisés avant le démarrage.",
-        },
-        {
-          question: "Comment évaluez-vous une rotation ?",
-          answer:
-            "Nous prenons en compte la surface, le nombre de chambres, les accès et les prestations souhaitées. Votre calendrier permet ensuite de préparer l’organisation des passages.",
-        },
-      ],
-    },
-    {
-      slug: "pack-lancement-airbnb",
-      kind: "service",
-      title: "Lancement et gestion d’annonce Airbnb | Inastia",
-      description:
-        "Préparez votre mise en location : audit du logement, annonce, calendrier, prix de départ et suivi des ajustements avec Inastia en Corse.",
-      eyebrow: "Lancement & gestion d’annonce",
-      heading: "Votre maison mérite une annonce à sa mesure.",
-      intro:
-        "La mise en location commence avant la publication. Nous vous aidons à présenter votre logement, fixer les règles de séjour et préparer le calendrier, puis à ajuster l’annonce après son lancement.",
-      image: "villa_lova",
-      imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
-      sections: [
-        {
-          title: "Ce que vous confiez : préparer et ajuster l’annonce",
-          text: "Nous examinons la présentation et les équipements du logement, puis préparons ou améliorons l’annonce. Le titre, le texte, les règles de séjour, les prix de départ et les disponibilités s’appuient sur les atouts réels de votre bien.",
-          items: [
-            "Création ou amélioration de l’annonce",
-            "Texte et règles de séjour",
-            "Calendrier et prix de départ",
-          ],
-        },
-        {
-          title: "Ce qui reste à organiser : l’accueil et les rotations",
-          text: "Cette offre porte sur l’annonce. L’accueil, le ménage et les rotations font l’objet d’une offre dédiée, qui peut compléter votre accompagnement. Le niveau de délégation se définit selon les tâches que vous souhaitez conserver.",
-        },
-        {
-          title: "Suivi, durée et coût à convenir",
-          text: "Après publication, le suivi de la visibilité, du calendrier et des premiers retours permet d’ajuster l’annonce. Nous définissons ensemble le périmètre et la durée de ce suivi ; les prestations et leur coût sont précisés dans la proposition.",
-        },
-      ],
-      faq: [
-        {
-          question: "Cette offre convient-elle à une annonce déjà publiée ?",
-          answer:
-            "Oui. Nous pouvons reprendre une annonce existante, en revoir la présentation et travailler sur le calendrier, les prix et les règles de séjour.",
-        },
-        {
-          question: "Le ménage et l’accueil font-ils partie du lancement ?",
-          answer:
-            "Le lancement concerne la préparation et la gestion d’annonce. L’accueil et les rotations font l’objet d’une offre dédiée, qui peut compléter votre accompagnement.",
-        },
-        {
-          question: "Quand faut-il préparer son annonce ?",
-          answer:
-            "L’idéal est de prévoir la préparation avant l’ouverture du calendrier à la location. Nous étudions votre état d’avancement et les points à traiter en priorité.",
+            "Leur organisation fait partie du périmètre à définir pour votre bien. Les prestations, le linge, les consommables et leurs coûts sont détaillés dans la proposition ; la gestion complète ne signifie pas que tous ces frais sont inclus dans la commission.",
         },
       ],
     },
@@ -428,8 +355,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, une maison accompagnée par Inastia à Pinarello",
       sections: [
         {
-          title: "Définir ce que vous souhaitez déléguer",
-          text: "Inastia est une entreprise familiale, née de notre expérience de propriétaires. Le premier échange porte sur votre logement, sa commune et votre organisation actuelle. Vos attentes et vos périodes personnelles permettent de définir l’accompagnement.",
+          title: "Définir la gestion de votre location",
+          text: "Inastia est une entreprise familiale, née de notre expérience de propriétaires. Le premier échange porte sur votre logement, sa commune et votre organisation actuelle. Vos attentes et vos périodes personnelles permettent de définir le cadre de la gestion complète.",
         },
         {
           title: "Échanger directement sur le suivi de votre bien",
@@ -449,12 +376,12 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Comment se passe un premier échange ?",
           answer:
-            "Nous parlons de votre logement, de son emplacement et de votre organisation actuelle. Cela nous permet de vous orienter vers l’accompagnement adapté.",
+            "Nous parlons de votre logement, de son emplacement et de votre organisation actuelle. Le premier audit gratuit permet de préciser les priorités avant de définir les prestations et les conditions de la gestion complète.",
         },
         {
           question: "Faut-il déjà louer son bien pour vous contacter ?",
           answer:
-            "Non. Nous accompagnons aussi la préparation d’une première mise en location, avec un audit du logement et une offre de lancement d’annonce.",
+            "Non. Le premier audit gratuit est possible même sans annonce existante. La préparation de la première mise en location peut ensuite s’inscrire dans la gestion complète, selon le périmètre convenu.",
         },
       ],
     },
@@ -467,7 +394,7 @@ export const pages: Record<Locale, PageContent[]> = {
       eyebrow: "Audit gratuit",
       heading: "Identifiez les priorités de votre location.",
       intro:
-        "Un premier audit gratuit et qualitatif pour repérer les points à travailler et choisir votre accompagnement. Cette analyse ne constitue pas une prévision de revenus.",
+        "Un premier audit gratuit et qualitatif pour repérer les points à travailler et préparer la gestion complète de votre location. Il vous est restitué par appel ou email et ne constitue pas une prévision de revenus.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
@@ -481,19 +408,19 @@ export const pages: Record<Locale, PageContent[]> = {
           items: [
             "Points à améliorer en priorité",
             "Recommandations sur l’annonce ou l’expérience de séjour",
-            "Orientation vers l’accompagnement utile",
+            "Priorités pour préparer la gestion complète",
           ],
         },
         {
-          title: "3. Choisir la suite de l’accompagnement",
-          text: "Si vous souhaitez ensuite confier des prestations à Inastia, nous en précisons le périmètre, le coût et les conditions dans une proposition distincte. Le premier audit reste une analyse qualitative ; il ne garantit pas de revenus locatifs.",
+          title: "3. Définir la suite ensemble",
+          text: "Si vous souhaitez nous confier la gestion complète de votre location, nous en précisons les prestations, la commission, les frais et les conditions dans une proposition distincte. Le premier audit reste gratuit et qualitatif ; il ne garantit pas de revenus locatifs.",
         },
       ],
       faq: [
         {
           question: "L’audit est-il payant ?",
           answer:
-            "Non, ce premier audit qualitatif est gratuit. Si vous souhaitez ensuite un accompagnement, les prestations et leurs conditions vous sont présentées séparément.",
+            "Non, ce premier audit qualitatif est gratuit. Si vous souhaitez ensuite nous confier la gestion complète, les prestations et les conditions sont présentées dans une proposition distincte.",
         },
         {
           question: "Donnez-vous un montant de revenus garanti ?",
@@ -519,7 +446,7 @@ export const pages: Record<Locale, PageContent[]> = {
       eyebrow: "Porto-Vecchio",
       heading: "Your rental keeps moving. Even from afar.",
       intro:
-        "Renting out your Porto-Vecchio home should not take over your days. Listings, guests and visits to the property: Inastia coordinates the work you choose to hand over and keeps you informed.",
+        "Renting out your Porto-Vecchio home should not take over your days. Our full management brings together the listing, guests and local coordination within a scope agreed with you.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, an Inastia portfolio home in Pinarello",
       sections: [
@@ -569,11 +496,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Solenzara | Inastia",
       description:
-        "Inastia coordinates holiday rentals in Solenzara: listing launches, guest arrivals, cleaning, linen and local support tailored to your home.",
+        "Full holiday rental management in Solenzara: listings, guests and local coordination, within the services agreed for your home.",
       eyebrow: "Solenzara · Sari-Solenzara",
       heading: "Your local support in Solenzara.",
       intro:
-        "An arrival to arrange, linen to prepare, maintenance to follow up. We take care of the work on the ground so your rental can keep welcoming guests while you are elsewhere.",
+        "A listing to manage, an arrival to arrange, a home to prepare. In Solenzara, our full management coordinates the rental and local services within the terms agreed with you.",
       image: "villa_lova",
       imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
       sections: [
@@ -592,14 +519,14 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Step in when you need us",
-          text: "Whether you are launching a rental or already taking bookings, we start with your current arrangements. We can prepare the listing and guest guide or coordinate stays within the support you choose.",
+          text: "Whether you are launching a rental or already taking bookings, we start with your current arrangements to prepare full management. Listing support, the guest guide and stay coordination form one service, with its scope agreed with you.",
         },
       ],
       faq: [
         {
           question: "Can you help with a first rental launch?",
           answer:
-            "Yes. Our launch support includes reviewing the property, creating or improving the listing, and preparing the calendar and house rules.",
+            "Yes. The free initial review helps us understand your home. Preparing the listing, calendar and house rules can then be arranged as part of full management, within the agreed services.",
         },
         {
           question: "Who follows up on minor maintenance?",
@@ -607,9 +534,9 @@ export const pages: Record<Locale, PageContent[]> = {
             "We can report and coordinate maintenance needs within the agreed scope. The work required and its cost are defined according to the situation.",
         },
         {
-          question: "Can I book changeover support on its own?",
+          question: "How do changeovers fit into full management?",
           answer:
-            "Yes. Guest arrivals and changeovers are a separate service. We agree the arrangements around your property and calendar.",
+            "We coordinate them with bookings and arrivals as part of full management. Visits, cleaning, linen and supplies are specified in the proposal, including their costs.",
         },
       ],
     },
@@ -618,11 +545,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Zonza and Pinarello | Inastia",
       description:
-        "Guest arrivals, cleaning, linen and rental management in Zonza and Pinarello. Inastia supports villa and holiday home owners from a distance.",
+        "Full rental management in Zonza and Pinarello. Inastia coordinates the listing, guests and services agreed for your home.",
       eyebrow: "Zonza · Pinarello",
       heading: "Your Pinarello home, in good hands.",
       intro:
-        "Hosting in a family villa means thinking about bedrooms, keys, instructions and requests during the stay. Inastia helps you look after these details so distance asks less of your day.",
+        "Hosting in a family villa means thinking about bedrooms, keys, instructions and requests during the stay. Our full management connects these details with the listing and bookings within the agreed scope.",
       image: "casa_verde",
       imageAlt: "Casa Verde in Pinarello, Zonza",
       sections: [
@@ -641,7 +568,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Someone on the ground",
-          text: "Keys, supplies or a minor repair: we coordinate practical needs within the agreed scope. Listing and pricing support can complement this local presence through the season.",
+          text: "Our full management connects listing, pricing and calendar management with local coordination. Keys, supplies or a minor repair: needs, services and costs are agreed with you, and work requiring your decision is brought to your attention.",
         },
       ],
       faq: [
@@ -667,11 +594,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Lecci and Saint-Cyprien | Inastia",
       description:
-        "Inastia coordinates listings, guest arrivals, cleaning and linen in Lecci and Saint-Cyprien. Local support to help prepare your rental season.",
+        "Full rental management in Lecci and Saint-Cyprien: listings, bookings and stay coordination, with scope and costs agreed for your home.",
       eyebrow: "Lecci · Saint-Cyprien",
       heading: "A prepared home. A supported stay.",
       intro:
-        "In Lecci and Saint-Cyprien, a good rental experience begins before arrival. We bring together the listing, the welcome and property preparation so you can delegate with clear expectations.",
+        "In Lecci and Saint-Cyprien, a good rental experience begins before arrival. Our full management connects the listing, bookings, guest welcome and property preparation within the agreed scope.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, an Inastia portfolio home in Pinarello",
       sections: [
@@ -690,7 +617,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Your calendar, your choices",
-          text: "Your own stays are part of the plan. Choose what to keep managing: bookings with local changeover support, your listing with ongoing help, or full management.",
+          text: "Your personal stays form part of the rental calendar. Within full management, we coordinate bookings and stays; you keep the decisions that remain yours about the home. Services and costs are agreed before management begins.",
         },
       ],
       faq: [
@@ -705,9 +632,9 @@ export const pages: Record<Locale, PageContent[]> = {
             "Yes. Personal or self check-in is agreed according to the property and its arrangements. We prepare the instructions guests will need.",
         },
         {
-          question: "Do I have to choose full management?",
+          question: "What stays in your hands with full management?",
           answer:
-            "No. We also offer listing launch and management, as well as guest arrival and changeover support. The choice depends on the tasks you want to keep.",
+            "You keep your personal stays and the decisions that remain yours. We manage the listing, bookings and local coordination within the agreed scope; services, linen and costs are detailed in the proposal.",
         },
       ],
     },
@@ -716,11 +643,11 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Ghisonaccia and Ventiseri | Inastia",
       description:
-        "Local rental support in Ghisonaccia, Ventiseri and Prunelli-di-Fiumorbo: listings, cleaning, linen and property coordination with Inastia.",
+        "Full rental management in Ghisonaccia, Ventiseri and Prunelli-di-Fiumorbo: listings, guests and local coordination with Inastia.",
       eyebrow: "Ghisonaccia · Ventiseri · Prunelli-di-Fiumorbo",
       heading: "Close to your home. Here for you.",
       intro:
-        "Based in Travo, Ventiseri, we support owners around Ghisonaccia and Prunelli-di-Fiumorbo. Local help to look after the property, prepare stays and keep you informed.",
+        "Based in Travo, Ventiseri, we provide full rental management around Ghisonaccia and Prunelli-di-Fiumorbo. We coordinate the listing, stays and agreed services while keeping you informed.",
       image: "villa_lova",
       imageAlt: "Cala Lova, an Inastia portfolio home in Solenzara",
       sections: [
@@ -763,32 +690,51 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "gestion-airbnb-corse-du-sud",
       kind: "service",
-      title: "Holiday rental management in Corsica | Inastia",
+      title: "Full holiday rental management in Corsica | Inastia",
       description:
-        "Inastia coordinates your listing, calendar, guests and on-site services along Corsica’s east coast, from Ghisonaccia to Porto-Vecchio.",
+        "Full rental management in Corsica: listings, calendar, guest communication and local coordination, within a scope agreed with you.",
       eyebrow: "Full rental management",
       heading: "Hand over the work. Keep the choice.",
       intro:
-        "A holiday rental brings many tasks together. Inastia coordinates your listing, guests and on-site services to give you time back while keeping you informed about your home.",
+        "Inastia provides full rental management, from preparing your listing to following each stay. We coordinate bookings, guest communication and local services within the agreed scope. You keep your personal stays and the decisions that remain yours.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
         {
-          title: "What you delegate: listings and stays",
-          text: "We create or improve your listing, manage availability and adjust prices through the season. We coordinate guest communication, arrivals, cleaning, linen and keys within the agreed scope.",
+          title: "A prepared listing and a managed calendar",
+          text: "We create or improve your listing around the home’s real strengths: presentation, amenities, house rules and practical information. We manage bookings and availability and adjust prices through the season. Your personal stays are taken into account in the calendar.",
           items: [
             "Listing creation or improvement",
-            "Pricing and availability management",
-            "Guest communication and review follow-up",
+            "Booking, pricing and availability management",
+            "Your personal stays included in the calendar",
           ],
         },
         {
-          title: "What you keep: your stays and decisions",
-          text: "Your personal stays are included in the calendar. We report maintenance needs, follow up on agreed work and bring decisions that belong to you to your attention.",
+          title: "Communication throughout the guest experience",
+          text: "Before arrival, we prepare access instructions and useful information for the stay. We coordinate the welcome and handle guest communication and requests during the stay within the agreed scope. Following up on reviews is part of this attention to the guest experience.",
+          items: [
+            "House instructions and a guest guide",
+            "Communication before and during the stay",
+            "Arrival and departure arrangements",
+          ],
         },
         {
-          title: "Commission, fees and duration to agree",
-          text: "Your proposal sets out the services, commission on rental income and any additional fees. Duration and terms are specified in the contract. This framework is agreed before the service begins.",
+          title: "Preparing the home and reporting what needs attention",
+          text: "The calendar helps us coordinate keys, cleaning, linen and checks between stays. A checklist and photographs record the agreed preparations after each intervention. We report issues and maintenance needs, then coordinate the work agreed with you. Cleaning, linen, supplies and any interventions are specified in the proposal, including their scope and cost; they are not automatically covered by the management commission.",
+          items: [
+            "Preparation and checks within the agreed scope",
+            "A checklist and photographs after each intervention",
+            "Issues reported and agreed follow-up coordinated",
+          ],
+        },
+        {
+          title: "Your decisions, with clear terms",
+          text: "You keep your personal stays and the decisions that remain yours about your home. Before management begins, the proposal sets out the services, commission on rental income and any additional costs; the contract specifies duration and terms. The property’s address helps us confirm coverage. A free initial qualitative review, shared by phone or email, helps prepare this conversation without forecasting rental income.",
+          items: [
+            "Your personal stays and decisions preserved",
+            "Commission, services and additional costs set out in the proposal",
+            "Duration and terms specified in the contract",
+          ],
         },
       ],
       faq: [
@@ -807,103 +753,10 @@ export const pages: Record<Locale, PageContent[]> = {
           answer:
             "No. Commission and any additional fees depend on the property, location, season and selected services. A personalised proposal sets out the cost and terms.",
         },
-      ],
-    },
-    {
-      slug: "menage-airbnb-corse-du-sud",
-      kind: "service",
-      title: "Cleaning, linen and guest arrivals in Corsica | Inastia",
-      description:
-        "Plan rental changeovers with Inastia: cleaning, linen, check-in, check-out and property checks along Corsica’s east coast.",
-      eyebrow: "Guest arrivals & changeovers",
-      heading: "You manage bookings. We prepare the welcome.",
-      intro:
-        "Want to keep managing your listings and reservations? Let us coordinate the work between stays: cleaning, linen, arrivals, departures and property checks, according to your needs.",
-      image: "casa_verde",
-      imageAlt: "Casa Verde in Pinarello, Zonza",
-      sections: [
         {
-          title: "What you delegate: preparing for the next stay",
-          text: "Cleaning, linen, supplies, keys and instructions: we plan visits around your needs. Personal or self check-in is arranged in advance, with the information guests need for arrival and departure.",
-          items: [
-            "Cleaning after each stay",
-            "Linen according to agreed needs",
-            "Guest arrivals and property checks",
-          ],
-        },
-        {
-          title: "What you keep: listings, bookings and decisions",
-          text: "You continue to manage your listing and reservations. A checklist and photographs record the completed preparations. We report issues found so you can decide what further work is needed.",
-        },
-        {
-          title: "Services and cost to agree",
-          text: "The proposal takes account of floor area, bedrooms, access and the services requested. It specifies cleaning, linen and supplies, with the scope and cost of each. Your booking calendar helps us plan the visits.",
-        },
-      ],
-      faq: [
-        {
-          question: "Can I keep managing my own bookings?",
+          question: "Are cleaning, linen and supplies included?",
           answer:
-            "Yes. This service lets you delegate arrivals and changeovers while continuing to manage your listing and reservations.",
-        },
-        {
-          question: "Is linen always included?",
-          answer:
-            "Linen and supplies are agreed according to your needs in the proposal. The scope and cost are specified before the service begins.",
-        },
-        {
-          question: "How do you assess a changeover?",
-          answer:
-            "We consider floor area, bedrooms, access and the services required. Your booking calendar then helps us plan the visits.",
-        },
-      ],
-    },
-    {
-      slug: "pack-lancement-airbnb",
-      kind: "service",
-      title: "Airbnb listing launch and management | Inastia",
-      description:
-        "Prepare your rental launch in Corsica with Inastia: property review, listing, calendar, initial pricing and ongoing adjustments.",
-      eyebrow: "Listing launch & management",
-      heading: "A listing worthy of your home.",
-      intro:
-        "Launching a rental starts before publication. We help you present your home, set house rules and prepare the calendar, then adjust the listing after it goes live.",
-      image: "villa_lova",
-      imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
-      sections: [
-        {
-          title: "What you delegate: preparing and updating the listing",
-          text: "We review the property’s presentation and amenities, then prepare or improve the listing. Its title, copy, house rules, initial prices and availability reflect your home’s real strengths.",
-          items: [
-            "Listing creation or improvement",
-            "Copy and house rules",
-            "Calendar and initial pricing",
-          ],
-        },
-        {
-          title: "What still needs arranging: arrivals and changeovers",
-          text: "This service focuses on the listing. Guest arrivals, cleaning and changeovers are a separate offer that can complement your support. The level of delegation depends on the tasks you want to keep.",
-        },
-        {
-          title: "Ongoing support, duration and cost to agree",
-          text: "After publication, reviewing visibility, availability and early feedback helps guide adjustments. We agree the scope and duration of this support together; the services and their cost are set out in the proposal.",
-        },
-      ],
-      faq: [
-        {
-          question: "Is this suitable for an existing listing?",
-          answer:
-            "Yes. We can review an existing listing, improve its presentation and work on the calendar, pricing and house rules.",
-        },
-        {
-          question: "Does the launch include cleaning and guest arrivals?",
-          answer:
-            "This service covers listing preparation and management. Guest arrivals and changeovers are a separate offer that can complement your support.",
-        },
-        {
-          question: "When should I start preparing the listing?",
-          answer:
-            "Ideally, preparation begins before you open the calendar for bookings. We review your progress and identify the priorities with you.",
+            "Their arrangements form part of the scope agreed for your home. Services, linen, supplies and their costs are detailed in the proposal; full management does not mean all these costs are covered by the commission.",
         },
       ],
     },
@@ -921,8 +774,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, a home supported by Inastia in Pinarello",
       sections: [
         {
-          title: "Agree what you want to delegate",
-          text: "Inastia is a family-run company that grew from our own experience as owners. The first conversation covers your property, its location and your current arrangements. Your expectations and personal stays help define the support.",
+          title: "Agree how your rental will be managed",
+          text: "Inastia is a family-run company that grew from our own experience as owners. The first conversation covers your property, its location and your current arrangements. Your expectations and personal stays help define the scope of full management.",
         },
         {
           title: "Speak directly about your property",
@@ -942,12 +795,12 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "What happens in a first conversation?",
           answer:
-            "We discuss your property, its location and your current arrangements. This helps us guide you towards the right level of support.",
+            "We discuss your property, its location and your current arrangements. The free initial review helps identify priorities before agreeing the services and terms of full management.",
         },
         {
           question: "Do I need to be renting already?",
           answer:
-            "No. We also help owners prepare a first rental, with a property review and a listing launch service.",
+            "No. The free initial review is available even without an existing listing. Preparing a first rental can then form part of full management, within the agreed scope.",
         },
       ],
     },
@@ -960,7 +813,7 @@ export const pages: Record<Locale, PageContent[]> = {
       eyebrow: "Free rental review",
       heading: "Identify the priorities for your rental.",
       intro:
-        "A free initial qualitative review to identify what needs attention and help you choose the right support. This assessment is not a rental income forecast.",
+        "A free initial qualitative review to identify what needs attention and prepare for full rental management. It is shared by phone or email and is not a rental income forecast.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
@@ -974,19 +827,19 @@ export const pages: Record<Locale, PageContent[]> = {
           items: [
             "Priority areas for improvement",
             "Recommendations on the listing or guest experience",
-            "Guidance on useful support",
+            "Priorities for preparing full management",
           ],
         },
         {
-          title: "3. Choose your next steps",
-          text: "If you then wish to arrange services with Inastia, a separate proposal sets out their scope, cost and terms. The initial review remains a qualitative assessment; it does not guarantee rental income.",
+          title: "3. Agree the next steps together",
+          text: "If you would like us to take on full management of your rental, a separate proposal sets out the services, commission, additional costs and terms. The initial review remains free and qualitative; it does not guarantee rental income.",
         },
       ],
       faq: [
         {
           question: "Is there a fee for the review?",
           answer:
-            "No, this initial qualitative review is free. If you then wish to arrange ongoing support, the services and terms are presented separately.",
+            "No, this initial qualitative review is free. If you then wish to arrange full management, the services and terms are set out in a separate proposal.",
         },
         {
           question: "Do you guarantee an income figure?",

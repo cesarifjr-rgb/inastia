@@ -24,7 +24,7 @@ export function header(locale: Locale, slug: string): string {
   <header class="site-header"><div class="header-inner">
     <a class="wordmark" href="${path(locale)}">INASTIA <span class="brand-detail">CONCIERGERIE · CORSE</span></a>
     <nav class="desktop-nav" aria-label="${t(locale, "Navigation principale", "Main navigation")}">
-      <a href="${path(locale)}#services">${t(locale, "L’accompagnement", "Our services")}</a>
+      <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
       <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
       <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
@@ -36,7 +36,7 @@ export function header(locale: Locale, slug: string): string {
   </div>
   <nav id="mobile-menu" class="mobile-menu" aria-label="${t(locale, "Navigation mobile", "Mobile navigation")}" hidden>
     <span class="eyebrow">${t(locale, "Votre maison, notre attention", "Your home, our care")}</span>
-    <a href="${path(locale)}#services">${t(locale, "L’accompagnement", "Our services")}</a>
+    <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
     <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
     <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
     <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
@@ -50,8 +50,6 @@ export function footer(locale: Locale): string {
     <div class="footer-intro"><a class="wordmark" href="${path(locale)}">INASTIA</a><p>${t(locale, "L’hospitalité corse.<br>Le soin de votre maison.", "Corsican hospitality.<br>A home in good hands.")}</p><a class="text-link" href="mailto:contact@inastia.fr">contact@inastia.fr</a><a class="text-link" href="tel:+33613812550">+33 6 13 81 25 50</a></div>
     <div><h2 class="footer-heading">${t(locale, "Votre projet", "Your plans")}</h2><ul>
       <li><a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a></li>
-      <li><a href="${path(locale, "pack-lancement-airbnb")}">${t(locale, "Lancement d’annonce", "Listing launch")}</a></li>
-      <li><a href="${path(locale, "menage-airbnb-corse-du-sud")}">${t(locale, "Accueil & rotation séjour", "Guest welcome & changeovers")}</a></li>
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>
     <div><h2 class="footer-heading">${t(locale, "Notre territoire", "Our region")}</h2><ul>${zones.map(([name, slug]) => `<li><a href="${path(locale, slug)}">${name}</a></li>`).join("")}</ul></div>
