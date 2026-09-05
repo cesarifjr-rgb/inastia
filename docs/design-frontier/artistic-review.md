@@ -8,7 +8,7 @@ Les douze captures des trois directions montrent des différences de composition
 
 La première critique du prototype B a entraîné quatre corrections intégrées : une promesse explicite sur la location en Corse et le relais sur place ; une ligne dédiée au coût dans chaque offre ; des textes fonctionnels plus grands ; le retour des trois illustrations originales. Le passage d’un sélecteur à quatre radios permet aussi de lire entièrement les formulations anglaises longues. Le carnet garde la grammaire d’index et de filets de l’atlas, sans introduire une troisième palette.
 
-La revue de la première tranche a couvert accueil, gestion et contact en français et anglais, à 1440 × 1000 et 390 × 844. Les espaces et retours à la ligne de l’introduction du contact ont été corrigés. La revue utilisateur a ensuite fait retirer le double numéro de la section équipe et les index redondants de l’audit. Les images avant/après de ces corrections figurent dans les dossiers `first-slice`, `user-review` et `user-review-final` du dossier de preuves.
+La revue de la première tranche a couvert accueil, gestion et contact en français, à 1440 × 1000 et 390 × 844 : douze captures premier écran/pleine page. Un contrôle complémentaire à 390 px a couvert le titre de gestion en anglais et le parcours vers le contact anglais avec reprise de l’intention ; une treizième capture montre ce titre. Les espaces et retours à la ligne de l’introduction du contact ont été corrigés. La revue utilisateur a ensuite fait retirer le double numéro de la section équipe et les index redondants de l’audit. Les images avant/après de ces corrections figurent dans les dossiers `first-slice`, `user-review` et `user-review-final-playwright` du dossier de preuves.
 
 ## Observation du résultat intégré
 

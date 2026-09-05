@@ -83,7 +83,7 @@ Remove-Item Env:BASE_URL
 
 Les suites de mutation formulaire sont ignorées à distance. Garder cette protection et ne jamais déduire une autorisation d’envoi réel de l’autorisation de consulter un site. Ne pas enregistrer d’informations personnelles dans les URL, les fragments, le stockage navigateur ou les preuves de test. Les seules variables serveur requises sont `RESEND_API_KEY` et `TURNSTILE_SECRET_KEY` ; ne pas afficher leurs valeurs.
 
-La vérification de livraison doit identifier la révision et la cible testées, les résultats effectifs et les limites. Contrôler les 27 pages indexables et la 404, FR/EN, métadonnées, navigation, état des interactions, rendu et erreurs navigateur. Voir [revue interne du parcours](user-review.md), [direction](direction.md) et [sources géographiques](geography.md). Les autres passes de validation peuvent encore être en cours ; ne pas convertir un résultat intermédiaire en validation globale.
+La vérification de livraison doit identifier la révision et la cible testées, les résultats effectifs et les limites. Contrôler les 27 pages indexables et la 404, FR/EN, métadonnées, navigation, état des interactions, rendu et erreurs navigateur. Le [dossier A–H](README.md) consolide les passes terminées et les limites. Voir aussi [revue interne du parcours](user-review.md), [direction](direction.md) et [sources géographiques](geography.md). Ne pas étendre un résultat au-delà de son périmètre documenté.
 
 ## Sauvegarde et retour arrière
 
