@@ -16,7 +16,7 @@ export function header(locale: Locale, slug: string): string {
   );
   return `<a class="skip-link" href="#main">${t(locale, "Aller au contenu", "Skip to content")}</a>
   <header class="site-header"><div class="header-inner">
-    <a class="wordmark" href="${path(locale)}" aria-label="INASTIA CONCIERGERIE · CORSE — ${t(locale, "accueil", "home")}">INASTIA<span class="brand-detail" aria-hidden="true">CONCIERGERIE · CORSE</span></a>
+    <a class="wordmark" href="${path(locale)}">INASTIA <span class="brand-detail">CONCIERGERIE · CORSE</span></a>
     <nav class="desktop-nav" aria-label="${t(locale, "Navigation principale", "Main navigation")}">
       <a href="${path(locale)}#services">${t(locale, "L’accompagnement", "Our services")}</a>
       <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
