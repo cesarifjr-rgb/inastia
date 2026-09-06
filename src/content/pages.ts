@@ -286,9 +286,9 @@ export const pages: Record<Locale, PageContent[]> = {
             "Inastia est située à Travo, sur la commune de Ventiseri. Nous accompagnons notamment les biens à Ghisonaccia, Ventiseri et Prunelli-di-Fiumorbo.",
         },
         {
-          question: "Travaillez-vous avec Airbnb et Booking ?",
+          question: "Travaillez-vous avec Airbnb, Booking et Abritel ?",
           answer:
-            "La création ou l’amélioration d’annonce peut concerner Airbnb et Booking. Nous définissons les plateformes adaptées à votre projet, sans affiliation à ces plateformes.",
+            "Nous créons ou améliorons vos annonces sur Airbnb, Booking et Abritel, puis suivons leur mise à jour et les réservations. Cette diffusion fait partie de la gestion complète ; Inastia n’est pas affiliée à ces plateformes.",
         },
         {
           question: "Quels renseignements envoyer pour commencer ?",
@@ -308,52 +308,84 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "service",
       title: "Gestion complète de location saisonnière en Corse | Inastia",
       description:
-        "Gestion complète de votre location en Corse : annonce, calendrier, voyageurs et coordination locale, dans un cadre défini avec vous.",
+        "Gestion de votre location en Corse de A à Z : annonces, réservations, ménage, linge, clés, assistance voyageurs 24 h/24 et 7 j/7, cautions et dommages.",
       eyebrow: "Gestion complète",
-      heading: "Confiez votre location. Gardez vos décisions.",
+      heading: "Votre location gérée à 100 %, de A à Z.",
       intro:
-        "Vous souhaitez louer votre bien sans coordonner vous-même l’annonce, les voyageurs et chaque passage sur place ? Notre équipe familiale réunit ces tâches dans une seule offre de gestion complète. Vous gardez vos séjours personnels, selon le calendrier convenu, et les décisions qui vous reviennent.",
+        "De la création des annonces au suivi des dommages, notre équipe familiale prend en charge toutes les étapes de votre location en Corse. Réservations, prix, ménage, linge, clés et assistance voyageurs 24 h/24 et 7 j/7 : vous déléguez la gestion de A à Z. Vous gardez vos séjours personnels, encaissez directement les loyers et validez les dépenses supplémentaires.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
         {
-          title: "Votre annonce et vos réservations suivies ensemble",
-          text: "Première mise en location ou annonce déjà publiée : nous préparons ou améliorons la présentation de votre logement, ses équipements, ses règles de séjour et ses informations pratiques. Nous suivons ensuite les réservations, les disponibilités et les prix selon la saison. Vos séjours personnels sont bloqués dans le calendrier en tenant compte des réservations déjà confirmées. Vous n’avez plus à coordonner l’annonce et chaque arrivée séparément.",
+          title: "Annonces et diffusion : votre logement prêt à être réservé",
+          text: "Nous organisons les photos et la mise en valeur de votre logement, rédigeons son descriptif et renseignons les équipements, les règles de séjour et les informations pratiques. Nous créons ou améliorons vos annonces sur Airbnb, Booking et Abritel, puis les mettons à jour. Vous nous confiez la présentation et la diffusion de votre location de A à Z.",
           items: [
-            "Création ou amélioration de l’annonce",
-            "Suivi des réservations, des prix et des disponibilités",
-            "Prise en compte de vos séjours personnels",
+            "Photos et mise en valeur du logement",
+            "Rédaction et mise à jour des annonces",
+            "Diffusion sur Airbnb, Booking et Abritel",
           ],
         },
         {
-          title: "Un relais pour les échanges avec vos voyageurs",
-          text: "Nous préparons les consignes d’accès et les informations sur le logement, organisons l’arrivée et le départ, puis répondons aux questions liées au séjour. Les voyageurs échangent avec notre équipe ; nous vous signalons les points qui demandent votre décision. Nous suivons aussi leurs avis après le départ.",
+          title: "Réservations et voyageurs : nous prenons le relais",
+          text: "Nous traitons les demandes de réservation, examinons les informations de profil et les avis disponibles, et expliquons les règles de la maison. Nous répondons aux voyageurs avant, pendant et après leur séjour, préparons les informations utiles et suivons leurs avis après le départ. Vous déléguez les échanges et le suivi des réservations à notre équipe.",
           items: [
-            "Consignes du logement et guide voyageur",
-            "Communication avant et pendant le séjour",
-            "Organisation des arrivées et des départs",
+            "Suivi des demandes, profils et avis disponibles",
+            "Règles du logement expliquées aux voyageurs",
+            "Messages avant, pendant et après le séjour",
           ],
         },
         {
-          title: "Une maison préparée, des besoins signalés",
-          text: "Nous coordonnons les clés, le ménage et le linge autour des arrivées. Une checklist et des photos de fin d’intervention documentent la préparation du logement. Les anomalies vous sont signalées ; vous validez les interventions et les achats supplémentaires que nous organisons. La coordination est incluse dans la commission. Le ménage, le linge, les consommables et les réparations sont chiffrés séparément.",
+          title: "Ménage, linge et consommables : la maison prête entre deux séjours",
+          text: "Nous prenons en charge le ménage entre les séjours, la fourniture du linge et le réassort des consommables. Nous organisons chaque passage autour du calendrier des arrivées, puis vérifions la préparation avec une checklist et des photos de fin d’intervention. La coordination fait partie de la gestion ; le ménage, le linge et les consommables sont facturés séparément aux voyageurs selon le devis.",
           items: [
-            "Préparation du logement entre les séjours",
-            "Checklist et photos de fin d’intervention",
-            "Anomalies signalées, interventions soumises à votre accord",
+            "Ménage entre les séjours et fourniture du linge",
+            "Réassort des consommables",
+            "Vérification de la préparation, checklist et photos",
           ],
         },
         {
-          title: "Vos décisions et vos coûts, précisés avant de commencer",
-          text: "Vous encaissez directement les loyers et conservez vos périodes personnelles ainsi que la validation des interventions supplémentaires. Avant de décider, vous recevez une proposition qui distingue la commission de 20 % TTC des nuitées, les prestations séparées et les dépenses liées au logement. L’adresse et les accès permettent de confirmer la prise en charge ; la durée et les modalités figurent au contrat. Si vous préparez encore votre projet, l’audit gratuit permet de faire le point.",
+          title: "Tarification dynamique : optimiser les prix de votre location",
+          text: "Nous analysons le marché local, la saison et la demande pour ajuster les prix de vos nuitées et favoriser les réservations. Nous tenons à jour les disponibilités et organisons le calendrier. Vous choisissez vos séjours personnels ; nous bloquons ces dates en tenant compte des réservations déjà confirmées.",
           items: [
-            "Vos séjours personnels et vos décisions préservés",
-            "Commission, prestations et frais précisés dans la proposition",
-            "Durée et modalités définies au contrat",
+            "Prix ajustés selon la saison, la demande et le marché",
+            "Suivi des disponibilités et des réservations",
+            "Vos périodes personnelles intégrées au calendrier",
+          ],
+        },
+        {
+          title: "Arrivées, départs et clés : chaque séjour organisé",
+          text: "Nous préparons les consignes d’accès et le guide du logement, organisons l’accueil et gérons la remise des clés. L’arrivée est personnalisée ou autonome selon la maison et ses accès. Au départ, nous récupérons les clés ou vérifions leur restitution, contrôlons le logement et signalons les anomalies. Vous n’avez pas à organiser chaque arrivée et chaque départ.",
+          items: [
+            "Consignes d’accès et guide voyageur",
+            "Accueil et remise des clés adaptés à la maison",
+            "Restitution des clés et contrôle après le départ",
+          ],
+        },
+        {
+          title: "Assistance voyageurs 24 h/24, 7 j/7 et maintenance",
+          text: "Notre équipe est joignable par les voyageurs 24 h/24 et 7 j/7. Nous évaluons le problème avec eux, apportons les premières indications et organisons les intervenants nécessaires. Vous êtes informé des anomalies et validez les réparations et achats à votre charge. L’assistance est continue ; le délai d’une intervention sur place dépend du problème, des accès et de la disponibilité de l’intervenant.",
+          items: [
+            "Une équipe joignable 24 h/24 et 7 j/7",
+            "Évaluation du problème et organisation des intervenants",
+            "Réparations et achats soumis à votre accord",
+          ],
+        },
+        {
+          title: "Cautions et dommages : les démarches sont suivies",
+          text: "Nous suivons le dispositif de dépôt de garantie prévu par la plateforme ou le canal de réservation utilisé. En cas de dommage constaté, nous réunissons les constats, photos et justificatifs, puis suivons les démarches auprès de la plateforme et des assureurs concernés. Vous êtes informé de l’avancement et des décisions à prendre. Le traitement et l’indemnisation dépendent des conditions du dépôt ou de la couverture applicable.",
+          items: [
+            "Suivi du dépôt de garantie selon le canal de réservation",
+            "Constats, photos et justificatifs des dommages",
+            "Démarches auprès des plateformes et assureurs concernés",
           ],
         },
       ],
       faq: [
+        {
+          question: "Que signifie une gestion à 100 % ?",
+          answer:
+            "Nous prenons en charge toutes les étapes : annonces, réservations, voyageurs, ménage et linge, prix et calendrier, clés, assistance 24 h/24 et 7 j/7, puis suivi des cautions et dommages. La commission reste de 20 % TTC des nuitées avant frais de plateforme. Le ménage, le linge et les consommables sont facturés séparément aux voyageurs ; les réparations et achats supplémentaires restent à votre charge après accord. Gestion complète ne signifie donc pas tous frais compris.",
+        },
         {
           question: "Quels logements pouvez-vous prendre en charge ?",
           answer:
@@ -367,7 +399,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Que se passe-t-il en cas de problème pendant un séjour ?",
           answer:
-            "Les voyageurs contactent notre équipe pour les questions liées au logement et au séjour. Nous vous signalons les anomalies et les interventions qui nécessitent votre décision, puis coordonnons les suites autorisées. Les réparations et achats supplémentaires sont distincts de la commission et doivent être précisés avec vous.",
+            "Notre équipe est joignable par les voyageurs 24 h/24 et 7 j/7. Nous évaluons le problème, donnons les premières indications et organisons les intervenants nécessaires. Vous validez les réparations et achats à votre charge. La disponibilité de l’assistance est continue ; une intervention sur place est organisée selon le problème, les accès et la disponibilité de l’intervenant.",
         },
         {
           question: "Pouvez-vous reprendre une location déjà en cours ?",
@@ -421,7 +453,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Notre équipe coordonne les voyageurs et la maison",
-          text: "Nous préparons les consignes, répondons aux voyageurs et organisons l’accueil. Entre les séjours, nous coordonnons le ménage et le linge, puis vérifions la préparation à l’aide d’une checklist et de photos. Les anomalies et les besoins de maintenance vous sont signalés. Vous validez les interventions supplémentaires ; leurs coûts sont distincts de la commission.",
+          text: "Nous préparons les consignes, organisons l’accueil et répondons aux voyageurs 24 h/24 et 7 j/7. Entre les séjours, nous prenons en charge le ménage, la fourniture du linge et les consommables, puis vérifions la préparation avec une checklist et des photos. Nous suivons aussi les besoins de maintenance et les démarches liées aux dommages. Vous validez les réparations et achats supplémentaires à votre charge.",
         },
         {
           title: "Vous échangez directement avec notre équipe",
@@ -787,9 +819,9 @@ export const pages: Record<Locale, PageContent[]> = {
             "Inastia is based in Travo, in the municipality of Ventiseri. Our coverage includes Ghisonaccia, Ventiseri and Prunelli-di-Fiumorbo.",
         },
         {
-          question: "Do you work with Airbnb and Booking?",
+          question: "Do you work with Airbnb, Booking and Abritel?",
           answer:
-            "Listing creation or improvement can cover Airbnb and Booking. We agree which platforms suit your project; we are not affiliated with these platforms.",
+            "We create or improve your listings on Airbnb, Booking and Abritel, then keep them up to date and follow bookings. Distribution is part of full management; Inastia is not affiliated with these platforms.",
         },
         {
           question: "What should I send to get started?",
@@ -809,52 +841,84 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "service",
       title: "Full holiday rental management in Corsica | Inastia",
       description:
-        "Full rental management in Corsica: listings, calendar, guest communication and local coordination, within a scope agreed with you.",
+        "Rental management in Corsica from start to finish: listings, bookings, cleaning, linen, keys, 24/7 guest assistance, deposits and damage follow-up.",
       eyebrow: "Full rental management",
-      heading: "Hand over your rental. Keep your decisions.",
+      heading: "100% rental management, from start to finish.",
       intro:
-        "Want to rent out your home without coordinating the listing, guests and every visit yourself? Our family team brings these tasks together in one full management service. You keep your personal stays, within the agreed calendar, and the decisions that remain yours.",
+        "From creating listings to following up on damage, our family team handles every stage of your Corsican rental. Bookings, pricing, cleaning, linen, keys and 24/7 guest assistance: you hand over management from start to finish. You keep your own stays, receive rental payments directly and approve additional spending.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
         {
-          title: "Your listing and bookings managed together",
-          text: "Whether this is your first rental or an existing listing, we prepare or improve your property’s presentation, amenities, house rules and practical information. We then follow bookings, availability and seasonal pricing. Your own stays are blocked in the calendar, taking confirmed bookings into account. You no longer have to coordinate the listing and each arrival separately.",
+          title: "Listings and distribution: your home ready for bookings",
+          text: "We arrange photographs and presentation of your home, write its description and add amenities, house rules and practical information. We create or improve your listings on Airbnb, Booking and Abritel, then keep them up to date. You hand over your rental’s presentation and distribution from start to finish.",
           items: [
-            "Listing creation or improvement",
-            "Booking, pricing and availability management",
-            "Your personal stays included in the calendar",
+            "Property photographs and presentation",
+            "Listing copy and updates",
+            "Distribution on Airbnb, Booking and Abritel",
           ],
         },
         {
-          title: "Someone to handle guest communication",
-          text: "We prepare access instructions and property information, organise arrivals and departures, then answer questions about the stay. Guests communicate with our team; we flag the points that need your decision. We also follow up on their reviews after departure.",
+          title: "Bookings and guests: our team takes over",
+          text: "We handle booking enquiries, review available profile information and guest reviews, and explain the house rules. We answer guests before, during and after their stay, prepare useful information and follow up on their reviews after departure. Our team handles the conversations and booking follow-up for you.",
           items: [
-            "House instructions and a guest guide",
-            "Communication before and during the stay",
-            "Arrival and departure arrangements",
+            "Booking enquiries, available profiles and reviews",
+            "House rules explained to guests",
+            "Messages before, during and after each stay",
           ],
         },
         {
-          title: "A prepared home, with issues brought to your attention",
-          text: "We coordinate keys, cleaning and linen around arrivals. A checklist and photographs after each visit document the home’s preparation. We report any issues; you approve the additional work and purchases we arrange. Coordination is included in the commission. Cleaning, linen, supplies and repairs are priced separately.",
+          title: "Cleaning, linen and supplies: ready for the next stay",
+          text: "We take care of cleaning between stays, supplying linen and replenishing consumables. We schedule each visit around arrivals, then check preparation using a checklist and photographs at the end of the visit. Coordination is part of management; cleaning, linen and supplies are charged separately to guests as quoted.",
           items: [
-            "Property preparation between stays",
-            "A checklist and photographs after each intervention",
-            "Issues reported, additional work submitted for your approval",
+            "Cleaning between stays and linen provision",
+            "Replenishing guest supplies",
+            "Preparation checks, checklists and photographs",
           ],
         },
         {
-          title: "Your decisions and costs, agreed before we begin",
-          text: "You receive rental payments directly, keep your own stays and approve additional work. Before deciding, you receive a proposal separating the 20% commission including VAT on accommodation from other services and property expenses. The address and access arrangements help us confirm coverage; duration and terms are set out in the contract. If you are still planning, the free review helps you consider the next steps.",
+          title: "Dynamic pricing: getting the most from your nightly rates",
+          text: "We analyse the local market, season and demand to adjust your nightly prices and encourage bookings. We keep availability up to date and organise the calendar. You choose your own stays; we block those dates while taking confirmed bookings into account.",
           items: [
-            "Your personal stays and decisions preserved",
-            "Commission, services and additional costs set out in the proposal",
-            "Duration and terms specified in the contract",
+            "Rates adjusted for the season, demand and local market",
+            "Availability and booking management",
+            "Your own stays included in the calendar",
+          ],
+        },
+        {
+          title: "Arrivals, departures and keys: each stay organised",
+          text: "We prepare access instructions and the property guide, organise arrivals and handle key handovers. Check-in is personal or self-service depending on the home and its access. After departure, we collect the keys or check their return, inspect the property and report any issues. You no longer have to organise every arrival and departure.",
+          items: [
+            "Access instructions and a guest guide",
+            "Arrival and key handover arrangements suited to the home",
+            "Key returns and checks after departure",
+          ],
+        },
+        {
+          title: "24/7 guest assistance and maintenance",
+          text: "Our team can be reached by guests 24 hours a day, 7 days a week. We assess the problem with them, provide initial guidance and arrange the people needed to address it. We report issues to you, and you approve repairs and purchases at your expense. Assistance is available around the clock; the timing of an on-site visit depends on the problem, access and the contractor’s availability.",
+          items: [
+            "A team guests can reach 24 hours a day, 7 days a week",
+            "Problem assessment and contractor arrangements",
+            "Repairs and purchases submitted for your approval",
+          ],
+        },
+        {
+          title: "Deposits and damage: following the process through",
+          text: "We follow the security deposit arrangements provided by the platform or booking channel used. If damage is found, we gather records, photographs and supporting documents, then follow up with the platform and relevant insurers. We keep you informed of progress and the decisions needed. Processing and compensation depend on the terms of the deposit or applicable cover.",
+          items: [
+            "Deposit follow-up through the relevant booking channel",
+            "Damage records, photographs and supporting documents",
+            "Follow-up with platforms and relevant insurers",
           ],
         },
       ],
       faq: [
+        {
+          question: "What does 100% management mean?",
+          answer:
+            "We handle every stage: listings, bookings, guests, cleaning and linen, pricing and availability, keys, 24/7 assistance, and deposit and damage follow-up. The commission remains 20% including VAT of accommodation before platform fees. Cleaning, linen and supplies are charged separately to guests; additional repairs and purchases remain at your expense after approval. Full management therefore does not mean every cost is included.",
+        },
         {
           question: "Which properties can you manage?",
           answer:
@@ -868,7 +932,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "What happens if there is a problem during a stay?",
           answer:
-            "Guests contact our team with questions about the property and their stay. We report issues and work that needs your decision, then coordinate the steps you authorise. Repairs and additional purchases are separate from the commission and must be discussed with you.",
+            "Our team can be reached by guests 24 hours a day, 7 days a week. We assess the problem, provide initial guidance and arrange the people needed to address it. You approve repairs and purchases at your expense. Assistance is available around the clock; on-site work is arranged according to the problem, access and the contractor’s availability.",
         },
         {
           question: "Can you take over an existing rental?",
@@ -922,7 +986,7 @@ export const pages: Record<Locale, PageContent[]> = {
         },
         {
           title: "Our team coordinates guests and property care",
-          text: "We prepare instructions, answer guests and organise arrivals. Between stays, we coordinate cleaning and linen, then check preparation using a checklist and photographs. We report any issues and maintenance needs. You approve additional work; its costs are separate from the commission.",
+          text: "We prepare instructions, organise arrivals and answer guests 24 hours a day, 7 days a week. Between stays, we take care of cleaning, linen provision and supplies, then check preparation using a checklist and photographs. We also follow up on maintenance needs and damage claims. You approve additional repairs and purchases at your expense.",
         },
         {
           title: "You speak directly with our team",

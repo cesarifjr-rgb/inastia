@@ -6,6 +6,7 @@
 - Préserver le projet Vercel `inastia`, les domaines et l'intégration Git existants.
 - Ne pas inventer de services, tarifs, résultats, avis ou membres de l'équipe.
 - Les données métier sont sourcées dans le contenu existant ; signaler les contradictions.
+- La demande du 6 septembre 2026 confirme une gestion de A à Z et une assistance voyageurs 24 h/24, 7 j/7. Détailler les sept domaines : annonces/diffusion, réservations/voyageurs, ménage/linge/consommables, tarification/calendrier, arrivées/départs/clés, assistance/maintenance, cautions/dommages. La gestion à 100 % ne signifie pas tous frais compris ; ne pas en déduire un délai d’intervention physique ni une assurance dommages propre à Inastia.
 
 ## Architecture
 

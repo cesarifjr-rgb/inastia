@@ -48,8 +48,8 @@ for (const locale of ["fr", "en"] as const) {
     ),
     t(
       locale,
-      "Déléguez votre location saisonnière de Ghisonaccia à Porto-Vecchio. Une équipe familiale, des prestations et des frais précisés avant de commencer.",
-      "Hand over your holiday rental from Ghisonaccia to Porto-Vecchio. A family team, with services and fees explained before you start.",
+      "Votre location en Corse gérée de A à Z : annonces, prix, voyageurs, ménage, linge et assistance 24h/24, 7j/7. De Ghisonaccia à Porto-Vecchio.",
+      "Complete holiday rental management in Corsica: listings, pricing, guests, cleaning, linen and 24/7 assistance. From Ghisonaccia to Porto-Vecchio.",
     ),
     home(locale),
   );

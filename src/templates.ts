@@ -47,12 +47,14 @@ export function secondary(locale: Locale, page: PageContent): string {
     ? t(locale, "Un rappel sous 24 h, selon votre convenance.", "A callback within 24 hours, at a time that suits you.")
     : page.kind === "about"
       ? t(locale, "Votre lien avec le terrain.", "Your connection to the ground.")
-      : t(locale, "L’accompagnement en bref.", "Your support at a glance.");
+      : t(locale, "Toute votre location, entre nos mains.", "Your entire rental, in our hands.");
   const summaryItems = page.kind === "audit"
     ? [t(locale, "Une première analyse qualitative", "An initial qualitative review"), t(locale, "Les améliorations à prioriser", "The improvements to prioritise"), t(locale, "Les conditions d’une prise en charge possible", "Conditions for possible management")]
     : page.kind === "about"
       ? [t(locale, "Une relation directe avec notre équipe", "A direct relationship with our team"), t(locale, "Des prestations définies avec vous", "Services agreed with you"), t(locale, "Des informations pour vos décisions", "Information to support your decisions")]
-      : page.sections.flatMap((section) => section.items ?? []).slice(0, 3);
+      : page.kind === "service"
+        ? [t(locale, "Annonces, prix et réservations", "Listings, pricing and bookings"), t(locale, "Voyageurs et assistance 24 h/24, 7 j/7", "Guests and 24/7 assistance"), t(locale, "Ménage, linge et suivi de votre maison", "Cleaning, linen and care for your home")]
+        : page.sections.flatMap((section) => section.items ?? []).slice(0, 3);
   const summaryNote = page.kind === "audit"
     ? t(locale, "Gratuit, même sans annonce existante. Cette analyse ne constitue pas une prévision de revenus.", "Free, even without an existing listing. This review is not a rental income forecast.")
     : page.kind === "about"

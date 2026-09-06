@@ -22,6 +22,44 @@
   border-radius: 50%;
   background: var(--blue);
 }
+.hero-assistance {
+  display: inline-block;
+  margin: 18px 0 0;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+.full-service-detail { margin-top: 64px; }
+.full-service-detail > h3 {
+  max-width: 680px;
+  margin: 0 0 32px;
+  font: 400 clamp(28px, 3.3vw, 44px)/1.15 var(--display);
+  letter-spacing: -0.045em;
+}
+.full-service-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 44px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.full-service-list > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+.full-service-number { padding-top: 4px; font-size: 12px; color: var(--blue); }
+.full-service-list h4 { margin: 0 0 12px; font-size: 19px; line-height: 1.35; letter-spacing: -0.025em; }
+.full-service-list h4 a { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.full-service-list h4 svg { flex-shrink: 0; width: 19px; height: 19px; }
+.full-service-list p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
 .management-agreement {
   margin-top: 36px;
   padding: 32px;
@@ -48,6 +86,11 @@
   line-height: 1.8;
 }
 @media (max-width: 699px) {
+  .hero-assistance { font-size: 12px; }
+  .full-service-detail { margin-top: 40px; }
+  .full-service-list { grid-template-columns: 1fr; }
+  .full-service-list > li { padding-block: 22px; }
+  .full-service-list h4 { font-size: 18px; }
   .management-pillar .management-pillar-list { font-size: 13px; }
   .management-agreement { margin-top: 24px; padding: 24px 20px; }
   .management-agreement dl { grid-template-columns: 1fr; gap: 24px; }
