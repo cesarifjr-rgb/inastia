@@ -29,13 +29,17 @@ La présentation familiale reste collective, sans prénom ni portrait non autori
 
 Les pages secondaires associent le hero typographique à un résumé concret des prestations et une petite photo légendée, puis un sommaire, des sections et une FAQ. La page de gestion complète ajoute la scène illustrée et quatre sections : annonce/calendrier, voyageurs, préparation/signalement, puis décisions/coût/cadre. Les anciennes pages annonce et rotation ne sont plus générées ; leurs URLs sont redirigées vers cette page. Sur mobile, les colonnes se superposent. Le corps principal est à 16 px, les labels et aides utiles à 13–14 px ; le H1 d’accueil est limité à 80 px sur grand écran et 40–48 px sur mobile.
 
-Le contact rapproche les champs de l’introduction. Le motif choisi reste visible et modifiable ; le parcours audit précise une restitution par appel ou email. Conserver l’aide permanente, les états d’envoi et la place réservée à l’antispam. Les champs utilisent un fond opaque `#fffefb`, une bordure `#657b88` et une aide `#566973`. Vérifier les contrastes et la lisibilité des états réels après toute évolution.
+Le contact rapproche les champs de l’introduction. Le motif choisi reste visible et modifiable ; le parcours audit annonce un rappel sous 24 h selon la convenance du propriétaire, avec téléphone obligatoire. Ce délai concerne le premier échange, pas la réalisation de l’analyse. Conserver l’aide permanente, les états d’envoi et la place réservée à l’antispam. Les champs utilisent un fond opaque `#fffefb`, une bordure `#657b88` et une aide `#566973`. Vérifier les contrastes et la lisibilité des états réels après toute évolution.
 
 ## Motion et rendu statique
 
 `src/art.ts` fournit les illustrations `serviceArt(index)` réutilisées pour les volets de gestion et `hospitalityArt(locale)` pour le hero FR/EN. Les illustrations sont intégrées au HTML et restent visibles et statiques sans JavaScript. Elles sont décoratives : les labels et le texte HTML portent le message métier. Les mouvements des volets suivent le même bouton de pause et la même préférence de réduction des animations que le hero. `management-art-client.ts` observe la scène et l’état de pause, puis suspend son mouvement hors écran, onglet masqué et pendant la suspension de page ; la sélection des volets est définie dans le CSS.
 
 `src/motion.ts` gère GSAP/ScrollTrigger, la pause/reprise et la visibilité. Le CSS anime le porte-clés, la clé et les vagues lorsque l’illustration est active. La préférence `prefers-reduced-motion` initialise une pause ; l’utilisateur peut explicitement reprendre. Respecter cet état, la suspension hors écran/onglet masqué et la reprise BFCache. Une capture fixe ne démontre pas la qualité temporelle du mouvement.
+
+La scène de gestion associe la maison à trois diagrammes originaux : calendrier, échanges voyageurs et vérifications. Ils restent visibles sans JavaScript et en pause. Seul le détail correspondant au volet sélectionné s’anime, quand la scène est visible et les animations autorisées. Ces diagrammes sont séparés du mouvement de la maison pour garder les autres repères immobiles ; aucun calendrier, échange ou statut ne représente une donnée client réelle.
+
+Les références HostnFly et WeHost, consultées le 6 septembre 2026 à la demande de l’utilisateur, inspirent la clarté des bénéfices, les illustrations de tâches et le parcours de prise en charge. La palette, le hero, les dessins, les textes et les limites commerciales restent propres à Inastia. Ne pas reprendre leurs actifs, promesses de revenus, partenariats ou preuves chiffrées.
 
 ## Sources et régénération
 

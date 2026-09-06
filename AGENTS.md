@@ -49,7 +49,7 @@
 
 ## Livraison et secrets
 
-- Branche actuelle : `codex/copywriting-gestion`, fondée sur `d52901a`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur renforce les textes de gestion complète et précise le rappel d’audit, en conservant le style sauvegardé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
+- Branche actuelle : `codex/inspiration-motion`, fondée sur `c4a1e39`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur inspire les textes et visuels des références HostnFly et WeHost, avec des créations propres à Inastia et le style sauvegardé conservé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.

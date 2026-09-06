@@ -17,6 +17,16 @@ async function paused(house: Locator, page: Page) {
   expect(await snapshot(house)).toEqual(before);
 }
 
+
+async function pausedScene(page: Page) {
+  for (const element of await page.locator(".management-art-house, .management-diagram-motion").all()) await paused(element, page);
+}
+async function movingScene(page: Page) {
+  await moving(page.locator(".management-art-house"));
+  const value = await page.locator('[data-management-art] input:checked').inputValue();
+  await moving(page.locator(`[data-management-motion="${value}"]`));
+}
+
 for (const locale of ["fr", "en"]) for (const width of [390, 1440]) {
   test(`house three choices work by keyboard and keep explanatory text visible (${locale}, ${width})`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
@@ -33,6 +43,12 @@ for (const locale of ["fr", "en"]) for (const width of [390, 1440]) {
       await expect(art.locator(`input[value="${value}"] + span`)).toHaveCSS("outline-style", "solid");
       await expect(art.locator(`[data-management-copy="${value}"]`)).toHaveCSS("border-left-color", "rgb(28, 98, 133)");
       for (const copy of await art.locator("[data-management-copy]").all()) await expect(copy).toBeVisible();
+      await art.locator(".management-art-scene").scrollIntoViewIfNeeded();
+      await expect(art.locator("[data-management-diagram]:visible")).toHaveCount(3);
+      for (const detail of await art.locator("[data-management-motion]").all()) {
+        if (await detail.getAttribute("data-management-motion") === value) await moving(detail);
+        else await paused(detail, page);
+      }
     }
     await expect(art.locator("figcaption")).toContainText(locale === "fr" ? "ne représente pas un bien du portfolio" : "does not represent a portfolio property");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -45,21 +61,21 @@ for (const preference of ["no-preference", "reduce"] as const) {
     await page.goto("/");
     const house = page.locator(".management-art-house");
     await house.scrollIntoViewIfNeeded();
-    if (preference === "reduce") await paused(house, page);
+    if (preference === "reduce") await pausedScene(page);
     else {
-      await moving(house);
+      await movingScene(page);
       await page.locator("#motion-toggle").click();
-      await paused(house, page);
+      await pausedScene(page);
     }
     await page.locator("#motion-toggle").focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("#motion-toggle")).toHaveAttribute("aria-pressed", "false");
     await house.scrollIntoViewIfNeeded();
-    await moving(house);
+    await movingScene(page);
     if (preference === "no-preference") {
       await page.emulateMedia({ reducedMotion: "reduce" });
       await expect(page.locator("html")).toHaveAttribute("data-motion", "paused");
-      await paused(house, page);
+      await pausedScene(page);
     }
   });
 }
@@ -68,18 +84,18 @@ test("house suspends offscreen and when document visibility is simulated hidden"
   await page.goto("/");
   const house = page.locator(".management-art-house");
   await house.scrollIntoViewIfNeeded();
-  await moving(house);
+  await movingScene(page);
   await page.locator(".site-footer").scrollIntoViewIfNeeded();
-  await paused(house, page);
+  await pausedScene(page);
   await house.scrollIntoViewIfNeeded();
-  await moving(house);
+  await movingScene(page);
   await page.evaluate(() => {
     Object.defineProperty(document, "hidden", { configurable: true, get: () => true });
     document.dispatchEvent(new Event("visibilitychange"));
   });
-  await paused(house, page);
+  await pausedScene(page);
   await page.evaluate(() => { Reflect.deleteProperty(document, "hidden"); document.dispatchEvent(new Event("visibilitychange")); });
-  await moving(house);
+  await movingScene(page);
 });
 
 test("house choices remain usable without JavaScript and movement stays static", async ({ browser, baseURL }) => {
@@ -90,12 +106,14 @@ test("house choices remain usable without JavaScript and movement stays static",
     const house = page.locator(".management-art-house");
     await house.scrollIntoViewIfNeeded();
     await expect(house).toBeVisible();
-    await paused(house, page);
+    await expect(page.locator("[data-management-diagram]:visible")).toHaveCount(3);
+    await pausedScene(page);
     await page.locator('[data-management-art] input[value="listing"]').focus();
     await page.keyboard.press("ArrowRight");
     await expect(page.locator('[data-management-art] input[value="guests"]')).toBeChecked();
     await expect(page.locator('[data-management-copy="guests"]')).toHaveCSS("border-left-color", "rgb(28, 98, 133)");
     await expect(page.locator("[data-management-copy]:visible")).toHaveCount(3);
+    await pausedScene(page);
   } finally { await context.close(); }
 });
 
@@ -111,14 +129,14 @@ test("house restores actual BFCache with working pause controls", async ({ baseU
     const original = await page.evaluate(() => Reflect.get(window, "houseDocumentId"));
     const house = page.locator(".management-art-house");
     await house.scrollIntoViewIfNeeded();
-    await moving(house);
+    await movingScene(page);
     await page.locator('.site-footer a[href="/about"]').click();
     await page.goBack({ waitUntil: "commit" });
     await expect.poll(() => page.evaluate(() => Reflect.get(window, "houseRestored"))).toBe(true);
     expect(await page.evaluate(() => Reflect.get(window, "houseDocumentId"))).toBe(original);
     await house.scrollIntoViewIfNeeded();
-    await moving(house);
+    await movingScene(page);
     await page.locator("#motion-toggle").click();
-    await paused(house, page);
+    await pausedScene(page);
   } finally { await browser.close(); }
 });

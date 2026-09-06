@@ -24,8 +24,28 @@ export function managementArt(locale: Locale): string {
       <path d="m198 340 63 34-18 10-63-35Z" fill="#a67853"/><path d="m184 351v17m56 16v16m18-26v17" stroke="#7d654e" stroke-width="4"/>
       <g fill="#647e60"><ellipse cx="116" cy="287" rx="25" ry="16"/><ellipse cx="121" cy="270" rx="20" ry="27"/><ellipse cx="504" cy="277" rx="24" ry="31"/></g><path d="M119 280v49m385-48v34" stroke="#977454" stroke-width="6"/><path d="m100 333 19-10 21 11-20 11Z" fill="#c49b76"/>
       </g>
-      <g class="management-art-zone management-art-zone-listing"><path d="m87 138 72-26 0 101-72 26Z" fill="#17455b" opacity=".12" transform="translate(6 9)"/><path d="m82 130 72-26v101l-72 26Z" fill="#fffaf3" stroke="#adc4c9" stroke-width="2"/><path d="m92 138 52-19v35l-52 19Z" fill="#c9e2e9"/><path d="m98 157 13-18 23 9v9l-36 13Z" fill="#6896a5"/><path d="m94 187 46-17m-46 28 34-12m-34 24 42-15" stroke="#47778a" stroke-width="3"/><circle cx="153" cy="107" r="15" fill="#1c6285"/><path d="m147 107 4 4 8-9" fill="none" stroke="#fffaf3" stroke-width="2.5" stroke-linecap="round"/></g>
-      <g class="management-art-zone management-art-zone-guests"><path d="m480 158 47-26 40 23v48l-47 27-40-24Z" fill="#f0d49f" opacity=".32"/><circle cx="506" cy="149" r="18" fill="none" stroke="#d7ad64" stroke-width="9"/><path d="m518 163 37 42m-12-13 10-9m-2 18 10-9" fill="none" stroke="#d7ad64" stroke-width="9" stroke-linejoin="round"/><path d="m493 248 49-27 32 18-49 28Z" fill="#fffaf3" stroke="#adc4c9" stroke-width="1.5"/><path d="m493 248 30-2 19-25" fill="none" stroke="#adc4c9" stroke-width="1.5"/></g>
+    </svg><svg class="management-art-diagrams" viewBox="0 0 640 510" fill="none" focusable="false" aria-hidden="true">
+      <g class="management-art-zone management-art-zone-listing management-art-diagram" data-management-diagram="listing">
+        <rect x="47" y="151" width="132" height="142" rx="16" fill="#17455b" opacity=".1"/>
+        <rect x="42" y="144" width="132" height="142" rx="16" fill="#fffaf3" stroke="#adc4c9" stroke-width="2"/>
+        <path d="M58 144h100a16 16 0 0 1 16 16v20H42v-20a16 16 0 0 1 16-16Z" fill="#c9e2e9"/>
+        <path d="M76 135v20m64-20v20" stroke="#1c6285" stroke-width="5" stroke-linecap="round"/>
+        <g fill="#d8e3e3"><rect x="61" y="198" width="19" height="19" rx="4"/><rect x="97" y="198" width="19" height="19" rx="4"/><rect x="133" y="198" width="19" height="19" rx="4"/><rect x="61" y="232" width="19" height="19" rx="4"/><rect x="97" y="232" width="19" height="19" rx="4"/><rect x="133" y="232" width="19" height="19" rx="4"/></g>
+        <g class="management-diagram-motion management-calendar-marker" data-management-motion="listing"><rect x="61" y="198" width="19" height="19" rx="4" fill="#1c6285"/><path d="m65 207 4 4 7-8" stroke="#fffaf3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g>
+      <g class="management-art-zone management-art-zone-guests management-art-diagram" data-management-diagram="guests">
+        <path d="M469 119h105a13 13 0 0 1 13 13v42a13 13 0 0 1-13 13h-67l-23 18v-18h-15a13 13 0 0 1-13-13v-42a13 13 0 0 1 13-13Z" fill="#17455b" opacity=".1" transform="translate(4 6)"/>
+        <path d="M469 119h105a13 13 0 0 1 13 13v42a13 13 0 0 1-13 13h-67l-23 18v-18h-15a13 13 0 0 1-13-13v-42a13 13 0 0 1 13-13Z" fill="#fffaf3" stroke="#adc4c9" stroke-width="2"/>
+        <path d="M476 141h66m-66 16h43" stroke="#86aab7" stroke-width="5" stroke-linecap="round"/>
+        <g class="management-diagram-motion management-guest-reply" data-management-motion="guests"><path d="M496 208h91a12 12 0 0 1 12 12v30a12 12 0 0 1-12 12h-10v16l-23-16h-58a12 12 0 0 1-12-12v-30a12 12 0 0 1 12-12Z" fill="#1c6285"/><g fill="#f8f3e9"><circle cx="518" cy="235" r="4"/><circle cx="542" cy="235" r="4"/><circle cx="566" cy="235" r="4"/></g></g>
+      </g>
+      <g class="management-art-zone management-art-zone-home management-art-diagram" data-management-diagram="home">
+        <rect x="72" y="346" width="137" height="126" rx="14" fill="#17455b" opacity=".1"/>
+        <rect x="67" y="340" width="137" height="126" rx="14" fill="#fffaf3" stroke="#adc4c9" stroke-width="2"/>
+        <rect x="107" y="331" width="57" height="18" rx="7" fill="#d8b88b"/>
+        <g stroke="#aec5c9" stroke-width="3" stroke-linecap="round"><path d="M119 373h61m-61 29h49m-49 29h57"/><rect x="85" y="366" width="16" height="16" rx="4"/><rect x="85" y="395" width="16" height="16" rx="4"/><rect x="85" y="424" width="16" height="16" rx="4"/></g>
+        <g class="management-diagram-motion management-home-check" data-management-motion="home"><circle cx="195" cy="439" r="24" fill="#1c6285"/><path d="m183 439 8 8 15-17" stroke="#fffaf3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+      </g>
     </svg></div><figcaption>${t(locale, "Illustration de la gestion — cette maison ne représente pas un bien du portfolio.", "Management illustration — this house does not represent a portfolio property.")}</figcaption></figure>
     <div class="management-art-copy">
       <div data-management-copy="listing"><span class="management-art-index" aria-hidden="true">01</span><h3>${t(locale, "Avant la réservation", "Before a booking")}</h3><p>${t(locale, "Une présentation soignée, des prix suivis au fil de la saison et un calendrier à jour. Nous gérons les éléments de votre annonce qui préparent les prochains séjours.", "A considered presentation, pricing reviewed through the season and an up-to-date calendar. We manage the details of your listing ahead of the next stays.")}</p></div>
