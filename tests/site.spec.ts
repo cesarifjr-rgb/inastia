@@ -12,14 +12,17 @@ mkdirSync(screenshotDirectory, { recursive: true });
 
 async function loadImages(page: Page): Promise<void> {
   for (const image of await page.locator("img").all()) {
-    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(element => (element.closest(".management-art-scene") ?? element).scrollIntoView({ block: "center", behavior: "instant" }));
     await expect(image).toHaveJSProperty("complete", true);
     expect(
       await image.evaluate(
         (element) => (element as HTMLImageElement).naturalWidth,
       ),
     ).toBeGreaterThan(0);
-    await expect(image).toHaveAttribute("alt", /.+/);
+    const decorative = await image.evaluate(element =>
+      Boolean(element.parentElement?.closest('[aria-hidden="true"]')),
+    );
+    await expect(image).toHaveAttribute("alt", decorative ? /.*/ : /.+/);
   }
   // A full-page capture must include sections revealed by actual scrolling.
   for (const section of await page.locator("[data-reveal]").all()) {

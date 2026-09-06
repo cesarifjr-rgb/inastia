@@ -1,5 +1,13 @@
 import { test, expect, chromium, type Page, type Locator } from "@playwright/test";
 
+async function expectHouseImageLoaded(house: Locator) {
+  const image = house.locator("img");
+  await house.evaluate(element => element.closest(".management-art-scene")?.scrollIntoView({ block: "center", behavior: "instant" }));
+  await expect(image).toBeVisible();
+  await expect(image).toHaveJSProperty("complete", true);
+  expect(await image.evaluate(element => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+}
+
 async function snapshot(house: Locator) {
   return house.evaluate(element => ({ transform: getComputedStyle(element).transform, animations: element.getAnimations().map(animation => ({ name: animation instanceof CSSAnimation ? animation.animationName : animation.id, state: animation.playState, time: animation.currentTime })) }));
 }
@@ -32,6 +40,7 @@ for (const locale of ["fr", "en"]) for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto(locale === "fr" ? "/" : "/en/");
     const art = page.locator("[data-management-art]");
+    await expectHouseImageLoaded(art.locator(".management-art-house"));
     const first = art.locator('input[value="listing"]');
     await first.focus();
     await page.keyboard.press("Shift+Tab");
@@ -106,6 +115,7 @@ test("house choices remain usable without JavaScript and movement stays static",
     const house = page.locator(".management-art-house");
     await house.scrollIntoViewIfNeeded();
     await expect(house).toBeVisible();
+    await expectHouseImageLoaded(house);
     await expect(page.locator("[data-management-diagram]:visible")).toHaveCount(3);
     await pausedScene(page);
     await page.locator('[data-management-art] input[value="listing"]').focus();
