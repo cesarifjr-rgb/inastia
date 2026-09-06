@@ -27,9 +27,13 @@ et de conservation des preuves figure dans [le suivi des demandes](lead-operatio
 Les CGV corrigées distinguent consommateurs/professionnels, rétractation et
 exécution anticipée, pénalités professionnelles et compétence territoriale.
 Elles reflètent l'encaissement direct des loyers par les propriétaires ; elles
-ne certifient aucun statut professionnel. Les coordonnées CM2C du PDF existant
-figurent aussi en HTML. Les modèles de contrat et la preuve d'adhésion CM2C en
-cours restent à fournir.
+ne certifient aucun statut professionnel. L’attestation nominative CM2C d’INASTIA
+(SIRET 94932970000015), vérifiée le 6 septembre 2026, est publiée avec l’accord
+de l’entreprise à `/attestation-cm2c-inastia.pdf`. Elle porte une échéance au
+13 février 2029, également indiquée en HTML dans les mentions légales et les
+CGV. La convention signée reste conservée hors du dépôt. Vérifier le
+renouvellement et actualiser l’attestation et les textes avant cette échéance.
+Les modèles contractuels restent à finaliser séparément.
 
 ## Cartographie et éléments vérifiés
 
@@ -91,7 +95,7 @@ vaut pas consentement. Aucune CMP ni mesure d'audience n'a été ajoutée.
   Vercel et organisation de la conservation des preuves avant expiration chez
   Resend ; contrôle des options de suivi du domaine Resend existant.
 - Analyse des opérations Turnstile au regard de l'article 82 et formalisation de
-  la mise en balance des intérêts ; modèles contractuels et adhésion CM2C.
+  la mise en balance des intérêts ; modèles contractuels.
 - Le test synthétique unique du 6 septembre 2026 est livré par Resend et sa
   bonne réception a été confirmée par l’entreprise. Les preuves détaillées
   sont conservées séparément du dépôt ; aucun nouvel envoi n’est requis.
@@ -102,6 +106,15 @@ AUD-01 et AUD-08 restent partiels sur ces points opérationnels ; les textes ne
 constituent pas une validation juridique générale.
 
 ## Sources consultées le 6 septembre 2026
+
+- Attestation nominative CM2C d’INASTIA récupérée dans l’espace adhérent,
+  échéance au 13 février 2029 ; publication du PDF original autorisée par
+  l’entreprise. SHA-256 :
+  `a8814962555318af70e31543d0f4f743e0dd1ea40ca8ab1e1dff7f337940116b`.
+- [Modalités publiques de saisine CM2C](https://www.cm2c.net/comment-nous-saisir.php) :
+  adresse électronique `declarer-un-litige@cm2c.net` et formulaire en ligne.
+- [Charte CM2C](https://www.cm2c.net/charte.php) : recours gratuit après une
+  réclamation écrite préalable datant de moins d’un an.
 
 - [RGPD, information et droits — CNIL](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3)
   et [FAQ CNIL cookies, CAPTCHA](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/FAQ).
