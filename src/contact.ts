@@ -29,7 +29,7 @@ const messages = {
     expired: "La vérification a expiré. Veuillez la renouveler avant l’envoi.",
     sending: "Envoi de votre demande…",
     success:
-      "Votre demande a bien été envoyée. Notre équipe vous recontactera pour échanger sur votre projet.",
+      "Votre demande a bien été envoyée. Nous examinons votre projet et vous répondons par le canal choisi pour préparer notre premier échange.",
     error:
       "Votre demande n’a pas pu être envoyée. Vos informations sont conservées. Réessayez ou contactez-nous par téléphone ou par e-mail.",
     timeout:
@@ -49,7 +49,7 @@ const messages = {
       "The verification has expired. Please complete it again before sending.",
     sending: "Sending your enquiry…",
     success:
-      "Your enquiry has been sent. Our team will contact you to discuss your property.",
+      "Your enquiry has been sent. We will review your plans and reply through your chosen channel to prepare our first conversation.",
     error:
       "Your enquiry could not be sent. Your information has been kept. Please try again or contact us by phone or email.",
     timeout:
@@ -74,6 +74,7 @@ export function initContact(): void {
   const locale = form.dataset.locale === "en" ? "en" : "fr";
   const copy = messages[locale];
   const intent = form.querySelector<HTMLSelectElement>("#contact-intent");
+  const contactPreference = form.querySelector<HTMLSelectElement>("#contactPreference");
   const marketingPhone = form.querySelector<HTMLInputElement>("#marketingPhone");
   const intents = ["audit", "gestion"];
   const initialIntent =
@@ -93,27 +94,36 @@ export function initContact(): void {
       title.textContent =
         locale === "fr"
           ? audit
-            ? "Votre audit gratuit."
-            : management ? "Confiez-nous la gestion de votre bien." : "Parlons de votre bien."
+            ? "Présentez-nous votre projet pour l’audit gratuit"
+            : management ? "Préparons la gestion de votre maison" : "Parlons de votre bien."
           : audit
-            ? "Your free property review."
-            : management ? "Let us manage your property." : "Let’s talk about your property.";
+            ? "Tell us about your plans for a free review"
+            : management ? "Let’s prepare the management of your home" : "Let’s talk about your property.";
     if (lead) lead.textContent = locale === "fr"
       ? audit
-        ? "Nous vous rappelons sous 24 h, selon votre convenance, pour parler de votre bien et préparer votre audit gratuit. Indiquez votre numéro et vos disponibilités."
-        : "Présentez-nous votre bien et votre situation. Un premier échange par appel ou email permettra de préciser la gestion complète et le cadre adapté à votre logement."
+        ? "Votre logement est déjà loué ou vous préparez une première saison ? Présentez-nous votre projet pour identifier les priorités. Nous vous rappelons sous 24 h, selon votre convenance, pour préparer votre audit gratuit."
+        : "Indiquez où se trouve votre logement et ce que vous souhaitez déléguer. Ces informations nous permettent de vérifier sa prise en charge et de préparer notre premier échange."
       : audit
-        ? "We call you back within 24 hours, at a time that suits you, to prepare your free review."
-        : "Tell us about your property and current situation. An initial conversation by phone or email will help define full management and the arrangements suited to your home.";
+        ? "Already renting your home or preparing your first season? Tell us about your plans so we can identify priorities. We call you back within 24 hours, at a time that suits you, to prepare your free review."
+        : "Tell us where your home is and what you would like to delegate. This helps us check whether we can manage it and prepare our first conversation.";
     if (help) help.textContent = locale === "fr"
       ? audit
         ? "Présentez votre bien et vos disponibilités pour le rappel. Vous pouvez ajouter sa capacité d’accueil et le lien de l’annonce, si elle existe."
-        : "Précisez votre situation actuelle, votre projet de gestion complète et votre rôle dans la décision. Vous pouvez ajouter la capacité d’accueil et le lien de votre annonce."
+        : "Votre logement est-il déjà loué ? Quand souhaitez-vous déléguer sa gestion ? Vous pouvez ajouter le lien de votre annonce, si elle existe."
       : audit
         ? "Tell us about your property and when you are available for the callback. You can add its guest capacity and a listing link, if one exists."
-        : "Tell us about your current situation, your full management plans and your role in the decision. You can add the guest capacity and a listing link.";
-    const phoneRequired = audit || marketingPhone?.checked === true;
-    if (phone) phone.required = phoneRequired;
+        : "Is your home already rented out? When would you like to delegate its management? You can add a link to your listing, if one exists.";
+    const preferenceField = form!.querySelector<HTMLElement>("#contact-preference-field");
+    const auditCallback = form!.querySelector<HTMLElement>("#audit-callback-help");
+    if (preferenceField) preferenceField.hidden = audit;
+    if (auditCallback) auditCallback.hidden = !audit;
+    const phoneRequired = audit || contactPreference?.value === "phone" || marketingPhone?.checked === true;
+    if (phone) {
+      phone.required = phoneRequired;
+      const phoneField = phone.closest<HTMLElement>(".field");
+      if (phoneField) phoneField.hidden = !phoneRequired;
+      if (!phoneRequired) phone.setCustomValidity("");
+    }
     if (phoneLabel) phoneLabel.textContent = locale === "fr"
       ? phoneRequired ? "Téléphone *" : "Téléphone (facultatif)"
       : phoneRequired ? "Phone *" : "Phone (optional)";
@@ -122,10 +132,10 @@ export function initContact(): void {
         locale === "fr"
           ? audit
             ? "Demander mon audit gratuit"
-            : management ? "Parlons de la gestion de mon bien" : "Envoyer ma demande"
+            : management ? "Demander une proposition de gestion" : "Envoyer ma demande"
           : audit
             ? "Request my free property review"
-            : management ? "Discuss my property management" : "Send my enquiry";
+            : management ? "Request a management proposal" : "Send my enquiry";
     document
       .querySelectorAll<HTMLAnchorElement>(".language-link")
       .forEach((link) => {
@@ -136,6 +146,7 @@ export function initContact(): void {
       });
   }
   intent?.addEventListener("change", updateIntent);
+  contactPreference?.addEventListener("change", updateIntent);
   marketingPhone?.addEventListener("change", updateIntent);
   updateIntent();
   let token = "";
@@ -146,7 +157,7 @@ export function initContact(): void {
   let enquiry: { fingerprint: string; id: string; collectedAt: string; createdWallAt: number; createdElapsedAt: number } | undefined;
 
   function validateFields(): void {
-    for (const name of ["firstName", "lastName", "location"]) {
+    for (const name of ["firstName", "location"]) {
       const field = form!.querySelector<HTMLInputElement>(`[name="${name}"]`);
       field?.setCustomValidity(field.value.trim() ? "" : copy.required);
     }
@@ -154,7 +165,7 @@ export function initContact(): void {
     if (phone) {
       const value = phone.value.trim();
       const digits = value.replace(/\D/g, "");
-      phone.setCustomValidity(value && (!/^\+?[0-9 ()\u00a0.-]+$/.test(value) || digits.length < 7 || digits.length > 15) ? copy.phone : "");
+      phone.setCustomValidity(phone.required && value && (!/^\+?[0-9 ()\u00a0.-]+$/.test(value) || digits.length < 7 || digits.length > 15) ? copy.phone : "");
     }
   }
   form.addEventListener("input", validateFields);
@@ -282,6 +293,8 @@ export function initContact(): void {
       const value = fields.get(name);
       payload[name] = typeof value === "string" ? value.trim() : "";
     }
+    if (!form.querySelector<HTMLInputElement>("#phone")?.required) payload.phone = "";
+    payload.contactPreference = intent?.value === "audit" ? "phone" : contactPreference?.value ?? "email";
     payload.marketingEmail = form.querySelector<HTMLInputElement>("#marketingEmail")?.checked === true;
     payload.marketingPhone = marketingPhone?.checked === true;
     payload.consentVersion = form.dataset.consentVersion ?? "";
@@ -329,6 +342,7 @@ export function initContact(): void {
       completed = true;
       form.reset();
       if (intent) intent.value = typeof payload.intent === "string" ? payload.intent : "";
+      if (contactPreference && payload.intent !== "audit") contactPreference.value = String(payload.contactPreference);
       updateIntent();
       if (reset) reset.hidden = false;
       announce(

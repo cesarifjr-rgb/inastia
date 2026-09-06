@@ -6,7 +6,7 @@ test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Integra
 for (const locale of ["fr", "en"]) {
 for (const lostResponse of [false, true]) {
   test(`${locale}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
-    // Load the unchanged JavaScript handler through its module URL.
+    // Load the JavaScript handler through its module URL.
     const { default: handler } = await import(new URL("../api/contact.js", import.meta.url).href);
     const providerCalls: { url: string; body: string; key: string | null }[] = [];
     const clientPayloads: Record<string, string | boolean>[] = [];
@@ -84,13 +84,13 @@ for (const lostResponse of [false, true]) {
       }
     });
 
-    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=audit`);
+    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${lostResponse ? "audit" : "gestion"}`);
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
     await page.locator("#firstName").fill("Exemple");
-    await page.locator("#lastName").fill("Synthétique");
+    await expect(page.locator("#lastName")).not.toHaveAttribute("required", "");
     await page.locator("#email").fill("integration@example.com");
-    await page.locator("#phone").fill("+33 6 00 00 00 00");
+    if (lostResponse) await page.locator("#phone").fill("+33 6 00 00 00 00");
     await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
     if (lostResponse) {
       await page.locator("#marketingEmail").check();
@@ -117,7 +117,7 @@ for (const lostResponse of [false, true]) {
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
     expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
     const mail = JSON.parse(emails[0]?.body || "{}");
-    expect(clientPayloads[0]).toMatchObject({ marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    expect(clientPayloads[0]).toMatchObject({ intent: lostResponse ? "audit" : "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     expect(mail.html).toContain(presentedEmail);
     expect(mail.html).toContain(presentedPhone);
     expect(mail.html).toContain(presentedHelp);

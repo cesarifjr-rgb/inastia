@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     const startedAt = Date.now();
     const requestId = typeof req.body?.requestId === 'string' && uuid.test(req.body.requestId)
         ? req.body.requestId : randomUUID();
+    let acceptedClassification;
     function respond(status, body, stage, providerId) {
         // Metadata only: never log the payload, provider errors, credentials or tokens.
         try {
@@ -32,6 +33,7 @@ export default async function handler(req, res) {
                 event.providerId = providerId;
                 event.receivedAt = new Date(startedAt).toISOString();
             }
+            if (stage === 'provider_accepted') Object.assign(event, acceptedClassification);
             console[status >= 400 ? 'warn' : 'info'](JSON.stringify(event));
         } catch { /* Telemetry must not prevent the response. */ }
         return res.status(status).json({ ...body, requestId });
@@ -59,7 +61,7 @@ export default async function handler(req, res) {
     }
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
-        surface: 10, capacity: 5, message: 2000, intent: 20, turnstileToken: 2048, requestId: 36,
+        surface: 10, capacity: 5, message: 2000, intent: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
         consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
     const input = {};
     for (const [key, limit] of Object.entries(limits)) {
@@ -108,12 +110,18 @@ export default async function handler(req, res) {
         return respond(400, { success: false, error: 'Motif de demande invalide.' }, 'validation');
     }
 
+    if (req.body.contactPreference !== undefined && !['email', 'phone'].includes(input.contactPreference)) {
+        return respond(400, { success: false, error: 'Préférence de contact invalide.' }, 'validation');
+    }
+    const contactPreference = intent === 'audit' ? 'phone' : input.contactPreference || 'email';
+    acceptedClassification = { intent, contactPreference };
+
     // --- 1. Validate required fields ---
-    if (!firstName || !lastName || !email || !location || !propertyType) {
+    if (!firstName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
     }
-    if ((intent === 'audit' || marketingPhone) && !phone) {
-        return respond(400, { success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit ou votre choix de relances téléphoniques.' }, 'validation');
+    if ((contactPreference === 'phone' || marketingPhone) && !phone) {
+        return respond(400, { success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit, votre préférence de réponse par téléphone ou votre choix de relances téléphoniques.' }, 'validation');
     }
     if (!['Villa', 'Appartement', 'Maison', 'Autre'].includes(propertyType)) {
         return respond(400, { success: false, error: 'Type de bien invalide.' }, 'validation');
@@ -196,6 +204,7 @@ export default async function handler(req, res) {
         <h2 style="color:#1a1a2e;font-size:16px;margin:0 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">👤 Contact</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr><td style="padding:6px 0;color:#666">Motif de la demande</td><td style="padding:6px 0;font-weight:600">${safeIntent}</td></tr>
+          <tr><td style="padding:6px 0;color:#666">Canal de réponse souhaité</td><td style="padding:6px 0">${contactPreference === 'phone' ? 'Téléphone' : 'Email'}${intent === 'audit' ? ' — rappel d’audit sous 24 h, selon votre convenance' : ''}</td></tr>
           <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0;font-weight:600">${safeFirstName} ${safeLastName}</td></tr>
           <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${safeEmail}" style="color:#16213e">${safeEmail}</a></td></tr>
           ${safePhone ? `<tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0"><a href="tel:${safePhone}" style="color:#16213e">${safePhone}</a></td></tr>` : ''}

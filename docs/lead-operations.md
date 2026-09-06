@@ -23,9 +23,11 @@ La déduplication Resend dure 24 heures. Une reprise identique dans la page ouve
 
 L'utilisateur a autorisé un unique envoi réel à `contact@inastia.fr` après déploiement. Préparer une seule demande synthétique dans le parcours « Gestion complète », nom « Test Audit », commune « Porto-Vecchio », type « Autre », email `audit-test@example.com`, téléphone vide, les deux choix commerciaux décochés, message indiquant explicitement « Test technique de réception Inastia — aucune demande commerciale, aucun rappel attendu ». Conserver sa référence opaque et son heure dans le relevé de vérification. Ne pas utiliser de coordonnées de prospect réel.
 
-Après envoi : rapprocher la réponse de l'API, l'événement Vercel, l'identifiant Resend, l'événement fournisseur et la présence dans la boîte professionnelle OVH. Le responsable commercial confirme ensuite l'attribution et classe la demande comme test selon la procédure existante. L'existence d'un CRM reste à confirmer. Ne pas supprimer automatiquement le message ni répondre à l'adresse réservée d'exemple.
+Après envoi : rapprocher la réponse de l'API, l'événement Vercel, l'identifiant Resend, l'événement fournisseur et la présence dans la boîte professionnelle OVH. Le responsable commercial confirme ensuite l'attribution et classe la demande comme test selon la procédure existante. Hub Inastia existe comme application indépendante ; le formulaire du site n'y crée pas automatiquement de dossier. Ne pas supprimer automatiquement le message ni répondre à l'adresse réservée d'exemple.
 
 Les tests automatisés du dépôt utilisent des fournisseurs simulés et n'envoient pas ce message. Aucun contrôle réel n'est réputé réussi par la seule présence de cette procédure.
+
+Le contrôle synthétique unique du 6 septembre 2026 est documenté dans [le registre opérationnel](privacy-operations.md). Il est exclu des demandes commerciales et ne constitue pas une autorisation de répéter cet envoi.
 
 ## Choix commerciaux et traitement humain
 
@@ -60,7 +62,7 @@ d'erreur de réception n'est donc attestée par ces interfaces. La création d'u
 webhook, d'un destinataire et d'un seuil d'alerte reste une décision d'exploitation
 à définir ; aucun nouvel envoi d'alerte n'a été activé.
 
-Pour le suivi commercial, utiliser des agrégats avec définitions explicites : tentatives, acceptations, réceptions confirmées, demandes qualifiées, premier traitement et contrats. Dédupliquer par demande logique ; ne pas additionner ses reprises. Comparer des périodes saisonnières équivalentes. Ne pas exporter les coordonnées ou messages pour calculer ces taux, et ne pas installer un traceur d'audience pour remplir un indicateur sans avoir défini son besoin et son cadre.
+Le [suivi manuel des demandes qualifiées](copywriting-measurement.md) définit la grille privée, la déduplication et le bilan hebdomadaire des demandes reçues, qualifiées, proposées puis signées. Les acceptations techniques restent distinctes de ce bilan. Les clics et débuts de formulaire ne sont pas mesurés actuellement ; aucun traceur d'audience n'est ajouté pour remplir artificiellement ces indicateurs.
 
 Les identifiants restent corrélables à une demande et ne sont donc pas réputés anonymes. Accès et conservation des logs doivent être qualifiés avec les autres traitements dans [le registre opérationnel](privacy-operations.md).
 

@@ -43,13 +43,13 @@ for (const locale of ["fr", "en"] as const) {
     "",
     t(
       locale,
-      "Inastia — Confiez la gestion de votre location en Corse",
-      "Inastia — Full holiday rental management in Corsica",
+      "Conciergerie en Corse : gestion saisonnière | Inastia",
+      "Holiday rental management in Corsica | Inastia",
     ),
     t(
       locale,
-      "Confiez votre location à Inastia : annonce, réservations, voyageurs et suivi sur place. Gestion complète de Ghisonaccia à Porto-Vecchio. Parlons de votre bien.",
-      "Let Inastia manage your holiday rental: listing, bookings, guests and local care. Full management from Ghisonaccia to Porto-Vecchio. Tell us about your home.",
+      "Déléguez votre location saisonnière de Ghisonaccia à Porto-Vecchio. Une équipe familiale, des prestations et des frais précisés avant de commencer.",
+      "Hand over your holiday rental from Ghisonaccia to Porto-Vecchio. A family team, with services and fees explained before you start.",
     ),
     home(locale),
   );
