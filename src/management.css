@@ -49,17 +49,22 @@
   list-style: none;
 }
 .full-service-list > li {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  grid-template-rows: min-content 1fr;
+  align-content: start;
+  column-gap: 18px;
+  row-gap: 12px;
   padding: 26px 0;
   border-top: 1px solid var(--line);
 }
-.full-service-number { padding-top: 4px; font-size: 12px; color: var(--blue); }
-.full-service-list h4 { margin: 0 0 12px; font-size: 19px; line-height: 1.35; letter-spacing: -0.025em; }
+.full-service-visual { grid-row: 1 / 3; display: grid; justify-items: center; align-content: start; gap: 4px; }
+.service-mini-art { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; overflow: visible; }
+.full-service-number { font-size: 11px; letter-spacing: 0.12em; color: var(--blue); }
+.full-service-list h4 { grid-column: 2; margin: 0; font-size: 19px; line-height: 1.35; letter-spacing: -0.025em; }
 .full-service-list h4 a { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .full-service-list h4 svg { flex-shrink: 0; width: 19px; height: 19px; }
-.full-service-list p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
+.full-service-list p { grid-column: 2; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; }
 .management-agreement {
   margin-top: 36px;
   padding: 32px;
@@ -85,12 +90,20 @@
   font-size: 14px;
   line-height: 1.8;
 }
+@media (min-width: 900px) and (max-width: 1100px) {
+  .full-service-list { column-gap: 28px; }
+  .full-service-list > li { grid-template-columns: 100px minmax(0, 1fr); column-gap: 14px; }
+}
+@media (max-width: 899px) {
+  .full-service-list { grid-template-columns: 1fr; }
+}
 @media (max-width: 699px) {
   .hero-assistance { font-size: 12px; }
   .full-service-detail { margin-top: 40px; }
-  .full-service-list { grid-template-columns: 1fr; }
-  .full-service-list > li { padding-block: 22px; }
-  .full-service-list h4 { font-size: 18px; }
+  .full-service-list > li { grid-template-columns: 88px minmax(0, 1fr); column-gap: 16px; padding-block: 22px; }
+  .full-service-visual { grid-row: 1; }
+  .full-service-list h4 { align-self: center; font-size: 18px; }
+  .full-service-list p { grid-column: 1 / -1; }
   .management-pillar .management-pillar-list { font-size: 13px; }
   .management-agreement { margin-top: 24px; padding: 24px 20px; }
   .management-agreement dl { grid-template-columns: 1fr; gap: 24px; }
