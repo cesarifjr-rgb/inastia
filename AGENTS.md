@@ -13,7 +13,7 @@
 - Node.js 24, TypeScript, génération HTML statique et Vite 8.
 - Modifier les contenus dans `src/content/pages.ts` et les fragments juridiques dans `src/content/legal/`.
 - Modifier les templates dans `src/home.ts`, `src/components.ts` et `src/templates.ts`. La gestion complète est la seule offre ; annonce, voyageurs et maison en sont les volets. L’audit gratuit reste une première étape.
-- `src/management.css` adapte la composition. `management-art.ts`, `management-art.css` et `management-art-client.ts` portent la villa illustrée, ses repères SVG, ses textes FR/EN et sa suspension selon visibilité/pause. La source de la villa est dans `assets/illustrations/inastia-management-villa.png` ; `scripts/render-management-villa.ts` génère ses versions AVIF/WebP. Conserver le hero `hospitalityArt` et le style sauvegardé.
+- `src/management.css` adapte la composition. `management-art.ts`, `management-art.css` et `management-art-client.ts` portent la scène de conciergerie, ses textes FR/EN et sa suspension selon visibilité/pause. `management-notebook.ts` dessine le carnet ouvert et les trois groupes d’objets en SVG, dans le style des sept petites illustrations de `service-detail-art.ts`. Conserver le hero `hospitalityArt` et le style sauvegardé.
 - `scripts/generate.ts` écrit `.generated/`, le sitemap et robots.txt.
 - Vite compile les documents générés vers `dist/`.
 - Ne jamais corriger directement `.generated/` ou `dist/`.
