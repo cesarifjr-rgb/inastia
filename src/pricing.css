@@ -34,7 +34,7 @@
 .pricing-detail-heading { max-width: 750px; margin-bottom: 45px; }
 .pricing-detail-heading h3 { margin: 12px 0 20px; font: 400 clamp(32px, 4vw, 52px)/1.12 var(--display); letter-spacing: -0.06em; }
 .pricing-detail-heading > p:last-child { max-width: 640px; font-size: 15px; }
-.pricing-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; align-items: stretch; }
+.pricing-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 22px; align-items: stretch; }
 .pricing-card { position: relative; padding: 38px 24px 24px; border: 1px solid #9eafb6; border-radius: 16px; background: var(--sand); }
 .pricing-card h4 { display: flex; align-items: center; gap: 9px; position: absolute; top: -16px; left: 20px; max-width: calc(100% - 40px); margin: 0; padding: 6px 14px; border-radius: 20px; background: #526c77; color: #fffaf3; font-size: 12px; font-weight: 700; }
 .pricing-card-included { border-color: var(--blue); background: var(--surface); }
@@ -52,7 +52,7 @@
   .pricing-top { grid-template-columns: 1fr 1fr; gap: 30px; }
   .pricing-calculator-body { padding: 24px 20px; }
   .pricing-input-row { grid-template-columns: 1fr 104px; gap: 12px; }
-  .pricing-columns { gap: 16px; }
+  .pricing-columns { gap: 32px 16px; }
   .pricing-card { padding: 36px 18px 22px; }
 }
 @media (max-width: 699px) {

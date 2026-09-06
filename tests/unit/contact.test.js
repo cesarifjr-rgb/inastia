@@ -58,6 +58,36 @@ describe("contact API (all external requests mocked)", () => {
     vi.unstubAllEnvs();
   });
 
+  it.each([undefined, "email"])("accepts management without a surname or phone and defaults preference %s to email", async (contactPreference) => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const res = await request({ ...valid, lastName: "", intent: "gestion", contactPreference });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(JSON.parse(fetch.mock.calls[1][1].body).html).toContain('Canal de réponse souhaité</td><td style="padding:6px 0">Email');
+    expect(JSON.parse(console.info.mock.calls[0][0])).toMatchObject({ intent: "gestion", contactPreference: "email" });
+  });
+
+  it.each(["sms", "", true, "x".repeat(11)])("rejects invalid service contact preference %s", async (contactPreference) => {
+    const res = await request({ ...valid, contactPreference });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([{ intent: "gestion", contactPreference: "phone" }, { intent: "audit", contactPreference: "email" }])("requires a number for the requested service callback %j", async (choice) => {
+    const res = await request({ ...valid, ...choice });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("keeps the audit callback by phone even if a client sends an email preference", async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const res = await request({ ...valid, intent: "audit", contactPreference: "email", phone: "+33 6 00 00 00 00" });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(JSON.parse(console.info.mock.calls[0][0])).toMatchObject({ intent: "audit", contactPreference: "phone" });
+    expect(JSON.parse(fetch.mock.calls[1][1].body).html).toContain("Téléphone — rappel d’audit sous 24 h");
+  });
+
   it("rejects unsupported methods without calling providers", async () => {
     const res = await request(valid, { method: "GET" });
     expect(res.status).toHaveBeenCalledWith(405);
@@ -272,7 +302,7 @@ describe("contact API (all external requests mocked)", () => {
     await request({ ...valid, message: "PRIVATE_MESSAGE", phone: "+33 6 12 34 56 78" });
     const events = console.info.mock.calls.map(([text]) => JSON.parse(text));
     expect(events).toEqual([expect.objectContaining({ requestId: valid.requestId, providerId: "fa64e6ef-875e-4e75-b9a1-593bdedb2629", stage: "provider_accepted", status: 200 })]);
-    expect(Object.keys(events[0]).sort()).toEqual(["durationMs", "event", "providerId", "receivedAt", "requestId", "stage", "status"]);
+    expect(Object.keys(events[0]).sort()).toEqual(["contactPreference", "durationMs", "event", "intent", "providerId", "receivedAt", "requestId", "stage", "status"]);
     expect(JSON.stringify(events)).not.toMatch(/PRIVATE_MESSAGE|test@example|test-secret|test-key|test-token|Jean|12 34 56/);
   });
 

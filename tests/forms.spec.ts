@@ -55,23 +55,53 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
+    test("management reply channel is independent of marketing and allows an optional surname", async ({ page }) => {
+      let payload: Record<string, unknown> | undefined;
+      await page.route("**/api/contact", async (route) => {
+        payload = route.request().postDataJSON();
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true }) });
+      });
+      await page.goto(`${path}?intent=gestion`);
+      await expect(page.locator("#contactPreference")).toHaveValue("email");
+      await expect(page.locator("#phone")).toBeHidden();
+      await page.locator("#contactPreference").selectOption("phone");
+      await expect(page.locator("#phone")).toHaveAttribute("required", "");
+      await expect(page.locator("#marketingPhone")).not.toBeChecked();
+      await expect(page.locator("#phone")).toBeVisible();
+      await page.locator("#phone").fill("invalid-old-number");
+      await page.locator("#contactPreference").selectOption("email");
+      await expect(page.locator("#phone")).toBeHidden();
+      await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
+      await fillContact(page);
+      await page.locator("#lastName").fill("");
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      expect(payload).toMatchObject({ intent: "gestion", contactPreference: "email", lastName: "", phone: "", marketingEmail: false, marketingPhone: false });
+    });
+
     test("audit callback phone requirement follows intent and survives simulated success/reset", async ({ page }) => {
       let requests = 0;
       await page.route("**/api/contact", async (route) => {
         requests += 1;
-        expect(route.request().postDataJSON()).toMatchObject({ intent: "audit", phone: "+33 6 00 00 00 00" });
+        expect(route.request().postDataJSON()).toMatchObject({ intent: "audit", contactPreference: "phone", phone: "+33 6 00 00 00 00" });
         await route.fulfill({ json: { success: true } });
       });
       await page.goto(`${path}?intent=audit`);
       const phone = page.locator("#phone");
+      await expect(page.locator("#contact-preference-field")).toBeHidden();
+      await expect(page.locator("#audit-callback-help")).toBeVisible();
       const intent = page.locator("#contact-intent");
       await expect(phone).toHaveAttribute("required", "");
       await expect(phone).toHaveAccessibleName(locale === "fr" ? "Téléphone *" : "Phone *");
       await expect(page.locator("#message-help")).toContainText(locale === "fr" ? "disponibilités" : "available");
       for (const value of ["gestion", ""]) {
         await intent.selectOption(value);
+        await expect(page.locator("#contact-preference-field")).toBeVisible();
+        await expect(page.locator("#audit-callback-help")).toBeHidden();
         await expect(phone).not.toHaveAttribute("required", "");
-        await expect(phone).toHaveAccessibleName(locale === "fr" ? "Téléphone (facultatif)" : "Phone (optional)");
+        await expect(phone).toBeHidden();
+        await expect(page.locator('label[for="phone"]')).toHaveText(locale === "fr" ? "Téléphone (facultatif)" : "Phone (optional)");
         await expect(page.locator("#contact-lead")).not.toContainText("24");
       }
       await intent.selectOption("audit");
@@ -95,7 +125,7 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#submit-contact")).toBeEnabled();
       await intent.selectOption("gestion");
       await expect(phone).not.toHaveAttribute("required", "");
-      await expect(page.locator("#contact-title")).toHaveText(locale === "fr" ? "Confiez-nous la gestion de votre bien." : "Let us manage your property.");
+      await expect(page.locator("#contact-title")).toHaveText(locale === "fr" ? "Préparons la gestion de votre maison" : "Let’s prepare the management of your home");
       expect(requests).toBe(1);
     });
 
@@ -121,7 +151,7 @@ for (const locale of ["fr", "en"] as const) {
         );
         if (intent === "audit") {
           await expect(page.locator("#contact-title")).toContainText(
-            locale === "fr" ? "audit gratuit" : "free property review",
+            locale === "fr" ? "audit gratuit" : "free review",
           );
           await expect(page.locator("#submit-contact-label")).toContainText(
             locale === "fr" ? "audit gratuit" : "free property review",
@@ -451,6 +481,7 @@ for (const locale of ["fr", "en"] as const) {
       await fillContact(page);
       await page.locator("#marketingEmail").check();
       await expect(page.locator("#marketingPhone")).not.toBeChecked();
+      await expect(page.locator("#phone")).toBeHidden();
       await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
       await page.evaluate(() => window.__solveChallenge());
       await page.locator("#submit-contact").click();
@@ -468,9 +499,11 @@ for (const locale of ["fr", "en"] as const) {
       await page.goto(path);
       await fillContact(page);
       await page.locator("#marketingPhone").check();
+      await expect(page.locator("#phone")).toBeVisible();
       await expect(page.locator("#phone")).toHaveAttribute("required", "");
       await expect(page.locator("#marketingEmail")).not.toBeChecked();
       await page.locator("#marketingPhone").uncheck();
+      await expect(page.locator("#phone")).toBeHidden();
       await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
       await page.locator("#marketingPhone").check();
       await page.evaluate(() => window.__solveChallenge());
@@ -486,6 +519,7 @@ for (const locale of ["fr", "en"] as const) {
       expect(payloads[0]).toMatchObject({ marketingEmail: false, marketingPhone: true, phone: "+33 6 00 00 00 00" });
       await expect(page.locator("#marketingEmail")).not.toBeChecked();
       await expect(page.locator("#marketingPhone")).not.toBeChecked();
+      await expect(page.locator("#phone")).toBeHidden();
       await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
     });
 
