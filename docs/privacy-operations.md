@@ -39,7 +39,7 @@ cours restent à fournir.
 | Entrée dans un champ | Chargement de la vérification anti-robot | Cloudflare Turnstile ; widget existant correspondant à la clé publique, mode Managed, préautorisation désactivée |
 | Vérification anti-spam | Jeton transmis à Siteverify, sans message commercial | Cloudflare ; entrée de domaine `inastia.fr`, qui inclut les sous-domaines selon son fonctionnement ; contrôle serveur limité à l'apex et `www` |
 | Transmission | Coordonnées, bien/projet, message facultatif et choix commerciaux avec leurs libellés | Resend puis boîte de contact Inastia chez OVH |
-| Suivi humain | Réponse, audit/devis et relances selon le choix applicable | Inastia ; fonctions habilitées, éventuel CRM, renvois et sauvegardes à confirmer |
+| Suivi humain | Réponse, audit/devis et relances selon le choix applicable | Hub Inastia confirmé ; hébergement Vercel et base PostgreSQL Neon constatée en production. Fonctions habilitées, renvois et sauvegardes à préciser |
 | Diagnostic | Référence opaque, phase, résultat, durée ; identifiant fournisseur et date serveur lors de l'acceptation | Journaux applicatifs Vercel ; sans coordonnées, message, jeton ni secret |
 
 Les identifiants de diagnostic restent corrélables à une demande et ne sont pas
@@ -79,20 +79,22 @@ vaut pas consentement. Aucune CMP ni mesure d'audience n'a été ajoutée.
 
 ## Points restant à confirmer
 
-- Fonctions accédant à la boîte et aux journaux, éventuel CRM, renvois internes,
-  sauvegardes, durées réellement appliquées et procédure d'effacement.
-- La notice historique annonce trois ans après le dernier contact, puis la durée
-  de la relation contractuelle. Cette règle n'est pas confirmée comme pratique
-  effective de purge ; ne pas considérer sa présence comme preuve d'exécution.
-  Distinguer traitement commercial, preuve des choix/retraits et archives légales.
+- Fonctions accédant à la boîte et aux journaux, renvois internes et sauvegardes.
+  Le Hub actuel est confirmé ; le CRM de remplacement fait l’objet d’un choix
+  séparé. Aucun transfert n’est réputé effectué par la recommandation seule.
+- L’entreprise a confirmé l’absence de règle appliquée auparavant et demandé
+  sa mise en place. La [politique de conservation](data-retention.md) distingue
+  prospection, autorisations par canal, preuves, oppositions et archives.
+  Un premier contrôle du Hub en lecture seule a été effectué ; la purge OVH et
+  les réglages du futur CRM restent à vérifier. Ne pas confondre suivi et purge.
 - Offre/commande OVH et garanties applicables ; conservation effective des logs
   Vercel et organisation de la conservation des preuves avant expiration chez
   Resend ; contrôle des options de suivi du domaine Resend existant.
 - Analyse des opérations Turnstile au regard de l'article 82 et formalisation de
   la mise en balance des intérêts ; modèles contractuels et adhésion CM2C.
-- Réception en boîte et attribution humaine du test synthétique : un envoi réel
-  à `contact@inastia.fr` est autorisé après déploiement, mais n'est pas établi par
-  le présent document. Voir la procédure de réception.
+- Le test synthétique unique du 6 septembre 2026 est livré par Resend et sa
+  bonne réception a été confirmée par l’entreprise. Les preuves détaillées
+  sont conservées séparément du dépôt ; aucun nouvel envoi n’est requis.
 
 Aucune purge, liste d'opposition contenant des coordonnées, signature de contrat,
 modification fournisseur ni souscription n'est effectuée par cette documentation.

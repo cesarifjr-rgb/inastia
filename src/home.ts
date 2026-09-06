@@ -4,6 +4,7 @@ import { contactCallout, faq, zones } from "./components.ts";
 import { hospitalityArt, serviceArt } from "./art.ts";
 import { reviews } from "./reviews.ts";
 import { managementArt } from "./management-art.ts";
+import { pricing } from "./pricing.ts";
 
 export function home(locale: Locale): string {
   const services = [
@@ -47,7 +48,7 @@ export function home(locale: Locale): string {
     },
     {
       question: t(locale, "Comment sont fixés vos tarifs ?", "How are your fees set?"),
-      answer: t(locale, "La gestion complète fonctionne avec une commission sur les revenus locatifs. Le bien, sa localisation, la saison et les prestations donnent le cadre. La commission, la durée et les frais éventuels sont précisés dans la proposition et le contrat.", "Full management is based on commission on rental income. The property, location, season and services define the scope. Commission, duration and any additional costs are specified in the proposal and agreement."),
+      answer: t(locale, "Notre commission est de 20 % TTC sur le montant des nuitées avant déduction des frais de plateforme, hors ménage, linge et taxe de séjour. Les frais séparés, le périmètre et la durée sont précisés dans la proposition et le contrat.", "Our commission is 20% including VAT of the accommodation amount before platform fees, excluding cleaning, linen and tourist tax. Separate costs, scope and duration are specified in the proposal and agreement."),
     },
     {
       question: t(locale, "Mon logement est-il dans votre secteur ?", "Is my property within your area?"),
@@ -92,6 +93,7 @@ export function home(locale: Locale): string {
     <div class="management-agreement"><dl><div><dt>${t(locale, "Vous gardez la main", "You stay in control")}</dt><dd>${t(locale, "Vos séjours personnels et les décisions qui vous reviennent. Nous vous signalons les points qui nécessitent votre accord.", "Your own stays and the decisions that remain yours. We flag the points that need your approval.")}</dd></div><div><dt>${t(locale, "Un cadre défini ensemble", "An agreement shaped together")}</dt><dd>${t(locale, "Commission sur les revenus locatifs. Ménage, linge, consommables et frais éventuels sont détaillés au devis ; ils ne sont pas automatiquement inclus dans la commission.", "Commission on rental income. Cleaning, linen, supplies and any additional costs are detailed in the proposal; they are not automatically included in the commission.")}</dd></div></dl><a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Parlons de votre gestion", "Discuss your rental management")}${arrow}</a></div>
   </div></section>
   ${managementArt(locale)}
+  ${pricing(locale)}
   <section class="presence-section"><div class="container">
     <div class="presence-grid"><div class="presence-heading" data-reveal><p class="eyebrow">${t(locale, "02 — UNE ÉQUIPE FAMILIALE", "02 — A FAMILY TEAM")}</p><h2>${t(locale, "Vous êtes loin ?<br><em>Nous sommes ici.</em>", "Away from your home?<br><em>We’re here for it.</em>")}</h2></div><div class="presence-copy" data-reveal><p class="presence-lead">${t(locale, "Une équipe familiale basée à Travo, un lien direct pour votre maison.", "A family team based in Travo, a direct connection to your home.")}</p><p>${t(locale, "Propriétaires nous-mêmes, nous savons que votre maison compte au-delà des réservations. Vous échangez directement avec nous sur le suivi de votre location. Nous coordonnons le quotidien et vous signalons les points qui demandent votre décision, pour que vous restiez informé même à distance.", "As owners ourselves, we know your home matters beyond its bookings. You speak directly with us about your rental. We coordinate the day-to-day work and flag decisions for you, keeping you informed even when you are away.")}</p><a class="text-link" href="${path(locale, "about")}">${t(locale, "Découvrir notre façon de travailler", "Discover how we work")}${arrow}</a></div></div>
     <div class="local-area" id="zone"><div><h3>${t(locale, "La côte est, au quotidien.", "Corsica’s east coast, every day.")}</h3><p>${t(locale, "De Ghisonaccia à Porto-Vecchio, ainsi qu’à Prunelli-di-Fiumorbo, Ventiseri, Solaro et Conca. Votre adresse permet de confirmer les prestations possibles.", "From Ghisonaccia to Porto-Vecchio, also covering Prunelli-di-Fiumorbo, Ventiseri, Solaro and Conca. Your address lets us confirm the services available.")}</p></div><div class="zone-list">${zones.map(([name, slug]) => `<a href="${path(locale, slug)}"><span>${name}</span>${arrow}</a>`).join("")}</div></div>
