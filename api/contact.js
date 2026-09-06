@@ -58,6 +58,9 @@ export default async function handler(req, res) {
     if (!firstName || !lastName || !email) {
         return res.status(400).json({ success: false, error: 'Champs obligatoires manquants.' });
     }
+    if (intent === 'audit' && !phone) {
+        return res.status(400).json({ success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit.' });
+    }
 
     // --- 1b. Validate email format ---
     if (!isValidEmail(email)) {

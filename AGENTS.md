@@ -30,6 +30,7 @@
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
 - Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.
 - Les nouveaux liens et le sélecteur utilisent seulement les intents audit/gestion, plus échange général. Les anciens intents annonce/rotation restent acceptés par l’API pour compatibilité ; aucun tarif ou périmètre ne doit en être déduit.
+- Les principaux appels à l’action privilégient la gestion complète. Aucune prestation seule n’est proposée. L’audit annonce un rappel sous 24 h selon la convenance du propriétaire, pas la livraison de l’analyse dans ce délai. Le téléphone est obligatoire uniquement pour l’audit, côté client et API ; les disponibilités peuvent être indiquées dans le message facultatif.
 - Utiliser les photos existantes sans changer leur identité ni leur localisation.
 - Régénérer les assets avec `npm run assets` seulement si nécessaire.
 - Conserver les licences des polices locales dans `public/fonts/`.
@@ -48,7 +49,7 @@
 
 ## Livraison et secrets
 
-- Branche actuelle : `codex/gestion-complete`, fondée sur `900c977`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur porte sur le retour au style sauvegardé avec la gestion complète seule ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
+- Branche actuelle : `codex/copywriting-gestion`, fondée sur `d52901a`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur renforce les textes de gestion complète et précise le rappel d’audit, en conservant le style sauvegardé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.

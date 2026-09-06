@@ -47,12 +47,58 @@ async function fillContact(page: Page): Promise<void> {
   await page.locator("#firstName").fill("Test");
   await page.locator("#lastName").fill("Local");
   await page.locator("#email").fill("local-test@example.com");
+  if (await page.locator("#phone").evaluate((phone) => (phone as HTMLInputElement).required))
+    await page.locator("#phone").fill("+33 6 00 00 00 00");
   await page.locator("#message").fill("Local automated test; never delivered.");
 }
 
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
+    test("audit callback phone requirement follows intent and survives simulated success/reset", async ({ page }) => {
+      let requests = 0;
+      await page.route("**/api/contact", async (route) => {
+        requests += 1;
+        expect(route.request().postDataJSON()).toMatchObject({ intent: "audit", phone: "+33 6 00 00 00 00" });
+        await route.fulfill({ json: { success: true } });
+      });
+      await page.goto(`${path}?intent=audit`);
+      const phone = page.locator("#phone");
+      const intent = page.locator("#contact-intent");
+      await expect(phone).toHaveAttribute("required", "");
+      await expect(phone).toHaveAccessibleName(locale === "fr" ? "Téléphone *" : "Phone *");
+      await expect(page.locator("#message-help")).toContainText(locale === "fr" ? "disponibilités" : "available");
+      for (const value of ["gestion", ""]) {
+        await intent.selectOption(value);
+        await expect(phone).not.toHaveAttribute("required", "");
+        await expect(phone).toHaveAccessibleName(locale === "fr" ? "Téléphone (facultatif)" : "Phone (optional)");
+        await expect(page.locator("#contact-lead")).not.toContainText("24");
+      }
+      await intent.selectOption("audit");
+      await expect(page.locator(".language-link")).toHaveAttribute("href", /intent=audit$/);
+      await fillContact(page);
+      await phone.fill("");
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(phone).toBeFocused();
+      expect(requests).toBe(0);
+      await phone.fill("+33 6 00 00 00 00");
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "selon votre convenance" : "at a time that suits you");
+      await expect(intent).toHaveValue("audit");
+      await expect(phone).toHaveAttribute("required", "");
+      await expect(page.locator("#submit-contact")).toBeDisabled();
+      await page.locator("#form-reset").click();
+      await expect(intent).toHaveValue("audit");
+      await expect(phone).toHaveAttribute("required", "");
+      await expect(page.locator("#submit-contact")).toBeEnabled();
+      await intent.selectOption("gestion");
+      await expect(phone).not.toHaveAttribute("required", "");
+      await expect(page.locator("#contact-title")).toHaveText(locale === "fr" ? "Confiez-nous la gestion de votre bien." : "Let us manage your property.");
+      expect(requests).toBe(1);
+    });
+
     for (const intent of ["audit", "gestion", "annonce", "rotation", ""]) {
       const expectedIntent = ["audit", "gestion"].includes(intent) ? intent : "";
       test(`${intent && !expectedIntent ? `legacy ${intent} falls back to generic` : `preserves ${intent || "generic"}`} through a simulated confirmation`, async ({
@@ -80,6 +126,7 @@ for (const locale of ["fr", "en"] as const) {
           await expect(page.locator("#submit-contact-label")).toContainText(
             locale === "fr" ? "audit gratuit" : "free property review",
           );
+          await expect(page.locator("#contact-lead")).toContainText(locale === "fr" ? "sous 24 h" : "within 24 hours");
         }
         await fillContact(page);
         await expect(page.locator("#message-help")).toBeVisible();
@@ -97,7 +144,7 @@ for (const locale of ["fr", "en"] as const) {
         await expect(page.locator("#contact-intent")).toHaveValue(expectedIntent);
         if (intent === "audit")
           await expect(page.locator("#form-status")).toContainText(
-            locale === "fr" ? "audit gratuit" : "free property review",
+            locale === "fr" ? "sous 24 h, selon votre convenance" : "within 24 hours, at a time that suits you",
           );
       });
     }
@@ -129,7 +176,10 @@ for (const locale of ["fr", "en"] as const) {
         ),
       );
       await expect(page.locator("#contact-intent")).toHaveValue("audit");
+      await expect(page.locator("#phone")).toHaveAttribute("required", "");
+      await expect(page.locator("#phone")).toHaveAccessibleName(locale === "fr" ? "Phone *" : "Téléphone *");
       await page.locator("#contact-intent").selectOption("gestion");
+      await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
       await fillContact(page);
       await page.evaluate(() => window.__solveChallenge());
       await page.locator("#submit-contact").click();

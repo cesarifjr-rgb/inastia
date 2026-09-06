@@ -43,13 +43,13 @@ for (const locale of ["fr", "en"] as const) {
     "",
     t(
       locale,
-      "Inastia — Votre location en Corse. Un relais sur place.",
-      "Inastia — Your rental in Corsica. Local property care.",
+      "Inastia — Confiez la gestion de votre location en Corse",
+      "Inastia — Full holiday rental management in Corsica",
     ),
     t(
       locale,
-      "Gestion complète de votre location en Corse, de Ghisonaccia à Porto-Vecchio. Une conciergerie familiale pour votre annonce, vos voyageurs et le suivi sur place.",
-      "Full management of your holiday rental in Corsica, from Ghisonaccia to Porto-Vecchio. A family-run service for your listing, guests and local care.",
+      "Confiez votre location à Inastia : annonce, réservations, voyageurs et suivi sur place. Gestion complète de Ghisonaccia à Porto-Vecchio. Parlons de votre bien.",
+      "Let Inastia manage your holiday rental: listing, bookings, guests and local care. Full management from Ghisonaccia to Porto-Vecchio. Tell us about your home.",
     ),
     home(locale),
   );
@@ -66,13 +66,13 @@ for (const locale of ["fr", "en"] as const) {
     "contact",
     t(
       locale,
-      "Parlons de votre bien — Contact & audit gratuit | Inastia",
-      "Tell us about your home — Contact & free review | Inastia",
+      "Confiez-nous la gestion de votre bien — Contact | Inastia",
+      "Let us manage your holiday rental — Contact | Inastia",
     ),
     t(
       locale,
-      "Décrivez votre maison et votre projet à Inastia. Audit gratuit de votre location saisonnière en Corse. Contact : +33 6 13 81 25 50, contact@inastia.fr.",
-      "Tell Inastia about your home and plans. A free review of your holiday rental in Corsica. Contact: +33 6 13 81 25 50, contact@inastia.fr.",
+      "Parlons de la gestion complète de votre location en Corse. Présentez votre bien à Inastia pour définir les prestations, les frais et le démarrage.",
+      "Discuss full management of your holiday rental in Corsica. Tell Inastia about your home to agree services, fees and how to get started.",
     ),
     contact(locale),
   );

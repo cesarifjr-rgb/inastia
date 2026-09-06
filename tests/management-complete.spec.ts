@@ -57,7 +57,7 @@ for (const locale of ["fr", "en"] as const) {
     await expect(page.locator(".hero-accent")).toHaveCSS("color", "rgb(39, 127, 168)");
     await expect(page.locator(".home-hero")).toHaveCSS("background-color", "rgb(248, 243, 233)");
     await expect(page.locator("[data-hospitality-scene] svg.hospitality-illustration")).toBeVisible();
-    await expect(page.locator(".hero-actions .button")).toHaveAttribute("href", `${prefix}/contact?intent=audit`);
+    await expect(page.locator(".hero-actions .button")).toHaveAttribute("href", `${prefix}/contact?intent=gestion`);
     await expect(page.locator(".territory-note")).toContainText(/Ghisonaccia.*Porto-Vecchio/);
     const properties = page.locator(".property-row");
     await expect(properties).toHaveCount(3);

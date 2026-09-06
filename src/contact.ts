@@ -71,26 +71,49 @@ export function initContact(): void {
     intent.value = intents.includes(initialIntent) ? initialIntent : "";
   function updateIntent(): void {
     const audit = intent?.value === "audit";
+    const management = intent?.value === "gestion";
     const title = document.querySelector("#contact-title");
     const label = document.querySelector("#submit-contact-label");
+    const lead = document.querySelector("#contact-lead");
+    const help = document.querySelector("#message-help");
+    const phone = form!.querySelector<HTMLInputElement>("#phone");
+    const phoneLabel = form!.querySelector('label[for="phone"]');
     if (title)
       title.textContent =
         locale === "fr"
           ? audit
             ? "Votre audit gratuit."
-            : "Parlons de votre bien."
+            : management ? "Confiez-nous la gestion de votre bien." : "Parlons de votre bien."
           : audit
             ? "Your free property review."
-            : "Let’s talk about your property.";
+            : management ? "Let us manage your property." : "Let’s talk about your property.";
+    if (lead) lead.textContent = locale === "fr"
+      ? audit
+        ? "Nous vous rappelons sous 24 h, selon votre convenance, pour parler de votre bien et préparer votre audit gratuit. Indiquez votre numéro et vos disponibilités."
+        : "Présentez-nous votre bien et votre situation. Un premier échange par appel ou email permettra de préciser la gestion complète et le cadre adapté à votre logement."
+      : audit
+        ? "We call you back within 24 hours, at a time that suits you, to prepare your free review."
+        : "Tell us about your property and current situation. An initial conversation by phone or email will help define full management and the arrangements suited to your home.";
+    if (help) help.textContent = locale === "fr"
+      ? audit
+        ? "Présentez votre bien et vos disponibilités pour le rappel. Vous pouvez ajouter sa capacité d’accueil et le lien de l’annonce, si elle existe."
+        : "Précisez votre situation actuelle, votre projet de gestion complète et votre rôle dans la décision. Vous pouvez ajouter la capacité d’accueil et le lien de votre annonce."
+      : audit
+        ? "Tell us about your property and when you are available for the callback. You can add its guest capacity and a listing link, if one exists."
+        : "Tell us about your current situation, your full management plans and your role in the decision. You can add the guest capacity and a listing link.";
+    if (phone) phone.required = audit;
+    if (phoneLabel) phoneLabel.textContent = locale === "fr"
+      ? audit ? "Téléphone *" : "Téléphone (facultatif)"
+      : audit ? "Phone *" : "Phone (optional)";
     if (label)
       label.textContent =
         locale === "fr"
           ? audit
             ? "Demander mon audit gratuit"
-            : "Envoyer ma demande"
+            : management ? "Parlons de la gestion de mon bien" : "Envoyer ma demande"
           : audit
             ? "Request my free property review"
-            : "Send my enquiry";
+            : management ? "Discuss my property management" : "Send my enquiry";
     document
       .querySelectorAll<HTMLAnchorElement>(".language-link")
       .forEach((link) => {
@@ -257,8 +280,8 @@ export function initContact(): void {
       announce(
         payload.intent === "audit"
           ? locale === "fr"
-            ? "Votre demande d’audit gratuit a bien été envoyée. Notre équipe vous répondra par appel ou par email."
-            : "Your free property review request has been sent. Our team will respond by phone or email."
+            ? "Votre demande d’audit gratuit a bien été envoyée. Nous vous rappelons sous 24 h, selon votre convenance, pour échanger sur votre bien et préparer l’audit."
+            : "Your free property review request has been sent. We will call you back within 24 hours, at a time that suits you, to discuss your property and prepare the review."
           : copy.success,
         "success",
         true,

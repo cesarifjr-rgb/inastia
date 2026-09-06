@@ -73,6 +73,13 @@ describe("contact API (all external requests mocked)", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
+  it.each([undefined, "", "   "])("requires audit callback phone before providers (%s)", async (phone) => {
+    const res = await request({ ...valid, intent: "audit", phone });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: false, error: expect.stringContaining("téléphone") }));
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
   it.each(["https://attacker.example", "not a URL"])(
     "rejects invalid origin %s",
     async (origin) => {
@@ -183,11 +190,12 @@ describe("contact API (all external requests mocked)", () => {
         json: async () => ({ success: true }),
       });
       fetch.mockResolvedValueOnce({ ok: true });
-      const res = await request({ ...valid, intent });
+      const res = await request({ ...valid, intent, ...(intent === "audit" ? { phone: " +33 6 00 00 00 00 " } : {}) });
       expect(res.status).toHaveBeenCalledWith(200);
       const mail = JSON.parse(fetch.mock.calls[1][1].body);
       expect(mail.html).toContain("Motif de la demande");
       expect(mail.html).toContain(label);
+      if (intent === "audit") expect(mail.html).toContain('href="tel:+33 6 00 00 00 00"');
     },
   );
 });

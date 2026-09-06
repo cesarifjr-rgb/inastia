@@ -5,15 +5,23 @@ for (const prefix of ["", "/en"]) {
     for (const [slug, intent] of [
       ["gestion-airbnb-corse-du-sud", "gestion"],
       ["audit-gratuit-potentiel-locatif", "audit"],
+      ["about", "gestion"],
+      ["conciergerie-ghisonaccia", "gestion"],
+      ["conciergerie-location-saisonniere-solenzara", "gestion"],
+      ["conciergerie-airbnb-zonza-pinarello", "gestion"],
+      ["conciergerie-airbnb-lecci-saint-cyprien", "gestion"],
+      ["conciergerie-airbnb-porto-vecchio", "gestion"],
     ] as const) {
       await page.goto(`${prefix}/${slug}`);
+      await expect(page.locator(".contact-callout .button")).toHaveAttribute("href", `${prefix}/contact?intent=${intent}`);
       await page.locator(".page-hero-copy .button").click();
       await expect(page).toHaveURL(new RegExp(`/contact\\?intent=${intent}$`));
       await expect(page.locator("#contact-intent")).toHaveValue(intent);
     }
     await page.goto(`${prefix}/`);
+    await expect(page.locator(".contact-callout .button")).toHaveAttribute("href", `${prefix}/contact?intent=gestion`);
     await page.locator(".hero-actions .button").click();
-    await expect(page.locator("#contact-intent")).toHaveValue("audit");
+    await expect(page.locator("#contact-intent")).toHaveValue("gestion");
   });
 
   test(`contact starts within the mobile screen ${prefix || "FR"}`, async ({ page }) => {

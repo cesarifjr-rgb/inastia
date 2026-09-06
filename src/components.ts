@@ -30,7 +30,7 @@ export function header(locale: Locale, slug: string): string {
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
     </nav>
     <div class="header-actions">${motionButton}<a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
-      <a class="button button-small header-cta" href="${path(locale, "contact")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a>
+      <a class="button button-small header-cta" href="${contactPath(locale, "gestion")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-open-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-close-label="${t(locale, "Fermer le menu", "Close menu")}"><span></span><span></span></button>
     </div>
   </div>
@@ -40,7 +40,7 @@ export function header(locale: Locale, slug: string): string {
     <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
     <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
     <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
-    <a class="button" href="${path(locale, "contact")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a>
+    <a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Parlons de votre bien", "Tell us about your home")}${arrow}</a>
     <a class="menu-phone" href="tel:+33613812550">+33 6 13 81 25 50</a>
   </nav></header>`;
 }
@@ -57,8 +57,9 @@ export function footer(locale: Locale): string {
   </div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} Inastia</span><nav aria-label="${t(locale, "Informations légales", "Legal information in French")}"><a href="/mentions-legales" lang="fr">${t(locale, "Mentions légales", "Legal notice (FR)")}</a><a href="/privacy" lang="fr">${t(locale, "Confidentialité", "Privacy (FR)")}</a><a href="/cgv" lang="fr">${t(locale, "CGV", "Terms (FR)")}</a></nav><a href="#main">${t(locale, "Retour en haut", "Back to top")} ↑</a></div></footer>`;
 }
 
-export function contactCallout(locale: Locale): string {
-  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${t(locale, "LE PREMIER AUDIT EST GRATUIT", "YOUR FIRST PROPERTY REVIEW IS FREE")}</p><h2>${t(locale, "Parlons de votre bien.<br><em>Et de ce que vous souhaitez confier.</em>", "Tell us about your home.<br><em>And what you’d like us to take care of.</em>")}</h2></div><div class="callout-action"><p>${t(locale, "Votre commune, votre logement et vos besoins nous donnent une première base. Nous échangeons par appel ou email pour vous présenter les priorités et l’accompagnement possible.", "Your town, your home and your needs give us a starting point. We discuss priorities and possible support with you by phone or email.")}</p><a class="button button-cream" href="${contactPath(locale, "audit")}">${t(locale, "Demander mon audit gratuit", "Request my free review")}${arrow}</a><a class="callout-phone" href="tel:+33613812550">${t(locale, "Ou appelez-nous au", "Or call us on")} +33 6 13 81 25 50</a></div></div></section>`;
+export function contactCallout(locale: Locale, intent: "audit" | "gestion" = "gestion"): string {
+  const audit = intent === "audit";
+  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${audit ? t(locale, "VOTRE AUDIT GRATUIT", "YOUR FREE PROPERTY REVIEW") : t(locale, "LA GESTION COMPLÈTE DE VOTRE LOCATION", "FULL MANAGEMENT OF YOUR HOLIDAY RENTAL")}</p><h2>${audit ? t(locale, "Votre projet mérite<br><em>un premier regard.</em>", "Your plans deserve<br><em>a closer look.</em>") : t(locale, "Confiez-nous votre location.<br><em>Commençons par en parler.</em>", "Let us manage your rental.<br><em>Let’s start with a conversation.</em>")}</h2></div><div class="callout-action"><p>${audit ? t(locale, "Parlez-nous de votre bien et indiquez vos disponibilités. Nous vous rappelons sous 24 h, à un moment qui vous convient, pour faire le point sur votre projet de gestion.", "Tell us about your home and when you are available. We’ll call you within 24 hours, at a time that suits you, to discuss your management plans.") : t(locale, "Vous souhaitez déléguer l’annonce, les voyageurs et le suivi sur place ? Présentez-nous votre bien. Nous échangeons sur votre projet et vous proposons un cadre de gestion adapté, avec des prestations et des frais clairement définis.", "Ready to hand over your listing, guest communication and local coordination? Tell us about your home. We’ll discuss your plans and propose a management arrangement with clearly defined services and fees.")}</p><a class="button button-cream" href="${contactPath(locale, intent)}">${audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : t(locale, "Parlons de la gestion de mon bien", "Let’s discuss my rental")}${arrow}</a>${audit ? "" : `<a class="callout-phone" href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Ou commencez par un audit gratuit", "Or start with a free property review")}</a>`}<a class="callout-phone" href="tel:+33613812550">${t(locale, "Appelez-nous au", "Call us on")} +33 6 13 81 25 50</a></div></div></section>`;
 }
 
 export function faq(
