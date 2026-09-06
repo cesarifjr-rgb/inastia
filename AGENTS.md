@@ -42,12 +42,14 @@
 - Exécuter typecheck, lint, tests et build selon le périmètre du changement.
 - `npm run dev` génère les pages puis démarre sur le port 3100.
 - Relancer `npm run generate` après modification des templates/contenus.
-- Les tests E2E nécessitent `npm run preview` actif sur le port 4100.
+- Après le build, les tests E2E démarrent le preview sur le port 4100 si `BASE_URL` n'est pas défini. En local, un preview existant peut être réutilisé ; en CI le serveur est toujours démarré par Playwright.
 - `BASE_URL` permet les contrôles distants ; les mutations formulaire y sont ignorées.
 - Les tests de formulaire locaux simulent Turnstile/Resend et ne doivent pas envoyer d'email.
 - Distinguer vérifications automatiques, vérifications production et limitations constatées.
 
 ## Livraison et secrets
+
+- Les corrections de l'audit du 6 septembre 2026 sont sur `codex/audit-recommendations`. Exécuter aussi les tests navigateur avant intégration ; Vercel attend le check GitHub `build-and-test` avant la promotion de production. Les cas clients et informations internes manquants ne doivent pas être remplacés par des exemples présentés comme réels.
 
 - Branche actuelle : `codex/inspiration-motion`, fondée sur `c4a1e39`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur inspire les textes et visuels des références HostnFly et WeHost, avec des créations propres à Inastia et le style sauvegardé conservé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.

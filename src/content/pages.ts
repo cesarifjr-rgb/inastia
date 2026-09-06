@@ -148,6 +148,10 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, à Pinarello, Zonza",
       sections: [
         {
+          title: "Préciser où se trouve votre maison",
+          text: "La commune de Zonza comprend le village en montagne et un secteur littoral autour de Sainte-Lucie-de-Porto-Vecchio et Pinarello. Pour votre demande, précisez le secteur, l’adresse et les conditions d’accès à la maison. Ces informations nous permettent de confirmer la prise en charge et d’organiser les passages prévus ; le nom de la commune seul ne suffit pas.",
+        },
+        {
           title: "Une préparation à sa mesure",
           text: "Le nombre de chambres, la capacité d’accueil et les extérieurs donnent le cadre. Nous organisons le ménage, le linge et les contrôles photo selon votre logement et les prestations convenues.",
         },
@@ -392,16 +396,16 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, une maison accompagnée par Inastia à Pinarello",
       sections: [
         {
-          title: "Partir de votre maison et de votre organisation",
-          text: "Votre annonce est déjà en ligne ou vous préparez une première saison ? Le premier échange sert à comprendre le logement, ses accès, votre organisation et vos attentes. Nous proposons une seule offre de gestion complète, dont les prestations et les conditions sont définies pour votre bien.",
+          title: "Notre équipe suit l’annonce et les réservations",
+          text: "Première saison ou annonce existante : nous partons de votre logement et de votre organisation. Notre équipe crée ou améliore l’annonce, suit les réservations et ajuste les prix selon la saison, dans le cadre convenu. Nous relions le calendrier aux arrivées et aux prestations à organiser sur place.",
         },
         {
-          title: "Échanger directement sur le suivi de votre bien",
-          text: "Vous échangez avec nous pour organiser les prestations convenues et suivre votre logement. Nous vous signalons les points qui demandent une décision : anomalie constatée, besoin de maintenance ou intervention à prévoir.",
+          title: "Notre équipe coordonne les voyageurs et la maison",
+          text: "Nous préparons les consignes, suivons les échanges voyageurs et organisons l’accueil. Entre les séjours, nous coordonnons le ménage, le linge et les contrôles prévus. La checklist et les photos de fin d’intervention documentent la préparation ; les anomalies et les besoins de maintenance vous sont signalés. Le périmètre et les coûts de ces prestations sont précisés dans la proposition.",
         },
         {
-          title: "Coordonner la préparation et l’accueil",
-          text: "Préparer le logement, transmettre les consignes et suivre les demandes font partie des tâches que nous coordonnons selon votre accompagnement. Nous sommes installés à Travo, à Ventiseri ; l’adresse de votre bien permet de confirmer les prestations possibles entre Ghisonaccia et Porto-Vecchio.",
+          title: "Vous gardez vos décisions et le lien avec nous",
+          text: "Vos séjours personnels sont définis et bloqués dans le calendrier, en tenant compte des réservations déjà confirmées. Vous échangez directement avec notre équipe sur le suivi de la maison ; nous vous signalons les interventions qui demandent votre décision. Avant le démarrage, vous examinez la proposition : prestations, commission, frais et modalités de la gestion complète.",
         },
       ],
       faq: [
@@ -619,6 +623,10 @@ export const pages: Record<Locale, PageContent[]> = {
       image: "casa_verde",
       imageAlt: "Casa Verde in Pinarello, Zonza",
       sections: [
+        {
+          title: "Tell us exactly where your home is",
+          text: "The municipality of Zonza includes the mountain village and a coastal area around Sainte-Lucie-de-Porto-Vecchio and Pinarello. In your enquiry, specify the area, address and access arrangements for your home. These details let us confirm whether we can take on management and organise the agreed visits; the municipality name alone is not enough.",
+        },
         {
           title: "Preparation that fits your home",
           text: "Bedrooms, guest capacity and outdoor spaces set the scope. We organise cleaning, linen and photographic checks around your property and the services agreed.",
@@ -864,16 +872,16 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Casa Verde, a home supported by Inastia in Pinarello",
       sections: [
         {
-          title: "Start with your home and how you manage it",
-          text: "Is your listing already live, or are you preparing your first season? The initial conversation helps us understand the home, access, your current arrangements and what you need. We offer one full management service, with scope and terms agreed for your property.",
+          title: "Our team manages the listing and bookings",
+          text: "First season or existing listing: we start with your home and current arrangements. Our team creates or improves the listing, manages bookings and adjusts prices for the season within the agreed framework. We connect the calendar with arrivals and the services to arrange locally.",
         },
         {
-          title: "Speak directly about your property",
-          text: "You speak with us to organise the agreed services and follow your home. We report matters that need a decision, such as an issue found, a maintenance need or work to arrange.",
+          title: "Our team coordinates guests and property care",
+          text: "We prepare instructions, handle guest communication and organise arrivals. Between stays, we coordinate the agreed cleaning, linen and checks. A checklist and photographs at the end of each visit document the preparation; we report any issues and maintenance needs to you. The proposal sets out the scope and costs of these services.",
         },
         {
-          title: "Coordinate preparation and guest arrivals",
-          text: "Preparing the home, sharing instructions and following up on requests are tasks we coordinate within your chosen support. We are based in Travo, Ventiseri; your property’s address helps us confirm the services available between Ghisonaccia and Porto-Vecchio.",
+          title: "You keep your decisions and a direct link with us",
+          text: "Your own stays are agreed and blocked in the calendar, taking confirmed bookings into account. You speak directly with our team about your home; we flag work that needs your decision. Before management starts, you review the proposal: services, commission, additional costs and the terms of full management.",
         },
       ],
       faq: [
