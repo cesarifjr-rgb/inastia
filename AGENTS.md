@@ -30,7 +30,7 @@
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
 - Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.
 - Les nouveaux liens et le sélecteur utilisent seulement les intents audit/gestion, plus échange général. Les anciens intents annonce/rotation restent acceptés par l’API pour compatibilité ; aucun tarif ou périmètre ne doit en être déduit.
-- Les principaux appels à l’action privilégient la gestion complète. Aucune prestation seule n’est proposée. L’audit annonce un rappel sous 24 h selon la convenance du propriétaire, pas la livraison de l’analyse dans ce délai. Le téléphone est obligatoire uniquement pour l’audit, côté client et API ; les disponibilités peuvent être indiquées dans le message facultatif.
+- Les principaux appels à l’action privilégient la gestion complète. Aucune prestation seule n’est proposée. L’audit annonce un rappel sous 24 h selon la convenance du propriétaire, pas la livraison de l’analyse dans ce délai. Le téléphone est obligatoire pour l’audit ou lorsque le visiteur choisit les appels commerciaux, côté client et API ; les disponibilités peuvent être indiquées dans le message facultatif. Les choix commerciaux email/téléphone sont séparés, facultatifs, non précochés et indépendants du traitement de la demande ; l’accord téléphone dure au maximum un an.
 - Utiliser les photos existantes sans changer leur identité ni leur localisation.
 - Régénérer les assets avec `npm run assets` seulement si nécessaire.
 - Conserver les licences des polices locales dans `public/fonts/`.
@@ -51,7 +51,8 @@
 
 - Les corrections de l'audit du 6 septembre 2026 sont sur `codex/audit-recommendations`. Exécuter aussi les tests navigateur avant intégration ; Vercel attend le check GitHub `build-and-test` avant la promotion de production. Les cas clients et informations internes manquants ne doivent pas être remplacés par des exemples présentés comme réels.
 
-- Branche actuelle : `codex/inspiration-motion`, fondée sur `c4a1e39`, dans `C:/Users/Admin/Documents/inastia-gestion-complete`. La demande utilisateur inspire les textes et visuels des références HostnFly et WeHost, avec des créations propres à Inastia et le style sauvegardé conservé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
+- Les compléments de l’audit sont sur `codex/contact-consent`, fondée sur `17d981b`, dans `C:/Users/Admin/Documents/inastia-gestion-complete` : choix commerciaux, messagerie OVH, encaissement direct des loyers par les propriétaires et vérification fournisseurs. Préserver les preuves sans versionner de données client.
+- La révision antérieure `codex/inspiration-motion`, fondée sur `c4a1e39`, inspire les textes et visuels des références HostnFly et WeHost, avec des créations propres à Inastia et le style sauvegardé conservé ; le responsable principal publie après validation. Le projet Atlas précédent reste séparé.
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.
