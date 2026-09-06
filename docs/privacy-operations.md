@@ -1,161 +1,122 @@
 # Traitements de contact et textes publics — suivi opérationnel
 
 Document interne au dépôt, non publié par le générateur du site. État au
-6 septembre 2026, après AUD-01, AUD-06, AUD-07 et AUD-08. Ne contient ni secret,
-ni export de demande, ni contrat privé. Les points non confirmés ci-dessous ne
-sont pas des déclarations à reprendre automatiquement dans la notice publique.
+6 septembre 2026. Ne contient ni secret, ni export de demande, ni contrat privé.
+Les points ouverts ne sont pas des déclarations à reprendre automatiquement
+sur le site.
 
-## Ce qui a été corrigé dans les textes
+## Pratiques confirmées et textes correspondants
 
-- AUD-01 : responsable Inastia explicite, données du formulaire, destinataires
-  techniques identifiés, caractère obligatoire/facultatif, conséquence d'une
-  absence de saisie et recours CNIL. Les bases légales restent à valider avant
-  publication ; aucune case de consentement n'a été ajoutée par défaut.
-- AUD-06 : distinction clients consommateurs/professionnels pour les clauses
-  ciblées. Le début d'une prestation ne vaut plus perte automatique du droit de
-  rétractation ; les conditions de pleine exécution sont précisées. L'indemnité
-  de 40 euros est réservée aux relations professionnelles concernées ; le taux
-  historique « intérêt légal + 3 points » conserve le minimum légal de trois
-  fois le taux légal. Les options de juridiction du consommateur sont préservées
-  et Bastia n'est plus présenté comme obligatoire pour tous.
-- AUD-07 : coordonnées professionnelles CM2C du PDF public reproduites en HTML
-  dans CGV et mentions légales, avec liens email/téléphone/site ; PDF conservé.
-  Aucun contrat d'adhésion créé ou renouvelé.
-- AUD-08 : cartographie ci-dessous ; aucune nouvelle CMP, mesure d'audience ou
-  affirmation d'exemption des opérations du CAPTCHA.
+Inastia répond aux demandes, prépare audits/devis et effectue des relances par
+email et téléphone. La boîte professionnelle est chez OVH ; l'offre précise
+n'a pas été fournie. Les propriétaires encaissent directement les loyers.
 
-## Cartographie fondée sur le code et le relevé public
+La notice distingue les mesures précontractuelles demandées par la personne
+concernée, l'intérêt légitime à répondre aux autres demandes et à sécuriser le
+formulaire, et le consentement aux offres/relances commerciales. Les demandes
+faites pour une personne morale ne relèvent pas automatiquement de la base
+précontractuelle applicable à la personne qui écrit. La mise en balance des
+intérêts reste à documenter en interne.
 
-| Étape | Données / finalité observables | Destinataire observé | Ce qui reste à vérifier |
-|---|---|---|---|
-| Navigation du site | Requêtes HTTP et ressources du site ; pages et langues servies sans stockage local applicatif observé | Vercel, hébergeur déclaré | Journaux d'infrastructure, personnes habilitées, régions et durée des logs |
-| Entrée dans un champ du formulaire | Chargement Turnstile pour la vérification anti-robot | Cloudflare | Options du widget, DPA accepté, opérations sur le terminal et finalités exactes |
-| Soumission | Identité, email, téléphone selon intention, commune, type de bien, message facultatif et jeton | Service /api/contact sur Vercel | Correspondance de la version déployée, réception réelle, accès aux journaux |
-| Vérification anti-spam | Le code envoie le jeton à Siteverify ; pas le message commercial dans cet appel | Cloudflare | Restrictions de domaines et garanties contractuelles applicables |
-| Transmission de la demande | Email reprenant les données de contact/logement/projet ; adresse de réponse du demandeur | Resend puis boîte contact Inastia | Contrat, conservation chez Resend, fournisseur de messagerie, accès, copies et sauvegardes |
-| Traitement commercial | Réponse et éventuel rappel audit annoncés publiquement | Équipe Inastia | Qui traite, éventuel CRM ou transfert interne, conservation et procédure d'effacement |
+Deux choix facultatifs, séparés et non précochés permettent les relances email
+et téléphone. Le choix téléphone vaut au maximum un an, sans renouvellement
+automatique ; tout choix peut être retiré à tout moment. La réponse à la demande
+et le rappel d'audit demandé restent indépendants. Le détail de traitement humain
+et de conservation des preuves figure dans [le suivi des demandes](lead-operations.md).
 
-Sources techniques : src/templates.ts, src/contact.ts, api/contact.js et
-mentions légales. Relevé public du 6 septembre : profil Chrome neuf, FR puis EN
-sans focus, aucune origine tierce ni clé local/session observée ; après focus
-sans saisie, requêtes vers challenges.cloudflare.com et un sous-domaine, sans
-cookie constaté dans la fenêtre d'environ 5,5 secondes. Des requêtes techniques
-Cloudflare utilisent POST ; aucune demande n'a été soumise à /api/contact lors
-de l'audit. Cette observation n'exclut pas d'autres opérations sur le terminal
-et ne suffit pas à conclure à une exemption de consentement.
+Les CGV corrigées distinguent consommateurs/professionnels, rétractation et
+exécution anticipée, pénalités professionnelles et compétence territoriale.
+Elles reflètent l'encaissement direct des loyers par les propriétaires ; elles
+ne certifient aucun statut professionnel. Les coordonnées CM2C du PDF existant
+figurent aussi en HTML. Les modèles de contrat et la preuve d'adhésion CM2C en
+cours restent à fournir.
 
-La corrélation d'envoi est intégrée et décrite dans la notice publique :
-identifiant opaque de demande, identifiant fournisseur, phase/résultat et durée
-peuvent eux aussi devenir des données personnelles lorsqu'ils sont reliables
-à une demande. Les événements applicatifs n'incluent ni coordonnées ni message.
-Ne pas journaliser
-les coordonnées, messages, jetons ni secrets ; documenter accès, fondement et
-conservation des nouvelles traces avant leur exploitation.
+## Cartographie et éléments vérifiés
 
-## Décisions factuelles indispensables à obtenir d'Inastia
+| Étape | Données / finalité | Destinataire et constat |
+|---|---|---|
+| Navigation et API | Requêtes HTTP, service du site et traitement du formulaire | Vercel ; fonctions de production dans `iad1`, États-Unis, selon les réglages inspectés |
+| Entrée dans un champ | Chargement de la vérification anti-robot | Cloudflare Turnstile ; widget existant correspondant à la clé publique, mode Managed, préautorisation désactivée |
+| Vérification anti-spam | Jeton transmis à Siteverify, sans message commercial | Cloudflare ; entrée de domaine `inastia.fr`, qui inclut les sous-domaines selon son fonctionnement ; contrôle serveur limité à l'apex et `www` |
+| Transmission | Coordonnées, bien/projet, message facultatif et choix commerciaux avec leurs libellés | Resend puis boîte de contact Inastia chez OVH |
+| Suivi humain | Réponse, audit/devis et relances selon le choix applicable | Inastia ; fonctions habilitées, éventuel CRM, renvois et sauvegardes à confirmer |
+| Diagnostic | Référence opaque, phase, résultat, durée ; identifiant fournisseur et date serveur lors de l'acceptation | Journaux applicatifs Vercel ; sans coordonnées, message, jeton ni secret |
 
-1. **Bases légales par finalité.** Confirmer le traitement exact des demandes :
-   réponse à une demande de prestation/devis, renseignements généraux, sécurité
-   anti-spam et éventuels journaux de diagnostic. Identifier le fondement retenu
-   pour chacun et, si intérêt légitime, l'intérêt poursuivi ainsi que la
-   justification de nécessité/proportionnalité. Ne pas confondre une finalité
-   avec une base légale et ne pas choisir le consentement par défaut.
-2. **Destinataires et durées.** Confirmer les personnes ou fonctions qui accèdent
-   à la boîte, le fournisseur de messagerie, les éventuels CRM/renvois et les
-   règles réellement appliquées aux copies, sauvegardes et journaux. La notice
-   historique annonce trois ans après le dernier contact, puis la durée de la
-   relation contractuelle : cette phrase est conservée, pas certifiée comme
-   politique de purge effective. Vérifier ses conditions et les éventuelles
-   obligations distinctes d'archivage avant de la modifier.
-3. **Fournisseurs et transferts.** Confirmer les contrats/DPA acceptés, options,
-   lieux de traitement et garanties utilisés chez Vercel, Cloudflare, Resend et
-   le fournisseur de messagerie. Un DPA public n'atteste pas à lui seul le
-   dispositif contractuel réellement applicable au compte.
-4. **Contrats et médiation.** Confirmer qualité des clients et modes de signature,
-   documents utilisés, demande d'exécution anticipée le cas échéant, et adhésion
-   CM2C en cours. Les CGV historiques décrivent un mandat et un reversement des
-   loyers sous quinze jours après fin de mois : préciser qui encaisse, au nom
-   de qui et selon quel contrat, puis rapprocher qualifications/assurances et
-   garanties des opérations réelles. Aucun statut métier ni manipulation de
-   fonds ne peut être certifié depuis la seule page publique.
+Les identifiants de diagnostic restent corrélables à une demande et ne sont pas
+réputés anonymes. L'horloge du navigateur est déclarative ; l'événement serveur
+d'acceptation permet de corréler la réception. Aucun stockage local applicatif
+des coordonnées n'est ajouté.
 
-## Préparation de la notice après validation
+**Resend.** Le domaine existant `inastia.fr` apparaît vérifié et sa région d'envoi
+est Ireland (`eu-west-1`). L'offre est Transactional Free, 3 000 emails/mois et
+100/jour ; l'interface montre un administrateur. La rubrique Documents indique
+que le DPA est conclu à l'inscription, conformément aux conditions qui
+l'incorporent. Les métadonnées, logs et données de compte sont stockés aux
+États-Unis selon la documentation, indépendamment de la région d'envoi. La
+rétention annoncée pour cette offre est de 30 jours. Ce délai ne définit pas la
+conservation dans la boîte OVH ni celle des preuves internes. Le formulaire de
+création d'un nouveau sous-domaine propose des options de suivi ; ses cases ne
+prouvent pas les réglages du domaine existant. Aucun sous-domaine n'a été créé,
+aucun réglage modifié. TLS apparaît opportuniste.
 
-Pour chaque finalité confirmée, ajouter un paragraphe court dans la section
-« Collecte des données » : finalité concrète, base juridique correspondante et,
-si nécessaire, intérêt légitime poursuivi. Une réponse à une demande de contrat
-peut relever des mesures précontractuelles à la demande de la personne ; cela
-ne qualifie pas automatiquement toutes les demandes générales ni l'anti-spam.
-Ce document ne vaut pas validation de ce fondement pour Inastia.
+**Transferts.** Le DPA Vercel prévoit les clauses contractuelles types (§13,
+annexe 3). Le DPA Resend prévoit notamment les modules applicables des clauses
+contractuelles types ; son délai de suppression après fin de compte ne doit pas
+être confondu avec la conservation des prospects. Cloudflare distingue le rôle
+de sous-traitant pour protéger les sites et celui de responsable pour améliorer
+la détection des robots ; son DPA prévoit des garanties pour les transferts hors
+EEE. Ces documents sont des éléments contractuels, pas une certification globale
+de conformité. Pour OVH, la localisation dépend notamment de la commande et de
+l'offre ; une résidence France/UE n'est pas établie par le seul nom du fournisseur.
 
-Proposition de rédaction à valider avec les pratiques réelles avant publication :
+**Terminal et CAPTCHA.** Le relevé public initial, sur profil Chrome neuf, n'a
+observé aucune origine tierce avant focus ni clé local/session ; après focus,
+des requêtes Cloudflare sont apparues sans cookie constaté dans la courte fenêtre
+observée. Cela n'exclut pas d'autres opérations sur le terminal. Le mode Managed
+et la préautorisation désactivée ne suffisent pas à conclure à une exemption de
+consentement : l'analyse des opérations et finalités reste ouverte. Un focus ne
+vaut pas consentement. Aucune CMP ni mesure d'audience n'a été ajoutée.
 
-- « Lorsque vous demandez une prestation, un devis ou un audit en vue d'un
-  accompagnement, les données nécessaires servent à prendre les mesures
-  précontractuelles demandées par vous (article 6, paragraphe 1, b du RGPD). »
-- « Pour les demandes de renseignements générales, nous nous fondons sur notre
-  intérêt légitime à répondre aux personnes qui nous contactent au sujet de
-  nos services (article 6, paragraphe 1, f). »
-- « La prévention des messages indésirables et le diagnostic des erreurs de
-  transmission répondent à notre intérêt légitime à assurer la sécurité et la
-  fiabilité du formulaire (article 6, paragraphe 1, f). »
+## Points restant à confirmer
 
-Ces trois phrases constituent une proposition conditionnelle, pas l'affirmation
-que ces fondements ont été retenus par Inastia. Vérifier notamment les demandes
-faites pour le compte d'une personne morale et documenter la mise en balance
-des intérêts avant de retenir un intérêt légitime.
+- Fonctions accédant à la boîte et aux journaux, éventuel CRM, renvois internes,
+  sauvegardes, durées réellement appliquées et procédure d'effacement.
+- La notice historique annonce trois ans après le dernier contact, puis la durée
+  de la relation contractuelle. Cette règle n'est pas confirmée comme pratique
+  effective de purge ; ne pas considérer sa présence comme preuve d'exécution.
+  Distinguer traitement commercial, preuve des choix/retraits et archives légales.
+- Offre/commande OVH et garanties applicables ; conservation effective des logs
+  Vercel et organisation de la conservation des preuves avant expiration chez
+  Resend ; contrôle des options de suivi du domaine Resend existant.
+- Analyse des opérations Turnstile au regard de l'article 82 et formalisation de
+  la mise en balance des intérêts ; modèles contractuels et adhésion CM2C.
+- Réception en boîte et attribution humaine du test synthétique : un envoi réel
+  à `contact@inastia.fr` est autorisé après déploiement, mais n'est pas établi par
+  le présent document. Voir la procédure de réception.
 
-Compléter ensuite les catégories réelles de destinataires, les durées ou
-critères vérifiés et, en cas de transfert applicable, le pays/la garantie et
-le moyen d'en obtenir une copie. Adapter les droits à la base retenue, notamment
-la portabilité ou le retrait du consentement lorsqu'ils s'appliquent. Ne pas
-publier une formule « conforme RGPD » globale ou « aucun transfert » faute de
-preuve.
+Aucune purge, liste d'opposition contenant des coordonnées, signature de contrat,
+modification fournisseur ni souscription n'est effectuée par cette documentation.
+AUD-01 et AUD-08 restent partiels sur ces points opérationnels ; les textes ne
+constituent pas une validation juridique générale.
 
-Cloudflare distingue, dans son addendum Turnstile du 18 juin 2025, un rôle de
-sous-traitant pour protéger les sites et de responsable pour améliorer la
-détection des robots. Le DPA public Resend décrit des opérations principales aux
-États-Unis et des mécanismes de transfert. Ces informations justifient une
-vérification des contrats/options Inastia ; elles ne prouvent ni transfert
-illicite ni obligation automatique de bandeau. La décision relative à l'article
-82 doit tenir compte des opérations sur le terminal et de leurs finalités
-effectives ; un simple focus ne vaut pas consentement.
+## Sources consultées le 6 septembre 2026
 
-## Vérification et clôture
-
-- AUD-01 reste **partiel** tant que les bases et informations conditionnelles
-  applicables ne sont pas confirmées puis ajoutées ; droit CNIL et informations
-  de formulaire peuvent être vérifiés sans données personnelles.
-- AUD-06 : vérifier le texte rendu, puis rapprocher les clauses corrigées des
-  modèles contractuels réels. Les autres thèmes historiques sont conservés ;
-  leur présence n'est pas une validation juridique générale.
-- AUD-07 : retrouver les mêmes coordonnées en texte dans les deux pages, activer
-  les liens au clavier et vérifier que le PDF reste disponible. L'accessibilité
-  de l'information ne prouve pas l'adhésion.
-- AUD-08 reste **à confirmer** tant que contrats, options, durées et opérations
-  effectives ne sont pas documentés. Aucun message réel ni compte fournisseur
-  modifié pour le compléter.
-
-## Références officielles reconsultées le 6 septembre 2026
-
-- [RGPD, articles 12–13 — CNIL](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3)
-  et [recours CNIL](https://www.cnil.fr/fr/plaintes).
-- [FAQ CNIL cookies, questions 17–18](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/FAQ),
-  29 avril 2026 : CAPTCHA, finalités et information distincte du RGPD.
-- [Turnstile Privacy Addendum](https://www.cloudflare.com/turnstile-privacy-policy/),
-  mise à jour du 18 juin 2025 ; [DPA Resend](https://resend.com/legal/dpa), version
-  publique consultée, contrat du compte non inspecté.
+- [RGPD, information et droits — CNIL](https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre3)
+  et [FAQ CNIL cookies, CAPTCHA](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/FAQ).
+- [DPA Vercel](https://vercel.com/legal/dpa).
+- [Conditions Resend](https://resend.com/legal/terms-of-service),
+  [DPA signé de référence](https://resend.com/static/documents/resend-dpa-signed.pdf),
+  [régions et stockage](https://resend.com/docs/dashboard/domains/regions),
+  [offres et rétention](https://resend.com/pricing/).
+- [Addendum Turnstile](https://www.cloudflare.com/turnstile-privacy-policy/),
+  18 juin 2025 ; [DPA Cloudflare](https://www.cloudflare.com/cloudflare-customer-dpa/).
+- [Contrats OVHcloud](https://www.ovhcloud.com/fr/terms-and-conditions/contracts/)
+  et [DPA OVHcloud](https://contract.eu.ovhapis.com/1.0/pdf/OVH_Data_Protection_Agreement-fr.pdf).
 - [L221-18](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032226842),
-  [L221-25](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044563179) et
-  [L221-28](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044563170) :
-  délai de rétractation, commencement et pleine exécution ; les deux derniers
-  articles sont en vigueur dans cette version depuis le 28 mai 2022.
-- [R631-3](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032808504),
-  depuis le 1er juillet 2016 ; [article 48 du Code de procédure civile](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006410147) :
-  compétences légales et attribution entre commerçants.
-- [L441-10](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414392),
-  version applicable au 6 septembre 2026 : pénalités et minimum légal ; vérifier
-  la version applicable lors d'une évolution future des contrats.
+  [L221-25](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044563179),
+  [L221-28](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000044563170),
+  [R631-3](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032808504),
+  [article 48 CPC](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006410147)
+  et [L441-10](https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414392).
 - [PDF CM2C déjà publié par Inastia](https://inastia.fr/vitrophanie.pdf),
-  relu visuellement le 6 septembre 2026 : coordonnées reprises à l'identique,
-  aucune identité individuelle.
+  coordonnées relues sans preuve d'adhésion.

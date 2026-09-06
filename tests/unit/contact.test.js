@@ -10,6 +10,16 @@ const valid = {
   location: "Porto-Vecchio",
   requestId: "b3f08a74-27f0-4a3b-9aab-4baab05f5c31",
 };
+function consentRecord(overrides = {}) {
+  return {
+    marketingEmail: false,
+    marketingPhone: false,
+    consentVersion: "commercial-2026-09-06-v1",
+    consentLocale: "fr",
+    consentCollectedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
 function request(body = valid, overrides = {}) {
   const res = {
     status: vi.fn().mockReturnThis(),
@@ -240,14 +250,15 @@ describe("contact API (all external requests mocked)", () => {
   it("retries ambiguous acceptance with an identical mail payload and idempotency key", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-09-06T10:00:00Z"));
+    const body = { ...valid, ...consentRecord({ marketingEmail: true, marketingPhone: true }), phone: "+33 6 00 00 00 00" };
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
     fetch.mockRejectedValueOnce(new Error("Synthetic lost response after acceptance"));
-    const first = await request();
+    const first = await request(body);
     expect(first.json).toHaveBeenCalledWith(expect.objectContaining({ uncertain: true, requestId: valid.requestId }));
     vi.setSystemTime(new Date("2026-09-06T10:15:00Z"));
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
-    const second = await request({ ...valid, turnstileToken: "fresh-test-token" });
+    const second = await request({ ...body, turnstileToken: "fresh-test-token" });
     expect(second.status).toHaveBeenCalledWith(200);
     expect(fetch.mock.calls[1][1].headers["Idempotency-Key"]).toBe(`contact/${valid.requestId}`);
     expect(fetch.mock.calls[3][1].headers["Idempotency-Key"]).toBe(fetch.mock.calls[1][1].headers["Idempotency-Key"]);
@@ -261,7 +272,7 @@ describe("contact API (all external requests mocked)", () => {
     await request({ ...valid, message: "PRIVATE_MESSAGE", phone: "+33 6 12 34 56 78" });
     const events = console.info.mock.calls.map(([text]) => JSON.parse(text));
     expect(events).toEqual([expect.objectContaining({ requestId: valid.requestId, providerId: "fa64e6ef-875e-4e75-b9a1-593bdedb2629", stage: "provider_accepted", status: 200 })]);
-    expect(Object.keys(events[0]).sort()).toEqual(["durationMs", "event", "providerId", "requestId", "stage", "status"]);
+    expect(Object.keys(events[0]).sort()).toEqual(["durationMs", "event", "providerId", "receivedAt", "requestId", "stage", "status"]);
     expect(JSON.stringify(events)).not.toMatch(/PRIVATE_MESSAGE|test@example|test-secret|test-key|test-token|Jean|12 34 56/);
   });
 
@@ -287,5 +298,93 @@ describe("contact API (all external requests mocked)", () => {
     const res = await request();
     expect(res.status).toHaveBeenCalledWith(200);
     expect(console.info).toHaveBeenCalledWith(expect.stringContaining("01991b0e-9432-7000-8000-000000000001"));
+  });
+
+  it.each([
+    ["marketingEmail", "true"], ["marketingPhone", "false"],
+    ["marketingEmail", 1], ["marketingPhone", 0],
+    ["marketingEmail", null], ["marketingPhone", []],
+  ])("rejects invalid commercial boolean %s=%j", async (name, value) => {
+    const res = await request({ ...valid, ...consentRecord(), [name]: value });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { consentVersion: "" }, { consentVersion: "different-version" },
+    { consentLocale: "de" }, { consentCollectedAt: "" },
+    { consentCollectedAt: "not-a-date" }, { consentCollectedAt: "2026-02-31T10:00:00.000Z" },
+  ])("rejects invalid consent evidence %#", async (override) => {
+    const res = await request({ ...valid, ...consentRecord(override) });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects a new opt-in without its collection evidence", async () => {
+    const res = await request({ ...valid, marketingEmail: true });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([[1, false], [1, true], [-48, false], [-48, true]])("accepts a declarative clock offset of %s hours with opt-ins %s", async (hours, optedIn) => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const record = consentRecord({ marketingEmail: optedIn, marketingPhone: optedIn, consentCollectedAt: new Date(Date.now() + hours * 60 * 60 * 1000).toISOString() });
+    const res = await request({ ...valid, ...record, ...(optedIn ? { phone: "+33 6 00 00 00 00" } : {}) });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.html).toContain(record.consentCollectedAt);
+    expect(mail.html).toContain("horloge non vérifiée");
+    expect(mail.html).toContain(`Email : <strong>${optedIn ? "Oui" : "Non"}</strong>`);
+  });
+
+  it.each(["", "x"])("requires a usable phone for optional telephone opt-in (%s)", async (phone) => {
+    const res = await request({ ...valid, ...consentRecord({ marketingPhone: true }), phone });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each([[false, false], [true, false], [false, true], [true, true]])("records independent email=%s and telephone=%s choices", async (marketingEmail, marketingPhone) => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const record = consentRecord({ marketingEmail, marketingPhone });
+    const res = await request({ ...valid, ...record, ...(marketingPhone ? { phone: "+33 6 00 00 00 00" } : {}) });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.html).toContain(`Email : <strong>${marketingEmail ? "Oui" : "Non"}</strong>`);
+    expect(mail.html).toContain(`Téléphone : <strong>${marketingPhone ? "Oui, pendant un an au maximum" : "Non</strong>"}`);
+    expect(mail.html).toContain(record.consentVersion);
+    expect(mail.html).toContain(record.consentCollectedAt);
+    expect(mail.html).toContain("horloge non vérifiée");
+    expect(mail.html).toContain("offres et relances commerciales d’Inastia concernant la gestion complète de locations");
+    expect(JSON.stringify(console.info.mock.calls)).not.toContain("marketingEmail");
+    expect(JSON.stringify(console.info.mock.calls)).not.toContain("marketingPhone");
+  });
+
+  it("keeps legacy requests without checkboxes explicitly opted out", async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const res = await request();
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.html).toContain("Email : <strong>Non</strong>");
+    expect(mail.html).toContain("Téléphone : <strong>Non</strong>");
+    expect(mail.html).toContain("aucune autorisation de prospection enregistrée");
+    expect(mail.html).not.toContain("Date déclarée");
+  });
+
+  it("uses reliable receipt evidence rather than deriving telephone expiry from the visitor clock", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2028-02-29T10:00:00.000Z"));
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const res = await request({ ...valid, ...consentRecord({ marketingPhone: true }), phone: "+33 6 00 00 00 00" });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.html).toContain("première date fiable de réception serveur ou d’acceptation fournisseur");
+    expect(mail.html).toContain("Aucun renouvellement automatique");
+    expect(mail.html).not.toContain("2029-02-28");
+    expect(mail.html).not.toContain("Fin du choix téléphone");
+    expect(console.info).toHaveBeenCalledWith(expect.stringContaining('"receivedAt":"2028-02-29T10:00:00.000Z"'));
   });
 });

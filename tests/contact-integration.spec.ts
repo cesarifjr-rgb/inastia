@@ -3,15 +3,18 @@ import { test, expect } from "@playwright/test";
 const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Integration submits only to a local intercepted route.");
 
+for (const locale of ["fr", "en"]) {
 for (const lostResponse of [false, true]) {
-  test(lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry", async ({ page }) => {
+  test(`${locale}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
     // Load the unchanged JavaScript handler through its module URL.
     const { default: handler } = await import(new URL("../api/contact.js", import.meta.url).href);
     const providerCalls: { url: string; body: string; key: string | null }[] = [];
-    const clientPayloads: Record<string, string>[] = [];
+    const clientPayloads: Record<string, string | boolean>[] = [];
     const replies: { status: number; body: unknown }[] = [];
     let emailAttempts = 0;
     let challengeGeneration = 0;
+    const reliableNow = new Date();
+    await page.clock.install({ time: new Date(reliableNow.getTime() + (lostResponse ? -48 : 1) * 60 * 60 * 1000) });
 
     await page.addInitScript(() => {
       let generation = 0;
@@ -81,7 +84,7 @@ for (const lostResponse of [false, true]) {
       }
     });
 
-    await page.goto("/contact?intent=audit");
+    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=audit`);
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
     await page.locator("#firstName").fill("Exemple");
@@ -89,6 +92,13 @@ for (const lostResponse of [false, true]) {
     await page.locator("#email").fill("integration@example.com");
     await page.locator("#phone").fill("+33 6 00 00 00 00");
     await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
+    if (lostResponse) {
+      await page.locator("#marketingEmail").check();
+      await page.locator("#marketingPhone").check();
+    }
+    const presentedEmail = await page.locator('label[for="marketingEmail"]').innerText();
+    const presentedPhone = await page.locator('label[for="marketingPhone"]').innerText();
+    const presentedHelp = await page.locator("#commercial-consent-help").innerText();
     await page.evaluate("window.__integrationSolve()");
     await page.locator("#submit-contact").click();
 
@@ -106,12 +116,22 @@ for (const lostResponse of [false, true]) {
     expect(emails).toHaveLength(lostResponse ? 2 : 1);
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
     expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
+    const mail = JSON.parse(emails[0]?.body || "{}");
+    expect(clientPayloads[0]).toMatchObject({ marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    expect(mail.html).toContain(presentedEmail);
+    expect(mail.html).toContain(presentedPhone);
+    expect(mail.html).toContain(presentedHelp);
+    expect(mail.html).toContain(clientPayloads[0]?.consentCollectedAt);
+    expect(mail.html).toContain(`Email : <strong>${lostResponse ? "Oui" : "Non"}</strong>`);
+    expect(mail.html).toContain(`Téléphone : <strong>${lostResponse ? "Oui, pendant un an au maximum" : "Non</strong>"}`);
     if (lostResponse) {
       expect(clientPayloads[1]?.requestId).toBe(clientPayloads[0]?.requestId);
       expect(clientPayloads[1]?.turnstileToken).not.toBe(clientPayloads[0]?.turnstileToken);
+      expect(clientPayloads[1]?.consentCollectedAt).toBe(clientPayloads[0]?.consentCollectedAt);
       expect(emails[1]?.key).toBe(emails[0]?.key);
       expect(emails[1]?.body).toBe(emails[0]?.body);
     }
     expect(providerCalls).toHaveLength(lostResponse ? 4 : 2);
   });
+}
 }

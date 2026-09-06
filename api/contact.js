@@ -6,6 +6,19 @@ import { escapeHtml, isValidEmail, truncate } from '../utils.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const receiptId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
+const consentVersion = 'commercial-2026-09-06-v1';
+const consentLabels = {
+    fr: {
+        email: 'J’accepte de recevoir par email les offres et relances commerciales d’Inastia concernant la gestion complète de locations.',
+        phone: 'J’accepte qu’Inastia m’appelle pendant un an pour me présenter ses offres de gestion complète de locations.',
+        help: 'Ces choix sont facultatifs et indépendants de votre demande. Vous pouvez retirer votre accord à tout moment en écrivant à contact@inastia.fr ; pour les appels commerciaux, vous pouvez aussi nous le dire pendant l’appel. Le refus de ces offres n’empêche pas le traitement de votre demande ni le rappel d’audit demandé.',
+    },
+    en: {
+        email: 'I agree to receive Inastia’s offers and marketing follow-ups about full holiday rental management by email.',
+        phone: 'I agree to receive calls from Inastia for one year about its full holiday rental management offers.',
+        help: 'These choices are optional and separate from your enquiry. You can withdraw your consent at any time by emailing contact@inastia.fr; for marketing calls, you can also tell us during the call. Declining these offers does not prevent us from handling your enquiry or making the audit callback you requested.',
+    },
+};
 
 export default async function handler(req, res) {
     const startedAt = Date.now();
@@ -15,7 +28,10 @@ export default async function handler(req, res) {
         // Metadata only: never log the payload, provider errors, credentials or tokens.
         try {
             const event = { event: 'contact', requestId, stage, status, durationMs: Date.now() - startedAt };
-            if (typeof providerId === 'string' && receiptId.test(providerId)) event.providerId = providerId;
+            if (typeof providerId === 'string' && receiptId.test(providerId)) {
+                event.providerId = providerId;
+                event.receivedAt = new Date(startedAt).toISOString();
+            }
             console[status >= 400 ? 'warn' : 'info'](JSON.stringify(event));
         } catch { /* Telemetry must not prevent the response. */ }
         return res.status(status).json({ ...body, requestId });
@@ -43,7 +59,8 @@ export default async function handler(req, res) {
     }
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
-        surface: 10, capacity: 5, message: 2000, intent: 20, turnstileToken: 2048, requestId: 36 };
+        surface: 10, capacity: 5, message: 2000, intent: 20, turnstileToken: 2048, requestId: 36,
+        consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
     const input = {};
     for (const [key, limit] of Object.entries(limits)) {
         const value = req.body[key];
@@ -58,6 +75,23 @@ export default async function handler(req, res) {
         propertyType, location, bedrooms, bathrooms,
         surface, capacity, message, intent, turnstileToken
     } = input;
+
+    for (const name of ['marketingEmail', 'marketingPhone']) {
+        if (req.body[name] !== undefined && typeof req.body[name] !== 'boolean') {
+            return respond(400, { success: false, error: 'Choix commercial invalide.' }, 'validation');
+        }
+    }
+    const marketingEmail = req.body.marketingEmail === true;
+    const marketingPhone = req.body.marketingPhone === true;
+    const hasConsentRecord = req.body.marketingEmail !== undefined || req.body.marketingPhone !== undefined
+        || input.consentVersion || input.consentLocale || input.consentCollectedAt;
+    if (hasConsentRecord) {
+        const collectedAt = new Date(input.consentCollectedAt);
+        if (input.consentVersion !== consentVersion || !['fr', 'en'].includes(input.consentLocale)
+            || !Number.isFinite(collectedAt.getTime()) || collectedAt.toISOString() !== input.consentCollectedAt) {
+            return respond(400, { success: false, error: 'Informations de collecte invalides.' }, 'validation');
+        }
+    }
 
     if (input.requestId && !uuid.test(input.requestId)) {
         return respond(400, { success: false, error: 'Identifiant de demande invalide.' }, 'validation');
@@ -78,8 +112,8 @@ export default async function handler(req, res) {
     if (!firstName || !lastName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
     }
-    if (intent === 'audit' && !phone) {
-        return respond(400, { success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit.' }, 'validation');
+    if ((intent === 'audit' || marketingPhone) && !phone) {
+        return respond(400, { success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit ou votre choix de relances téléphoniques.' }, 'validation');
     }
     if (!['Villa', 'Appartement', 'Maison', 'Autre'].includes(propertyType)) {
         return respond(400, { success: false, error: 'Type de bien invalide.' }, 'validation');
@@ -142,6 +176,14 @@ export default async function handler(req, res) {
     const safeCapacity = escapeHtml(truncate(capacity, 5));
     const safeMessage = escapeHtml(truncate(message, 2000));
     const safeIntent = escapeHtml(intentLabels.get(intent));
+    const consentCopy = consentLabels[input.consentLocale];
+    const consentHtml = `
+        <h2 style="color:#1a1a2e;font-size:16px;margin:24px 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">Choix commerciaux facultatifs</h2>
+        <p style="font-size:14px">Email : <strong>${marketingEmail ? 'Oui' : 'Non'}</strong><br>Téléphone : <strong>${marketingPhone ? 'Oui, pendant un an au maximum et jusqu’au retrait éventuel' : 'Non'}</strong></p>
+        ${hasConsentRecord ? `<p style="font-size:12px">Version : ${consentVersion} ; langue : ${input.consentLocale}<br>Date déclarée par le navigateur (UTC, horloge non vérifiée) : ${input.consentCollectedAt}</p>
+        <p style="font-size:12px">Libellé email : ${escapeHtml(consentCopy.email)}<br>Libellé téléphone : ${escapeHtml(consentCopy.phone)}<br>Information associée : ${escapeHtml(consentCopy.help)}</p>` : '<p style="font-size:12px">Aucun choix commercial fourni : aucune autorisation de prospection enregistrée.</p>'}
+        ${marketingPhone ? '<p style="font-size:12px">Limiter les appels commerciaux à un an à compter de la première date fiable de réception serveur ou d’acceptation fournisseur, à retrouver avec cette référence. Aucun renouvellement automatique ; tout retrait met fin aux appels avant cette échéance. Ne pas calculer cette échéance depuis l’horloge du navigateur.</p>' : ''}
+        <p style="font-size:12px">La réponse à la demande reste indépendante de ces choix. Référence de demande : ${requestId}. L’horodatage de réception serveur est corrélé à cette référence dans l’événement d’acceptation fournisseur.</p>`;
 
     const subject = `Nouveau lead Inastia — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
 
@@ -173,6 +215,7 @@ export default async function handler(req, res) {
         <h2 style="color:#1a1a2e;font-size:16px;margin:24px 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">💬 Message</h2>
         <p style="background:#fff;padding:16px;border-radius:8px;border-left:4px solid #d4a853;margin:0;font-size:14px;line-height:1.6">${safeMessage}</p>
         ` : ''}
+        ${consentHtml}
       </div>
       <div style="background:#f0f0f0;padding:16px 32px;text-align:center;font-size:12px;color:#999">
         Envoyé depuis le formulaire de contact inastia.fr

@@ -38,6 +38,7 @@ const messages = {
       "La confirmation de votre envoi n’a pas été reçue. Vos informations sont conservées. Vous pouvez réessayer sans les modifier ou nous contacter pour vérifier la réception.",
     phone: "Indiquez un numéro de téléphone de 7 à 15 chiffres, avec son indicatif si nécessaire.",
     required: "Veuillez renseigner ce champ.",
+    requestExpired: "Pour éviter un doublon, contactez-nous pour vérifier la réception de votre précédente demande avant d’en envoyer une nouvelle.",
   },
   en: {
     loading: "Loading spam protection…",
@@ -57,6 +58,7 @@ const messages = {
       "We did not receive confirmation of your enquiry. Your information has been kept. You can retry without changing it or contact us to check whether it arrived.",
     phone: "Enter a phone number with 7 to 15 digits, including its country code if needed.",
     required: "Please complete this field.",
+    requestExpired: "To avoid a duplicate, contact us to check whether your previous enquiry arrived before sending a new one.",
   },
 };
 
@@ -72,6 +74,7 @@ export function initContact(): void {
   const locale = form.dataset.locale === "en" ? "en" : "fr";
   const copy = messages[locale];
   const intent = form.querySelector<HTMLSelectElement>("#contact-intent");
+  const marketingPhone = form.querySelector<HTMLInputElement>("#marketingPhone");
   const intents = ["audit", "gestion"];
   const initialIntent =
     new URLSearchParams(location.search).get("intent") ?? "";
@@ -109,10 +112,11 @@ export function initContact(): void {
       : audit
         ? "Tell us about your property and when you are available for the callback. You can add its guest capacity and a listing link, if one exists."
         : "Tell us about your current situation, your full management plans and your role in the decision. You can add the guest capacity and a listing link.";
-    if (phone) phone.required = audit;
+    const phoneRequired = audit || marketingPhone?.checked === true;
+    if (phone) phone.required = phoneRequired;
     if (phoneLabel) phoneLabel.textContent = locale === "fr"
-      ? audit ? "Téléphone *" : "Téléphone (facultatif)"
-      : audit ? "Phone *" : "Phone (optional)";
+      ? phoneRequired ? "Téléphone *" : "Téléphone (facultatif)"
+      : phoneRequired ? "Phone *" : "Phone (optional)";
     if (label)
       label.textContent =
         locale === "fr"
@@ -132,13 +136,14 @@ export function initContact(): void {
       });
   }
   intent?.addEventListener("change", updateIntent);
+  marketingPhone?.addEventListener("change", updateIntent);
   updateIntent();
   let token = "";
   let widgetId: string | undefined;
   let scriptPromise: Promise<void> | undefined;
   let pending = false;
   let completed = false;
-  let enquiry: { fingerprint: string; id: string } | undefined;
+  let enquiry: { fingerprint: string; id: string; collectedAt: string; createdWallAt: number; createdElapsedAt: number } | undefined;
 
   function validateFields(): void {
     for (const name of ["firstName", "lastName", "location"]) {
@@ -259,7 +264,7 @@ export function initContact(): void {
     form.setAttribute("aria-busy", "true");
     announce(copy.sending, "pending");
     const fields = new FormData(form);
-    const payload: Record<string, string> = {};
+    const payload: Record<string, string | boolean> = {};
     for (const name of [
       "intent",
       "firstName",
@@ -277,11 +282,16 @@ export function initContact(): void {
       const value = fields.get(name);
       payload[name] = typeof value === "string" ? value.trim() : "";
     }
+    payload.marketingEmail = form.querySelector<HTMLInputElement>("#marketingEmail")?.checked === true;
+    payload.marketingPhone = marketingPhone?.checked === true;
+    payload.consentVersion = form.dataset.consentVersion ?? "";
+    payload.consentLocale = locale;
     const fingerprint = JSON.stringify(payload);
     if (enquiry?.fingerprint !== fingerprint) {
-      enquiry = { fingerprint, id: globalThis.crypto.randomUUID() };
+      enquiry = { fingerprint, id: globalThis.crypto.randomUUID(), collectedAt: new Date().toISOString(), createdWallAt: Date.now(), createdElapsedAt: globalThis.performance.now() };
     }
     payload.requestId = enquiry.id;
+    payload.consentCollectedAt = enquiry.collectedAt;
     payload.turnstileToken = token;
     // Snapshot first: disabled controls are excluded from FormData.
     const controls = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea"));
@@ -290,7 +300,13 @@ export function initContact(): void {
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), 25000);
     let uncertain = true;
+    let requestExpired = false;
     try {
+      // Initial clock offsets cancel out; either clock can cover sleep or a clock change.
+      if (Math.max(Date.now() - enquiry.createdWallAt, globalThis.performance.now() - enquiry.createdElapsedAt) >= 23 * 60 * 60 * 1000) {
+        requestExpired = true;
+        throw new Error("Enquiry retry window expired");
+      }
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -312,7 +328,7 @@ export function initContact(): void {
       }
       completed = true;
       form.reset();
-      if (intent) intent.value = payload.intent ?? "";
+      if (intent) intent.value = typeof payload.intent === "string" ? payload.intent : "";
       updateIntent();
       if (reset) reset.hidden = false;
       announce(
@@ -326,7 +342,7 @@ export function initContact(): void {
       );
     } catch {
       announce(
-        controller.signal.aborted ? copy.timeout : uncertain ? copy.uncertain : copy.error,
+        requestExpired ? copy.requestExpired : controller.signal.aborted ? copy.timeout : uncertain ? copy.uncertain : copy.error,
         "error",
         true,
       );
