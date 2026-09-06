@@ -12,7 +12,7 @@ export function pricing(locale: Locale): string {
   ];
   const separate = [
     t(locale, "Frais des plateformes Airbnb, Booking et autres canaux", "Fees charged by Airbnb, Booking and other platforms"),
-    t(locale, "Prestations de ménage, linge et consommables selon le devis", "Cleaning, linen and supplies as quoted"),
+    t(locale, "Prestations de ménage, linge et consommables selon le devis (payées par le locataire)", "Cleaning, linen and supplies as quoted (paid by the guest)"),
     t(locale, "Maintenance, réparations et remplacement d’équipements", "Maintenance, repairs and replacement equipment"),
     t(locale, "Travaux et gros entretien du logement", "Building work and major property maintenance"),
     t(locale, "Assurance propriétaire et charges de copropriété", "Owner’s insurance and co-ownership charges"),
