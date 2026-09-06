@@ -2917,22 +2917,30 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
   }
   .contact-layout {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding-block: 24px 48px;
+    gap: 16px;
+    padding-block: 16px 48px;
   }
   .contact-intro > .eyebrow {
     font-size: 9px;
   }
   .contact-intro h1 {
-    font-size: 40px;
-    margin-block: 12px;
+    font-size: 32px;
+    margin-block: 8px;
+  }
+  .contact-intro .lead {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 12px;
   }
   .contact-direct {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 16px;
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+  .contact-direct > a {
+    margin-bottom: 0;
   }
   .contact-direct p {
     width: 100%;
@@ -2940,7 +2948,13 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
   }
   .contact-form {
     border-radius: 7px;
-    padding: 20px;
+    padding: 16px;
+  }
+  .contact-form h2 {
+    margin-bottom: 8px;
+  }
+  .contact-form .form-note {
+    margin-bottom: 12px;
   }
   .form-grid {
     grid-template-columns: 1fr;
@@ -2988,7 +3002,7 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
     margin-top: 24px;
   }
   .contact-intro .breadcrumb {
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
   .contact-next-steps {
     grid-column: 1;

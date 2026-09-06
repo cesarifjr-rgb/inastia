@@ -53,7 +53,7 @@ for (const locale of ["fr", "en"] as const) {
     await page.goto(`${prefix}/`);
     await expect(page.locator(".home-hero")).toBeVisible();
     await expect(page.locator(".hero-main")).toHaveCSS("display", "grid");
-    await expect(page.locator(".hero-copy h1")).toHaveCSS("font-size", "80px");
+    await expect(page.locator(".hero-copy h1")).toHaveCSS("font-size", "72px");
     await expect(page.locator(".hero-accent")).toHaveCSS("color", "rgb(39, 127, 168)");
     await expect(page.locator(".home-hero")).toHaveCSS("background-color", "rgb(248, 243, 233)");
     await expect(page.locator("[data-hospitality-scene] svg.hospitality-illustration")).toBeVisible();
