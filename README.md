@@ -79,9 +79,13 @@ Ce script réutilise le SVG français, le compose avec le texte de la carte et p
 
 `contactPath(locale, intent)` conserve le motif choisi dans l’URL de contact : `audit` ou `gestion`. Les principaux appels à l’action mènent à la gestion complète ; l’audit reste une première étape possible. L’interface propose également un échange général. Les anciennes valeurs `annonce` et `rotation` reviennent à ce choix neutre côté client ; l’API continue à accepter ces anciens payloads pour compatibilité, sans proposer d’offres partielles. Le formulaire adapte le titre, les aides, le bouton et le message de réussite au motif choisi, puis le transmet avec la demande. Pour l’audit gratuit, Inastia rappelle sous 24 h selon la convenance du propriétaire : ce délai concerne le premier échange, pas la réalisation de l’analyse. Le téléphone est obligatoire pour l’audit, côté formulaire et API, et facultatif pour les autres demandes. Le projet reste facultatif ; son aide invite à préciser les disponibilités pour un rappel d’audit.
 
-`api/contact.js` vérifie les données et le jeton Cloudflare Turnstile avant d'envoyer via Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`. `src/contact.ts` charge Turnstile à l'interaction et gère chargement, erreur, expiration, succès et nouvel envoi.
+`api/contact.js` vérifie les données et le jeton Cloudflare Turnstile avant d'envoyer via Resend à `contact@inastia.fr`, depuis `noreply@inastia.fr`. `src/contact.ts` charge Turnstile à l'interaction et gère chargement, erreur, expiration, succès et nouvel envoi. Les champs sont verrouillés pendant l'envoi puis restaurés. Le type de bien et la commune sont validés côté serveur ; tout téléphone fourni doit être plausible, sans restriction aux seuls numéros français.
+
+Une demande conserve son identifiant opaque lors d'une reprise sans modification, tant que la page reste ouverte. L'API utilise cet identifiant comme clé d'idempotence Resend avec un contenu stable ; un nouveau jeton Turnstile est nécessaire à chaque tentative. Une réponse perdue est présentée comme incertaine. Les journaux structurés permettent de retrouver la phase et l'identifiant fournisseur sans enregistrer les coordonnées, le message ni le jeton. L'acceptation fournisseur ne prouve pas la réception en boîte : voir [le suivi opérationnel](docs/lead-operations.md).
 
 Les variables serveur nécessaires sont `RESEND_API_KEY` et `TURNSTILE_SECRET_KEY` ; voir `.env.example`. Les configurer dans les environnements Vercel concernés. Ne jamais exposer les valeurs dans le code client, les logs ou Git. Le domaine d'expédition Resend et les domaines autorisés Turnstile doivent correspondre à l'environnement utilisé.
+
+Le serveur accepte les réponses Turnstile pour `inastia.fr` et `www.inastia.fr`. `TURNSTILE_ALLOWED_HOSTNAMES` permet d'ajouter des hôtes exacts, séparés par des virgules, après leur autorisation dans le widget Cloudflare. Aucun sous-domaine de prévisualisation ni wildcard n'est autorisé automatiquement.
 
 Vite dev/preview ne sert pas les fonctions Vercel. Les tests locaux du formulaire simulent les services ; ils ne prouvent pas la délivrabilité réelle. Ne pas ajouter de clé réelle pour faire fonctionner les tests simulés.
 
@@ -92,16 +96,10 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npm run preview
-```
-
-Avec le preview actif sur `http://127.0.0.1:4100`, dans un autre terminal :
-
-```sh
 npm run test:e2e
 ```
 
-Playwright utilise Chrome installé sur la machine. Les tests couvrent notamment les routes, liens, métadonnées, images, navigation, accessibilité et états simulés du formulaire. La configuration ne démarre pas le serveur automatiquement.
+Playwright utilise Chrome installé sur la machine et démarre automatiquement le preview sur `http://127.0.0.1:4100` lorsqu'aucun `BASE_URL` n'est fourni. Hors CI, il peut réutiliser un preview déjà lancé sur ce port. Les tests couvrent notamment les routes, liens, métadonnées, images, navigation, accessibilité et états simulés du formulaire. La CI installe Chrome puis exécute cette suite après le build ; elle conserve les preuves d'échec pendant sept jours. Aucun secret fournisseur n'est requis en CI.
 
 Pour contrôler un déploiement depuis PowerShell :
 
@@ -114,6 +112,8 @@ Remove-Item Env:BASE_URL
 Sur une URL distante, les tests de mutation du formulaire sont ignorés. Aucun résultat de QA n'est présumé par cette documentation : exécuter les vérifications pour la révision à livrer et distinguer tests simulés et contrôles réels.
 
 ## Livraison
+
+Les corrections de l'audit du 6 septembre 2026 sont réalisées sur `codex/audit-recommendations`. Le contrôle GitHub `build-and-test` est requis par Vercel avant promotion en production ; la liaison Git et les domaines existants sont conservés. Les bundles JS/CSS dont le nom contient l'empreinte Vite utilisent un cache d'un an avec `immutable`. Le HTML et les fichiers à nom stable gardent leur comportement de revalidation.
 
 La révision inspirée des références HostnFly et WeHost est réalisée sur `codex/inspiration-motion`, dans le worktree `C:/Users/Admin/Documents/inastia-gestion-complete`, à partir de `c4a1e39`. Elle précise les bénéfices et les liens de l’accueil, et enrichit la scène de gestion de diagrammes originaux animés : calendrier, échanges et vérifications. La gestion complète reste la seule offre et le rappel d’audit sous 24 h est conservé. Le style rétabli depuis `900c977` est maintenu ; le responsable principal coordonne la publication après validation. Le projet précédent `C:/Users/Admin/Documents/inastia-design-frontier` reste distinct : ne pas y reprendre les règles Atlas pour cette version. Relire les modifications et vérifier la version avant intégration à `main`. L'intégration Git du projet Vercel `inastia` assure le déploiement ; conserver cette liaison et les domaines existants. Ne pas forcer de push.
 

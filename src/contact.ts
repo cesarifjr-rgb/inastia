@@ -34,6 +34,10 @@ const messages = {
       "Votre demande n’a pas pu être envoyée. Vos informations sont conservées. Réessayez ou contactez-nous par téléphone ou par e-mail.",
     timeout:
       "L’envoi a pris trop de temps et sa confirmation n’a pas été reçue. Avant de réessayer, vous pouvez nous contacter pour vérifier la réception.",
+    uncertain:
+      "La confirmation de votre envoi n’a pas été reçue. Vos informations sont conservées. Vous pouvez réessayer sans les modifier ou nous contacter pour vérifier la réception.",
+    phone: "Indiquez un numéro de téléphone de 7 à 15 chiffres, avec son indicatif si nécessaire.",
+    required: "Veuillez renseigner ce champ.",
   },
   en: {
     loading: "Loading spam protection…",
@@ -49,6 +53,10 @@ const messages = {
       "Your enquiry could not be sent. Your information has been kept. Please try again or contact us by phone or email.",
     timeout:
       "Sending took too long and we did not receive confirmation. You can contact us to check whether your enquiry arrived before trying again.",
+    uncertain:
+      "We did not receive confirmation of your enquiry. Your information has been kept. You can retry without changing it or contact us to check whether it arrived.",
+    phone: "Enter a phone number with 7 to 15 digits, including its country code if needed.",
+    required: "Please complete this field.",
   },
 };
 
@@ -130,6 +138,21 @@ export function initContact(): void {
   let scriptPromise: Promise<void> | undefined;
   let pending = false;
   let completed = false;
+  let enquiry: { fingerprint: string; id: string } | undefined;
+
+  function validateFields(): void {
+    for (const name of ["firstName", "lastName", "location"]) {
+      const field = form!.querySelector<HTMLInputElement>(`[name="${name}"]`);
+      field?.setCustomValidity(field.value.trim() ? "" : copy.required);
+    }
+    const phone = form!.querySelector<HTMLInputElement>("#phone");
+    if (phone) {
+      const value = phone.value.trim();
+      const digits = value.replace(/\D/g, "");
+      phone.setCustomValidity(value && (!/^\+?[0-9 ()\u00a0.-]+$/.test(value) || digits.length < 7 || digits.length > 15) ? copy.phone : "");
+    }
+  }
+  form.addEventListener("input", validateFields);
 
   function announce(message: string, state: string, focus = false): void {
     status!.textContent = message;
@@ -217,6 +240,7 @@ export function initContact(): void {
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
+    validateFields();
     if (pending || completed || !form.reportValidity()) return;
     try {
       await loadWidget();
@@ -235,7 +259,7 @@ export function initContact(): void {
     form.setAttribute("aria-busy", "true");
     announce(copy.sending, "pending");
     const fields = new FormData(form);
-    const payload: Record<string, string> = { turnstileToken: token };
+    const payload: Record<string, string> = {};
     for (const name of [
       "intent",
       "firstName",
@@ -253,8 +277,19 @@ export function initContact(): void {
       const value = fields.get(name);
       payload[name] = typeof value === "string" ? value.trim() : "";
     }
+    const fingerprint = JSON.stringify(payload);
+    if (enquiry?.fingerprint !== fingerprint) {
+      enquiry = { fingerprint, id: globalThis.crypto.randomUUID() };
+    }
+    payload.requestId = enquiry.id;
+    payload.turnstileToken = token;
+    // Snapshot first: disabled controls are excluded from FormData.
+    const controls = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea"));
+    const disabledStates = controls.map((field) => ({ field, disabled: field.disabled }));
+    controls.forEach((field) => { field.disabled = true; });
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), 25000);
+    let uncertain = true;
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -263,6 +298,9 @@ export function initContact(): void {
         signal: controller.signal,
       });
       const result: unknown = await response.json();
+      if (result && typeof result === "object" && "success" in result && result.success === false) {
+        uncertain = "uncertain" in result ? result.uncertain !== false : response.status >= 500;
+      }
       if (
         !response.ok ||
         !result ||
@@ -288,12 +326,13 @@ export function initContact(): void {
       );
     } catch {
       announce(
-        controller.signal.aborted ? copy.timeout : copy.error,
+        controller.signal.aborted ? copy.timeout : uncertain ? copy.uncertain : copy.error,
         "error",
         true,
       );
     } finally {
       window.clearTimeout(timer);
+      disabledStates.forEach(({ field, disabled }) => { field.disabled = disabled; });
       token = "";
       if (widgetId !== undefined) {
         try {
@@ -313,6 +352,7 @@ export function initContact(): void {
     event.preventDefault();
     if (pending) return;
     completed = false;
+    enquiry = undefined;
     reset.hidden = true;
     submit.disabled = false;
     announce("", "ready");

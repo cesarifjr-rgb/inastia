@@ -30,7 +30,7 @@ test.beforeEach(async ({ page }) => {
           widget.style.width = options.size === "compact" ? "150px" : "300px";
           widget.style.height = options.size === "compact" ? "140px" : "65px";
           container.append(widget);
-          window.__solveChallenge = () => options.callback("local-test-token");
+          window.__solveChallenge = () => options.callback(window.__challengeResetCount ? `local-test-token-${window.__challengeResetCount}` : "local-test-token");
           return "test-widget";
         },
         reset: () => {
@@ -270,7 +270,7 @@ for (const locale of ["fr", "en"] as const) {
       let requests = 0;
       await page.route("**/api/contact", async (route) => {
         requests += 1;
-        await route.fulfill({ status: 500, json: { success: false } });
+        await route.fulfill({ status: 500, json: { success: false, uncertain: false } });
       });
       await page.goto(`${path}?intent=audit`);
       await fillContact(page);
@@ -316,6 +316,9 @@ for (const locale of ["fr", "en"] as const) {
         "aria-busy",
         "true",
       );
+      for (const field of ["#message", "#email", "#propertyType", "#contact-intent"]) {
+        await expect(page.locator(field)).toBeDisabled();
+      }
       await page
         .locator("#contact-form")
         .evaluate((form: HTMLFormElement) => form.requestSubmit());
@@ -326,6 +329,105 @@ for (const locale of ["fr", "en"] as const) {
         "success",
       );
       expect(requests).toBe(1);
+      await expect(page.locator("#message")).toBeEnabled();
+      await expect(page.locator("#form-status")).toBeFocused();
+    });
+
+    test("invalid phone and blank qualification are rejected before sending", async ({ page }) => {
+      let requests = 0;
+      await page.route("**/api/contact", async (route) => {
+        requests += 1;
+        await route.fulfill({ json: { success: true } });
+      });
+      await page.goto(`${path}?intent=audit`);
+      await fillContact(page);
+      await page.locator("#phone").fill("x");
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#phone")).toBeFocused();
+      expect(requests).toBe(0);
+      await page.locator("#phone").fill("+1 (202) 555-0123");
+      await page.locator("#location").fill("   ");
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#location")).toBeFocused();
+      expect(requests).toBe(0);
+      await page.locator("#location").fill("Porto-Vecchio");
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      expect(requests).toBe(1);
+    });
+
+    test("uncertain retries keep identity, use fresh challenge, and renew identity after editing", async ({ page }) => {
+      const payloads: Record<string, string>[] = [];
+      await page.route("**/api/contact", async (route) => {
+        payloads.push(route.request().postDataJSON());
+        await route.fulfill(payloads.length < 3
+          ? { status: 500, json: { success: false, uncertain: true } }
+          : { json: { success: true } });
+      });
+      await page.goto(`${path}?intent=gestion`);
+      await fillContact(page);
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toContainText("confirmation");
+      await expect(page.locator("#message")).toBeEnabled();
+      await expect(page.locator("#message")).toHaveValue("Local automated test; never delivered.");
+      await expect(page.locator("#form-status")).toBeFocused();
+      await page.locator("#submit-contact").click();
+      expect(payloads).toHaveLength(1);
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
+      expect(payloads).toHaveLength(2);
+      expect(payloads[1]?.requestId).toBe(payloads[0]?.requestId);
+      expect(payloads[1]?.turnstileToken).not.toBe(payloads[0]?.turnstileToken);
+      await page.locator("#message").fill("Updated synthetic request; never delivered.");
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      expect(payloads).toHaveLength(3);
+      expect(payloads[2]?.requestId).not.toBe(payloads[1]?.requestId);
+      expect(payloads[2]?.turnstileToken).not.toBe(payloads[1]?.turnstileToken);
+    });
+
+    test("client timeout restores fields and retries the same enquiry with a fresh challenge", async ({ page }) => {
+      const payloads: Record<string, string>[] = [];
+      await page.clock.install();
+      await page.route("**/api/contact", async (route) => {
+        payloads.push(route.request().postDataJSON());
+        // Leave the first request unresolved so the real client AbortController fires.
+        if (payloads.length === 1) return;
+        await route.fulfill({ json: { success: true } });
+      });
+      await page.goto(`${path}?intent=audit`);
+      await fillContact(page);
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect.poll(() => payloads.length).toBe(1);
+      await expect(page.locator("#message")).toBeDisabled();
+      await page.clock.fastForward(25_001);
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
+      await expect(page.locator("#form-status")).toContainText(locale === "fr"
+        ? "L’envoi a pris trop de temps et sa confirmation n’a pas été reçue"
+        : "Sending took too long and we did not receive confirmation");
+      await expect(page.locator("#form-status")).toBeFocused();
+      await expect(page.locator("#submit-contact")).toBeEnabled();
+      await expect(page.locator("#message")).toBeEnabled();
+      await expect(page.locator("#email")).toBeEnabled();
+      await expect(page.locator("#message")).toHaveValue("Local automated test; never delivered.");
+      await expect(page.locator("#email")).toHaveValue("local-test@example.com");
+      await expect(page.locator("#contact-intent")).toHaveValue("audit");
+      await expect(page.locator("#contact-form")).not.toHaveAttribute("aria-busy", "true");
+      expect(await page.evaluate(() => window.__challengeResetCount)).toBe(1);
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "Veuillez effectuer" : "Please complete");
+      expect(payloads).toHaveLength(1);
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      expect(payloads).toHaveLength(2);
+      expect(payloads[1]?.requestId).toBe(payloads[0]?.requestId);
+      expect(payloads[1]?.turnstileToken).not.toBe(payloads[0]?.turnstileToken);
     });
   });
 }
