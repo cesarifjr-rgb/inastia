@@ -38,6 +38,9 @@ src/management.css         Composition de l’offre unique
 src/management-art.ts      Illustration de maison et textes FR/EN
 src/management-art.css     Scène SVG/CSS en volume et sélection des volets
 src/management-art-client.ts Visibilité, pause et cycle de page de la scène
+src/pricing.ts             Tarif FR/EN à 20 % TTC et détail des prestations
+src/pricing-client.ts      Exemple de calcul en centimes, taux en points de base
+src/pricing.css            Présentation des tarifs et calcul mobile
 api/contact.js             Fonction Vercel : validation, Turnstile, Resend
 scripts/render-share.ts    Carte sociale PNG depuis le SVG via Sharp
 public/                    Images, polices locales, licences et PDF légal
@@ -46,6 +49,12 @@ public/                    Images, polices locales, licences et PDF légal
 Les templates TypeScript génèrent du HTML statique ; Vite 8 compile 24 documents vers `dist/` : 23 pages indexables (10 FR, 10 EN et trois pages légales FR) et une 404. Les anciennes routes `/pack-lancement-airbnb` et `/menage-airbnb-corse-du-sud`, ainsi que leurs équivalents `/en/`, sont redirigées de façon permanente vers la page de gestion complète dans la même langue. Elles ne sont plus générées ni listées dans le sitemap ; `scripts/generate.ts` retire uniquement leurs anciens HTML intermédiaires. `vercel.json` fait autorité pour les redirections ; Vite dev/preview les reproduit localement. Leur contrôle final reste à effectuer sur l’hébergement. Les trois pages légales restent en français ; les liens anglais le précisent. Les URL sans extension reposent sur `cleanUrls` dans `vercel.json`.
 
 Ne pas modifier `.generated/` ou `dist/` directement. Les sources de contenu, les templates et les scripts de génération font autorité.
+
+Le tarif confirmé le 6 septembre 2026 est de 20 % TTC des nuitées avant frais de
+plateforme, hors ménage, linge et taxe de séjour. Le calculateur est un exemple
+arithmétique modifiable, sans estimation de revenus. Sa valeur de 17 % pour la
+plateforme est une hypothèse à remplacer par les frais réels. La politique et
+les limites du contrôle de conservation figurent dans `docs/data-retention.md`.
 
 ## Images et polices
 

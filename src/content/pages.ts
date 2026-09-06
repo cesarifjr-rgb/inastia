@@ -367,7 +367,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "La gestion complète a-t-elle un tarif unique ?",
           answer:
-            "Non. La commission et les frais éventuels dépendent du bien, de la zone, de la saison et des services retenus. Une proposition personnalisée précise le coût et les conditions.",
+            "Oui. La commission est de 20 % TTC sur le montant des nuitées avant déduction des frais de plateforme, hors ménage, linge et taxe de séjour. Les frais séparés et les conditions propres à votre bien sont détaillés dans la proposition.",
         },
         {
           question: "Le ménage, le linge et les consommables sont-ils inclus ?",
@@ -843,7 +843,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Is there one fixed management rate?",
           answer:
-            "No. Commission and any additional fees depend on the property, location, season and selected services. A personalised proposal sets out the cost and terms.",
+            "Yes. Our commission is 20% including VAT of the accommodation amount before platform fees, excluding cleaning, linen and tourist tax. Separate costs and the terms for your property are detailed in the proposal.",
         },
         {
           question: "Are cleaning, linen and supplies included?",

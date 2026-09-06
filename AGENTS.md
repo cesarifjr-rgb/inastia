@@ -17,6 +17,7 @@
 - Vite compile les documents générés vers `dist/`.
 - Ne jamais corriger directement `.generated/` ou `dist/`.
 - `src/client.ts` gère l'interface ; `src/contact.ts` gère le formulaire.
+- `src/pricing.ts`, `src/pricing-client.ts` et `src/pricing.css` présentent le tarif confirmé de 20 % TTC des nuitées avant frais de plateforme, hors ménage, linge et taxe de séjour. Le calculateur est arithmétique, sans prévision locative ; garder les opérations en centimes et points de base entiers et les versions FR/EN.
 - `api/contact.js` est la fonction serveur Vercel utilisant Turnstile et Resend.
 - `src/art.ts` fournit `hospitalityArt(locale)`, illustration SVG FR/EN intégrée au HTML ; `src/motion.ts` pilote GSAP, la pause CSS et la visibilité de l’illustration.
 - `npx tsx scripts/render-share.ts` génère la carte sociale PNG depuis le SVG avec Sharp. Le site ne nécessite pas de Blender ni de rendu 3D.
@@ -56,6 +57,7 @@
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.
+- Les compléments tarifs et conservation sont sur `codex/pricing-contract-crm`, fondée sur `09bc246`. Le projet de contrat Word, les preuves CM2C, les recherches CRM et les contrôles de la base Hub restent hors du dépôt. Ne pas publier de carte professionnelle, assurance, adhésion ou prestation supplémentaire non confirmée.
 - Garder les clés Resend/Turnstile côté serveur, sans les afficher dans les sorties.
 - Après chaque release, contrôler le site production et l'état du déploiement Vercel.
 - Tout envoi réel de message nécessite une autorisation explicite.
