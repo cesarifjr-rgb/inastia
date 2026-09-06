@@ -57,7 +57,7 @@
 - Pour retrouver la baseline, consulter `900c977` ou la sauvegarde indiquée dans README, dans un emplacement séparé. Ne pas écraser le travail courant ni utiliser un reset destructif. Conserver les mesures historiques de baseline avec leur date et leur version.
 - Relire le diff et les vérifications avant intégration à `main` ; aucun force-push.
 - Ne versionner ni secrets, fichiers .env privés, artefacts de tests ni notes de travail.
-- Les compléments tarifs et conservation sont sur `codex/pricing-contract-crm`, fondée sur `09bc246`. Le projet de contrat Word, les preuves CM2C, les recherches CRM et les contrôles de la base Hub restent hors du dépôt. Ne pas publier de carte professionnelle, assurance, adhésion ou prestation supplémentaire non confirmée.
+- Les compléments tarifs et conservation sont sur `codex/pricing-contract-crm`, fondée sur `09bc246`. Le projet de contrat Word, la convention CM2C, les recherches CRM et les contrôles de la base Hub restent hors du dépôt. L’attestation CM2C nominative, vérifiée et autorisée à la publication le 6 septembre 2026, est dans `public/attestation-cm2c-inastia.pdf`, avec une échéance au 13 février 2029. Ne pas publier de carte professionnelle, assurance, adhésion ou prestation supplémentaire non confirmée.
 - Garder les clés Resend/Turnstile côté serveur, sans les afficher dans les sorties.
 - Après chaque release, contrôler le site production et l'état du déploiement Vercel.
 - Tout envoi réel de message nécessite une autorisation explicite.
