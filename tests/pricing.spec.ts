@@ -17,18 +17,18 @@ for (const locale of ["fr", "en"] as const) {
     const revenue = page.locator("#pricing-revenue");
     const rate = page.locator("#pricing-platform-rate");
     await expect(revenue).toBeEnabled();
-    await expect(revenue).toHaveValue("5500");
+    await expect(revenue).toHaveValue("5000");
     await expect(rate).toHaveValue("17");
     await expectAmounts(page, locale === "fr"
-      ? ["− 935,00 €", "− 1 100,00 €", "3 465,00 €"]
-      : ["− €935.00", "− €1,100.00", "€3,465.00"]);
+      ? ["− 850,00 €", "− 1 000,00 €", "3 150,00 €"]
+      : ["− €850.00", "− €1,000.00", "€3,150.00"]);
     await expect(page.locator(".pricing-basis")).toContainText(locale === "fr"
       ? "avant les frais des plateformes"
       : "before platform fees");
     await rate.fill("10");
     await expectAmounts(page, locale === "fr"
-      ? ["− 550,00 €", "− 1 100,00 €", "3 850,00 €"]
-      : ["− €550.00", "− €1,100.00", "€3,850.00"]);
+      ? ["− 500,00 €", "− 1 000,00 €", "3 500,00 €"]
+      : ["− €500.00", "− €1,000.00", "€3,500.00"]);
   });
 
   test(`edited amounts preserve cent rounding and local currency formatting (${locale})`, async ({ page }) => {
@@ -111,7 +111,7 @@ test("without JavaScript the fixed example, explanation and management link rema
         await expect(calculator).toBeVisible();
         await expect(page.locator("#pricing-revenue")).toBeDisabled();
         await expect(page.locator("#pricing-platform-rate")).toBeDisabled();
-        await expectAmounts(page, ["− 935 €", "− 1 100 €", "3 465 €"]);
+        await expectAmounts(page, ["− 850 €", "− 1 000 €", "3 150 €"]);
         await expect(calculator.locator("noscript p")).toBeVisible();
         await expect(calculator.locator("noscript p")).toContainText(prefix
           ? "Enable JavaScript to change the amounts."
