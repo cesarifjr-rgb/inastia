@@ -3,7 +3,7 @@ import { t } from "./lib.ts";
 
 export function managementArt(locale: Locale): string {
   const id = `management-art-${locale}`;
-  const image = "/images/inastia-key-handover";
+  const image = "/images/inastia-family-pool-welcome";
   const sizes = "(min-width: 1440px) 740px, (min-width: 761px) calc(60vw - 77px), (min-width: 640px) 580px, calc(100vw - 48px)";
   return `<section class="section management-art-section" id="gestion-au-quotidien"><div class="container"><div class="management-art" data-management-art>
     <div class="management-art-heading"><p class="eyebrow">${t(locale, "La gestion, au fil des séjours", "Management through every stay")}</p><h2>${t(locale, "Une réservation.<br>Toute une organisation.", "One booking.<br>So much to coordinate.")}</h2></div>
