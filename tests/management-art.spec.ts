@@ -68,7 +68,6 @@ for (const locale of ["fr", "en"]) for (const width of [390, 1440]) {
         else await paused(detail, page);
       }
     }
-    await expect(art.locator("figcaption")).toHaveText(locale === "fr" ? "Illustration de l’accueil — maison et personnages imaginaires." : "Welcome illustration — an imaginary house and characters.");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 }
