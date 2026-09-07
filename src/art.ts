@@ -58,13 +58,13 @@ export function hospitalityArt(locale: "fr" | "en"): string {
 </g>
 <path d="M336 204C318 141 354 101 407 115s69 59 62 95" stroke="#a98d5d" stroke-width="5" stroke-linecap="round"/>
 <path d="M336 204C318 141 354 101 407 115s69 59 62 95" stroke="#f1dbac" stroke-width="2" stroke-linecap="round"/>
-<g transform="rotate(5 578 423)">
-  <rect x="522" y="377" width="153" height="93" rx="5" fill="#9db8c0" opacity=".11" transform="translate(3 5)"/>
-  <rect x="522" y="377" width="153" height="93" rx="5" fill="#fffaf3" stroke="#c5d3d4"/>
-  <circle cx="547" cy="403" r="9" stroke="#719dad"/>
-  <path d="m543 403 3 3 5-6" stroke="#1c6285" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="562" y="407" fill="#17455b" font-family="Manrope,Arial,sans-serif" font-size="11">${french ? "Le soin" : "Care in"}</text>
-  <text x="542" y="440" fill="#17455b" font-family="Space,Arial,sans-serif" font-size="21">${french ? "des détails." : "every detail."}</text>
+<g transform="rotate(5 610 423)">
+  <rect x="516" y="370" width="188" height="107" rx="5" fill="#9db8c0" opacity=".11" transform="translate(3 5)"/>
+  <rect x="516" y="370" width="188" height="107" rx="5" fill="#fffaf3" stroke="#adc4cd" stroke-width="1.4"/>
+  <circle cx="540" cy="400" r="9" stroke="#1c6285" stroke-width="1.4"/>
+  <path d="m536 400 3 3 5-6" stroke="#1c6285" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="558" y="409" fill="#123f56" font-family="Space,Arial,sans-serif" font-size="24" font-weight="600">${french ? "Le soin" : "Care in"}</text>
+  <text x="534" y="448" fill="#123f56" font-family="Space,Arial,sans-serif" font-size="27" font-weight="600">${french ? "des détails." : "every detail."}</text>
 </g>
 <g stroke="#6593a6" stroke-width="1.2" stroke-linecap="round">
   <path d="M611 243v20m-10-10h20M601 245l20 16m-18 0 16-16"/>
