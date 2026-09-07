@@ -1,3 +1,5 @@
+import { trackEnquiry } from "./ads.ts";
+
 interface TurnstileAPI {
   render(
     container: HTMLElement,
@@ -340,6 +342,7 @@ export function initContact(): void {
         throw new Error("Request failed");
       }
       completed = true;
+      trackEnquiry(enquiry.id);
       form.reset();
       if (intent) intent.value = typeof payload.intent === "string" ? payload.intent : "";
       if (contactPreference && payload.intent !== "audit") contactPreference.value = String(payload.contactPreference);
