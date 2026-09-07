@@ -389,7 +389,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Quels logements pouvez-vous prendre en charge ?",
           answer:
-            "Nous étudions les logements sur la côte est de la Corse, de Ghisonaccia à Porto-Vecchio. L’adresse précise, les accès, le type de bien et sa capacité permettent de vérifier l’organisation des arrivées et des passages. Le nom de la commune seul ne confirme pas la prise en charge.",
+            "Nous étudions les logements sur la côte orientale de la Corse, de Ghisonaccia à Porto-Vecchio. L’adresse précise, les accès, le type de bien et sa capacité permettent de vérifier l’organisation des arrivées et des passages. Le nom de la commune seul ne confirme pas la prise en charge.",
         },
         {
           question: "Comment serai-je informé du suivi de ma maison ?",
@@ -439,7 +439,7 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "about",
       title: "Une conciergerie familiale en Corse | Inastia",
       description:
-        "Découvrez Inastia, une entreprise familiale de conciergerie sur la côte est de la Corse. Un lien direct avec les propriétaires, une attention au séjour.",
+        "Découvrez Inastia, une entreprise familiale de conciergerie sur la côte orientale de la Corse. Un lien direct avec les propriétaires, une attention au séjour.",
       eyebrow: "L’esprit Inastia",
       heading: "Des propriétaires à vos côtés pour gérer votre location.",
       intro:
@@ -464,7 +464,7 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Où se situe Inastia ?",
           answer:
-            "Notre entreprise est installée à Travo, sur la commune de Ventiseri. Notre secteur s’étend sur la côte est de la Corse, de Ghisonaccia à Porto-Vecchio.",
+            "Notre entreprise est installée à Travo, sur la commune de Ventiseri. Notre secteur s’étend sur la côte orientale de la Corse, de Ghisonaccia à Porto-Vecchio.",
         },
         {
           question: "Comment se passe un premier échange ?",
