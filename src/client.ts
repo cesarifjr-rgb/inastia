@@ -2,6 +2,8 @@ import "./styles.css";
 import "./management.css";
 import "./management-art.css";
 import "./pricing.css";
+import "./ads-consent.css";
+import { initAdsConsent } from "./ads.ts";
 import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
 import { initManagementArt } from "./management-art-client.ts";
@@ -77,6 +79,7 @@ document.addEventListener("keydown", (event) => {
 matchMedia("(min-width:1024px)").addEventListener("change", (event) => {
   if (event.matches) closeMenu();
 });
+initAdsConsent();
 initContact();
 initMotion();
 initManagementArt();
