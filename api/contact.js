@@ -289,6 +289,13 @@ export default async function handler(req, res) {
         if (!emailData || typeof emailData.id !== 'string' || !receiptId.test(emailData.id)) throw new Error('Missing provider receipt');
         // CRM availability must not affect delivery or trigger a duplicate email retry.
         waitUntil(syncEnquiry(input, { requestId, receivedAt: startedAt, contactPreference,
+            qualification: [
+                ['Lieu-dit ou quartier', propertyArea],
+                ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
+                ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
+                ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
+                ['Lien de l’annonce', listingUrl],
+            ].filter(([, value]) => value),
             marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt) })
             .then(result => {
                 if (result.status !== 'disabled') console.info(JSON.stringify({ event: 'contact_crm', requestId, status: result.status }));

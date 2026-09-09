@@ -34,7 +34,7 @@ describe('website to Attio (all network requests mocked)', () => {
         fetch.mockResolvedValueOnce(ok({ id: { workspace_id: workspace } }))
             .mockResolvedValueOnce(ok([])).mockResolvedValueOnce(ok(person({})))
             .mockResolvedValueOnce(ok(person({})));
-        await expect(syncEnquiry(input, { ...context, ads: adsAttribution(consent, now) })).resolves.toEqual({ status: 'synced' });
+        await expect(syncEnquiry(input, { ...context, qualification: [['Rôle du demandeur', 'Propriétaire']], ads: adsAttribution(consent, now) })).resolves.toEqual({ status: 'synced' });
         expect(fetch.mock.calls[0][1].method).toBe('GET');
         expect(JSON.parse(fetch.mock.calls[2][1].body).data.values.email_addresses).toEqual(['test@example.invalid']);
         const values = JSON.parse(fetch.mock.calls[3][1].body).data.values;
@@ -42,6 +42,7 @@ describe('website to Attio (all network requests mocked)', () => {
         expect(values.google_ads_gclid).toBe(consent.googleAdsGclid);
         expect(values.site_derniere_demande_id).toBe(context.requestId);
         expect(values.site_derniere_demande).toContain('Offres email : refusées');
+        expect(values.site_derniere_demande).toContain('Rôle du demandeur : Propriétaire');
         expect(values.google_ads_qualifie_le).toBeUndefined();
         expect(values.google_ads_export_autorise).toBeUndefined();
         expect(values.ne_pas_contacter).toBeUndefined();
