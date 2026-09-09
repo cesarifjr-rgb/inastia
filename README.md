@@ -100,6 +100,11 @@ Une demande conserve son identifiant opaque lors d'une reprise sans modification
 
 Les variables serveur nécessaires sont `RESEND_API_KEY` et `TURNSTILE_SECRET_KEY` ; voir `.env.example`. Les configurer dans les environnements Vercel concernés. Ne jamais exposer les valeurs dans le code client, les logs ou Git. Le domaine d'expédition Resend et les domaines autorisés Turnstile doivent correspondre à l'environnement utilisé.
 
+La [liaison Attio et Google Ads](docs/attio-google-ads.md) ajoute les demandes
+acceptées au CRM en arrière-plan avec `ATTIO_API_KEY`, configurée uniquement
+côté serveur en production. L’attribution Google Ads exige l’accord du visiteur ;
+la qualification et l’autorisation d’export restent explicites dans Attio.
+
 Le serveur accepte les réponses Turnstile pour `inastia.fr` et `www.inastia.fr`. `TURNSTILE_ALLOWED_HOSTNAMES` permet d'ajouter des hôtes exacts, séparés par des virgules, après leur autorisation dans le widget Cloudflare. Aucun sous-domaine de prévisualisation ni wildcard n'est autorisé automatiquement.
 
 Vite dev/preview ne sert pas les fonctions Vercel. Les tests locaux du formulaire simulent les services ; ils ne prouvent pas la délivrabilité réelle. Ne pas ajouter de clé réelle pour faire fonctionner les tests simulés.

@@ -1,5 +1,7 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import handler from "../../api/contact.js";
+const background = vi.hoisted(() => []);
+vi.mock('@vercel/functions', () => ({ waitUntil: promise => { background.push(promise); } }));
 
 const valid = {
   firstName: "Jean",
@@ -41,6 +43,8 @@ function request(body = valid, overrides = {}) {
 
 describe("contact API (all external requests mocked)", () => {
   beforeEach(() => {
+    background.length = 0;
+    vi.stubEnv("ATTIO_API_KEY", "");
     vi.spyOn(console, "info").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret");
@@ -51,11 +55,26 @@ describe("contact API (all external requests mocked)", () => {
       vi.fn().mockRejectedValue(new Error("Unexpected external request")),
     );
   });
-  afterEach(() => {
+  afterEach(async () => {
+    await Promise.all(background);
     vi.useRealTimers();
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
+  });
+
+  it("keeps email success when the background CRM refuses a write", async () => {
+    vi.stubEnv("ATTIO_API_KEY", "synthetic-attio-key");
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    fetch.mockResolvedValueOnce({ ok: false, status: 401 });
+    const res = await request();
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(background).toHaveLength(1);
+    await Promise.all(background);
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('sync_failed'));
+    expect(fetch.mock.calls.filter(([url]) => url === 'https://api.resend.com/emails')).toHaveLength(1);
+    expect(JSON.stringify(console.warn.mock.calls)).not.toContain('synthetic-attio-key');
   });
 
   it.each([undefined, "email"])("accepts management without a surname or phone and defaults preference %s to email", async (contactPreference) => {

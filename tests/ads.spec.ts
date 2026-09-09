@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 
 const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Synthetic conversions run only on the local intercepted site.");
-const consentKey = "inastia-ads-consent-v1";
+const consentKey = "inastia-ads-consent-v2";
 
 async function queue(page: Page) {
   return page.evaluate(() => (window.dataLayer || []).map((item) => Array.from(item)));
@@ -58,6 +58,16 @@ test("expired consent and storage failure keep the site usable", async ({ page }
   expect(await queue(page)).toEqual([]);
 });
 
+test("expired clicks are removed without renewing their attribution window", async ({ page }) => {
+  await page.addInitScript((key) => {
+    localStorage.setItem(key, JSON.stringify({ accepted: true, at: Date.now() }));
+    localStorage.setItem('inastia-ads-click-v1', JSON.stringify({ gclid: 'synthetic_click_12345', at: Date.now() - 91 * 86400000 }));
+  }, consentKey);
+  await page.goto('/contact?gclid=synthetic_click_12345');
+  await expect(page.locator('#ads-consent')).toBeHidden();
+  expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
+});
+
 for (const consent of [false, true]) {
   test(`confirmed enquiry only, consent=${consent}, with retry and duplicate protection`, async ({ page }) => {
     await page.addInitScript(() => {
@@ -75,8 +85,9 @@ for (const consent of [false, true]) {
       payloads.push(route.request().postDataJSON());
       return route.fulfill({ status: succeed ? 200 : 503, contentType: "application/json", body: JSON.stringify({ success: succeed }) });
     });
-    await page.goto("/contact?intent=gestion");
+    await page.goto("/?gclid=synthetic_click_12345");
     await page.locator(`[data-ads-choice="${consent ? "accept" : "reject"}"]`).click();
+    await page.goto("/contact?intent=gestion");
     await page.locator("#firstName").fill("Synthetic");
     await page.locator("#email").fill("ads-test@example.invalid");
     await page.locator("#location").fill("Solenzara");
@@ -92,6 +103,8 @@ for (const consent of [false, true]) {
     await page.locator("#submit-contact").click();
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
     expect(payloads[1]?.requestId).toBe(payloads[0]?.requestId);
+    expect(payloads[1]?.googleAdsGclid).toBe(consent ? 'synthetic_click_12345' : undefined);
+    expect(payloads[1]?.googleAdsConsent).toBe(consent ? true : undefined);
     const conversions = (await queue(page)).filter((item) => item[0] === "event");
     expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-18439914063/16GeCNTTh_IcEM-E69hE", transaction_id: payloads[0]?.requestId }]] : []);
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
@@ -102,6 +115,7 @@ for (const consent of [false, true]) {
     if (consent) {
       await page.locator("#ads-consent-settings").click();
       await page.locator('[data-ads-choice="reject"]').click();
+      expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
       await page.locator("#form-reset").click();
       await page.locator("#firstName").fill("Another");
       await page.locator("#email").fill("another@example.invalid");
@@ -110,6 +124,7 @@ for (const consent of [false, true]) {
       await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      expect(payloads.at(-1)?.googleAdsGclid).toBeUndefined();
       expect((await queue(page)).filter((item) => item[0] === "event")).toHaveLength(1);
     }
     await page.reload();
