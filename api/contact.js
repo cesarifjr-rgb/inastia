@@ -2,7 +2,9 @@
 // Validates Cloudflare Turnstile + sends email via Resend
 
 import { randomUUID } from 'node:crypto';
+import { waitUntil } from '@vercel/functions';
 import { escapeHtml, isValidEmail, truncate } from '../utils.js';
+import { adsAttribution, syncEnquiry } from '../lib/attio.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const receiptId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
@@ -285,6 +287,20 @@ export default async function handler(req, res) {
         }
         const emailData = await emailRes.json();
         if (!emailData || typeof emailData.id !== 'string' || !receiptId.test(emailData.id)) throw new Error('Missing provider receipt');
+        // CRM availability must not affect delivery or trigger a duplicate email retry.
+        waitUntil(syncEnquiry(input, { requestId, receivedAt: startedAt, contactPreference,
+            qualification: [
+                ['Lieu-dit ou quartier', propertyArea],
+                ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
+                ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
+                ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
+                ['Lien de l’annonce', listingUrl],
+            ].filter(([, value]) => value),
+            marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt) })
+            .then(result => {
+                if (result.status !== 'disabled') console.info(JSON.stringify({ event: 'contact_crm', requestId, status: result.status }));
+            })
+            .catch(() => console.warn(JSON.stringify({ event: 'contact_crm', requestId, status: 'sync_failed' }))));
         return respond(200, { success: true }, 'provider_accepted', emailData.id);
     } catch {
         return respond(500, { success: false, uncertain: true, error: 'La confirmation de votre envoi n’a pas été reçue. Vous pouvez nous contacter pour vérifier sa réception.' }, 'send_uncertain');

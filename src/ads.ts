@@ -1,6 +1,8 @@
 const TAG_ID = "AW-18439914063";
 const CONVERSION = `${TAG_ID}/16GeCNTTh_IcEM-E69hE`;
-const CONSENT_KEY = "inastia-ads-consent-v1";
+const CONSENT_KEY = "inastia-ads-consent-v2";
+const CLICK_KEY = "inastia-ads-click-v1";
+const CLICK_LIFETIME = 90 * 24 * 60 * 60 * 1000;
 const CONSENT_LIFETIME = 180 * 24 * 60 * 60 * 1000;
 const denied = {
   ad_storage: "denied",
@@ -20,6 +22,32 @@ let allowed = false;
 let loaded = false;
 let consentExpiresAt = 0;
 const recorded = new Set<string>();
+let click: { gclid: string; at: number } | undefined;
+
+function captureClick(): void {
+  if (!allowed) return;
+  try {
+    click = JSON.parse(window.localStorage.getItem(CLICK_KEY) ?? "null") ?? undefined;
+  } catch { /* Keep the current page's accepted click when storage is unavailable. */ }
+  const gclid = new URL(window.location.href).searchParams.get("gclid");
+  if (gclid && /^[A-Za-z0-9_-]{10,300}$/.test(gclid) && click?.gclid !== gclid) {
+    click = { gclid, at: Date.now() };
+    try { window.localStorage.setItem(CLICK_KEY, JSON.stringify(click)); } catch { /* Memory only. */ }
+  }
+  if (click && (typeof click.gclid !== "string" || !Number.isFinite(click.at) || click.at > Date.now()
+    || Date.now() - click.at >= CLICK_LIFETIME)) {
+    click = undefined;
+    try { window.localStorage.removeItem(CLICK_KEY); } catch { /* Storage may be unavailable. */ }
+  }
+}
+
+export function enquiryAttribution(): Record<string, string | boolean> {
+  if (!allowed || Date.now() >= consentExpiresAt) return {};
+  if (!click || typeof click.gclid !== "string" || !/^[A-Za-z0-9_-]{10,300}$/.test(click.gclid) || !Number.isFinite(click.at)
+    || click.at > Date.now() || Date.now() - click.at >= CLICK_LIFETIME) return {};
+  return { googleAdsGclid: click.gclid, googleAdsClickAt: new Date(click.at).toISOString(),
+    googleAdsConsent: true, googleAdsConsentVersion: "ads-2026-09-09-v2" };
+}
 
 function readConsent(): boolean | undefined {
   try {
@@ -55,6 +83,8 @@ function loadTag(): void {
 }
 
 function clearAdsCookies(): void {
+  click = undefined;
+  try { window.localStorage.removeItem(CLICK_KEY); } catch { /* Storage may be unavailable. */ }
   for (const item of document.cookie.split(";")) {
     const name = item.trim().split("=")[0];
     if (!name?.startsWith("_gcl_")) continue;
@@ -75,7 +105,8 @@ export function initAdsConsent(): void {
   const saved = readConsent();
   allowed = saved === true;
   banner.hidden = saved !== undefined;
-  if (allowed) loadTag();
+  if (allowed) { captureClick(); loadTag(); }
+  else clearAdsCookies();
   let returnFocus = false;
   settings.addEventListener("click", () => {
     returnFocus = true;
@@ -90,6 +121,7 @@ export function initAdsConsent(): void {
         window.localStorage.setItem(CONSENT_KEY, JSON.stringify({ accepted: allowed, at: Date.now() }));
       } catch { /* Respect the current choice even when it cannot be persisted. */ }
       if (allowed) {
+        captureClick();
         if (loaded) window.gtag?.("consent", "update", { ...denied, ad_storage: "granted", ad_user_data: "granted" });
         else loadTag();
       } else {
@@ -106,10 +138,11 @@ export function initAdsConsent(): void {
     allowed = saved === true;
     banner.hidden = saved !== undefined;
     if (allowed) {
+      captureClick();
       if (loaded) window.gtag?.("consent", "update", { ...denied, ad_storage: "granted", ad_user_data: "granted" });
       else loadTag();
-    } else if (loaded) {
-      window.gtag?.("consent", "update", denied);
+    } else {
+      if (loaded) window.gtag?.("consent", "update", denied);
       clearAdsCookies();
     }
   });
