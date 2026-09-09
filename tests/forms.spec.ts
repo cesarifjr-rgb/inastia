@@ -94,7 +94,7 @@ for (const locale of ["fr", "en"] as const) {
       const intent = page.locator("#contact-intent");
       await expect(phone).toHaveAttribute("required", "");
       await expect(phone).toHaveAccessibleName(locale === "fr" ? "Téléphone *" : "Phone *");
-      await expect(page.locator("#message-help")).toContainText(locale === "fr" ? "disponibilités" : "available");
+      await expect(page.locator("#message-help")).toContainText(locale === "fr" ? "disponibilités" : "availability");
       for (const value of ["gestion", ""]) {
         await intent.selectOption(value);
         await expect(page.locator("#contact-preference-field")).toBeVisible();

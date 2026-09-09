@@ -61,6 +61,7 @@ export default async function handler(req, res) {
     }
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
+        propertyArea: 100, decisionRole: 20, rentalSituation: 20, startTimeline: 20, listingUrl: 500,
         surface: 10, capacity: 5, message: 2000, intent: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
         consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
     const input = {};
@@ -75,6 +76,7 @@ export default async function handler(req, res) {
     const {
         firstName, lastName, email, phone,
         propertyType, location, bedrooms, bathrooms,
+        propertyArea, decisionRole, rentalSituation, startTimeline, listingUrl,
         surface, capacity, message, intent, turnstileToken
     } = input;
 
@@ -115,6 +117,24 @@ export default async function handler(req, res) {
     }
     const contactPreference = intent === 'audit' ? 'phone' : input.contactPreference || 'email';
     acceptedClassification = { intent, contactPreference };
+
+    const qualificationLabels = {
+        decisionRole: { proprietaire: 'Propriétaire', mandataire: 'Mandataire autorisé', autre: 'Autre rôle' },
+        rentalSituation: { premiere: 'Première mise en location', existante: 'Location déjà en activité', changement: 'Changement de conciergerie' },
+        startTimeline: { desquepossible: 'Dès que possible', troismois: 'Dans les trois mois', prochainesaison: 'Pour la prochaine saison', adefinir: 'À définir ensemble' },
+    };
+    for (const [name, labels] of Object.entries(qualificationLabels)) {
+        if (input[name] && !Object.hasOwn(labels, input[name])) {
+            return respond(400, { success: false, error: 'Précision sur le projet invalide.' }, 'validation');
+        }
+    }
+    if (listingUrl) {
+        try {
+            if (!['http:', 'https:'].includes(new URL(listingUrl).protocol)) throw new Error('Invalid protocol');
+        } catch {
+            return respond(400, { success: false, error: 'Lien d’annonce invalide.' }, 'validation');
+        }
+    }
 
     // --- 1. Validate required fields ---
     if (!firstName || !email || !location || !propertyType) {
@@ -178,6 +198,13 @@ export default async function handler(req, res) {
     const safePhone = escapeHtml(truncate(phone, 30));
     const safePropertyType = escapeHtml(truncate(propertyType, 50));
     const safeLocation = escapeHtml(truncate(location, 100));
+    const qualificationHtml = [
+        ['Lieu-dit ou quartier', propertyArea],
+        ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
+        ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
+        ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
+        ['Lien de l’annonce', listingUrl],
+    ].filter(([, value]) => value).map(([label, value]) => `<tr><td style="padding:6px 0;color:#666">${label}</td><td style="padding:6px 0">${escapeHtml(value)}</td></tr>`).join('');
     const safeBedrooms = escapeHtml(truncate(bedrooms, 5));
     const safeBathrooms = escapeHtml(truncate(bathrooms, 5));
     const safeSurface = escapeHtml(truncate(surface, 10));
@@ -214,6 +241,7 @@ export default async function handler(req, res) {
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           ${safePropertyType ? `<tr><td style="padding:6px 0;color:#666;width:140px">Type</td><td style="padding:6px 0;font-weight:600">${safePropertyType}</td></tr>` : ''}
           ${safeLocation ? `<tr><td style="padding:6px 0;color:#666">Localisation</td><td style="padding:6px 0">${safeLocation}</td></tr>` : ''}
+          ${qualificationHtml}
           ${safeBedrooms ? `<tr><td style="padding:6px 0;color:#666">Chambres</td><td style="padding:6px 0">${safeBedrooms}</td></tr>` : ''}
           ${safeBathrooms ? `<tr><td style="padding:6px 0;color:#666">Salles de bain</td><td style="padding:6px 0">${safeBathrooms}</td></tr>` : ''}
           ${safeSurface ? `<tr><td style="padding:6px 0;color:#666">Surface</td><td style="padding:6px 0">${safeSurface} m²</td></tr>` : ''}

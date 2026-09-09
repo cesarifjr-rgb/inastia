@@ -110,11 +110,11 @@ export function initContact(): void {
         : "Tell us where your home is and what you would like to delegate. This helps us check whether we can manage it and prepare our first conversation.";
     if (help) help.textContent = locale === "fr"
       ? audit
-        ? "Présentez votre bien et vos disponibilités pour le rappel. Vous pouvez ajouter sa capacité d’accueil et le lien de l’annonce, si elle existe."
-        : "Votre logement est-il déjà loué ? Quand souhaitez-vous déléguer sa gestion ? Vous pouvez ajouter le lien de votre annonce, si elle existe."
+        ? "Précisez la capacité d’accueil, les accès et vos disponibilités pour le rappel."
+        : "Précisez la capacité d’accueil, les accès et vos disponibilités pour notre échange."
       : audit
-        ? "Tell us about your property and when you are available for the callback. You can add its guest capacity and a listing link, if one exists."
-        : "Is your home already rented out? When would you like to delegate its management? You can add a link to your listing, if one exists.";
+        ? "Add the guest capacity, access details and your availability for the callback."
+        : "Add the guest capacity, access details and your availability for our conversation.";
     const preferenceField = form!.querySelector<HTMLElement>("#contact-preference-field");
     const auditCallback = form!.querySelector<HTMLElement>("#audit-callback-help");
     if (preferenceField) preferenceField.hidden = audit;
@@ -285,6 +285,11 @@ export function initContact(): void {
       "email",
       "propertyType",
       "location",
+      "propertyArea",
+      "decisionRole",
+      "rentalSituation",
+      "startTimeline",
+      "listingUrl",
       "phone",
       "bedrooms",
       "capacity",
