@@ -41,7 +41,7 @@ for (const prefix of ["", "/en"]) {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${prefix}/contact?intent=audit`);
     await page.evaluate(() => document.fonts.ready);
-    const bounds = await page.locator("#contact-intent").boundingBox();
+    const bounds = await page.locator("#propertyType").boundingBox();
     expect(bounds).not.toBeNull();
     expect(bounds!.y).toBeLessThanOrEqual(600);
     expect(await page.evaluate(() => document.documentElement.scrollWidth))

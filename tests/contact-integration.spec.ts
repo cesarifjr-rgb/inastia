@@ -95,7 +95,10 @@ for (const lostResponse of [false, true]) {
     await page.locator("#firstName").fill("Exemple");
     await expect(page.locator("#lastName")).not.toHaveAttribute("required", "");
     await page.locator("#email").fill("integration@example.com");
-    if (lostResponse) await page.locator("#phone").fill("+33 6 00 00 00 00");
+    if (lostResponse) {
+      await page.locator("#contactPreference").selectOption("phone");
+      await page.locator("#phone").fill("+33 6 00 00 00 00");
+    }
     await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
     if (lostResponse) {
       await page.locator("#marketingEmail").check();
@@ -125,7 +128,7 @@ for (const lostResponse of [false, true]) {
     expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: "changement", startTimeline: "prochainesaison", listingUrl: "https://example.com/listing?a=1&b=2" });
     for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Changement de conciergerie", "Pour la prochaine saison", "https://example.com/listing?a=1&amp;b=2"]) expect(mail.html).toContain(value);
     expect(mail.html).not.toContain("<test>");
-    expect(clientPayloads[0]).toMatchObject({ intent: lostResponse ? "audit" : "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    expect(clientPayloads[0]).toMatchObject({ intent: "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     expect(mail.html).toContain(presentedEmail);
     expect(mail.html).toContain(presentedPhone);
     expect(mail.html).toContain(presentedHelp);
