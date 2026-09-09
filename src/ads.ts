@@ -1,5 +1,5 @@
-const TAG_ID = "AW-16573676464";
-const CONVERSION = `${TAG_ID}/BHALCNepqPAcELD3-N49`;
+const TAG_ID = "AW-18439914063";
+const CONVERSION = `${TAG_ID}/16GeCNTTh_IcEM-E69hE`;
 const CONSENT_KEY = "inastia-ads-consent-v1";
 const CONSENT_LIFETIME = 180 * 24 * 60 * 60 * 1000;
 const denied = {
