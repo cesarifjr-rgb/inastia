@@ -1,26 +1,39 @@
 import { test, expect } from "@playwright/test";
 
 for (const prefix of ["", "/en"]) {
-  test(`service and audit CTAs preserve the chosen request ${prefix || "FR"}`, async ({ page }) => {
-    for (const [slug, intent] of [
-      ["gestion-airbnb-corse-du-sud", "gestion"],
-      ["audit-gratuit-potentiel-locatif", "audit"],
-      ["about", "gestion"],
-      ["conciergerie-ghisonaccia", "gestion"],
-      ["conciergerie-location-saisonniere-solenzara", "gestion"],
-      ["conciergerie-airbnb-zonza-pinarello", "gestion"],
-      ["conciergerie-airbnb-lecci-saint-cyprien", "gestion"],
-      ["conciergerie-airbnb-porto-vecchio", "gestion"],
+  test(`all primary CTAs open a management request ${prefix || "FR"}`, async ({ page }) => {
+    const label = prefix ? "Have my property managed" : "Confier la gestion de mon bien";
+    for (const slug of [
+      "gestion-airbnb-corse-du-sud",
+      "audit-gratuit-potentiel-locatif",
+      "about",
+      "conciergerie-ghisonaccia",
+      "conciergerie-location-saisonniere-solenzara",
+      "conciergerie-airbnb-zonza-pinarello",
+      "conciergerie-airbnb-lecci-saint-cyprien",
+      "conciergerie-airbnb-porto-vecchio",
+      "",
     ] as const) {
       await page.goto(`${prefix}/${slug}`);
-      await expect(page.locator(".contact-callout .button")).toHaveAttribute("href", `${prefix}/contact?intent=${intent}`);
-      await page.locator(".page-hero-copy .button").click();
-      await expect(page).toHaveURL(new RegExp(`/contact\\?intent=${intent}$`));
-      await expect(page.locator("#contact-intent")).toHaveValue(intent);
+      const buttons = page.locator('a.button[href*="/contact?intent="]');
+      expect(await buttons.count()).toBeGreaterThan(2);
+      for (const button of await buttons.all()) {
+        await expect(button).toHaveText(label);
+        await expect(button).toHaveAttribute("href", `${prefix}/contact?intent=gestion`);
+      }
+      await page.locator(slug ? ".page-hero-copy .button" : ".hero-actions .button").click();
+      await expect(page).toHaveURL(new RegExp(`/contact\\?intent=gestion$`));
+      await expect(page.locator("#contact-intent")).toHaveValue("gestion");
+      await expect(page.locator("#submit-contact-label")).toHaveText(label);
     }
+  });
+
+  test(`mobile menu CTA opens a management request ${prefix || "FR"}`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
     await page.goto(`${prefix}/`);
-    await expect(page.locator(".contact-callout .button")).toHaveAttribute("href", `${prefix}/contact?intent=gestion`);
-    await page.locator(".hero-actions .button").click();
+    await page.locator(".menu-toggle").click();
+    await page.locator("#mobile-menu .button").click();
+    await expect(page).toHaveURL(new RegExp(`/contact\\?intent=gestion$`));
     await expect(page.locator("#contact-intent")).toHaveValue("gestion");
   });
 

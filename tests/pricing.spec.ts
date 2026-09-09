@@ -162,7 +162,7 @@ test("home and service pricing are accessible on mobile and the keyboard CTA sel
       await expect(rate).toBeFocused();
       await expect(rate).toHaveCSS("outline-style", "solid");
       await page.keyboard.press("Tab");
-      const cta = calculator.getByRole("link", { name: prefix ? "Request a management proposal" : "Demander une proposition de gestion" });
+      const cta = calculator.getByRole("link", { name: prefix ? "Have my property managed" : "Confier la gestion de mon bien" });
       await expect(cta).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(page).toHaveURL(new RegExp(`${prefix}/contact\\?intent=gestion$`));

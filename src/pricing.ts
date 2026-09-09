@@ -53,7 +53,7 @@ export function pricing(locale: Locale): string {
           <p class="pricing-error" id="pricing-error" data-pricing-error role="status" hidden>${t(locale, "Indiquez un montant entre 0 et 1 000 000 € et un taux entre 0 et 100 %, avec deux décimales au maximum.", "Enter an amount from €0 to €1,000,000 and a rate from 0 to 100%, with no more than two decimal places.")}</p>
           <p class="pricing-example-note" id="pricing-example-note">${t(locale, "Exemple arithmétique, sans estimation de revenus ni garantie de résultat. Ménage, linge, taxe de séjour, entretien, assurances et impôts restent à traiter séparément selon votre situation.", "An arithmetic example, not an income estimate or a guarantee. Cleaning, linen, tourist tax, maintenance, insurance and taxes must be considered separately for your circumstances.")}</p>
           <noscript><p class="pricing-example-note">${t(locale, "Le calcul ci-dessus reste consultable. Activez JavaScript pour modifier les montants.", "The example above remains available. Enable JavaScript to change the amounts.")}</p></noscript>
-          <a class="button button-cream" href="${contactPath(locale, "gestion")}">${t(locale, "Demander une proposition de gestion", "Request a management proposal")}${arrow}</a>
+          <a class="button button-cream" href="${contactPath(locale, "gestion")}">${t(locale, "Confier la gestion de mon bien", "Have my property managed")}${arrow}</a>
         </div>
       </div>
     </div>

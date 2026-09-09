@@ -134,10 +134,10 @@ export function initContact(): void {
         locale === "fr"
           ? audit
             ? "Demander mon audit gratuit"
-            : management ? "Demander une proposition de gestion" : "Envoyer ma demande"
+            : management ? "Confier la gestion de mon bien" : "Envoyer ma demande"
           : audit
             ? "Request my free property review"
-            : management ? "Request a management proposal" : "Send my enquiry";
+            : management ? "Have my property managed" : "Send my enquiry";
     document
       .querySelectorAll<HTMLAnchorElement>(".language-link")
       .forEach((link) => {
