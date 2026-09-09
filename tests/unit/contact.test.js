@@ -77,10 +77,10 @@ describe("contact API (all external requests mocked)", () => {
     expect(JSON.stringify(console.warn.mock.calls)).not.toContain('synthetic-attio-key');
   });
 
-  it.each([undefined, "email"])("accepts management without a surname or phone and defaults preference %s to email", async (contactPreference) => {
+  it.each([undefined, "email"])("accepts management without a phone and defaults preference %s to email", async (contactPreference) => {
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
-    const res = await request({ ...valid, lastName: "", intent: "gestion", contactPreference });
+    const res = await request({ ...valid, intent: "gestion", contactPreference });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(JSON.parse(fetch.mock.calls[1][1].body).html).toContain('Canal de réponse souhaité</td><td style="padding:6px 0">Email');
     expect(JSON.parse(console.info.mock.calls[0][0])).toMatchObject({ intent: "gestion", contactPreference: "email" });
@@ -119,6 +119,9 @@ describe("contact API (all external requests mocked)", () => {
     "invalid",
     {},
     { ...valid, firstName: " " },
+    { ...valid, lastName: undefined },
+    { ...valid, lastName: "" },
+    { ...valid, lastName: "   " },
     { ...valid, email: ["test@example.com"] },
     { ...valid, phone: {} },
     { ...valid, message: "a".repeat(2001) },

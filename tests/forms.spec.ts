@@ -55,7 +55,7 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
-    test("management reply channel is independent of marketing and allows an optional surname", async ({ page }) => {
+    test("management reply channel is independent of marketing and requires a surname", async ({ page }) => {
       let payload: Record<string, unknown> | undefined;
       await page.route("**/api/contact", async (route) => {
         payload = route.request().postDataJSON();
@@ -73,11 +73,20 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#phone")).toBeHidden();
       await expect(page.locator("#phone")).not.toHaveAttribute("required", "");
       await fillContact(page);
-      await page.locator("#lastName").fill("");
       await page.evaluate(() => window.__solveChallenge());
+      const surname = page.locator("#lastName");
+      await expect(surname).toHaveAttribute("required", "");
+      await expect(surname).toHaveAccessibleName(locale === "fr" ? "Nom *" : "Last name *");
+      for (const value of ["", "   "]) {
+        await surname.fill(value);
+        await page.locator("#submit-contact").click();
+        await expect(surname).toBeFocused();
+        expect(payload).toBeUndefined();
+      }
+      await surname.fill("Local");
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
-      expect(payload).toMatchObject({ intent: "gestion", contactPreference: "email", lastName: "", phone: "", marketingEmail: false, marketingPhone: false });
+      expect(payload).toMatchObject({ intent: "gestion", contactPreference: "email", lastName: "Local", phone: "", marketingEmail: false, marketingPhone: false });
     });
 
     test("phone reply requirement survives simulated success/reset", async ({ page }) => {

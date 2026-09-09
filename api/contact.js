@@ -139,7 +139,7 @@ export default async function handler(req, res) {
     }
 
     // --- 1. Validate required fields ---
-    if (!firstName || !email || !location || !propertyType) {
+    if (!firstName || !lastName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
     }
     if ((contactPreference === 'phone' || marketingPhone) && !phone) {

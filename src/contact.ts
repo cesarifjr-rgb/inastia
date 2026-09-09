@@ -107,7 +107,7 @@ export function initContact(): void {
   let enquiry: { fingerprint: string; id: string; collectedAt: string; createdWallAt: number; createdElapsedAt: number } | undefined;
 
   function validateFields(): void {
-    for (const name of ["firstName", "location"]) {
+    for (const name of ["firstName", "lastName", "location"]) {
       const field = form!.querySelector<HTMLInputElement>(`[name="${name}"]`);
       field?.setCustomValidity(field.value.trim() ? "" : copy.required);
     }

@@ -89,6 +89,7 @@ for (const consent of [false, true]) {
     await page.locator(`[data-ads-choice="${consent ? "accept" : "reject"}"]`).click();
     await page.goto("/contact?intent=gestion");
     await page.locator("#firstName").fill("Synthetic");
+    await page.locator("#lastName").fill("Test");
     await page.locator("#email").fill("ads-test@example.invalid");
     await page.locator("#location").fill("Solenzara");
     await page.locator("#propertyArea").fill("Quartier privé synthétique");
@@ -118,6 +119,7 @@ for (const consent of [false, true]) {
       expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
       await page.locator("#form-reset").click();
       await page.locator("#firstName").fill("Another");
+      await page.locator("#lastName").fill("Test");
       await page.locator("#email").fill("another@example.invalid");
       await page.locator("#location").fill("Zonza");
       await page.locator("#propertyType").selectOption("Maison");
