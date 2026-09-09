@@ -87,6 +87,11 @@ for (const lostResponse of [false, true]) {
     await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${lostResponse ? "audit" : "gestion"}`);
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
+    await page.locator("#propertyArea").fill('Quartier <test> & voisinage');
+    await page.locator("#decisionRole").selectOption("mandataire");
+    await page.locator("#rentalSituation").selectOption("changement");
+    await page.locator("#startTimeline").selectOption("prochainesaison");
+    await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
     await page.locator("#firstName").fill("Exemple");
     await expect(page.locator("#lastName")).not.toHaveAttribute("required", "");
     await page.locator("#email").fill("integration@example.com");
@@ -117,6 +122,9 @@ for (const lostResponse of [false, true]) {
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
     expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
     const mail = JSON.parse(emails[0]?.body || "{}");
+    expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: "changement", startTimeline: "prochainesaison", listingUrl: "https://example.com/listing?a=1&b=2" });
+    for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Changement de conciergerie", "Pour la prochaine saison", "https://example.com/listing?a=1&amp;b=2"]) expect(mail.html).toContain(value);
+    expect(mail.html).not.toContain("<test>");
     expect(clientPayloads[0]).toMatchObject({ intent: lostResponse ? "audit" : "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     expect(mail.html).toContain(presentedEmail);
     expect(mail.html).toContain(presentedPhone);

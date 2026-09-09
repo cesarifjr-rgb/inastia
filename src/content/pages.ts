@@ -85,9 +85,9 @@ export const pages: Record<Locale, PageContent[]> = {
       description:
         "Gestion complète de location saisonnière à Solenzara : annonce, voyageurs et coordination locale, selon les prestations convenues pour votre maison.",
       eyebrow: "Solenzara · Sari-Solenzara",
-      heading: "À Solenzara, confiez le suivi de votre location.",
+      heading: "À Solenzara, déléguez toute votre location saisonnière.",
       intro:
-        "Une arrivée à organiser ne se prépare pas sans connaître les réservations, les accès et les besoins de la maison. Notre gestion complète relie ces tâches, de l’annonce au suivi sur place. Vous échangez avec notre équipe sur les séjours à organiser, les prestations et les dépenses à valider.",
+        "Propriétaire d’une maison ou d’une villa à Solenzara ? Notre gestion complète réunit la création et la diffusion des annonces, les prix et le calendrier, les réservations, les échanges voyageurs et la coordination sur place. Vous gardez un lien direct avec notre équipe pour les décisions concernant votre bien.",
       image: "villa_lova",
       imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
       sections: [
@@ -140,7 +140,7 @@ export const pages: Record<Locale, PageContent[]> = {
       title: "Conciergerie à Zonza et Pinarello | Inastia",
       description:
         "Gestion complète de location à Zonza et Pinarello. Inastia coordonne l’annonce, les voyageurs et les prestations convenues pour votre maison.",
-      eyebrow: "Zonza · Pinarello",
+      eyebrow: "Pinarello · Zonza",
       heading: "Votre maison à Pinarello. Notre équipe pour la location.",
       intro:
         "Vous souhaitez louer votre maison tout en gardant des moments pour votre famille ? Nous suivons l’annonce, les réservations, les voyageurs et la préparation du logement dans le cadre de la gestion complète. Vos périodes personnelles s’organisent selon le calendrier et les modalités convenus.",
@@ -619,9 +619,9 @@ export const pages: Record<Locale, PageContent[]> = {
       description:
         "Full holiday rental management in Solenzara: listings, guests and local coordination, within the services agreed for your home.",
       eyebrow: "Solenzara · Sari-Solenzara",
-      heading: "Hand over the care of your Solenzara rental.",
+      heading: "Delegate your entire Solenzara holiday rental.",
       intro:
-        "Preparing an arrival means knowing the bookings, access and needs of the home. Our full management connects these tasks, from the listing to local coordination. You speak with our team about upcoming stays, services and spending that needs your approval.",
+        "Own a house or villa in Solenzara? Our full management brings together listing creation and distribution, pricing and calendar management, bookings, guest communication and local coordination. You keep a direct link with our team for decisions about your property.",
       image: "villa_lova",
       imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
       sections: [
@@ -673,7 +673,7 @@ export const pages: Record<Locale, PageContent[]> = {
       title: "Holiday rental management in Zonza and Pinarello | Inastia",
       description:
         "Full rental management in Zonza and Pinarello. Inastia coordinates the listing, guests and services agreed for your home.",
-      eyebrow: "Zonza · Pinarello",
+      eyebrow: "Pinarello · Zonza",
       heading: "Your Pinarello home. Our team for the rental.",
       intro:
         "Want to rent out your home while keeping time there with your family? We manage the listing, bookings, guest communication and property preparation as part of full management. Your personal stays are arranged within the agreed calendar and terms.",

@@ -80,6 +80,8 @@ for (const consent of [false, true]) {
     await page.locator("#firstName").fill("Synthetic");
     await page.locator("#email").fill("ads-test@example.invalid");
     await page.locator("#location").fill("Solenzara");
+    await page.locator("#propertyArea").fill("Quartier privé synthétique");
+    await page.locator("#decisionRole").selectOption("proprietaire");
     await page.locator("#propertyType").selectOption("Villa");
     await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
     await page.locator("#submit-contact").click();
@@ -93,6 +95,7 @@ for (const consent of [false, true]) {
     const conversions = (await queue(page)).filter((item) => item[0] === "event");
     expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-18439914063/16GeCNTTh_IcEM-E69hE", transaction_id: payloads[0]?.requestId }]] : []);
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
+    expect(JSON.stringify(await queue(page))).not.toContain("Quartier privé synthétique");
     await page.locator("#contact-form").dispatchEvent("submit");
     expect(payloads).toHaveLength(2);
     expect((await queue(page)).filter((item) => item[0] === "event")).toHaveLength(consent ? 1 : 0);
@@ -109,5 +112,7 @@ for (const consent of [false, true]) {
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
       expect((await queue(page)).filter((item) => item[0] === "event")).toHaveLength(1);
     }
+    await page.reload();
+    expect((await queue(page)).filter((item) => item[0] === "event")).toEqual([]);
   });
 }
