@@ -91,7 +91,7 @@ for (const consent of [false, true]) {
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
     expect(payloads[1]?.requestId).toBe(payloads[0]?.requestId);
     const conversions = (await queue(page)).filter((item) => item[0] === "event");
-    expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-16573676464/BHALCNepqPAcELD3-N49", transaction_id: payloads[0]?.requestId }]] : []);
+    expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-18439914063/16GeCNTTh_IcEM-E69hE", transaction_id: payloads[0]?.requestId }]] : []);
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
     await page.locator("#contact-form").dispatchEvent("submit");
     expect(payloads).toHaveLength(2);
