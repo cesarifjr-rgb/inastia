@@ -137,11 +137,15 @@
 </section>
 
 <section>
-  <h2>3. Cookies et Traceurs</h2>
+  <h2 id="mesure">3. Cookies et Traceurs</h2>
   <p>
     La navigation et le choix de langue ne nécessitent pas de cookie. Le site
-    ne charge pas Google Analytics ni de carte Google Maps intégrée. Les
-    traceurs de mesure publicitaire décrits ci-dessous restent facultatifs.
+    propose deux mesures facultatives et indépendantes : les statistiques de
+    visite avec Google Analytics et la mesure des annonces avec Google Ads.
+    Aucun de ces usages n'est activé avant votre accord pour la finalité
+    correspondante. Vous pouvez tout refuser, tout accepter ou personnaliser
+    vos choix ; le site et son formulaire restent utilisables en cas de refus.
+    Le site ne charge pas de carte Google Maps intégrée.
   </p>
   <h3 id="publicite">3.1 Mesure des annonces Google Ads</h3>
   <p>
@@ -174,9 +178,11 @@
     Les cookies Google Ads de première partie, dont les noms commencent par
     <code>_gcl_</code>, servent à cette attribution et peuvent être conservés
     jusqu’à 90 jours. Votre acceptation ou votre refus est enregistré dans le
-    stockage local du navigateur sous <code>inastia-ads-consent-v2</code> pendant
-    180 jours. Vous pouvez modifier ou retirer votre accord à tout moment via
-    « Cookies publicitaires » en bas de chaque page. Le retrait arrête l’envoi
+    stockage local du navigateur sous <code>inastia-measurement-consent-v1</code>
+    pendant 180 jours, séparément de votre choix pour Google Analytics.
+    Un ancien choix publicitaire ne vaut pas accord pour Analytics.
+    Vous pouvez modifier ou retirer cet accord à tout moment via
+    « Gérer les cookies » en bas de chaque page. Le retrait arrête l’envoi
     des événements de demande, transmet le changement de consentement à Google
     si sa balise était déjà chargée, et supprime les cookies de première partie
     <code>_gcl_</code> et l’identifiant de clic <code>inastia-ads-click-v1</code>
@@ -192,7 +198,39 @@
     Pour toute question ou pour exercer vos droits auprès d’Inastia, écrivez à
     <a href="mailto:contact@inastia.fr">contact@inastia.fr</a>.
   </p>
-  <h3>3.2 Protection contre les messages indésirables</h3>
+  <h3 id="analytics">3.2 Statistiques de visite avec Google Analytics</h3>
+  <p>
+    Avec votre consentement, Inastia utilise Google Analytics 4, fourni par
+    Google Ireland Limited, pour comprendre l'origine des visites, les pages
+    consultées, le temps d'engagement, les défilements et les téléchargements
+    de documents. Nous mesurons également les clics vers le formulaire, le
+    téléphone ou l'email, le début de saisie du formulaire et sa transmission
+    réussie. Un clic sur un lien de contact ne prouve pas qu'un appel ou un
+    email a ensuite été effectué. Une demande n'est comptabilisée comme
+    envoyée qu'après confirmation de réception par notre service.
+  </p>
+  <p>
+    Cette mesure repose sur votre consentement (article 6, paragraphe 1, a du
+    RGPD). Google reçoit des données de navigation, des informations techniques
+    sur le navigateur et l'appareil et des identifiants pseudonymes. Le contenu
+    saisi dans le formulaire, les coordonnées et le message ne sont pas transmis
+    à Analytics. Les paramètres libres de l'adresse des pages sont retirés ;
+    les identifiants publicitaires ne sont conservés dans cette adresse que si
+    vous avez également accepté la mesure Google Ads. Les signaux Google et la
+    personnalisation publicitaire sont désactivés.
+  </p>
+  <p>
+    Les cookies Analytics dont les noms commencent par <code>_ga</code> sont
+    configurés pour une durée maximale de 180 jours, sans prolongation à chaque
+    visite. La conservation des données d'événements et d'utilisateurs dans
+    Analytics est réglée à deux mois ; ce réglage ne limite pas les rapports
+    agrégés standards. Vous pouvez retirer votre accord via « Gérer les cookies ».
+    Le retrait désactive la collecte Analytics et supprime ses cookies de
+    première partie accessibles au site, sans affecter les traitements antérieurs.
+    Les informations et garanties relatives aux traitements de Google, y compris
+    hors de l'Espace économique européen, sont indiquées dans la section précédente.
+  </p>
+  <h3>3.3 Protection contre les messages indésirables</h3>
   <p>
     Cloudflare Turnstile est chargé lorsque vous interagissez avec le formulaire
     de contact pour vérifier qu’une demande est légitime. Ce service peut

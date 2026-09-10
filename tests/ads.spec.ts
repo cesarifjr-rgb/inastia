@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 
 const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Synthetic conversions run only on the local intercepted site.");
-const consentKey = "inastia-ads-consent-v2";
+const consentKey = "inastia-measurement-consent-v1";
 
 async function queue(page: Page) {
   return page.evaluate(() => (window.dataLayer || []).map((item) => Array.from(item)));
@@ -35,7 +35,7 @@ for (const locale of ["fr", "en"]) {
     expect(requests).toHaveLength(1);
     const commands = await queue(page);
     expect(commands[0]).toEqual(["consent", "default", { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied" }]);
-    expect(commands[1]).toEqual(["consent", "update", { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "denied", analytics_storage: "denied" }]);
+    expect(commands[1]).toEqual(["consent", "update", { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "denied", analytics_storage: "granted" }]);
     await page.context().addCookies([{ name: "_gcl_aw", value: "synthetic", url: base.origin }]);
     await page.locator("#ads-consent-settings").click();
     await page.locator('[data-ads-choice="reject"]').click();
@@ -48,7 +48,7 @@ for (const locale of ["fr", "en"]) {
 }
 
 test("expired consent and storage failure keep the site usable", async ({ page }) => {
-  await page.addInitScript((key) => window.localStorage.setItem(key, JSON.stringify({ accepted: true, at: Date.now() - 181 * 86400000 })), consentKey);
+  await page.addInitScript((key) => window.localStorage.setItem(key, JSON.stringify({ ads: true, analytics: false, at: Date.now() - 181 * 86400000 })), consentKey);
   await page.goto("/contact");
   await expect(page.locator("#ads-consent")).toBeVisible();
   expect(await queue(page)).toEqual([]);
@@ -60,7 +60,7 @@ test("expired consent and storage failure keep the site usable", async ({ page }
 
 test("expired clicks are removed without renewing their attribution window", async ({ page }) => {
   await page.addInitScript((key) => {
-    localStorage.setItem(key, JSON.stringify({ accepted: true, at: Date.now() }));
+    localStorage.setItem(key, JSON.stringify({ ads: true, analytics: false, at: Date.now() }));
     localStorage.setItem('inastia-ads-click-v1', JSON.stringify({ gclid: 'synthetic_click_12345', at: Date.now() - 91 * 86400000 }));
   }, consentKey);
   await page.goto('/contact?gclid=synthetic_click_12345');
@@ -98,7 +98,7 @@ for (const consent of [false, true]) {
     await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
     await page.locator("#submit-contact").click();
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
-    expect((await queue(page)).filter((item) => item[0] === "event")).toEqual([]);
+    expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toEqual([]);
     succeed = true;
     await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
     await page.locator("#submit-contact").click();
@@ -106,13 +106,13 @@ for (const consent of [false, true]) {
     expect(payloads[1]?.requestId).toBe(payloads[0]?.requestId);
     expect(payloads[1]?.googleAdsGclid).toBe(consent ? 'synthetic_click_12345' : undefined);
     expect(payloads[1]?.googleAdsConsent).toBe(consent ? true : undefined);
-    const conversions = (await queue(page)).filter((item) => item[0] === "event");
+    const conversions = (await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion");
     expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-18439914063/16GeCNTTh_IcEM-E69hE", transaction_id: payloads[0]?.requestId }]] : []);
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
     expect(JSON.stringify(await queue(page))).not.toContain("Quartier privé synthétique");
     await page.locator("#contact-form").dispatchEvent("submit");
     expect(payloads).toHaveLength(2);
-    expect((await queue(page)).filter((item) => item[0] === "event")).toHaveLength(consent ? 1 : 0);
+    expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(consent ? 1 : 0);
     if (consent) {
       await page.locator("#ads-consent-settings").click();
       await page.locator('[data-ads-choice="reject"]').click();
@@ -127,9 +127,9 @@ for (const consent of [false, true]) {
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
       expect(payloads.at(-1)?.googleAdsGclid).toBeUndefined();
-      expect((await queue(page)).filter((item) => item[0] === "event")).toHaveLength(1);
+      expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(1);
     }
     await page.reload();
-    expect((await queue(page)).filter((item) => item[0] === "event")).toEqual([]);
+    expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toEqual([]);
   });
 }
