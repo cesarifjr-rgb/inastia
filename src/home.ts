@@ -11,7 +11,7 @@ export function home(locale: Locale): string {
   const services = [
     {
       title: t(locale, "Nous mettons votre maison en location.", "We get your home ready to rent."),
-      text: t(locale, "Photos, rédaction, diffusion sur les plateformes, prix et calendrier : nous préparons l’annonce et pilotons les réservations.", "Photos, listing copy, booking platforms, pricing and availability: we prepare your listing and manage its bookings."),
+      text: t(locale, "Photos professionnelles, rédaction, diffusion sur les plateformes, prix et calendrier : nous préparons l’annonce et pilotons les réservations.", "Photos, listing copy, booking platforms, pricing and availability: we prepare your listing and manage its bookings."),
       items: [t(locale, "Annonce sur Airbnb, Booking et Abritel", "Listings on Airbnb, Booking and Abritel"), t(locale, "Tarification dynamique et disponibilités", "Dynamic pricing and availability"), t(locale, "Demandes de réservation prises en charge", "Booking enquiries handled for you")],
       section: "section-1",
       link: t(locale, "Voir le suivi de l’annonce", "Explore listing management"),
