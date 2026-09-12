@@ -67,7 +67,7 @@ for (const locale of ["fr", "en"] as const) {
     locale,
     intendanceSlug,
     t(locale, "Intendance de résidence secondaire en Corse | Inastia", "Second-home care in Corsica | Inastia"),
-    t(locale, "Visites, comptes rendus photo et préparation de votre résidence secondaire en Corse. Dès 89 € TTC/mois, mise en place 120 €. De Ghisonaccia à Porto-Vecchio.", "Visits, photo reports and preparation for your second home in Corsica. From €89/month including VAT, €120 setup. From Ghisonaccia to Porto-Vecchio."),
+    t(locale, "Intendance de votre résidence secondaire en Corse : visites régulières, photos et suivi local. Forfaits dès 89 € TTC/mois, mise en place 120 € TTC.", "Local care for your second home in Corsica: regular visits, property checks and photo reports. Plans from €89/month, plus €120 setup, including VAT."),
     intendance(locale),
   );
   await output(
