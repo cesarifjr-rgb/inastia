@@ -68,8 +68,8 @@ test("expired clicks are removed without renewing their attribution window", asy
   expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
 });
 
-for (const consent of [false, true]) {
-  test(`confirmed enquiry only, consent=${consent}, with retry and duplicate protection`, async ({ page }) => {
+for (const intent of ["gestion", "intendance"]) for (const consent of [false, true]) {
+  test(`confirmed ${intent} enquiry only, consent=${consent}, with retry and duplicate protection`, async ({ page }) => {
     await page.addInitScript(() => {
       Object.assign(window, { turnstile: {
         render: (_element: HTMLElement, options: { callback: (token: string) => void }) => {
@@ -87,7 +87,7 @@ for (const consent of [false, true]) {
     });
     await page.goto("/?gclid=synthetic_click_12345");
     await page.locator(`[data-ads-choice="${consent ? "accept" : "reject"}"]`).click();
-    await page.goto("/contact?intent=gestion");
+    await page.goto(`/contact?intent=${intent}`);
     await page.locator("#firstName").fill("Synthetic");
     await page.locator("#lastName").fill("Test");
     await page.locator("#email").fill("ads-test@example.invalid");
@@ -107,7 +107,8 @@ for (const consent of [false, true]) {
     expect(payloads[1]?.googleAdsGclid).toBe(consent ? 'synthetic_click_12345' : undefined);
     expect(payloads[1]?.googleAdsConsent).toBe(consent ? true : undefined);
     const conversions = (await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion");
-    expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: "AW-18439914063/16GeCNTTh_IcEM-E69hE", transaction_id: payloads[0]?.requestId }]] : []);
+    const sendTo = intent === "intendance" ? "AW-18439914063/nZIzCL6Ih_UcEM-E69hE" : "AW-18439914063/16GeCNTTh_IcEM-E69hE";
+    expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: sendTo, transaction_id: payloads[0]?.requestId }]] : []);
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
     expect(JSON.stringify(await queue(page))).not.toContain("Quartier privé synthétique");
     await page.locator("#contact-form").dispatchEvent("submit");

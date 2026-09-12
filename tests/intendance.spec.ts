@@ -52,13 +52,14 @@ for (const locale of ["fr", "en"]) {
     await page.locator("#submit-contact").click();
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
     expect(await page.evaluate(() => (window.dataLayer || []).filter(item => item[1] === "generate_lead"))).toHaveLength(0);
+    expect(await page.evaluate(() => (window.dataLayer || []).filter(item => item[1] === "conversion"))).toHaveLength(0);
     succeed = true;
     await page.evaluate("window.__careSolve()");
     await page.locator("#submit-contact").click();
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
     expect(payload).toMatchObject({ intent: "intendance", intendancePlan: "serenite", surface: "125", rentalSituation: "", listingUrl: "", phone: "" });
     const events = await page.evaluate(() => (window.dataLayer || []).map(item => Array.from(item)));
-    expect(events.filter(item => item[1] === "conversion")).toEqual([]);
+    expect(events.filter(item => item[1] === "conversion")).toEqual([["event", "conversion", { send_to: "AW-18439914063/nZIzCL6Ih_UcEM-E69hE", transaction_id: payload?.requestId }]]);
     expect(events.filter(item => item[1] === "generate_lead")).toEqual([["event", "generate_lead", { send_to: ANALYTICS_ID, form_id: "contact-form", service: "intendance" }]]);
     await page.locator("#form-reset").click();
     await expect(page.locator("#contact-intent")).toHaveValue("intendance");
