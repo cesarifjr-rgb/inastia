@@ -4,8 +4,9 @@ const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Integration submits only to a local intercepted route.");
 
 for (const locale of ["fr", "en"]) {
+for (const care of [false, true]) {
 for (const lostResponse of [false, true]) {
-  test(`${locale}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
+  test(`${locale} ${care ? "intendance" : "gestion"}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
     // Load the JavaScript handler through its module URL.
     const { default: handler } = await import(new URL("../api/contact.js", import.meta.url).href);
     const providerCalls: { url: string; body: string; key: string | null }[] = [];
@@ -84,14 +85,15 @@ for (const lostResponse of [false, true]) {
       }
     });
 
-    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${lostResponse ? "audit" : "gestion"}`);
+    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${care ? "intendance&formule=serenite" : lostResponse ? "audit" : "gestion"}`);
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
     await page.locator("#propertyArea").fill('Quartier <test> & voisinage');
     await page.locator("#decisionRole").selectOption("mandataire");
-    await page.locator("#rentalSituation").selectOption("changement");
+    if (care) await page.locator("#surface").fill("125");
+    else await page.locator("#rentalSituation").selectOption("changement");
     await page.locator("#startTimeline").selectOption("prochainesaison");
-    await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
+    if (!care) await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
     await page.locator("#firstName").fill("Exemple");
     await expect(page.locator("#lastName")).toHaveAttribute("required", "");
     await page.locator("#lastName").fill("Test");
@@ -126,10 +128,19 @@ for (const lostResponse of [false, true]) {
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
     expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
     const mail = JSON.parse(emails[0]?.body || "{}");
-    expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: "changement", startTimeline: "prochainesaison", listingUrl: "https://example.com/listing?a=1&b=2" });
-    for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Changement de conciergerie", "Pour la prochaine saison", "https://example.com/listing?a=1&amp;b=2"]) expect(mail.html).toContain(value);
+    expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: care ? "" : "changement", startTimeline: "prochainesaison", listingUrl: care ? "" : "https://example.com/listing?a=1&b=2" });
+    for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Pour la prochaine saison"]) expect(mail.html).toContain(value);
+    if (care) {
+      expect(clientPayloads[0]).toMatchObject({ intendancePlan: "serenite", surface: "125" });
+      expect(mail.subject).toContain("demande d’intendance");
+      expect(mail.html).toContain("Sérénité — 2 visites par mois");
+      expect(mail.html).toContain("125");
+    } else {
+      expect(mail.html).toContain("Changement de conciergerie");
+      expect(mail.html).toContain("https://example.com/listing?a=1&amp;b=2");
+    }
     expect(mail.html).not.toContain("<test>");
-    expect(clientPayloads[0]).toMatchObject({ intent: "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "Test", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    expect(clientPayloads[0]).toMatchObject({ intent: care ? "intendance" : "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "Test", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     expect(mail.html).toContain(presentedEmail);
     expect(mail.html).toContain(presentedPhone);
     expect(mail.html).toContain(presentedHelp);
@@ -145,5 +156,6 @@ for (const lostResponse of [false, true]) {
     }
     expect(providerCalls).toHaveLength(lostResponse ? 4 : 2);
   });
+}
 }
 }

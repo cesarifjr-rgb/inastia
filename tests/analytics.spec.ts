@@ -108,7 +108,7 @@ test("Analytics-only enquiry records a lead only after confirmed success and nev
   await page.locator("#submit-contact").click();
   await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
   await page.locator("#contact-form").dispatchEvent("submit");
-  expect((await queue(page)).filter(item => item[1] === "generate_lead")).toEqual([["event", "generate_lead", { send_to: ANALYTICS_ID, form_id: "contact-form" }]]);
+  expect((await queue(page)).filter(item => item[1] === "generate_lead")).toEqual([["event", "generate_lead", { send_to: ANALYTICS_ID, form_id: "contact-form", service: "gestion" }]]);
   expect((await queue(page)).filter(item => item[1] === "conversion")).toEqual([]);
   expect(JSON.stringify(await queue(page))).not.toContain("analytics-test@example.invalid");
 });

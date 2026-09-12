@@ -117,6 +117,20 @@ describe('website to Attio (all network requests mocked)', () => {
         expect(scalar(existing, 'source_acquisition')).toBe('Apporteur documenté');
     });
 
+    it('keeps home-care intent, plan and surface on the contact and linked opportunity', async () => {
+        const qualification = [['Formule d’intendance', 'Sérénité — 2 visites par mois']];
+        await syncEnquiry({ ...input, intent: 'intendance', surface: '125.5' }, { ...context, qualification });
+        const person = store.data.people[0];
+        const deal = store.data.deals[0];
+        for (const text of [scalar(person, 'site_derniere_demande'), scalar(deal, 'demande_initiale')]) {
+            expect(text).toContain('Motif : intendance');
+            expect(text).toContain('Formule d’intendance : Sérénité — 2 visites par mois');
+            expect(text).toContain('Surface (m²) : 125.5');
+        }
+        expect(scalar(store.data.biens[0], 'surface_m2')).toBe(125.5);
+        expect(deal.values.google_ads_export_autorise).toBeUndefined();
+    });
+
     it('does not transmit a click without consent, assume SEO, or duplicate a replayed enquiry', async () => {
         await syncEnquiry(input, context);
         fetch.mockClear();

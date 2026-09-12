@@ -1,6 +1,7 @@
 import type { Locale } from "./content/pages.ts";
 import { arrow, contactPath, escape, path, t } from "./lib.ts";
 import { googleProfileUrl } from "./reviews.ts";
+import { intendanceSlug } from "./content/intendance.ts";
 
 export const zones = [
   ["Ghisonaccia", "conciergerie-ghisonaccia"],
@@ -11,6 +12,8 @@ export const zones = [
 ] as const;
 
 export function header(locale: Locale, slug: string): string {
+  const care = slug === intendanceSlug;
+  const cta = care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Confier la gestion de mon bien", "Have my property managed");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
     ["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "" : slug,
@@ -25,22 +28,24 @@ export function header(locale: Locale, slug: string): string {
     <a class="wordmark" href="${path(locale)}">INASTIA <span class="brand-detail">CONCIERGERIE · CORSE</span></a>
     <nav class="desktop-nav" aria-label="${t(locale, "Navigation principale", "Main navigation")}">
       <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
+      <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
       <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
       <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
     </nav>
     <div class="header-actions">${motionButton}<a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
-      <a class="button button-small header-cta" href="${contactPath(locale, "gestion")}">${t(locale, "Confier la gestion de mon bien", "Have my property managed")}${arrow}</a>
+      <a class="button button-small header-cta" href="${contactPath(locale, care ? "intendance" : "gestion")}">${cta}${arrow}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-open-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-close-label="${t(locale, "Fermer le menu", "Close menu")}"><span></span><span></span></button>
     </div>
   </div>
   <nav id="mobile-menu" class="mobile-menu" aria-label="${t(locale, "Navigation mobile", "Mobile navigation")}" hidden>
     <span class="eyebrow">${t(locale, "Votre maison, notre attention", "Your home, our care")}</span>
     <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
+    <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
     <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
     <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
     <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
-    <a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Confier la gestion de mon bien", "Have my property managed")}${arrow}</a>
+    <a class="button" href="${contactPath(locale, care ? "intendance" : "gestion")}">${cta}${arrow}</a>
     <a class="menu-phone" href="tel:+33613812550">+33 6 13 81 25 50</a>
   </nav></header>`;
 }
@@ -50,6 +55,7 @@ export function footer(locale: Locale): string {
     <div class="footer-intro"><a class="wordmark" href="${path(locale)}">INASTIA</a><p>${t(locale, "L’hospitalité corse.<br>Le soin de votre maison.", "Corsican hospitality.<br>A home in good hands.")}</p><a class="text-link" href="mailto:contact@inastia.fr">contact@inastia.fr</a><a class="text-link" href="tel:+33613812550">+33 6 13 81 25 50</a></div>
     <div><h2 class="footer-heading">${t(locale, "Votre projet", "Your plans")}</h2><ul>
       <li><a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a></li>
+      <li><a href="${path(locale, intendanceSlug)}">${t(locale, "Intendance de résidence", "Second-home care")}</a></li>
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>
     <div><h2 class="footer-heading">${t(locale, "Notre territoire", "Our region")}</h2><ul>${zones.map(([name, slug]) => `<li><a href="${path(locale, slug)}">${name}</a></li>`).join("")}</ul></div>
