@@ -2,6 +2,7 @@ import { ANALYTICS_ID, initAnalyticsInteractions, trackAnalytics, updateAnalytic
 
 const TAG_ID = "AW-18439914063";
 const CONVERSION = `${TAG_ID}/16GeCNTTh_IcEM-E69hE`;
+const INTENDANCE_CONVERSION = `${TAG_ID}/nZIzCL6Ih_UcEM-E69hE`;
 const CONSENT_KEY = "inastia-measurement-consent-v1";
 const LEGACY_CONSENT_KEY = "inastia-ads-consent-v2";
 const CLICK_KEY = "inastia-ads-click-v1";
@@ -212,8 +213,8 @@ export function trackEnquiry(requestId: string, intent: "gestion" | "intendance"
       return;
     }
     recorded.add(requestId);
-    // The existing Ads conversion belongs to full rental management.
-    if (allowed && intent === "gestion") window.gtag?.("event", "conversion", { send_to: CONVERSION, transaction_id: requestId });
+    // Each service has its own Ads action, after confirmed delivery and consent.
+    if (allowed) window.gtag?.("event", "conversion", { send_to: intent === "intendance" ? INTENDANCE_CONVERSION : CONVERSION, transaction_id: requestId });
     trackAnalytics("generate_lead", { form_id: "contact-form", service: intent });
   } catch { /* Ad blockers or a tag failure must not break the contact form. */ }
 }
