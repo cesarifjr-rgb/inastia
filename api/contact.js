@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
         propertyArea: 100, decisionRole: 20, rentalSituation: 20, startTimeline: 20, listingUrl: 500,
-        surface: 10, capacity: 5, message: 2000, intent: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
+        surface: 10, capacity: 5, message: 2000, intent: 20, intendancePlan: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
         consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
     const input = {};
     for (const [key, limit] of Object.entries(limits)) {
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
         firstName, lastName, email, phone,
         propertyType, location, bedrooms, bathrooms,
         propertyArea, decisionRole, rentalSituation, startTimeline, listingUrl,
-        surface, capacity, message, intent, turnstileToken
+        surface, capacity, message, intent, intendancePlan, turnstileToken
     } = input;
 
     for (const name of ['marketingEmail', 'marketingPhone']) {
@@ -107,11 +107,19 @@ export default async function handler(req, res) {
         ['', 'Demande générale'],
         ['audit', 'Audit gratuit'],
         ['gestion', 'Gestion complète'],
+        ['intendance', 'Intendance de résidence secondaire'],
         ['annonce', 'Lancement et gestion d’annonce'],
         ['rotation', 'Accueil et rotation'],
     ]);
     if (!intentLabels.has(intent)) {
         return respond(400, { success: false, error: 'Motif de demande invalide.' }, 'validation');
+    }
+    const intendancePlanLabels = { essentielle: 'Essentielle — 1 visite par mois', serenite: 'Sérénité — 2 visites par mois', surmesure: 'Intendance sur mesure' };
+    if (intendancePlan && (intent !== 'intendance' || !Object.hasOwn(intendancePlanLabels, intendancePlan))) {
+        return respond(400, { success: false, error: 'Formule d’intendance invalide.' }, 'validation');
+    }
+    if (intent === 'intendance' && surface && (!/^\d+(?:\.\d)?$/.test(surface) || Number(surface) < 1 || Number(surface) > 10000)) {
+        return respond(400, { success: false, error: 'Surface invalide.' }, 'validation');
     }
 
     if (req.body.contactPreference !== undefined && !['email', 'phone'].includes(input.contactPreference)) {
@@ -201,6 +209,7 @@ export default async function handler(req, res) {
     const safePropertyType = escapeHtml(truncate(propertyType, 50));
     const safeLocation = escapeHtml(truncate(location, 100));
     const qualificationHtml = [
+        ['Formule d’intendance', intendancePlanLabels[intendancePlan]],
         ['Lieu-dit ou quartier', propertyArea],
         ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
         ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
@@ -222,7 +231,7 @@ export default async function handler(req, res) {
         ${marketingPhone ? '<p style="font-size:12px">Limiter les appels commerciaux à un an à compter de la première date fiable de réception serveur ou d’acceptation fournisseur, à retrouver avec cette référence. Aucun renouvellement automatique ; tout retrait met fin aux appels avant cette échéance. Ne pas calculer cette échéance depuis l’horloge du navigateur.</p>' : ''}
         <p style="font-size:12px">La réponse à la demande reste indépendante de ces choix. Référence de demande : ${requestId}. L’horodatage de réception serveur est corrélé à cette référence dans l’événement d’acceptation fournisseur.</p>`;
 
-    const subject = `Nouveau lead Inastia — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
+    const subject = `${intent === 'intendance' ? 'Nouvelle demande d’intendance Inastia' : 'Nouveau lead Inastia'} — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
 
     const htmlBody = `
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;border-radius:12px;overflow:hidden">
@@ -290,6 +299,7 @@ export default async function handler(req, res) {
         // CRM availability must not affect delivery or trigger a duplicate email retry.
         waitUntil(syncEnquiry(input, { requestId, receivedAt: startedAt, contactPreference,
             qualification: [
+                ['Formule d’intendance', intendancePlanLabels[intendancePlan]],
                 ['Lieu-dit ou quartier', propertyArea],
                 ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
                 ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],

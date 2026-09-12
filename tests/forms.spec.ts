@@ -127,7 +127,7 @@ for (const locale of ["fr", "en"] as const) {
     });
 
     for (const intent of ["audit", "gestion", "annonce", "rotation", "", "%3Cscript%3E"]) {
-      test(`${intent || "direct contact"} opens only management through a simulated confirmation`, async ({ page }) => {
+      test(`${intent || "direct contact"} defaults to management through a simulated confirmation`, async ({ page }) => {
         let payload: Record<string, string> | undefined;
         await page.route("**/api/contact", async (route) => {
           payload = route.request().postDataJSON();
@@ -136,8 +136,8 @@ for (const locale of ["fr", "en"] as const) {
         await page.goto(intent ? `${path}?intent=${intent}` : path);
         const label = locale === "fr" ? "Confier la gestion de mon bien" : "Have my property managed";
         await expect(page.locator("#contact-intent")).toHaveValue("gestion");
-        await expect(page.locator("#contact-intent")).toBeHidden();
-        await expect(page.locator('select[name="intent"]')).toHaveCount(0);
+        await expect(page.locator("#contact-intent")).toBeVisible();
+        await expect(page.locator('select[name="intent"]')).toHaveCount(1);
         await expect(page.locator("#contact-form-title")).toHaveText(label);
         await expect(page.locator("#submit-contact-label")).toHaveText(label);
         await expect(page.locator("#contact-title")).toHaveText(locale === "fr" ? "Préparons la gestion de votre maison" : "Let’s prepare the management of your home");
@@ -168,13 +168,13 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator("#phone")).toBeHidden();
     });
 
-    test("management is the only request displayed without JavaScript", async ({ browser }) => {
+    test("management is the default request displayed without JavaScript", async ({ browser }) => {
       const context = await browser.newContext({ javaScriptEnabled: false });
       const page = await context.newPage();
       try {
         await page.goto(new URL(`${path}?intent=audit`, base).href);
         const label = locale === "fr" ? "Confier la gestion de mon bien" : "Have my property managed";
-        await expect(page.locator('select[name="intent"]')).toHaveCount(0);
+        await expect(page.locator('select[name="intent"]')).toHaveCount(1);
         await expect(page.locator("#contact-intent")).toHaveValue("gestion");
         await expect(page.locator("#contact-form-title")).toHaveText(label);
         await expect(page.locator("#submit-contact-label")).toHaveText(label);

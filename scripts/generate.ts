@@ -3,6 +3,8 @@ import { pages } from "../src/content/pages.ts";
 import type { Locale } from "../src/content/pages.ts";
 import { document, secondary, legal, contact } from "../src/templates.ts";
 import { home } from "../src/home.ts";
+import { intendance } from "../src/intendance.ts";
+import { intendanceSlug } from "../src/content/intendance.ts";
 import { path, t } from "../src/lib.ts";
 
 // Remove only obsolete generated offer files; Vercel preserves their URLs as redirects.
@@ -63,16 +65,23 @@ for (const locale of ["fr", "en"] as const) {
     );
   await output(
     locale,
+    intendanceSlug,
+    t(locale, "Intendance de résidence secondaire en Corse | Inastia", "Second-home care in Corsica | Inastia"),
+    t(locale, "Visites, comptes rendus photo et préparation de votre résidence secondaire en Corse. Dès 89 € TTC/mois, mise en place 120 €. De Ghisonaccia à Porto-Vecchio.", "Visits, photo reports and preparation for your second home in Corsica. From €89/month including VAT, €120 setup. From Ghisonaccia to Porto-Vecchio."),
+    intendance(locale),
+  );
+  await output(
+    locale,
     "contact",
     t(
       locale,
-      "Confiez-nous la gestion de votre bien — Contact | Inastia",
-      "Let us manage your holiday rental — Contact | Inastia",
+      "Gestion locative et intendance — Contact | Inastia",
+      "Rental management and home care — Contact | Inastia",
     ),
     t(
       locale,
-      "Parlons de la gestion complète de votre location en Corse. Présentez votre bien à Inastia pour définir les prestations, les frais et le démarrage.",
-      "Discuss full management of your holiday rental in Corsica. Tell Inastia about your home to agree services, fees and how to get started.",
+      "Parlons de votre maison en Corse : gestion locative complète ou intendance de résidence secondaire. Présentez votre bien pour préparer une proposition détaillée.",
+      "Discuss your home in Corsica: full rental management or second-home care. Tell us about your property to prepare a detailed proposal.",
     ),
     contact(locale),
   );

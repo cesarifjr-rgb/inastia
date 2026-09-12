@@ -74,7 +74,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -130,7 +130,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -189,7 +189,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -244,7 +244,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -299,7 +299,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -430,7 +430,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -480,7 +480,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -546,7 +546,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Puis-je vous confier uniquement le ménage, l’accueil ou l’annonce ?",
           answer:
-            "Non. Inastia propose uniquement la gestion complète de votre location. Le suivi de l’annonce, l’accueil et la préparation du logement font partie de cette offre ; nous ne les proposons pas séparément. Les prestations et leurs coûts sont précisés dans la proposition.",
+            "Pour vos locations, l’annonce, l’accueil et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, Inastia propose aussi une offre d’intendance avec visites régulières et prestations complémentaires. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres. Les prestations et leurs coûts sont précisés dans la proposition.",
         },
       ],
     },
@@ -608,7 +608,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -663,7 +663,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -722,7 +722,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -777,7 +777,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -832,7 +832,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -963,7 +963,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -1013,7 +1013,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },
@@ -1078,7 +1078,7 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Can I book cleaning, guest arrivals or listing support on their own?",
           answer:
-            "No. Inastia provides full rental management only. Listing support, guest arrivals and property preparation are parts of that service; we do not offer them separately. Services and costs are set out in the proposal.",
+            "For rentals, listing support, guest arrivals and changeovers are part of full management. For a second home used for your own stays, Inastia also offers regular home-care visits and additional services. We do not provide standalone cleaning or listing management outside these services. Services and costs are set out in the proposal.",
         },
       ],
     },

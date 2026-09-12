@@ -201,7 +201,7 @@ export function initAdsConsent(): void {
   });
 }
 
-export function trackEnquiry(requestId: string): void {
+export function trackEnquiry(requestId: string, intent: "gestion" | "intendance" = "gestion"): void {
   // Tracking must never affect delivery or the success message of the enquiry.
   try {
     if ((!allowed && !analyticsAllowed) || !loaded || recorded.has(requestId)) return;
@@ -212,7 +212,8 @@ export function trackEnquiry(requestId: string): void {
       return;
     }
     recorded.add(requestId);
-    if (allowed) window.gtag?.("event", "conversion", { send_to: CONVERSION, transaction_id: requestId });
-    trackAnalytics("generate_lead", { form_id: "contact-form" });
+    // The existing Ads conversion belongs to full rental management.
+    if (allowed && intent === "gestion") window.gtag?.("event", "conversion", { send_to: CONVERSION, transaction_id: requestId });
+    trackAnalytics("generate_lead", { form_id: "contact-form", service: intent });
   } catch { /* Ad blockers or a tag failure must not break the contact form. */ }
 }

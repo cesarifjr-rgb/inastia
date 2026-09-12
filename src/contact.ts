@@ -77,6 +77,40 @@ export function initContact(): void {
   const copy = messages[locale];
   const contactPreference = form.querySelector<HTMLSelectElement>("#contactPreference");
   const marketingPhone = form.querySelector<HTMLInputElement>("#marketingPhone");
+  const intentField = form.querySelector<HTMLSelectElement>("#contact-intent");
+  const planField = form.querySelector<HTMLSelectElement>("#intendancePlan");
+  const params = new URL(location.href).searchParams;
+  if (intentField) intentField.value = params.get("intent") === "intendance" ? "intendance" : "gestion";
+  const requestedPlan = params.get("formule") ?? "";
+  if (planField && ["essentielle", "serenite", "surmesure"].includes(requestedPlan)) planField.value = requestedPlan;
+
+  function updateIntent(): void {
+    const care = intentField?.value === "intendance";
+    const text = (fr: string, en: string): string => locale === "fr" ? fr : en;
+    const label = care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Confier la gestion de mon bien", "Have my property managed");
+    for (const id of ["contact-form-title", "submit-contact-label"]) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = label;
+    }
+    const title = document.getElementById("contact-title");
+    if (title) title.textContent = care ? text("Prenons soin de votre maison en Corse", "Let’s care for your home in Corsica") : text("Préparons la gestion de votre maison", "Let’s prepare the management of your home");
+    const messageHelp = document.getElementById("message-help");
+    if (messageHelp) messageHelp.textContent = care ? text("Précisez vos périodes de présence, les dépendances, les accès et le suivi souhaité.", "Tell us when you stay, about any outbuildings and access, and the care you need.") : text("Précisez la capacité d’accueil, les accès et vos disponibilités pour notre échange.", "Add the guest capacity, access details and your availability for our conversation.");
+    const nextStep = document.querySelector(".contact-next-steps li:nth-child(2)");
+    if (nextStep) nextStep.textContent = care ? text("Nous échangeons sur vos habitudes et le rythme de visite adapté.", "We discuss your routines and the right visit schedule.") : text("Nous échangeons pour préciser votre projet de gestion complète.", "We discuss your full management plans.");
+    for (const group of form!.querySelectorAll<HTMLElement>("[data-intendance-fields], [data-rental-field]")) {
+      const visible = group.hasAttribute("data-intendance-fields") ? care : !care;
+      group.hidden = !visible;
+      group.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select").forEach(field => { field.disabled = !visible; });
+    }
+    document.querySelectorAll<HTMLAnchorElement>(".language-link").forEach((link) => {
+      const url = new URL(link.href);
+      url.searchParams.set("intent", care ? "intendance" : "gestion");
+      if (care && planField?.value) url.searchParams.set("formule", planField.value);
+      else url.searchParams.delete("formule");
+      link.href = url.href;
+    });
+  }
   function updatePhoneRequirement(): void {
     const phone = form!.querySelector<HTMLInputElement>("#phone");
     const phoneLabel = form!.querySelector('label[for="phone"]');
@@ -91,11 +125,9 @@ export function initContact(): void {
       ? phoneRequired ? "Téléphone *" : "Téléphone (facultatif)"
       : phoneRequired ? "Phone *" : "Phone (optional)";
   }
-  document.querySelectorAll<HTMLAnchorElement>(".language-link").forEach((link) => {
-    const url = new URL(link.href);
-    url.searchParams.set("intent", "gestion");
-    link.href = url.href;
-  });
+  intentField?.addEventListener("change", updateIntent);
+  planField?.addEventListener("change", updateIntent);
+  updateIntent();
   contactPreference?.addEventListener("change", updatePhoneRequirement);
   marketingPhone?.addEventListener("change", updatePhoneRequirement);
   updatePhoneRequirement();
@@ -228,6 +260,7 @@ export function initContact(): void {
     const payload: Record<string, string | boolean> = {};
     for (const name of [
       "intent",
+      "intendancePlan",
       "firstName",
       "lastName",
       "email",
@@ -296,8 +329,10 @@ export function initContact(): void {
         throw new Error("Request failed");
       }
       completed = true;
-      trackEnquiry(enquiry.id);
+      trackEnquiry(enquiry.id, payload.intent === "intendance" ? "intendance" : "gestion");
       form.reset();
+      if (intentField) intentField.value = String(payload.intent);
+      if (planField) planField.value = String(payload.intendancePlan);
       if (contactPreference) contactPreference.value = String(payload.contactPreference);
       updatePhoneRequirement();
       if (reset) reset.hidden = false;
@@ -311,6 +346,7 @@ export function initContact(): void {
     } finally {
       window.clearTimeout(timer);
       disabledStates.forEach(({ field, disabled }) => { field.disabled = disabled; });
+      updateIntent();
       token = "";
       if (widgetId !== undefined) {
         try {

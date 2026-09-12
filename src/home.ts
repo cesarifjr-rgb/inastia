@@ -6,6 +6,7 @@ import { reviews } from "./reviews.ts";
 import { managementArt } from "./management-art.ts";
 import { pricing } from "./pricing.ts";
 import { serviceDetailArt } from "./service-detail-art.ts";
+import { intendanceTeaser } from "./intendance.ts";
 
 export function home(locale: Locale): string {
   const services = [
@@ -66,7 +67,11 @@ export function home(locale: Locale): string {
     },
     {
       question: t(locale, "Puis-je vous confier seulement le ménage ou l’annonce ?", "Can I book cleaning or listing management on its own?"),
-      answer: t(locale, "Non. Notre offre réunit l’annonce, les échanges voyageurs, l’accueil et la coordination sur place. Nous ne proposons pas ces services seuls. La proposition distingue les tâches couvertes par la commission et les prestations facturées séparément.", "No. Our service brings together the listing, guest communication, welcome arrangements and local coordination. We do not offer these services on their own. The proposal separates work covered by the commission from services charged separately."),
+      answer: t(locale, "Pour vos locations, l’annonce, les échanges voyageurs et les rotations font partie de la gestion complète. Pour une résidence secondaire à usage personnel, notre offre d’intendance prévoit des visites régulières et des prestations complémentaires sur devis. Nous ne proposons pas de ménage ou de gestion d’annonce isolés en dehors de ces offres.", "For rentals, listings, guest communication and changeovers are part of full management. For a second home used for your own stays, our home-care service provides regular visits and separately quoted extras. We do not provide standalone cleaning or listing management outside these services."),
+    },
+    {
+      question: t(locale, "Pouvez-vous suivre ma maison si je ne la loue pas ?", "Can you care for my home if I don’t rent it out?"),
+      answer: t(locale, "Oui. Notre offre d’intendance de résidence secondaire comprend une ou deux visites programmées par mois, un compte rendu photo, la garde des clés et le signalement des anomalies. Essentielle est à 89 € TTC par mois et Sérénité à 159 € TTC par mois, avec 120 € TTC de mise en place. Les conditions d’accès, les prestations et les suppléments sont détaillés sur notre page Intendance.", "Yes. Our second-home care service includes one or two scheduled visits a month, a photo report, key holding and reporting any issues found. Essential costs €89 a month and Serenity €159 a month, including VAT, with a €120 setup fee including VAT. Access conditions, services and extras are detailed on our Home care page."),
     },
     {
       question: t(locale, "Puis-je continuer à profiter de ma maison ?", "Can I still enjoy my own home?"),
@@ -133,6 +138,7 @@ export function home(locale: Locale): string {
     ${reviews(locale)}
   </div></section>
   ${pricing(locale)}
+  ${intendanceTeaser(locale)}
   <section class="section process-section" id="processus"><div class="container"><div class="section-heading" data-reveal><div><p class="eyebrow">${t(locale, "04 — DU PREMIER ÉCHANGE AU DÉMARRAGE", "04 — FROM FIRST CONTACT TO GETTING STARTED")}</p><h2>${t(locale, "Ce qui se passe<br><em>après votre demande.</em>", "What happens<br><em>after your enquiry.</em>")}</h2></div><a class="text-link" href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Encore en réflexion ? Découvrez l’audit gratuit", "Still considering it? Explore the free review")}${arrow}</a></div><ol class="process-list">${steps.map(([title, text], index) => `<li data-reveal><span class="step-index">0${index + 1}</span><div><h3>${title}</h3><p>${text}</p></div></li>`).join("")}</ol><p class="process-note">${t(locale, "L’audit est une analyse qualitative, sans prévision de revenus. Le périmètre, le coût et les modalités de l’accompagnement sont précisés avant de commencer.", "The review is qualitative, not a rental income forecast. Scope, cost and arrangements are specified before work begins.")} <a href="/cgv" lang="fr">${t(locale, "Consulter les CGV", "Read the terms (French)")}</a>.</p></div></section>
   ${faq(locale, questions)}${contactCallout(locale)}`;
 }

@@ -159,6 +159,26 @@ describe("contact API (all external requests mocked)", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
+  it.each([
+    { intendancePlan: "constructor" }, { intendancePlan: "invalid" },
+    { surface: "-1" }, { surface: "0" }, { surface: "10001" }, { surface: "12.55" },
+    { surface: "NaN" }, { lastName: " " },
+  ])("rejects invalid intendance qualification %j before providers", async (fields) => {
+    const res = await request({ ...valid, intent: "intendance", ...fields });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it.each(["essentielle", "serenite", "surmesure", ""])("accepts intendance plan %s without forcing a phone", async (intendancePlan) => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
+    const res = await request({ ...valid, intent: "intendance", intendancePlan, surface: "125.5" });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.subject).toContain("demande d’intendance");
+    expect(mail.html).toContain("125.5");
+  });
+
   it.each([undefined, "", "   "])("requires audit callback phone before providers (%s)", async (phone) => {
     const res = await request({ ...valid, intent: "audit", phone });
     expect(res.status).toHaveBeenCalledWith(400);
