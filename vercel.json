@@ -48,6 +48,12 @@
       ]
     },
     {
+      "source": "/api/:path*",
+      "headers": [
+        { "key": "Cache-Control", "value": "private, no-store" }
+      ]
+    },
+    {
       "source": "/assets/:file(.+-[A-Za-z0-9_-]{8}\\.(?:js|css))",
       "headers": [
         {

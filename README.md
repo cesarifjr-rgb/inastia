@@ -17,6 +17,21 @@ npm run dev
 
 Le serveur démarre sur `http://127.0.0.1:3100`. La commande génère les pages avant de lancer Vite. Après modification d'un template ou d'un contenu TypeScript, relancer `npm run generate` pour actualiser les HTML ; le CSS et le JavaScript client bénéficient du rechargement Vite.
 
+## Sécurité du formulaire et des dépendances
+
+Les clés `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY` et `ATTIO_API_KEY` sont réservées
+à l’environnement Production de Vercel. Ne pas les copier dans les previews, le
+développement ou les fichiers locaux. La fonction de contact refuse les envois
+dans les environnements Vercel Preview et Development, même si des clés y sont
+ajoutées par erreur. Les tests locaux et navigateur utilisent des fournisseurs
+simulés ; ils n’envoient aucun message réel. Les réponses API ne sont pas mises
+en cache.
+
+La CI contrôle les dépendances avec `npm audit --audit-level=moderate`. Dependabot
+propose les mises à jour npm et GitHub Actions chaque semaine ; les actions CI
+sont fixées à une révision précise. Relire et tester les mises à jour avant
+intégration, sans fusion automatique.
+
 ## Architecture
 
 ```text
