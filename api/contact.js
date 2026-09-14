@@ -172,6 +172,9 @@ export default async function handler(req, res) {
     if (!process.env.TURNSTILE_SECRET_KEY || !process.env.RESEND_API_KEY) {
         return respond(503, { success: false, uncertain: false, error: 'Service temporairement indisponible.' }, 'configuration_missing');
     }
+    if (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production') {
+        return respond(503, { success: false, uncertain: false, error: 'Service temporairement indisponible.' }, 'non_production');
+    }
 
     // --- 2. Verify Turnstile token server-side ---
     try {

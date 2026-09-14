@@ -45,6 +45,7 @@ describe("contact API (all external requests mocked)", () => {
   beforeEach(() => {
     background.length = 0;
     vi.stubEnv("ATTIO_API_KEY", "");
+    vi.stubEnv("VERCEL_ENV", "production");
     vi.spyOn(console, "info").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.stubEnv("TURNSTILE_SECRET_KEY", "test-secret");
@@ -61,6 +62,15 @@ describe("contact API (all external requests mocked)", () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
+  });
+
+  it.each(["preview", "development"])("does not contact providers in %s even when credentials are configured", async (environment) => {
+    vi.stubEnv("VERCEL_ENV", environment);
+    const res = await request();
+    expect(res.status).toHaveBeenCalledWith(503);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: false, uncertain: false }));
+    expect(fetch).not.toHaveBeenCalled();
+    expect(background).toHaveLength(0);
   });
 
   it("keeps email success when the background CRM refuses a write", async () => {

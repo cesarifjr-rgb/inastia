@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 for (const locale of ["fr", "en"]) {
   test(`${locale}: no tag before consent or after a persisted refusal`, async ({ page }) => {
     const requests: string[] = [];
-    page.on("request", (request) => { if (request.url().includes("googletagmanager.com")) requests.push(request.url()); });
+    page.on("request", (request) => { if (new URL(request.url()).hostname === "www.googletagmanager.com") requests.push(request.url()); });
     await page.goto(locale === "fr" ? "/" : "/en/");
     await expect(page.locator("#ads-consent")).toBeVisible();
     await expect(page.locator("script[src*='googletagmanager']")).toHaveCount(0);
