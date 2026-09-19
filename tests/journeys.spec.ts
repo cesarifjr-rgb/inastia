@@ -5,7 +5,6 @@ for (const prefix of ["", "/en"]) {
     const label = prefix ? "Have my property managed" : "Confier la gestion de mon bien";
     for (const slug of [
       "gestion-airbnb-corse-du-sud",
-      "audit-gratuit-potentiel-locatif",
       "about",
       "conciergerie-ghisonaccia",
       "conciergerie-location-saisonniere-solenzara",

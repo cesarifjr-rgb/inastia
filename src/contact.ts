@@ -80,24 +80,37 @@ export function initContact(): void {
   const intentField = form.querySelector<HTMLSelectElement>("#contact-intent");
   const planField = form.querySelector<HTMLSelectElement>("#intendancePlan");
   const params = new URL(location.href).searchParams;
-  if (intentField) intentField.value = params.get("intent") === "intendance" ? "intendance" : "gestion";
+  const requestedIntent = params.get("intent");
+  if (intentField) intentField.value = requestedIntent === "audit" || requestedIntent === "intendance" ? requestedIntent : "gestion";
   const requestedPlan = params.get("formule") ?? "";
   if (planField && ["essentielle", "serenite", "surmesure"].includes(requestedPlan)) planField.value = requestedPlan;
 
   function updateIntent(): void {
     const care = intentField?.value === "intendance";
+    const audit = intentField?.value === "audit";
     const text = (fr: string, en: string): string => locale === "fr" ? fr : en;
-    const label = care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Confier la gestion de mon bien", "Have my property managed");
+    const label = audit ? text("Demander mon audit gratuit", "Request my free review") : care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Confier la gestion de mon bien", "Have my property managed");
     for (const id of ["contact-form-title", "submit-contact-label"]) {
       const element = document.getElementById(id);
       if (element) element.textContent = label;
     }
+    for (const link of document.querySelectorAll<HTMLAnchorElement>(".header-cta, #mobile-menu .button")) {
+      if (link.firstChild?.nodeType === Node.TEXT_NODE) link.firstChild.textContent = label;
+      link.setAttribute("href", "#contact-form");
+    }
     const title = document.getElementById("contact-title");
-    if (title) title.textContent = care ? text("Prenons soin de votre maison en Corse", "Let’s care for your home in Corsica") : text("Préparons la gestion de votre maison", "Let’s prepare the management of your home");
+    if (title) title.textContent = audit ? text("Faisons le point sur votre projet locatif", "Let’s review your rental plans") : care ? text("Prenons soin de votre maison en Corse", "Let’s care for your home in Corsica") : text("Préparons la gestion de votre maison", "Let’s prepare the management of your home");
+    const lead = document.getElementById("contact-lead");
+    if (lead) lead.textContent = audit ? text("Demandez un premier audit gratuit et qualitatif, sans vous engager dans une gestion complète. Présentez votre situation : nous vous rappelons sous 24 h, selon vos disponibilités, pour commencer l’échange. Ce délai concerne le rappel, pas la réalisation de l’audit.", "Request a free qualitative review without committing to full management. Tell us about your situation: we call you back within 24 hours, taking your availability into account, to begin the conversation. This time frame concerns the callback, not completion of the review.") : text("Indiquez où se trouve votre logement et ce que vous souhaitez déléguer. Ces informations nous permettent de vérifier sa prise en charge et de préparer notre premier échange.", "Tell us where your home is and what you would like to delegate. This helps us check whether we can look after it and prepare our first conversation.");
     const messageHelp = document.getElementById("message-help");
-    if (messageHelp) messageHelp.textContent = care ? text("Précisez vos périodes de présence, les dépendances, les accès et le suivi souhaité.", "Tell us when you stay, about any outbuildings and access, and the care you need.") : text("Précisez la capacité d’accueil, les accès et vos disponibilités pour notre échange.", "Add the guest capacity, access details and your availability for our conversation.");
+    if (messageHelp) messageHelp.textContent = audit ? text("Vous pouvez préciser vos questions et vos disponibilités pour le rappel. Aucune décision de déléguer n’est nécessaire.", "You can add your questions and availability for the callback. You do not need to have decided to hand over management.") : care ? text("Précisez vos périodes de présence, les dépendances, les accès et le suivi souhaité.", "Tell us when you stay, about any outbuildings and access, and the care you need.") : text("Précisez la capacité d’accueil, les accès et vos disponibilités pour notre échange.", "Add the guest capacity, access details and your availability for our conversation.");
     const nextStep = document.querySelector(".contact-next-steps li:nth-child(2)");
-    if (nextStep) nextStep.textContent = care ? text("Nous échangeons sur vos habitudes et le rythme de visite adapté.", "We discuss your routines and the right visit schedule.") : text("Nous échangeons pour préciser votre projet de gestion complète.", "We discuss your full management plans.");
+    if (nextStep) nextStep.textContent = audit ? text("Nous vous rappelons sous 24 h, selon vos disponibilités, pour préparer l’audit gratuit.", "We call you back within 24 hours, taking your availability into account, to prepare the free review.") : care ? text("Nous échangeons sur vos habitudes et le rythme de visite adapté.", "We discuss your routines and the right visit schedule.") : text("Nous échangeons pour préciser votre projet de gestion complète.", "We discuss your full management plans.");
+    const finalStep = document.querySelector(".contact-next-steps li:nth-child(3)");
+    if (finalStep) finalStep.textContent = audit ? text("Vous décidez ensuite si vous souhaitez poursuivre. Une éventuelle gestion fait l’objet d’une proposition distincte.", "You then decide whether to continue. Any management service is covered by a separate proposal.") : text("Nous définissons ensemble les prestations et le devis adaptés à votre bien.", "Together, we define the services and quote suited to your property.");
+    const preferenceGroup = document.getElementById("contact-preference-field");
+    if (preferenceGroup) preferenceGroup.hidden = audit;
+    if (contactPreference) contactPreference.disabled = audit;
     for (const group of form!.querySelectorAll<HTMLElement>("[data-intendance-fields], [data-rental-field]")) {
       const visible = group.hasAttribute("data-intendance-fields") ? care : !care;
       group.hidden = !visible;
@@ -105,16 +118,17 @@ export function initContact(): void {
     }
     document.querySelectorAll<HTMLAnchorElement>(".language-link").forEach((link) => {
       const url = new URL(link.href);
-      url.searchParams.set("intent", care ? "intendance" : "gestion");
+      url.searchParams.set("intent", audit ? "audit" : care ? "intendance" : "gestion");
       if (care && planField?.value) url.searchParams.set("formule", planField.value);
       else url.searchParams.delete("formule");
       link.href = url.href;
     });
+    updatePhoneRequirement();
   }
   function updatePhoneRequirement(): void {
     const phone = form!.querySelector<HTMLInputElement>("#phone");
     const phoneLabel = form!.querySelector('label[for="phone"]');
-    const phoneRequired = contactPreference?.value === "phone" || marketingPhone?.checked === true;
+    const phoneRequired = intentField?.value === "audit" || contactPreference?.value === "phone" || marketingPhone?.checked === true;
     if (phone) {
       phone.required = phoneRequired;
       const phoneField = phone.closest<HTMLElement>(".field");
@@ -139,7 +153,7 @@ export function initContact(): void {
   let enquiry: { fingerprint: string; id: string; collectedAt: string; createdWallAt: number; createdElapsedAt: number } | undefined;
 
   function validateFields(): void {
-    for (const name of ["firstName", "lastName", "location"]) {
+    for (const name of ["firstName", "lastName", "location", "propertyArea"]) {
       const field = form!.querySelector<HTMLInputElement>(`[name="${name}"]`);
       field?.setCustomValidity(field.value.trim() ? "" : copy.required);
     }
@@ -282,7 +296,7 @@ export function initContact(): void {
       payload[name] = typeof value === "string" ? value.trim() : "";
     }
     if (!form.querySelector<HTMLInputElement>("#phone")?.required) payload.phone = "";
-    payload.contactPreference = contactPreference?.value ?? "email";
+    payload.contactPreference = payload.intent === "audit" ? "phone" : contactPreference?.value ?? "email";
     payload.marketingEmail = form.querySelector<HTMLInputElement>("#marketingEmail")?.checked === true;
     payload.marketingPhone = marketingPhone?.checked === true;
     payload.consentVersion = form.dataset.consentVersion ?? "";
@@ -329,14 +343,16 @@ export function initContact(): void {
         throw new Error("Request failed");
       }
       completed = true;
-      trackEnquiry(enquiry.id, payload.intent === "intendance" ? "intendance" : "gestion");
+      trackEnquiry(enquiry.id, payload.intent === "audit" ? "audit" : payload.intent === "intendance" ? "intendance" : "gestion");
       form.reset();
       if (intentField) intentField.value = String(payload.intent);
       if (planField) planField.value = String(payload.intendancePlan);
       if (contactPreference) contactPreference.value = String(payload.contactPreference);
       updatePhoneRequirement();
       if (reset) reset.hidden = false;
-      announce(copy.success, "success", true);
+      announce(payload.intent === "audit" ? (locale === "fr"
+        ? "Votre demande d’audit gratuit a bien été envoyée. Nous vous rappelons sous 24 h, selon vos disponibilités, pour préparer ce premier échange. Vous ne vous engagez pas dans une gestion complète."
+        : "Your free review request has been sent. We call you back within 24 hours, taking your availability into account, to prepare this first conversation. You are not committing to full management.") : copy.success, "success", true);
     } catch {
       announce(
         requestExpired ? copy.requestExpired : controller.signal.aborted ? copy.timeout : uncertain ? copy.uncertain : copy.error,

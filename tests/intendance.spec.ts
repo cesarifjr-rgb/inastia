@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { fillQualification } from "./helpers/qualification.ts";
 import AxeBuilder from "@axe-core/playwright";
 import { ANALYTICS_ID } from "../src/analytics.ts";
 
@@ -42,6 +43,7 @@ for (const locale of ["fr", "en"]) {
     await page.locator("#surface").fill("125");
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Solenzara");
+    await fillQualification(page);
     await page.locator("#firstName").fill("Synthetic");
     await page.locator("#email").fill("care@example.invalid");
     await page.evaluate("window.__careSolve()");

@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { fillQualification } from "./helpers/qualification.ts";
 import { ANALYTICS_ID } from "../src/analytics.ts";
 
 const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
@@ -97,6 +98,7 @@ test("Analytics-only enquiry records a lead only after confirmed success and nev
   await page.locator("#lastName").fill("Test");
   await page.locator("#email").fill("analytics-test@example.invalid");
   await page.locator("#location").fill("Solenzara");
+  await fillQualification(page);
   await page.locator("#decisionRole").selectOption("proprietaire");
   await page.locator("#propertyType").selectOption("Villa");
   await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());

@@ -10,6 +10,10 @@ const valid = {
   turnstileToken: "test-token",
   propertyType: "Villa",
   location: "Porto-Vecchio",
+  propertyArea: "Quartier de test",
+  decisionRole: "proprietaire",
+  rentalSituation: "premiere",
+  startTimeline: "adefinir",
   requestId: "b3f08a74-27f0-4a3b-9aab-4baab05f5c31",
 };
 function consentRecord(overrides = {}) {
@@ -115,6 +119,60 @@ describe("contact API (all external requests mocked)", () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(JSON.parse(console.info.mock.calls[0][0])).toMatchObject({ intent: "audit", contactPreference: "phone" });
     expect(JSON.parse(fetch.mock.calls[1][1].body).html).toContain("Téléphone — rappel d’audit sous 24 h");
+    expect(JSON.parse(fetch.mock.calls[1][1].body).subject).toContain("demande d’audit gratuit");
+  });
+
+  for (const intent of ['audit', 'gestion', 'intendance']) {
+    it.each(['propertyArea', 'decisionRole', 'startTimeline', ...(intent === 'intendance' ? [] : ['rentalSituation'])])(`requires qualification for ${intent}: %s`, async field => {
+      for (const missing of [undefined, '', '   ']) {
+        const res = await request({ ...valid, intent, phone: '+33600000000', [field]: missing });
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(fetch).not.toHaveBeenCalled();
+      }
+    });
+  }
+
+  it('accepts an exploratory audit with an explicitly undecided timeline and no marketing consent', async () => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 'fa64e6ef-875e-4e75-b9a1-593bdedb2629' }) });
+    const res = await request({ ...valid, intent: 'audit', decisionRole: 'acquereur', rentalSituation: 'reflexion', startTimeline: 'adefinir', phone: '+33600000000', ...consentRecord() });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    for (const text of ['Audit gratuit', 'Acquéreur potentiel', 'Projet encore en réflexion', 'À définir ensemble', 'Email : <strong>Non']) expect(mail.html).toContain(text);
+  });
+
+  it('passes a received audit and its qualification through the real CRM sync without changing its maturity', async () => {
+    vi.stubEnv('ATTIO_API_KEY', 'synthetic-attio-key');
+    const writes = [];
+    const records = {};
+    fetch.mockImplementation(async (url, options) => {
+      if (url.includes('siteverify')) return Response.json({ success: true, hostname: 'inastia.fr' });
+      if (url === 'https://api.resend.com/emails') return Response.json({ id: 'fa64e6ef-875e-4e75-b9a1-593bdedb2629' });
+      if (!url.startsWith('https://api.attio.com/v2/objects/')) throw new Error('Unexpected provider blocked');
+      const object = new URL(url).pathname.split('/')[3];
+      const id = { workspace_id: '303b4287-37bc-4166-abcc-005574bbfa5a', record_id: `synthetic-${object}` };
+      if (options.method === 'GET') return Response.json({ data: { id } });
+      if (url.endsWith('/query')) return Response.json({ data: [] });
+      const values = JSON.parse(options.body).data.values;
+      writes.push({ object, values });
+      const formatted = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, Array.isArray(value) ? value : [{ value }]]));
+      const record = records[object] ??= { id, values: {} };
+      Object.assign(record.values, formatted);
+      return Response.json({ data: record });
+    });
+    const res = await request({ ...valid, intent: 'audit', phone: '+33600000000', decisionRole: 'coproprietaire', rentalSituation: 'reflexion', startTimeline: 'adefinir', ...consentRecord() });
+    expect(res.status).toHaveBeenCalledWith(200);
+    await Promise.all(background);
+    expect(console.info).toHaveBeenCalledWith(expect.stringContaining('"status":"synced"'));
+    const deal = writes.find(write => write.object === 'deals' && write.values.demande_initiale).values;
+    expect(deal.name).toMatch(/^Audit gratuit/);
+    expect(deal.demande_initiale).toContain('Motif : audit');
+    expect(deal.demande_initiale).toContain('Projet encore en réflexion');
+    expect(deal.demande_initiale).toContain('À définir ensemble');
+    expect(deal.demande_initiale).toContain('aucune demande de gestion complète');
+    expect(deal.stage).toBe('Nouveau lead');
+    const property = writes.find(write => write.object === 'biens').values;
+    expect(property).toMatchObject({ secteur: valid.propertyArea, role_demandeur: 'Copropriétaire', situation_locative: 'Projet encore en réflexion', demarrage_souhaite: 'À définir ensemble' });
   });
 
   it("rejects unsupported methods without calling providers", async () => {

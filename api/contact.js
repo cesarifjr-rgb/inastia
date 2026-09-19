@@ -129,8 +129,8 @@ export default async function handler(req, res) {
     acceptedClassification = { intent, contactPreference };
 
     const qualificationLabels = {
-        decisionRole: { proprietaire: 'Propriétaire', mandataire: 'Mandataire autorisé', autre: 'Autre rôle' },
-        rentalSituation: { premiere: 'Première mise en location', existante: 'Location déjà en activité', changement: 'Changement de conciergerie' },
+        decisionRole: { proprietaire: 'Propriétaire', coproprietaire: 'Copropriétaire', acquereur: 'Acquéreur potentiel', mandataire: 'Mandataire autorisé', autre: 'Autre rôle' },
+        rentalSituation: { reflexion: 'Projet encore en réflexion', premiere: 'Première mise en location', existante: 'Location déjà en activité', changement: 'Changement de conciergerie' },
         startTimeline: { desquepossible: 'Dès que possible', troismois: 'Dans les trois mois', prochainesaison: 'Pour la prochaine saison', adefinir: 'À définir ensemble' },
     };
     for (const [name, labels] of Object.entries(qualificationLabels)) {
@@ -149,6 +149,10 @@ export default async function handler(req, res) {
     // --- 1. Validate required fields ---
     if (!firstName || !lastName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
+    }
+    if (['audit', 'gestion', 'intendance'].includes(intent)
+        && (!propertyArea || !decisionRole || !startTimeline || (intent !== 'intendance' && !rentalSituation))) {
+        return respond(400, { success: false, error: 'Précisez le secteur du bien, votre rôle, l’échéance et la situation locative si elle s’applique.' }, 'validation');
     }
     if ((contactPreference === 'phone' || marketingPhone) && !phone) {
         return respond(400, { success: false, error: 'Le téléphone est obligatoire pour le rappel de votre audit gratuit, votre préférence de réponse par téléphone ou votre choix de relances téléphoniques.' }, 'validation');
@@ -234,12 +238,13 @@ export default async function handler(req, res) {
         ${marketingPhone ? '<p style="font-size:12px">Limiter les appels commerciaux à un an à compter de la première date fiable de réception serveur ou d’acceptation fournisseur, à retrouver avec cette référence. Aucun renouvellement automatique ; tout retrait met fin aux appels avant cette échéance. Ne pas calculer cette échéance depuis l’horloge du navigateur.</p>' : ''}
         <p style="font-size:12px">La réponse à la demande reste indépendante de ces choix. Référence de demande : ${requestId}. L’horodatage de réception serveur est corrélé à cette référence dans l’événement d’acceptation fournisseur.</p>`;
 
-    const subject = `${intent === 'intendance' ? 'Nouvelle demande d’intendance Inastia' : 'Nouveau lead Inastia'} — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
+    const enquiryTitle = intent === 'audit' ? 'Nouvelle demande d’audit gratuit Inastia' : intent === 'intendance' ? 'Nouvelle demande d’intendance Inastia' : 'Nouveau lead Inastia';
+    const subject = `${enquiryTitle} — ${propertyType || 'Non précisé'} à ${location || 'Non précisé'}`.replace(/[\r\n]/g, ' ');
 
     const htmlBody = `
     <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#fafafa;border-radius:12px;overflow:hidden">
       <div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);padding:28px 32px">
-        <h1 style="color:#d4a853;margin:0;font-size:22px">🏠 Nouveau Lead Inastia</h1>
+        <h1 style="color:#d4a853;margin:0;font-size:22px">${enquiryTitle}</h1>
       </div>
       <div style="padding:24px 32px">
         <h2 style="color:#1a1a2e;font-size:16px;margin:0 0 16px;border-bottom:2px solid #d4a853;padding-bottom:8px">👤 Contact</h2>
