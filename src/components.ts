@@ -2,6 +2,7 @@ import type { Locale } from "./content/pages.ts";
 import { arrow, contactPath, escape, path, t } from "./lib.ts";
 import { googleProfileUrl } from "./reviews.ts";
 import { intendanceSlug } from "./content/intendance.ts";
+import { partnersSlug } from "./content/partners.ts";
 
 export const zones = [
   ["Ghisonaccia", "conciergerie-ghisonaccia"],
@@ -13,14 +14,16 @@ export const zones = [
 
 export function header(locale: Locale, slug: string): string {
   const care = slug === intendanceSlug;
-  const cta = care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Confier la gestion de mon bien", "Have my property managed");
+  const partnership = slug === partnersSlug;
+  const cta = partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Confier la gestion de mon bien", "Have my property managed");
+  const ctaHref = partnership ? "#devenir-partenaire" : contactPath(locale, care ? "intendance" : "gestion");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
     ["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "" : slug,
   );
   const motionButton =
     slug &&
-    !["contact", "privacy", "cgv", "mentions-legales", "404"].includes(slug)
+    !["contact", "privacy", "cgv", "mentions-legales", "404", partnersSlug].includes(slug)
       ? `<button id="motion-toggle" class="header-motion" type="button" aria-pressed="false" aria-label="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-pause="${t(locale, "Mettre les animations en pause", "Pause animations")}" data-play="${t(locale, "Reprendre les animations", "Resume animations")}"><span class="motion-icon" aria-hidden="true">Ⅱ</span><span class="motion-label">${t(locale, "Animations", "Motion")}</span></button>`
       : "";
   return `<a class="skip-link" href="#main">${t(locale, "Aller au contenu", "Skip to content")}</a>
@@ -32,9 +35,10 @@ export function header(locale: Locale, slug: string): string {
       <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
       <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
+      <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
     </nav>
     <div class="header-actions">${motionButton}<a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
-      <a class="button button-small header-cta" href="${contactPath(locale, care ? "intendance" : "gestion")}">${cta}${arrow}</a>
+      <a class="button button-small header-cta" href="${ctaHref}">${cta}${arrow}</a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-open-label="${t(locale, "Ouvrir le menu", "Open menu")}" data-close-label="${t(locale, "Fermer le menu", "Close menu")}"><span></span><span></span></button>
     </div>
   </div>
@@ -45,7 +49,8 @@ export function header(locale: Locale, slug: string): string {
     <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
     <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
     <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
-    <a class="button" href="${contactPath(locale, care ? "intendance" : "gestion")}">${cta}${arrow}</a>
+    <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
+    <a class="button" href="${ctaHref}">${cta}${arrow}</a>
     <a class="menu-phone" href="tel:+33613812550">+33 6 13 81 25 50</a>
   </nav></header>`;
 }
@@ -59,7 +64,7 @@ export function footer(locale: Locale): string {
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>
     <div><h2 class="footer-heading">${t(locale, "Notre territoire", "Our region")}</h2><ul>${zones.map(([name, slug]) => `<li><a href="${path(locale, slug)}">${name}</a></li>`).join("")}</ul></div>
-    <div><h2 class="footer-heading">Inastia</h2><ul><li><a href="${path(locale, "about")}">${t(locale, "Notre histoire", "Our story")}</a></li><li><a href="${path(locale, "contact")}">Contact</a></li><li><a href="${googleProfileUrl}" target="_blank" rel="noopener noreferrer">${t(locale, "Lire les avis Google", "Read our Google reviews")} <span class="sr-only">${t(locale, "(nouvel onglet)", "(new tab)")}</span>↗</a></li><li><a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener noreferrer">${t(locale, "Donner un avis Google", "Leave a Google review")} <span class="sr-only">${t(locale, "(nouvel onglet)", "(new tab)")}</span>↗</a></li></ul><p class="footer-location">${t(locale, "De Ghisonaccia<br>à Porto-Vecchio.", "From Ghisonaccia<br>to Porto-Vecchio.")}</p></div>
+    <div><h2 class="footer-heading">Inastia</h2><ul><li><a href="${path(locale, "about")}">${t(locale, "Notre histoire", "Our story")}</a></li><li><a href="${path(locale, partnersSlug)}">${t(locale, "Devenir partenaire", "Become a partner")}</a></li><li><a href="${path(locale, "contact")}">Contact</a></li><li><a href="${googleProfileUrl}" target="_blank" rel="noopener noreferrer">${t(locale, "Lire les avis Google", "Read our Google reviews")} <span class="sr-only">${t(locale, "(nouvel onglet)", "(new tab)")}</span>↗</a></li><li><a href="https://g.page/r/CZVJJeGqvKOtEBM/review" target="_blank" rel="noopener noreferrer">${t(locale, "Donner un avis Google", "Leave a Google review")} <span class="sr-only">${t(locale, "(nouvel onglet)", "(new tab)")}</span>↗</a></li></ul><p class="footer-location">${t(locale, "De Ghisonaccia<br>à Porto-Vecchio.", "From Ghisonaccia<br>to Porto-Vecchio.")}</p></div>
   </div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} Inastia</span><nav aria-label="${t(locale, "Informations légales", "Legal information in French")}"><a href="/mentions-legales" lang="fr">${t(locale, "Mentions légales", "Legal notice (FR)")}</a><a href="/privacy" lang="fr">${t(locale, "Confidentialité", "Privacy (FR)")}</a><a href="/cgv" lang="fr">${t(locale, "CGV", "Terms (FR)")}</a><button id="ads-consent-settings" type="button" hidden>${t(locale, "Gérer les cookies", "Cookie settings")}</button></nav><a href="#main">${t(locale, "Retour en haut", "Back to top")} ↑</a></div></footer>${measurementConsent(locale)}`;
 }
 

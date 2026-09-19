@@ -5,6 +5,8 @@ import { document, secondary, legal, contact } from "../src/templates.ts";
 import { home } from "../src/home.ts";
 import { intendance } from "../src/intendance.ts";
 import { intendanceSlug } from "../src/content/intendance.ts";
+import { partners } from "../src/partners.ts";
+import { partnersSlug } from "../src/content/partners.ts";
 import { path, t } from "../src/lib.ts";
 
 // Remove only obsolete generated offer files; Vercel preserves their URLs as redirects.
@@ -69,6 +71,13 @@ for (const locale of ["fr", "en"] as const) {
     t(locale, "Intendance de résidence secondaire en Corse | Inastia", "Second-home care in Corsica | Inastia"),
     t(locale, "Intendance de votre résidence secondaire en Corse : visites régulières, photos et suivi local. Forfaits dès 89 € TTC/mois, mise en place 120 € TTC.", "Local care for your second home in Corsica: regular visits, property checks and photo reports. Plans from €89/month, plus €120 setup, including VAT."),
     intendance(locale),
+  );
+  await output(
+    locale,
+    partnersSlug,
+    t(locale, "Partenaires en Corse : construisons ensemble | Inastia", "Partners in Corsica: working together | Inastia"),
+    t(locale, "Professionnels de l’immobilier, artisans et acteurs de l’hospitalité en Corse : échangeons pour accompagner les propriétaires et prendre soin de leurs maisons.", "Property professionals, tradespeople and hospitality businesses in Corsica: work with Inastia to support homeowners and care for their properties."),
+    partners(locale),
   );
   await output(
     locale,

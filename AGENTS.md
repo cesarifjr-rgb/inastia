@@ -27,7 +27,7 @@
 
 - Définir le résultat attendu et faire le changement le plus simple possible.
 - Respecter le style existant ; éviter les refontes sans rapport avec la demande.
-- Conserver 25 pages indexables (11 FR, 11 EN, trois légales FR) et la 404. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
+- Conserver 27 pages indexables (12 FR, 12 EN, trois légales FR) et la 404. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
 - Maintenir les pages FR/EN en parallèle, avec canonical et hreflang cohérents.
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
 - Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.
