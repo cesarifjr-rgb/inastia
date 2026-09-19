@@ -1,4 +1,17 @@
 /* Three parts of the same full-management service, in the restored design. */
+.services-section .management-art-section { padding-bottom: 32px; }
+.home-service-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding-bottom: 72px;
+}
+.home-service-summary p { max-width: 620px; margin: 0; color: var(--muted); }
+.home-service-summary .text-link { flex-shrink: 0; }
+@media (max-width: 899px) {
+  .home-service-summary { flex-direction: column; align-items: flex-start; gap: 20px; padding-bottom: 48px; }
+}
 .management-pillar .management-pillar-list {
   list-style: none;
   margin: 6px 0 30px;

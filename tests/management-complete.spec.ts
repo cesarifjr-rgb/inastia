@@ -28,17 +28,25 @@ for (const locale of ["fr", "en"] as const) {
     }
   });
 
-  test(`three illustrated components belong to one complete management offer (${locale})`, async ({ page }) => {
+  test(`one service overview leads straight to fees and the full management details (${locale})`, async ({ page }) => {
     await page.goto(`${prefix}/`);
     const services = page.locator("#services");
     await expect(services).toContainText(locale === "fr" ? /gestion complète/i : /full management/i);
-    const components = services.locator(".service-card");
+    const components = services.locator("[data-management-copy]");
     await expect(components).toHaveCount(3);
-    for (const [index, component] of (await components.all()).entries()) {
+    for (const component of await components.all()) {
       await component.scrollIntoViewIfNeeded();
       await expect(component.locator("h3")).toBeVisible();
-      await expect(component.locator(`.service-art-${[2, 3, 1][index]}`)).toBeVisible();
     }
+    await expect(services.locator("[data-management-art]")).toHaveCount(1);
+    await expect(page.locator(".service-grid, .full-service-list, .care-proof")).toHaveCount(0);
+    expect(await services.evaluate(element => element.nextElementSibling?.id)).toBe("tarifs");
+    await expect(page.locator("#tarifs")).toHaveCount(1);
+    await expect(page.locator(".hero-reassurance")).toContainText(/20\s?%/);
+    const feesLink = page.locator('.hero-actions a[href="#tarifs"]');
+    await feesLink.focus();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/#tarifs$/);
     const copy = await services.innerText();
     expect(copy).toMatch(locale === "fr" ? /annonce|réservation/i : /listing|booking/i);
     expect(copy).toMatch(locale === "fr" ? /voyageur|accueil/i : /guest|welcome/i);
@@ -46,6 +54,11 @@ for (const locale of ["fr", "en"] as const) {
     await expect(services.locator(`a[href^="${prefix}/gestion-airbnb-corse-du-sud#section-"]`).first()).toBeVisible();
     await expect(services.locator('a[href*="pack-lancement"], a[href*="menage-airbnb"], a[href*="intent=annonce"], a[href*="intent=rotation"]')).toHaveCount(0);
     expect(copy).not.toMatch(/trois offres|three offers|prestations convenues séparément|unless separate services are agreed/i);
+    await services.locator(`a[href="${prefix}/gestion-airbnb-corse-du-sud#section-1"]`).click();
+    for (let section = 1; section <= 7; section++) {
+      await expect(page.locator(`#section-${section} h2`)).toContainText(/\S+/);
+    }
+    await expect(page.locator(".pricing-card-included li")).toHaveCount(9);
   });
 
   test(`original hospitality hero, property identities and contact facts remain (${locale})`, async ({ page }) => {
