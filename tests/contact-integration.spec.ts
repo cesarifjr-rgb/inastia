@@ -4,9 +4,11 @@ const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Integration submits only to a local intercepted route.");
 
 for (const locale of ["fr", "en"]) {
-for (const care of [false, true]) {
+for (const intent of ["audit", "gestion", "intendance"]) {
+const care = intent === "intendance";
+const audit = intent === "audit";
 for (const lostResponse of [false, true]) {
-  test(`${locale} ${care ? "intendance" : "gestion"}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
+  test(`${locale} ${intent}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
     // Load the JavaScript handler through its module URL.
     const { default: handler } = await import(new URL("../api/contact.js", import.meta.url).href);
     const providerCalls: { url: string; body: string; key: string | null }[] = [];
@@ -85,7 +87,7 @@ for (const lostResponse of [false, true]) {
       }
     });
 
-    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${care ? "intendance&formule=serenite" : lostResponse ? "audit" : "gestion"}`);
+    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=${intent}${care ? "&formule=serenite" : ""}`);
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
     await page.locator("#propertyArea").fill('Quartier <test> & voisinage');
@@ -98,8 +100,8 @@ for (const lostResponse of [false, true]) {
     await expect(page.locator("#lastName")).toHaveAttribute("required", "");
     await page.locator("#lastName").fill("Test");
     await page.locator("#email").fill("integration@example.com");
-    if (lostResponse) {
-      await page.locator("#contactPreference").selectOption("phone");
+    if (lostResponse || audit) {
+      if (!audit) await page.locator("#contactPreference").selectOption("phone");
       await page.locator("#phone").fill("+33 6 00 00 00 00");
     }
     await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
@@ -140,7 +142,17 @@ for (const lostResponse of [false, true]) {
       expect(mail.html).toContain("https://example.com/listing?a=1&amp;b=2");
     }
     expect(mail.html).not.toContain("<test>");
-    expect(clientPayloads[0]).toMatchObject({ intent: care ? "intendance" : "gestion", contactPreference: lostResponse ? "phone" : "email", lastName: "Test", phone: lostResponse ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    expect(clientPayloads[0]).toMatchObject({ intent, contactPreference: lostResponse || audit ? "phone" : "email", lastName: "Test", phone: lostResponse || audit ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
+    if (audit) {
+      expect(mail.subject).toContain("demande d’audit gratuit");
+      expect(mail.html).toContain("Audit gratuit");
+      await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "demande d’audit gratuit" : "free review request");
+      await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "ne vous engagez pas" : "not committing");
+      await expect(page.locator("#contact-intent")).toHaveValue("audit");
+      await page.locator("#form-reset").click();
+      await expect(page.locator("#contact-intent")).toHaveValue("audit");
+      await expect(page.locator("#phone")).toHaveAttribute("required", "");
+    }
     expect(mail.html).toContain(presentedEmail);
     expect(mail.html).toContain(presentedPhone);
     expect(mail.html).toContain(presentedHelp);

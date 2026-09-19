@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { fillQualification } from "./helpers/qualification.ts";
 
 const base = new URL(process.env.BASE_URL || "http://127.0.0.1:4100");
 test.skip(!["localhost", "127.0.0.1", "[::1]"].includes(base.hostname), "Synthetic conversions run only on the local intercepted site.");
@@ -68,7 +69,7 @@ test("expired clicks are removed without renewing their attribution window", asy
   expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
 });
 
-for (const intent of ["gestion", "intendance"]) for (const consent of [false, true]) {
+for (const intent of ["audit", "gestion", "intendance"]) for (const consent of [false, true]) {
   test(`confirmed ${intent} enquiry only, consent=${consent}, with retry and duplicate protection`, async ({ page }) => {
     await page.addInitScript(() => {
       Object.assign(window, { turnstile: {
@@ -88,6 +89,8 @@ for (const intent of ["gestion", "intendance"]) for (const consent of [false, tr
     await page.goto("/?gclid=synthetic_click_12345");
     await page.locator(`[data-ads-choice="${consent ? "accept" : "reject"}"]`).click();
     await page.goto(`/contact?intent=${intent}`);
+    await fillQualification(page);
+    if (intent === "audit") await page.locator("#phone").fill("+33600000000");
     await page.locator("#firstName").fill("Synthetic");
     await page.locator("#lastName").fill("Test");
     await page.locator("#email").fill("ads-test@example.invalid");
@@ -108,17 +111,22 @@ for (const intent of ["gestion", "intendance"]) for (const consent of [false, tr
     expect(payloads[1]?.googleAdsConsent).toBe(consent ? true : undefined);
     const conversions = (await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion");
     const sendTo = intent === "intendance" ? "AW-18439914063/nZIzCL6Ih_UcEM-E69hE" : "AW-18439914063/16GeCNTTh_IcEM-E69hE";
-    expect(conversions).toEqual(consent ? [["event", "conversion", { send_to: sendTo, transaction_id: payloads[0]?.requestId }]] : []);
+    expect(conversions).toEqual(consent && intent !== "audit" ? [["event", "conversion", { send_to: sendTo, transaction_id: payloads[0]?.requestId }]] : []);
+    const leads = (await queue(page)).filter(item => item[0] === "event" && item[1] === "generate_lead");
+    expect(leads).toHaveLength(consent ? 1 : 0);
+    if (consent) expect(leads[0]?.[2]).toMatchObject({ service: intent });
     expect(JSON.stringify(await queue(page))).not.toContain("ads-test@example.invalid");
     expect(JSON.stringify(await queue(page))).not.toContain("Quartier privé synthétique");
     await page.locator("#contact-form").dispatchEvent("submit");
     expect(payloads).toHaveLength(2);
-    expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(consent ? 1 : 0);
+    expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(consent && intent !== "audit" ? 1 : 0);
     if (consent) {
       await page.locator("#ads-consent-settings").click();
       await page.locator('[data-ads-choice="reject"]').click();
       expect(await page.evaluate(() => localStorage.getItem('inastia-ads-click-v1'))).toBeNull();
       await page.locator("#form-reset").click();
+      await fillQualification(page);
+      if (intent === "audit") await page.locator("#phone").fill("+33600000000");
       await page.locator("#firstName").fill("Another");
       await page.locator("#lastName").fill("Test");
       await page.locator("#email").fill("another@example.invalid");
@@ -128,7 +136,7 @@ for (const intent of ["gestion", "intendance"]) for (const consent of [false, tr
       await page.locator("#submit-contact").click();
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
       expect(payloads.at(-1)?.googleAdsGclid).toBeUndefined();
-      expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(1);
+      expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toHaveLength(intent === "audit" ? 0 : 1);
     }
     await page.reload();
     expect((await queue(page)).filter((item) => item[0] === "event" && item[1] === "conversion")).toEqual([]);

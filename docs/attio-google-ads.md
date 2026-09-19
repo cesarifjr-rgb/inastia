@@ -9,6 +9,27 @@ avec la demande, sa source documentée et une prochaine action à deux heures.
 Les emails et l’historique des attributs conservent les demandes antérieures.
 Aucune séquence ni relance n’est déclenchée par ce code.
 
+L’audit gratuit conserve le motif `audit` du bouton jusqu’à la confirmation,
+à l’objet de l’email et aux textes de demande du contact et de l’opportunité.
+Une nouvelle opportunité porte le préfixe « Audit gratuit » et prévoit le rappel
+exploratoire. Elle reste à l’étape « Nouveau lead » : aucune décision de déléguer,
+qualification commerciale ou signature n’est déduite. Une demande sur un dossier
+existant conserve son étape et son nom ; le texte de la dernière demande indique
+son intention réelle.
+
+Pour les intentions actuelles audit, gestion et intendance, l’API exige le secteur
+précis, le rôle déclaré et l’échéance. La situation locative est requise pour
+audit et gestion, et masquée pour l’intendance. « Projet encore en réflexion » et
+« À définir ensemble » sont des réponses explicites valides. Les liens historiques
+annonce et rotation restent compatibles. Le rappel d’audit requiert un téléphone,
+indépendamment des choix de prospection ; le choix redondant du canal est masqué.
+
+Après réception confirmée et consentement Analytics, l’audit est compté comme
+`generate_lead` avec `service=audit`. Aucune conversion Google Ads de gestion ou
+d’intendance n’est émise pour un audit. Une éventuelle action Ads propre à l’audit
+doit être configurée séparément avant d’être utilisée. L’attribution consentie du
+clic et le suivi commercial manuel restent conservés.
+
 Le même identifiant de demande ne crée pas de doublon. Pour une même personne,
 un identifiant d’annonce Airbnb ou Booking reconnu rapproche les demandes du même
 bien ; les paramètres de suivi n’influencent pas ce rapprochement. Sans cet

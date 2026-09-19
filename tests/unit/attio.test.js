@@ -117,6 +117,24 @@ describe('website to Attio (all network requests mocked)', () => {
         expect(scalar(existing, 'source_acquisition')).toBe('Apporteur documenté');
     });
 
+    it('preserves an exploratory audit and its qualification in the contact, property and opportunity', async () => {
+        const qualification = [['Rôle du demandeur', 'Acquéreur potentiel'], ['Situation locative', 'Projet encore en réflexion'], ['Démarrage souhaité', 'À définir ensemble']];
+        await syncEnquiry({ ...input, intent: 'audit', phone: '+33600000000', propertyArea: 'Pinarello', decisionRole: 'acquereur', rentalSituation: 'reflexion', startTimeline: 'adefinir' }, { ...context, contactPreference: 'phone', qualification });
+        const [person, property, deal] = Object.values(store.data).map(rows => rows[0]);
+        for (const text of [scalar(person, 'site_derniere_demande'), scalar(deal, 'demande_initiale'), scalar(deal, 'derniere_demande')]) {
+            expect(text).toContain('Motif : audit');
+            expect(text).toContain('aucune demande de gestion complète');
+            expect(text).toContain('Projet encore en réflexion');
+            expect(text).toContain('À définir ensemble');
+        }
+        expect(scalar(property, 'secteur')).toBe('Pinarello');
+        expect(scalar(property, 'role_demandeur')).toBe('Acquéreur potentiel');
+        expect(scalar(deal, 'name')).toMatch(/^Audit gratuit/);
+        expect(scalar(deal, 'prochaine_action')).toContain('rappel d’audit gratuit');
+        expect(deal.values.stage[0].status.title).toBe('Nouveau lead');
+        expect(deal.values.signature_verifiee).toBeUndefined();
+    });
+
     it('keeps home-care intent, plan and surface on the contact and linked opportunity', async () => {
         const qualification = [['Formule d’intendance', 'Sérénité — 2 visites par mois']];
         await syncEnquiry({ ...input, intent: 'intendance', surface: '125.5' }, { ...context, qualification });
