@@ -1,99 +1,155 @@
 import type { Locale } from "./pages.ts";
+import { escape, t } from "../lib.ts";
 
 export const partnersSlug = "partenaires";
+export type PartnerProfile = "general" | "immobilier" | "prestataire" | "recommandation";
 
-export const partnerProfiles: Record<Locale, { title: string; label: string; text: string; detail: string; action: string }[]> = {
+export function partnerMail(locale: Locale, profile: PartnerProfile = "general"): string {
+  const subjects = {
+    general: t(locale, "présentation professionnelle", "professional introduction"),
+    immobilier: t(locale, "immobilier", "property professionals"),
+    prestataire: t(locale, "prestations", "home services"),
+    recommandation: t(locale, "mise en relation", "homeowner introduction"),
+  };
+  const intentions = {
+    general: "",
+    immobilier: t(locale, "Proposer à mes clients un relais pour la gestion locative ou l’intendance.", "Offer my clients a local team for rental management or second-home care."),
+    prestataire: t(locale, "Proposer mes prestations pour les maisons suivies par Inastia.", "Offer my services for the homes looked after by Inastia."),
+    recommandation: t(locale, "Comprendre le cadre applicable avant de présenter un propriétaire.", "Understand the agreed terms before introducing a homeowner."),
+  };
+  const subject = `${t(locale, "Partenariat Inastia", "Partnering with Inastia")} — ${subjects[profile]}`;
+  const body = t(locale,
+    `Bonjour à l’équipe Inastia,\n\nJe souhaite échanger sur une possibilité de collaboration.\n\nNom et structure, le cas échéant :\nActivité :\nSecteur géographique concerné (communes d’intervention ou des projets) :\nCollaboration envisagée : ${intentions[profile]}\n\nBien à vous,`,
+    `Hello Inastia team,\n\nI would like to discuss a possible collaboration.\n\nName and business, if applicable:\nActivity:\nRelevant area (towns covered or where the projects are located):\nProposed collaboration: ${intentions[profile]}\n\nBest regards,`);
+  return escape(`mailto:contact@inastia.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+}
+
+export const partnerProfiles: Record<Locale, { id: PartnerProfile; title: string; label: string; text: string; next: string; detail: string; action: string; detailAnchor: string; detailLink: string }[]> = {
   fr: [
     {
-      title: "Vous connaissez les propriétaires.",
+      id: "immobilier",
+      title: "Un relais pour les projets de vos clients.",
       label: "Agences & professionnels de l’immobilier",
-      text: "Après une acquisition ou au fil de votre accompagnement, vos clients cherchent une équipe pour leur maison en Corse. Présentez-leur Inastia pour la gestion de leur location ou l’intendance de leur résidence secondaire.",
-      detail: "Un relais local pour la suite de leur projet.",
-      action: "Échanger sur vos clients",
+      text: "Après une acquisition ou au fil de votre accompagnement, un propriétaire peut avoir besoin de faire gérer sa location ou de faire suivre sa résidence secondaire.",
+      next: "Vous pouvez lui présenter Inastia pour ces besoins. Avant toute mise en relation, échangeons sur les services concernés et le rôle de chacun.",
+      detail: "Inastia prend ensuite en charge les échanges commerciaux, la proposition et l’éventuelle signature. Les modalités de présentation sont à convenir ensemble.",
+      action: "Échanger sur un relais pour mes clients",
+      detailAnchor: "inastia-concretement",
+      detailLink: "Voir les prestations à recommander",
     },
     {
-      title: "Vous prenez soin des maisons.",
-      label: "Artisans & services de la maison",
-      text: "Entretien des piscines, jardins, dépannage, ménage ou linge : votre savoir-faire compte dans la vie d’une maison. Présentez-nous votre métier, votre secteur et vos disponibilités pour étudier une collaboration.",
-      detail: "Des interventions définies et organisées ensemble.",
-      action: "Présenter votre savoir-faire",
+      id: "prestataire",
+      title: "Vos prestations. Votre secteur d’intervention.",
+      label: "Artisans & prestataires de la maison",
+      text: "Piscine, jardin, dépannage, ménage ou linge : dites-nous ce que vous prenez en charge et dans quelles communes vous intervenez.",
+      next: "Le premier échange permet d’examiner la correspondance entre votre activité et les besoins des maisons suivies par Inastia. Les conditions d’une intervention sont à convenir avant de commencer.",
+      detail: "Une prise de contact ne vaut pas commande et ne garantit pas de missions.",
+      action: "Présenter mes prestations",
+      detailAnchor: "conditions-prestations",
+      detailLink: "Comprendre le cadre des prestations",
     },
     {
-      title: "Vous faites les bonnes rencontres.",
-      label: "Professionnels de la mise en relation",
-      text: "Vous connaissez un propriétaire qui souhaite déléguer sa gestion ? Avec son accord, vous nous mettez en relation. Nous prenons ensuite en charge les échanges, la proposition et la signature éventuelle.",
-      detail: "Vous créez le lien. Nous accompagnons le projet.",
-      action: "Parler de mise en relation",
+      id: "recommandation",
+      title: "Un premier échange avant la mise en relation.",
+      label: "Professionnels en contact avec des propriétaires",
+      text: "Vous connaissez un propriétaire qui cherche à déléguer la gestion de sa maison ? Commencez par nous présenter votre activité et le type de besoin rencontré, sans communiquer ses coordonnées.",
+      next: "Nous pourrons ainsi préciser le cadre de la mise en relation. Il n’est pas nécessaire de vous définir comme apporteur pour ouvrir la discussion.",
+      detail: "Une éventuelle rémunération se convient par écrit avant la mise en relation. Le seul envoi d’un contact ne crée pas de droit à rémunération.",
+      action: "Échanger avant une mise en relation",
+      detailAnchor: "conditions-recommandation",
+      detailLink: "Lire les conditions de rémunération",
     },
   ],
   en: [
     {
-      title: "You know the homeowners.",
+      id: "immobilier",
+      title: "A local team for your clients’ plans.",
       label: "Estate agents & property professionals",
-      text: "After a purchase or during your ongoing work, your clients may need a team to care for their home in Corsica. Introduce them to Inastia for full holiday rental management or second-home care.",
-      detail: "A local team for the next chapter of their plans.",
-      action: "Discuss your clients’ needs",
+      text: "After a purchase or during your ongoing work, an owner may need someone to manage their rental or look after their second home.",
+      next: "You can introduce Inastia for these needs. Before making an introduction, let’s discuss the services involved and everyone’s role.",
+      detail: "Inastia then handles the commercial discussions, proposal and any eventual contract. We agree how to make the introduction together.",
+      action: "Discuss support for my clients",
+      detailAnchor: "inastia-concretement",
+      detailLink: "Explore the services to recommend",
     },
     {
-      title: "You care for the homes.",
-      label: "Tradespeople & home services",
-      text: "Pool care, gardening, repairs, cleaning or linen: your expertise plays a part in keeping a home running well. Tell us about your work, service area and availability so we can explore working together.",
-      detail: "Work with a scope and schedule agreed together.",
-      action: "Tell us about your expertise",
+      id: "prestataire",
+      title: "Your services. The area you cover.",
+      label: "Tradespeople & home service providers",
+      text: "Pool care, gardens, repairs, cleaning or linen: tell us what you offer and which towns you cover.",
+      next: "Our first conversation helps us see how your expertise fits the needs of the homes Inastia looks after. The terms of any work are agreed before it begins.",
+      detail: "Getting in touch is not a work order and does not guarantee assignments.",
+      action: "Present my services",
+      detailAnchor: "conditions-prestations",
+      detailLink: "Understand the terms for services",
     },
     {
-      title: "You make the connections.",
-      label: "Professional introducers",
-      text: "Know an owner who wants to hand over their rental management? With their permission, introduce us. We then handle the conversations, proposal and any eventual contract.",
-      detail: "You make the introduction. We take it from there.",
-      action: "Discuss introductions",
+      id: "recommandation",
+      title: "A conversation before an introduction.",
+      label: "Professionals who know homeowners",
+      text: "Know an owner who wants to hand over their property management? Start by telling us about your work and the need you have encountered, without sharing their contact details.",
+      next: "We can then agree how an introduction would work. You do not need to call yourself a professional introducer to start the conversation.",
+      detail: "Any referral fee must be agreed in writing before the introduction. Sending a contact does not in itself create an entitlement to payment.",
+      action: "Talk before making an introduction",
+      detailAnchor: "conditions-recommandation",
+      detailLink: "Read the referral fee conditions",
     },
   ],
 };
 
-export const partnerFaq: Record<Locale, { question: string; answer: string }[]> = {
+export const partnerFaq: Record<Locale, { id: string; question: string; answer: string }[]> = {
   fr: [
     {
-      question: "Avec quels professionnels souhaitez-vous échanger ?",
-      answer: "Agences immobilières, professionnels en relation avec des propriétaires, artisans et prestataires de la maison : nous étudions les collaborations en lien avec notre gestion locative et notre intendance. Votre activité, votre secteur et vos disponibilités nous permettent de voir comment travailler ensemble.",
+      id: "role-partenaire",
+      question: "Qui échange avec le propriétaire après une mise en relation ?",
+      answer: "Inastia prend en charge les échanges commerciaux, la proposition et l’éventuelle signature. Votre rôle dans cette démarche est la mise en relation ; son cadre est précisé avant de transmettre le contact. Nous convenons ensemble des modalités de présentation et des informations à partager avec vous, avec l’accord des personnes concernées.",
     },
     {
-      question: "Comment vous présenter un propriétaire ?",
-      answer: "Commencez par échanger avec nous pour convenir du cadre. Avant toute transmission de coordonnées, assurez-vous que le propriétaire accepte d’être contacté par Inastia. Votre rôle se limite à la mise en relation ; notre équipe assure ensuite les échanges commerciaux, la proposition et la signature éventuelle.",
+      id: "conditions-recommandation",
+      question: "Une recommandation peut-elle être rémunérée ?",
+      answer: "Une rémunération éventuelle doit être convenue par écrit avant la mise en relation. Pour un apport en gestion complète, elle dépend de la signature effective d’un contrat par le propriétaire présenté et des conditions convenues. Transmettre un contact ne crée pas, à lui seul, un droit à rémunération. Ces modalités ne sont pas automatiquement applicables à l’intendance.",
     },
     {
-      question: "Une mise en relation peut-elle être rémunérée ?",
-      answer: "Une rémunération éventuelle se convient par écrit avant la mise en relation. Pour un apport en gestion complète, elle est conditionnée à la signature effective d’un contrat par le propriétaire présenté, selon les conditions convenues. Le premier échange permet de préciser ce cadre ; l’envoi d’un contact ne crée pas à lui seul un droit à rémunération.",
+      id: "conditions-prestations",
+      question: "Comment les conditions d’une prestation sont-elles définies ?",
+      answer: "Le périmètre, les tarifs, les disponibilités et les modalités d’intervention sont convenus avant la collaboration. Présentez d’abord votre métier et votre secteur pour examiner les besoins auxquels vous pourriez répondre. Les modalités de validation, de facturation et de paiement sont à préciser ensemble avant toute intervention. Aucun volume de missions n’est garanti.",
     },
     {
-      question: "Sur quel secteur peut-on travailler ensemble ?",
-      answer: "Notre activité se situe sur la côte orientale de la Corse, de Ghisonaccia à Porto-Vecchio, notamment autour de Ventiseri, Solenzara, Sainte-Lucie de Porto-Vecchio, Pinarello et Lecci. Pour chaque besoin, nous vérifions l’adresse, les accès et les disponibilités avant de confirmer une prise en charge ou une intervention.",
+      id: "secteur-partenaire",
+      question: "Toutes les maisons du secteur peuvent-elles être prises en charge ?",
+      answer: "L’adresse et les accès doivent être examinés avant de confirmer l’organisation possible. Le seul nom d’une commune ne suffit pas à confirmer une prise en charge. Notre secteur s’étend de Ghisonaccia à Porto-Vecchio. Vous pouvez être installé ailleurs et nous présenter un projet dans ce secteur : indiquez les communes des projets ou de vos interventions, pas seulement l’adresse de votre entreprise.",
     },
     {
-      question: "Comment sont organisées les prestations ?",
-      answer: "Nous échangeons d’abord sur votre métier et notre besoin. Le périmètre, les tarifs, les disponibilités et les modalités d’intervention sont convenus avant chaque collaboration. Une prise de contact ne vaut pas commande et aucun volume d’interventions n’est garanti.",
+      id: "residence-non-louee",
+      question: "Puis-je vous contacter pour une maison qui n’est pas louée ?",
+      answer: "Oui. L’intendance s’adresse aussi aux propriétaires qui utilisent leur résidence secondaire pour leurs propres séjours. La maison n’a pas besoin d’être proposée à la location. Les visites, les prestations complémentaires et leurs conditions sont détaillées dans notre offre d’intendance.",
     },
   ],
   en: [
     {
-      question: "Which professionals would you like to hear from?",
-      answer: "Estate agents, professionals who work with homeowners, tradespeople and home service providers: we consider collaborations connected to our rental management and second-home care. Your expertise, service area and availability help us explore how we might work together.",
+      id: "role-partenaire",
+      question: "Who speaks with the owner after an introduction?",
+      answer: "Inastia handles the commercial discussions, proposal and any eventual contract. Your role is the introduction; we agree its terms before any contact details are shared. Together, we discuss how to make the introduction and which information to share with you, with the permission of those involved.",
     },
     {
-      question: "How do I introduce a homeowner?",
-      answer: "Speak with us first to agree how the introduction will work. Before sharing any contact details, make sure the owner agrees to be contacted by Inastia. Your role is limited to the introduction; our team then handles the commercial discussions, proposal and any eventual contract.",
+      id: "conditions-recommandation",
+      question: "Can a recommendation be paid?",
+      answer: "Any referral fee must be agreed in writing before the introduction. For full management referrals, it depends on the introduced owner actually signing a contract and on the agreed terms. Sharing a contact does not in itself create an entitlement to payment. These arrangements do not automatically apply to second-home care.",
     },
     {
-      question: "Can an introduction be paid?",
-      answer: "Any referral fee must be agreed in writing before the introduction. For a full management referral, payment depends on the introduced owner actually signing a contract, under the agreed terms. Our first conversation is the opportunity to discuss those terms; sending a contact does not in itself create an entitlement to payment.",
+      id: "conditions-prestations",
+      question: "How are the terms of service work agreed?",
+      answer: "Scope, rates, availability and working arrangements are agreed before a collaboration begins. Start by telling us about your expertise and service area so we can consider relevant needs. Approval, invoicing and payment arrangements must be discussed together before any work starts. No volume of assignments is guaranteed.",
     },
     {
-      question: "Where can we work together?",
-      answer: "We work along Corsica’s east coast, from Ghisonaccia to Porto-Vecchio, including Ventiseri, Solenzara, Sainte-Lucie de Porto-Vecchio, Pinarello and Lecci. We check the address, access and availability for each enquiry before confirming any service or visit.",
+      id: "secteur-partenaire",
+      question: "Can you look after every property in your area?",
+      answer: "We need to review the address and access before confirming possible arrangements. A town name alone does not confirm that we can take a property on. Our area runs from Ghisonaccia to Porto-Vecchio. Your own business can be based elsewhere: tell us where the projects are located or where you work, not just your business address.",
     },
     {
-      question: "How is service work arranged?",
-      answer: "We begin by discussing your expertise and our requirements. Scope, rates, availability and working arrangements are agreed before each collaboration. Getting in touch is not a work order and no volume of assignments is guaranteed.",
+      id: "residence-non-louee",
+      question: "Can I contact you about a home that is not rented out?",
+      answer: "Yes. Second-home care is also for owners who use their property for their own stays. The home does not have to be offered as a rental. Our home care page explains the scheduled visits, additional services and their terms.",
     },
   ],
 };

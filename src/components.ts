@@ -2,7 +2,7 @@ import type { Locale } from "./content/pages.ts";
 import { arrow, contactPath, escape, path, t } from "./lib.ts";
 import { googleProfileUrl } from "./reviews.ts";
 import { intendanceSlug } from "./content/intendance.ts";
-import { partnersSlug } from "./content/partners.ts";
+import { partnerMail, partnersSlug } from "./content/partners.ts";
 
 export const zones = [
   ["Ghisonaccia", "conciergerie-ghisonaccia"],
@@ -16,7 +16,7 @@ export function header(locale: Locale, slug: string): string {
   const care = slug === intendanceSlug;
   const partnership = slug === partnersSlug;
   const cta = partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Confier la gestion de mon bien", "Have my property managed");
-  const ctaHref = partnership ? "#devenir-partenaire" : contactPath(locale, care ? "intendance" : "gestion");
+  const ctaHref = partnership ? partnerMail(locale) : contactPath(locale, care ? "intendance" : "gestion");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
     ["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "" : slug,
