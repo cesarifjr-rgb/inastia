@@ -62,6 +62,18 @@ export function initAnalyticsInteractions(): void {
     const url = new URL(link.href);
     const method = url.protocol === "tel:" ? "phone" : url.protocol === "mailto:" ? "email"
       : url.origin === location.origin && /^\/(en\/)?contact$/.test(url.pathname) ? "form" : undefined;
-    if (method) trackAnalytics("contact_click", { contact_method: method });
+    if (!method) return;
+    const parameters: Record<string, string> = { contact_method: method };
+    if (/^\/(en\/)?partenaires$/.test(location.pathname)) {
+      const profile = link.dataset.partnerProfile ?? "general";
+      const placement = link.closest("#mobile-menu") ? "mobile_menu"
+        : link.closest(".site-header") ? "header"
+        : link.closest(".site-footer") ? "footer" : link.dataset.contactPlacement ?? "direct";
+      // Only fixed categories enter Analytics, never the link, draft, address or free text.
+      parameters.service = "partenariat";
+      parameters.partner_profile = ["general", "immobilier", "prestataire", "recommandation"].includes(profile) ? profile : "general";
+      parameters.contact_placement = ["hero", "profile", "contact", "email_fallback", "phone", "header", "mobile_menu", "footer"].includes(placement) ? placement : "direct";
+    }
+    trackAnalytics("contact_click", parameters);
   });
 }

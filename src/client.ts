@@ -86,3 +86,12 @@ initContact();
 initMotion();
 initManagementArt();
 initPricing();
+
+function openPartnerQuestion(): void {
+  const question = document.getElementById(location.hash.slice(1));
+  if (question instanceof HTMLDetailsElement && question.closest(".partners-faq")) question.open = true;
+}
+if (document.querySelector(".partners-page")) {
+  openPartnerQuestion();
+  window.addEventListener("hashchange", openPartnerQuestion);
+}

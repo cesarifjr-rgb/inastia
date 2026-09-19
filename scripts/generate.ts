@@ -75,8 +75,8 @@ for (const locale of ["fr", "en"] as const) {
   await output(
     locale,
     partnersSlug,
-    t(locale, "Partenaires en Corse : construisons ensemble | Inastia", "Partners in Corsica: working together | Inastia"),
-    t(locale, "Professionnels de l’immobilier, artisans et acteurs de l’hospitalité en Corse : échangeons pour accompagner les propriétaires et prendre soin de leurs maisons.", "Property professionals, tradespeople and hospitality businesses in Corsica: work with Inastia to support homeowners and care for their properties."),
+    t(locale, "Partenaires en Corse : recommandation et prestations | Inastia", "Partners in Corsica: referrals and home services | Inastia"),
+    t(locale, "Recommander Inastia ou proposer vos prestations : échangeons sur la gestion locative et l’intendance, de Ghisonaccia à Porto-Vecchio. Présentez votre activité.", "Recommend Inastia or offer your services for rental management and second-home care, from Ghisonaccia to Porto-Vecchio. Tell us about your business."),
     partners(locale),
   );
   await output(
