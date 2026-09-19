@@ -2194,6 +2194,9 @@ html[data-motion="running"] .presence-signal > div:nth-child(3) {
   }
 }
 @media (max-width: 1199px) {
+  .header-cta {
+    display: none;
+  }
   .desktop-nav {
     gap: 18px;
   }
