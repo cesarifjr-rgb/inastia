@@ -1,5 +1,3 @@
-import { SITE_VERSION } from "./site-version.ts";
-
 export const ANALYTICS_ID = "G-ZQWEB3WMM4";
 
 let enabled = false;
@@ -32,7 +30,7 @@ export function updateAnalyticsConsent(accepted: boolean, advertising: boolean, 
   expiresAt = expiry;
   window[`ga-disable-${ANALYTICS_ID}`] = !enabled;
   if (!enabled) return;
-  const page = { page_location: pageLocation(advertising), page_referrer: pageReferrer(), site_version: SITE_VERSION };
+  const page = { page_location: pageLocation(advertising), page_referrer: pageReferrer() };
   // Update URL context without reconfiguring the stream or counting another page view.
   window.gtag?.("set", page);
   if (configured) return;

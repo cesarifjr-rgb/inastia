@@ -16,7 +16,7 @@ for (const locale of ["fr", "en"] as const) {
     await expect(page.locator("#submit-contact-label")).toHaveText(label);
     await expect(page.locator(".header-cta")).toHaveText(label);
     await expect(page.locator(".header-cta")).toHaveAttribute("href", "#contact-form");
-    await expect(page.locator("#contact-lead")).toContainText(locale === "fr" ? "avant une éventuelle délégation" : "before a possible handover");
+    await expect(page.locator("#contact-lead")).toContainText(locale === "fr" ? "sans vous engager" : "without committing");
     await expect(page.locator("#phone")).toBeVisible();
     await expect(page.locator("#phone")).toHaveAttribute("required", "");
     await expect(page.locator("#contact-preference-field")).toBeHidden();
