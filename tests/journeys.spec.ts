@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 for (const prefix of ["", "/en"]) {
   test(`all primary CTAs open a management request ${prefix || "FR"}`, async ({ page }) => {
-    const label = prefix ? "Let’s talk about your property" : "Parlons de votre bien";
+    const label = prefix ? "Let’s talk about your property" : "Parlons de votre logement";
     for (const slug of [
       "gestion-airbnb-corse-du-sud",
       "about",
