@@ -28,7 +28,7 @@ for (const locale of ["fr", "en"] as const) {
     }
   });
 
-  test(`one service overview leads straight to fees and the full management details (${locale})`, async ({ page }) => {
+  test(`one service overview leads to team, homes, then fees and the full management details (${locale})`, async ({ page }) => {
     await page.goto(`${prefix}/`);
     const services = page.locator("#services");
     await expect(services).toContainText(locale === "fr" ? /gestion complète/i : /full management/i);
@@ -40,10 +40,12 @@ for (const locale of ["fr", "en"] as const) {
     }
     await expect(services.locator("[data-management-art]")).toHaveCount(1);
     await expect(page.locator(".service-grid, .full-service-list, .care-proof")).toHaveCount(0);
-    expect(await services.evaluate(element => element.nextElementSibling?.id)).toBe("tarifs");
+    expect(await services.evaluate(element => element.nextElementSibling?.id)).toBe("equipe");
     await expect(page.locator("#tarifs")).toHaveCount(1);
-    await expect(page.locator(".hero-reassurance")).toContainText(/20\s?%/);
-    const feesLink = page.locator('.hero-actions a[href="#tarifs"]');
+    await expect(page.locator(".hero-fees")).toContainText(/20\s?%/);
+    expect(await page.locator("#tarifs").evaluate(element => element.previousElementSibling?.id)).toBe("portfolio");
+    await expect(page.locator(".pricing-calculator")).not.toHaveAttribute("open");
+    const feesLink = page.locator('.hero-reassurance a[href="#tarifs"]');
     await feesLink.focus();
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#tarifs$/);
