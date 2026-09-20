@@ -72,7 +72,8 @@ export function home(locale: Locale): string {
       <p class="hero-description">${t(locale, "Notre équipe familiale gère votre location de A à Z. Vous profitez de votre maison et encaissez directement les loyers ; nous prenons en charge l’organisation des séjours.", "Our family team manages your rental from start to finish. You enjoy your home and receive rental income directly; we take care of organising the stays.")}</p>
       <p class="hero-assistance">${t(locale, "Assistance voyageurs 24 h/24, 7 j/7", "Guest assistance available 24/7")}</p>
       <p class="hero-location">${t(locale, "Votre conciergerie familiale, de Ghisonaccia à Porto-Vecchio.", "Your family-run property management team, from Ghisonaccia to Porto-Vecchio.")}</p>
-      <div class="hero-actions"><a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Confier la gestion de mon bien", "Have my property managed")}${arrow}</a><a class="text-link" href="#tarifs">${t(locale, "Comprendre les honoraires", "Understand our fees")}</a></div>
+      <div class="hero-actions"><a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Parlons de votre bien", "Let’s talk about your property")}${arrow}</a><a class="text-link" href="#tarifs">${t(locale, "Comprendre les honoraires", "Understand our fees")}</a></div>
+      <p class="hero-contact-note">${t(locale, "Présentez-nous votre logement et vos besoins pour préparer un premier échange avec notre équipe.", "Tell us about your property and your needs to prepare a first conversation with our team.")}</p>
       <p class="hero-reassurance">${t(locale, "20 % TTC des nuitées, avant frais de plateforme. Hors ménage, linge et taxe de séjour.", "20% incl. VAT of accommodation charges, before platform fees. Excluding cleaning, linen and tourist tax.")}</p></div>
       <div class="hero-visual" data-hospitality-scene data-illustration-active="false" aria-hidden="true">${hospitalityArt(locale)}</div>
     </div>

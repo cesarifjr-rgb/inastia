@@ -89,17 +89,17 @@ export function initContact(): void {
     const care = intentField?.value === "intendance";
     const audit = intentField?.value === "audit";
     const text = (fr: string, en: string): string => locale === "fr" ? fr : en;
-    const label = audit ? text("Demander mon audit gratuit", "Request my free review") : care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Confier la gestion de mon bien", "Have my property managed");
-    for (const id of ["contact-form-title", "submit-contact-label"]) {
-      const element = document.getElementById(id);
-      if (element) element.textContent = label;
-    }
+    const label = audit ? text("Demander mon audit gratuit", "Request my free review") : care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Parlons de votre bien", "Let’s talk about your property");
+    const formTitle = document.getElementById("contact-form-title");
+    if (formTitle) formTitle.textContent = audit || care ? label : text("Présentez-nous votre bien", "Tell us about your property");
+    const submitLabel = document.getElementById("submit-contact-label");
+    if (submitLabel) submitLabel.textContent = audit || care ? label : text("Envoyer ma demande", "Send my enquiry");
     for (const link of document.querySelectorAll<HTMLAnchorElement>(".header-cta, #mobile-menu .button")) {
       if (link.firstChild?.nodeType === Node.TEXT_NODE) link.firstChild.textContent = label;
       link.setAttribute("href", "#contact-form");
     }
     const title = document.getElementById("contact-title");
-    if (title) title.textContent = audit ? text("Faisons le point sur votre projet locatif", "Let’s review your rental plans") : care ? text("Prenons soin de votre maison en Corse", "Let’s care for your home in Corsica") : text("Préparons la gestion de votre maison", "Let’s prepare the management of your home");
+    if (title) title.textContent = audit ? text("Faisons le point sur votre projet locatif", "Let’s review your rental plans") : care ? text("Prenons soin de votre maison en Corse", "Let’s care for your home in Corsica") : text("Parlons de votre projet de gestion", "Let’s talk about managing your property");
     const lead = document.getElementById("contact-lead");
     if (lead) lead.textContent = audit ? text("Un premier audit gratuit, sans vous engager dans une gestion complète. Nous vous rappelons sous 24 h, selon vos disponibilités, pour commencer l’échange ; l’analyse se poursuit ensuite.", "A free initial review without committing to full management. We call you back within 24 hours, taking your availability into account, to start the conversation; the review continues afterwards.") : text("Indiquez où se trouve votre logement et ce que vous souhaitez déléguer. Ces informations nous permettent de vérifier sa prise en charge et de préparer notre premier échange.", "Tell us where your home is and what you would like to delegate. This helps us check whether we can look after it and prepare our first conversation.");
     const messageHelp = document.getElementById("message-help");
