@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 for (const prefix of ["", "/en"]) {
   test(`all primary CTAs open a management request ${prefix || "FR"}`, async ({ page }) => {
-    const label = prefix ? "Have my property managed" : "Confier la gestion de mon bien";
+    const label = prefix ? "Let’s talk about your property" : "Parlons de votre bien";
     for (const slug of [
       "gestion-airbnb-corse-du-sud",
       "about",
@@ -23,7 +23,7 @@ for (const prefix of ["", "/en"]) {
       await page.locator(slug ? ".page-hero-copy .button" : ".hero-actions .button").click();
       await expect(page).toHaveURL(new RegExp(`/contact\\?intent=gestion$`));
       await expect(page.locator("#contact-intent")).toHaveValue("gestion");
-      await expect(page.locator("#submit-contact-label")).toHaveText(label);
+      await expect(page.locator("#submit-contact-label")).toHaveText(prefix ? "Send my enquiry" : "Envoyer ma demande");
     }
   });
 
