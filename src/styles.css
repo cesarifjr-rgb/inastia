@@ -1703,6 +1703,33 @@ html[data-motion] #motion-toggle {
   font-size: 13px;
   margin-bottom: 20px;
 }
+.contact-section {
+  min-width: 0;
+  margin: 24px 0 0;
+  padding: 0;
+  border: 0;
+}
+.contact-section legend,
+.contact-project summary {
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 700;
+}
+.contact-section legend {
+  margin-bottom: 16px;
+}
+.contact-project {
+  margin-top: 24px;
+  padding: 18px 0;
+  border-top: 1px solid #bdcfd4;
+  border-bottom: 1px solid #bdcfd4;
+}
+.contact-project summary {
+  cursor: pointer;
+}
+.contact-project[open] summary {
+  margin-bottom: 16px;
+}
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

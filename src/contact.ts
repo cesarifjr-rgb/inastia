@@ -78,6 +78,7 @@ export function initContact(): void {
   const contactPreference = form.querySelector<HTMLSelectElement>("#contactPreference");
   const marketingPhone = form.querySelector<HTMLInputElement>("#marketingPhone");
   const intentField = form.querySelector<HTMLSelectElement>("#contact-intent");
+  const project = form.querySelector<HTMLDetailsElement>("#contact-project");
   const planField = form.querySelector<HTMLSelectElement>("#intendancePlan");
   const params = new URL(location.href).searchParams;
   const requestedIntent = params.get("intent");
@@ -116,6 +117,22 @@ export function initContact(): void {
       group.hidden = !visible;
       group.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select").forEach(field => { field.disabled = !visible; });
     }
+    for (const [name, fr, en] of [
+      ["decisionRole", "Votre rôle dans le projet", "Your role in the project"],
+      ["rentalSituation", "Situation locative", "Rental situation"],
+      ["startTimeline", "Échéance envisagée", "Expected timing"],
+    ]) {
+      const field = form!.querySelector<HTMLSelectElement>('#' + name);
+      const required = (audit || care) && !field?.disabled;
+      if (field) field.required = required;
+      const fieldLabel = form!.querySelector('label[for="' + name + '"]');
+      if (fieldLabel) fieldLabel.textContent = text(fr!, en!) + (required ? " *" : text(" (facultatif)", " (optional)"));
+    }
+    if (project) project.open = audit || care;
+    const projectSummary = document.getElementById("contact-project-summary");
+    if (projectSummary) projectSummary.textContent = audit || care ? text("Votre projet", "Your plans") : text("Votre projet (facultatif)", "Your plans (optional)");
+    const projectHelp = document.getElementById("contact-project-help");
+    if (projectHelp) projectHelp.hidden = audit || care;
     document.querySelectorAll<HTMLAnchorElement>(".language-link").forEach((link) => {
       const url = new URL(link.href);
       url.searchParams.set("intent", audit ? "audit" : care ? "intendance" : "gestion");
@@ -165,6 +182,10 @@ export function initContact(): void {
     }
   }
   form.addEventListener("input", validateFields);
+  // Reveal invalid optional input (for example a listing URL) before native focus.
+  form.addEventListener("invalid", (event) => {
+    if (project && event.target instanceof Node && project.contains(event.target)) project.open = true;
+  }, true);
 
   function announce(message: string, state: string, focus = false): void {
     status!.textContent = message;

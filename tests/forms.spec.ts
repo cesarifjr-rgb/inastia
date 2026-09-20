@@ -57,6 +57,54 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
+    test("management keeps six essential answers and reveals invalid optional details", async ({ page }) => {
+      let requests = 0;
+      await page.route("**/api/contact", async route => {
+        requests += 1;
+        expect(route.request().postDataJSON()).toMatchObject({ decisionRole: "", rentalSituation: "", startTimeline: "", listingUrl: "" });
+        await route.fulfill({ json: { success: true } });
+      });
+      await page.goto(path + "?intent=gestion");
+      const project = page.locator("#contact-project");
+      const summary = page.locator("#contact-project-summary");
+      await expect(project).not.toHaveAttribute("open", "");
+      await expect(summary).toHaveText(locale === "fr" ? "Votre projet (facultatif)" : "Your plans (optional)");
+      for (const intent of ["audit", "intendance"]) {
+        await page.locator("#contact-intent").selectOption(intent);
+        await expect(project).toHaveAttribute("open", "");
+        await expect(page.locator("#decisionRole")).toHaveAttribute("required", "");
+        await expect(page.locator("#startTimeline")).toHaveAttribute("required", "");
+        if (intent === "audit") await expect(page.locator("#rentalSituation")).toHaveAttribute("required", "");
+        else await expect(page.locator("#rentalSituation")).toBeDisabled();
+      }
+      await page.locator("#contact-intent").selectOption("gestion");
+      expect(await page.locator("#contact-form [required]:enabled").evaluateAll(fields => fields.map(field => field.getAttribute("name")))).toEqual(["intent", "propertyType", "location", "propertyArea", "firstName", "lastName", "email"]);
+      await summary.focus();
+      await summary.press("Enter");
+      await expect(project).toHaveAttribute("open", "");
+      await page.locator("#listingUrl").fill("invalid-url");
+      await summary.click();
+      await page.locator("#propertyType").selectOption("Villa");
+      await page.locator("#location").fill("Commune synthétique");
+      await page.locator("#propertyArea").fill("Secteur synthétique");
+      await page.locator("#firstName").fill("Test");
+      await page.locator("#lastName").fill("Local");
+      await page.locator("#email").fill("test@example.com");
+      await page.evaluate(() => window.__solveChallenge());
+      await page.locator("#submit-contact").click();
+      await expect(project).toHaveAttribute("open", "");
+      await expect(page.locator("#listingUrl")).toBeFocused();
+      expect(requests).toBe(0);
+      await page.locator("#listingUrl").fill("");
+      await page.locator("#submit-contact").click();
+      await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+      await page.locator("#form-reset").click();
+      await expect(project).not.toHaveAttribute("open", "");
+      for (const name of ["decisionRole", "rentalSituation", "startTimeline"])
+        await expect(page.locator("#" + name)).not.toHaveAttribute("required", "");
+      expect(requests).toBe(1);
+    });
+
     test("management reply channel is independent of marketing and requires a surname", async ({ page }) => {
       let payload: Record<string, unknown> | undefined;
       await page.route("**/api/contact", async (route) => {

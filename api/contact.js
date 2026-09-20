@@ -150,8 +150,11 @@ export default async function handler(req, res) {
     if (!firstName || !lastName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
     }
-    if (['audit', 'gestion', 'intendance'].includes(intent)
-        && (!propertyArea || !decisionRole || !startTimeline || (intent !== 'intendance' && !rentalSituation))) {
+    if (['audit', 'gestion', 'intendance'].includes(intent) && !propertyArea) {
+        return respond(400, { success: false, error: 'Précisez le secteur du logement.' }, 'validation');
+    }
+    if (['audit', 'intendance'].includes(intent)
+        && (!decisionRole || !startTimeline || (intent === 'audit' && !rentalSituation))) {
         return respond(400, { success: false, error: 'Précisez le secteur du bien, votre rôle, l’échéance et la situation locative si elle s’applique.' }, 'validation');
     }
     if ((contactPreference === 'phone' || marketingPhone) && !phone) {

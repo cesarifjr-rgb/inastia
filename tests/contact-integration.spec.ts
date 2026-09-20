@@ -8,6 +8,7 @@ for (const intent of ["audit", "gestion", "intendance"]) {
 const care = intent === "intendance";
 const audit = intent === "audit";
 for (const lostResponse of [false, true]) {
+const minimal = intent === "gestion" && !lostResponse;
   test(`${locale} ${intent}: ${lostResponse ? "contact client retries the real handler after ambiguous provider acceptance" : "contact client and real handler accept a verified enquiry"}`, async ({ page }) => {
     // Load the JavaScript handler through its module URL.
     const { default: handler } = await import(new URL("../api/contact.js", import.meta.url).href);
@@ -91,11 +92,19 @@ for (const lostResponse of [false, true]) {
     await page.locator("#propertyType").selectOption("Villa");
     await page.locator("#location").fill("Ville de test");
     await page.locator("#propertyArea").fill('Quartier <test> & voisinage');
-    await page.locator("#decisionRole").selectOption("mandataire");
+    if (minimal) {
+      await expect(page.locator("#contact-project")).not.toHaveAttribute("open", "");
+      for (const name of ["decisionRole", "rentalSituation", "startTimeline"])
+        await expect(page.locator("#" + name)).not.toHaveAttribute("required", "");
+    } else {
+      if (!(await page.locator("#contact-project").evaluate(element => (element as HTMLDetailsElement).open)))
+        await page.locator("#contact-project-summary").click();
+      await page.locator("#decisionRole").selectOption("mandataire");
+    }
     if (care) await page.locator("#surface").fill("125");
-    else await page.locator("#rentalSituation").selectOption("changement");
-    await page.locator("#startTimeline").selectOption("prochainesaison");
-    if (!care) await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
+    else if (!minimal) await page.locator("#rentalSituation").selectOption("changement");
+    if (!minimal) await page.locator("#startTimeline").selectOption("prochainesaison");
+    if (!care && !minimal) await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
     await page.locator("#firstName").fill("Exemple");
     await expect(page.locator("#lastName")).toHaveAttribute("required", "");
     await page.locator("#lastName").fill("Test");
@@ -104,7 +113,7 @@ for (const lostResponse of [false, true]) {
       if (!audit) await page.locator("#contactPreference").selectOption("phone");
       await page.locator("#phone").fill("+33 6 00 00 00 00");
     }
-    await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
+    if (!minimal) await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
     if (lostResponse) {
       await page.locator("#marketingEmail").check();
       await page.locator("#marketingPhone").check();
@@ -130,18 +139,23 @@ for (const lostResponse of [false, true]) {
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
     expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
     const mail = JSON.parse(emails[0]?.body || "{}");
-    expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: care ? "" : "changement", startTimeline: "prochainesaison", listingUrl: care ? "" : "https://example.com/listing?a=1&b=2" });
-    for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Pour la prochaine saison"]) expect(mail.html).toContain(value);
+    expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: minimal ? "" : "mandataire", rentalSituation: care || minimal ? "" : "changement", startTimeline: minimal ? "" : "prochainesaison", listingUrl: care || minimal ? "" : "https://example.com/listing?a=1&b=2" });
+    for (const value of ["Quartier &lt;test&gt; &amp; voisinage", ...(minimal ? [] : ["Mandataire autorisé", "Pour la prochaine saison"])]) expect(mail.html).toContain(value);
     if (care) {
       expect(clientPayloads[0]).toMatchObject({ intendancePlan: "serenite", surface: "125" });
       expect(mail.subject).toContain("demande d’intendance");
       expect(mail.html).toContain("Sérénité — 2 visites par mois");
       expect(mail.html).toContain("125");
-    } else {
+    } else if (!minimal) {
       expect(mail.html).toContain("Changement de conciergerie");
       expect(mail.html).toContain("https://example.com/listing?a=1&amp;b=2");
     }
     expect(mail.html).not.toContain("<test>");
+    if (minimal) {
+      for (const text of ["Rôle du demandeur", "Situation locative", "Démarrage souhaité", "undefined"])
+        expect(mail.html).not.toContain(text);
+      expect(clientPayloads[0]?.message).toBe("");
+    }
     expect(clientPayloads[0]).toMatchObject({ intent, contactPreference: lostResponse || audit ? "phone" : "email", lastName: "Test", phone: lostResponse || audit ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     if (audit) {
       expect(mail.subject).toContain("demande d’audit gratuit");

@@ -18,8 +18,11 @@ existant conserve son étape et son nom ; le texte de la dernière demande indiq
 son intention réelle.
 
 Pour les intentions actuelles audit, gestion et intendance, l’API exige le secteur
-précis, le rôle déclaré et l’échéance. La situation locative est requise pour
-audit et gestion, et masquée pour l’intendance. « Projet encore en réflexion » et
+précis. Depuis le 20 septembre 2026, le rôle, l’échéance et la situation locative
+sont facultatifs pour la gestion : une demande minimale peut être reçue et copiée
+dans le CRM sans inventer ces précisions ni qualifier automatiquement le projet.
+Le rôle et l’échéance restent requis pour audit et intendance, la situation locative
+pour audit ; cette dernière reste masquée pour l’intendance. « Projet encore en réflexion » et
 « À définir ensemble » sont des réponses explicites valides. Les liens historiques
 annonce et rotation restent compatibles. Le rappel d’audit requiert un téléphone,
 indépendamment des choix de prospection ; le choix redondant du canal est masqué.
