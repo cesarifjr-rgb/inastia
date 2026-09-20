@@ -123,7 +123,7 @@ describe("contact API (all external requests mocked)", () => {
   });
 
   for (const intent of ['audit', 'gestion', 'intendance']) {
-    it.each(['propertyArea', 'decisionRole', 'startTimeline', ...(intent === 'intendance' ? [] : ['rentalSituation'])])(`requires qualification for ${intent}: %s`, async field => {
+    it.each(['propertyArea', ...(intent === 'gestion' ? [] : ['decisionRole', 'startTimeline']), ...(intent === 'audit' ? ['rentalSituation'] : [])])(`requires qualification for ${intent}: %s`, async field => {
       for (const missing of [undefined, '', '   ']) {
         const res = await request({ ...valid, intent, phone: '+33600000000', [field]: missing });
         expect(res.status).toHaveBeenCalledWith(400);
@@ -131,6 +131,16 @@ describe("contact API (all external requests mocked)", () => {
       }
     });
   }
+
+  it.each([undefined, '', '   '])('accepts management without optional project details: %s', async missing => {
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 'fa64e6ef-875e-4e75-b9a1-593bdedb2629' }) });
+    const res = await request({ ...valid, intent: 'gestion', decisionRole: missing, rentalSituation: missing, startTimeline: missing, ...consentRecord() });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const mail = JSON.parse(fetch.mock.calls[1][1].body);
+    expect(mail.html).toContain(valid.propertyArea);
+    for (const label of ['Rôle du demandeur', 'Situation locative', 'Démarrage souhaité', 'undefined']) expect(mail.html).not.toContain(label);
+  });
 
   it('accepts an exploratory audit with an explicitly undecided timeline and no marketing consent', async () => {
     fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
@@ -141,7 +151,7 @@ describe("contact API (all external requests mocked)", () => {
     for (const text of ['Audit gratuit', 'Acquéreur potentiel', 'Projet encore en réflexion', 'À définir ensemble', 'Email : <strong>Non']) expect(mail.html).toContain(text);
   });
 
-  it('passes a received audit and its qualification through the real CRM sync without changing its maturity', async () => {
+  it.each(['audit', 'gestion'])('passes %s through the real CRM sync without inventing missing qualification', async intent => {
     vi.stubEnv('ATTIO_API_KEY', 'synthetic-attio-key');
     const writes = [];
     const records = {};
@@ -160,19 +170,26 @@ describe("contact API (all external requests mocked)", () => {
       Object.assign(record.values, formatted);
       return Response.json({ data: record });
     });
-    const res = await request({ ...valid, intent: 'audit', phone: '+33600000000', decisionRole: 'coproprietaire', rentalSituation: 'reflexion', startTimeline: 'adefinir', ...consentRecord() });
+    const audit = intent === 'audit';
+    const res = await request({ ...valid, intent, phone: audit ? '+33600000000' : '', decisionRole: audit ? 'coproprietaire' : '', rentalSituation: audit ? 'reflexion' : '', startTimeline: audit ? 'adefinir' : '', ...consentRecord() });
     expect(res.status).toHaveBeenCalledWith(200);
     await Promise.all(background);
     expect(console.info).toHaveBeenCalledWith(expect.stringContaining('"status":"synced"'));
     const deal = writes.find(write => write.object === 'deals' && write.values.demande_initiale).values;
-    expect(deal.name).toMatch(/^Audit gratuit/);
-    expect(deal.demande_initiale).toContain('Motif : audit');
-    expect(deal.demande_initiale).toContain('Projet encore en réflexion');
-    expect(deal.demande_initiale).toContain('À définir ensemble');
-    expect(deal.demande_initiale).toContain('aucune demande de gestion complète');
+    expect(deal.demande_initiale).toContain('Motif : ' + intent);
+    if (audit) {
+      expect(deal.name).toMatch(/^Audit gratuit/);
+      expect(deal.demande_initiale).toContain('Projet encore en réflexion');
+      expect(deal.demande_initiale).toContain('À définir ensemble');
+      expect(deal.demande_initiale).toContain('aucune demande de gestion complète');
+    } else {
+      for (const label of ['Rôle du demandeur', 'Situation locative', 'Démarrage souhaité']) expect(deal.demande_initiale).not.toContain(label);
+    }
     expect(deal.stage).toBe('Nouveau lead');
     const property = writes.find(write => write.object === 'biens').values;
-    expect(property).toMatchObject({ secteur: valid.propertyArea, role_demandeur: 'Copropriétaire', situation_locative: 'Projet encore en réflexion', demarrage_souhaite: 'À définir ensemble' });
+    expect(property.secteur).toBe(valid.propertyArea);
+    if (audit) expect(property).toMatchObject({ role_demandeur: 'Copropriétaire', situation_locative: 'Projet encore en réflexion', demarrage_souhaite: 'À définir ensemble' });
+    else for (const field of ['role_demandeur', 'situation_locative', 'demarrage_souhaite']) expect(property).not.toHaveProperty(field);
   });
 
   it("rejects unsupported methods without calling providers", async () => {

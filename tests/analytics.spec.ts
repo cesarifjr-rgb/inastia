@@ -33,6 +33,7 @@ for (const locale of ["fr", "en"]) {
     await page.locator(`.site-footer a[href='${locale === "fr" ? "/contact" : "/en/contact"}']`).click();
     await page.locator("#firstName").fill("PrivateName");
     await page.locator("#lastName").fill("PrivateSurname");
+    await page.locator("#contact-project-summary").click();
     await page.locator("#message").fill("Confidential message");
     expect((await queue(page)).filter(item => item[1] === "form_start")).toHaveLength(1);
     expect(JSON.stringify(await queue(page))).not.toContain("PrivateName");
