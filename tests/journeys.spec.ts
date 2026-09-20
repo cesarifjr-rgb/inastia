@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 for (const prefix of ["", "/en"]) {
   test(`all primary CTAs open a management request ${prefix || "FR"}`, async ({ page }) => {
-    const label = prefix ? "Request my management proposal" : "Demander ma proposition de gestion";
+    const label = prefix ? "Have my property managed" : "Confier la gestion de mon bien";
     for (const slug of [
       "gestion-airbnb-corse-du-sud",
       "about",
@@ -23,7 +23,7 @@ for (const prefix of ["", "/en"]) {
       await page.locator(slug ? ".page-hero-copy .button" : ".hero-actions .button").click();
       await expect(page).toHaveURL(new RegExp(`/contact\\?intent=gestion$`));
       await expect(page.locator("#contact-intent")).toHaveValue("gestion");
-      await expect(page.locator("#submit-contact-label")).toHaveText(prefix ? "Send my management enquiry" : "Envoyer mon projet de gestion");
+      await expect(page.locator("#submit-contact-label")).toHaveText(label);
     }
   });
 
@@ -51,8 +51,8 @@ for (const prefix of ["", "/en"]) {
 test("review excerpts retain attribution and their original language", async ({ page }) => {
   await page.goto("/");
   const reviews = page.locator(".review-card");
-  await expect(reviews).toHaveCount(1);
-  await expect(page.locator(".reviews-note")).toContainText("Avis de voyageur");
+  await expect(reviews).toHaveCount(3);
+  await expect(page.locator(".reviews-note")).toContainText("avis de voyageurs");
   for (const review of await reviews.all()) {
     await expect(review.locator("footer strong")).toHaveText(/\S+/);
     await expect(review.locator(".review-quote")).toHaveAttribute("lang", /^(fr|en)$/);

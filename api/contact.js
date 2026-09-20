@@ -4,8 +4,7 @@
 import { randomUUID } from 'node:crypto';
 import { waitUntil } from '@vercel/functions';
 import { escapeHtml, isValidEmail, truncate } from '../utils.js';
-import { adsAttribution, phoneIdentity, syncEnquiry } from '../lib/attio.js';
-import { preferenceReceipt } from '../lib/contact-preferences.js';
+import { adsAttribution, syncEnquiry } from '../lib/attio.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const receiptId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
@@ -65,8 +64,8 @@ export default async function handler(req, res) {
     const limits = { firstName: 100, lastName: 100, email: 254, phone: 30,
         propertyType: 50, location: 100, bedrooms: 5, bathrooms: 5,
         propertyArea: 100, decisionRole: 20, rentalSituation: 20, startTimeline: 20, listingUrl: 500,
-        surface: 10, capacity: 5, message: 2000, callbackAvailability: 300, intent: 20, intendancePlan: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
-        locale: 2, siteVersion: 40, consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
+        surface: 10, capacity: 5, message: 2000, intent: 20, intendancePlan: 20, contactPreference: 10, turnstileToken: 2048, requestId: 36,
+        consentVersion: 40, consentLocale: 2, consentCollectedAt: 24 };
     const input = {};
     for (const [key, limit] of Object.entries(limits)) {
         const value = req.body[key];
@@ -127,9 +126,7 @@ export default async function handler(req, res) {
         return respond(400, { success: false, error: 'Préférence de contact invalide.' }, 'validation');
     }
     const contactPreference = intent === 'audit' ? 'phone' : input.contactPreference || 'email';
-    // Fixed release provenance only; never place visitor-supplied free text in logs.
-    input.siteVersion = input.siteVersion === 'conversion-2026-09-20-a' ? input.siteVersion : '';
-    acceptedClassification = { intent, contactPreference, ...(input.siteVersion ? { siteVersion: input.siteVersion } : {}) };
+    acceptedClassification = { intent, contactPreference };
 
     const qualificationLabels = {
         decisionRole: { proprietaire: 'Propriétaire', coproprietaire: 'Copropriétaire', acquereur: 'Acquéreur potentiel', mandataire: 'Mandataire autorisé', autre: 'Autre rôle' },
@@ -150,7 +147,7 @@ export default async function handler(req, res) {
     }
 
     // --- 1. Validate required fields ---
-    if (!firstName || !location || !propertyType || (contactPreference === 'email' && !email)) {
+    if (!firstName || !lastName || !email || !location || !propertyType) {
         return respond(400, { success: false, error: 'Champs obligatoires manquants.' }, 'validation');
     }
     if (['audit', 'gestion', 'intendance'].includes(intent)
@@ -169,15 +166,9 @@ export default async function handler(req, res) {
     }
 
     // --- 1b. Validate email format ---
-    if ((email && !isValidEmail(email)) || (marketingEmail && !email)) {
+    if (!isValidEmail(email)) {
         return respond(400, { success: false, error: 'Adresse email invalide.' }, 'validation');
     }
-    if (!email && !phoneIdentity(phone)) {
-        return respond(400, { success: false, error: 'Indiquez un numéro français à dix chiffres ou un numéro international avec son indicatif.' }, 'validation');
-    }
-    // Hidden service-specific fields must not leak into another enquiry type.
-    if (intent !== 'audit') input.callbackAvailability = '';
-    if (intent !== 'intendance') input.surface = '';
 
     if (!turnstileToken) {
         return respond(403, { success: false, error: 'Veuillez effectuer la vérification anti-spam.' }, 'challenge_missing');
@@ -231,11 +222,10 @@ export default async function handler(req, res) {
         ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
         ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
         ['Lien de l’annonce', listingUrl],
-        ['Disponibilités pour le rappel', input.callbackAvailability],
     ].filter(([, value]) => value).map(([label, value]) => `<tr><td style="padding:6px 0;color:#666">${label}</td><td style="padding:6px 0">${escapeHtml(value)}</td></tr>`).join('');
     const safeBedrooms = escapeHtml(truncate(bedrooms, 5));
     const safeBathrooms = escapeHtml(truncate(bathrooms, 5));
-    const safeSurface = escapeHtml(truncate(input.surface, 10));
+    const safeSurface = escapeHtml(truncate(surface, 10));
     const safeCapacity = escapeHtml(truncate(capacity, 5));
     const safeMessage = escapeHtml(truncate(message, 2000));
     const safeIntent = escapeHtml(intentLabels.get(intent));
@@ -262,7 +252,7 @@ export default async function handler(req, res) {
           <tr><td style="padding:6px 0;color:#666">Motif de la demande</td><td style="padding:6px 0;font-weight:600">${safeIntent}</td></tr>
           <tr><td style="padding:6px 0;color:#666">Canal de réponse souhaité</td><td style="padding:6px 0">${contactPreference === 'phone' ? 'Téléphone' : 'Email'}${intent === 'audit' ? ' — rappel d’audit sous 24 h, selon votre convenance' : ''}</td></tr>
           <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0;font-weight:600">${safeFirstName} ${safeLastName}</td></tr>
-          ${safeEmail ? `<tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${safeEmail}" style="color:#16213e">${safeEmail}</a></td></tr>` : ''}
+          <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0"><a href="mailto:${safeEmail}" style="color:#16213e">${safeEmail}</a></td></tr>
           ${safePhone ? `<tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0"><a href="tel:${safePhone}" style="color:#16213e">${safePhone}</a></td></tr>` : ''}
         </table>
 
@@ -300,7 +290,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 from: 'Inastia <noreply@inastia.fr>',
                 to: 'contact@inastia.fr',
-                ...(email ? { reply_to: email } : {}),
+                reply_to: email,
                 subject: subject,
                 html: htmlBody,
             }),
@@ -323,14 +313,13 @@ export default async function handler(req, res) {
                 ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
                 ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
                 ['Lien de l’annonce', listingUrl],
-                ['Disponibilités pour le rappel', input.callbackAvailability],
             ].filter(([, value]) => value),
             marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt) })
             .then(result => {
                 if (result.status !== 'disabled') console.info(JSON.stringify({ event: 'contact_crm', requestId, status: result.status }));
             })
             .catch(() => console.warn(JSON.stringify({ event: 'contact_crm', requestId, status: 'sync_failed' }))));
-        return respond(200, { success: true, preferencesReceipt: preferenceReceipt(input, requestId, startedAt) }, 'provider_accepted', emailData.id);
+        return respond(200, { success: true }, 'provider_accepted', emailData.id);
     } catch {
         return respond(500, { success: false, uncertain: true, error: 'La confirmation de votre envoi n’a pas été reçue. Vous pouvez nous contacter pour vérifier sa réception.' }, 'send_uncertain');
     }

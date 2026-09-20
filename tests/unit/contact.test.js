@@ -187,6 +187,9 @@ describe("contact API (all external requests mocked)", () => {
     "invalid",
     {},
     { ...valid, firstName: " " },
+    { ...valid, lastName: undefined },
+    { ...valid, lastName: "" },
+    { ...valid, lastName: "   " },
     { ...valid, email: ["test@example.com"] },
     { ...valid, phone: {} },
     { ...valid, message: "a".repeat(2001) },
@@ -218,17 +221,6 @@ describe("contact API (all external requests mocked)", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it.each(["gestion", "audit", "intendance"])("accepts %s with phone only and no surname", async intent => {
-    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: "inastia.fr" }) });
-    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "fa64e6ef-875e-4e75-b9a1-593bdedb2629" }) });
-    const res = await request({ ...valid, intent, email: "", lastName: "", phone: "06 00 00 00 00", contactPreference: "phone", callbackAvailability: "Après 17 h <test>" });
-    expect(res.status).toHaveBeenCalledWith(200);
-    const mail = JSON.parse(fetch.mock.calls[1][1].body);
-    expect(mail.reply_to).toBeUndefined();
-    if (intent === "audit") expect(mail.html).toContain("Après 17 h &lt;test&gt;");
-    else expect(mail.html).not.toContain("Après 17 h");
-  });
-
   it("rejects missing body", async () => {
     const res = await request(valid, { body: undefined });
     expect(res.status).toHaveBeenCalledWith(400);
@@ -238,7 +230,7 @@ describe("contact API (all external requests mocked)", () => {
   it.each([
     { intendancePlan: "constructor" }, { intendancePlan: "invalid" },
     { surface: "-1" }, { surface: "0" }, { surface: "10001" }, { surface: "12.55" },
-    { surface: "NaN" },
+    { surface: "NaN" }, { lastName: " " },
   ])("rejects invalid intendance qualification %j before providers", async (fields) => {
     const res = await request({ ...valid, intent: "intendance", ...fields });
     expect(res.status).toHaveBeenCalledWith(400);
@@ -344,7 +336,7 @@ describe("contact API (all external requests mocked)", () => {
       location: "A\r\nB",
     });
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({ success: true, requestId: valid.requestId, preferencesReceipt: expect.any(String) }));
+    expect(res.json).toHaveBeenCalledWith({ success: true, requestId: valid.requestId });
     expect(fetch).toHaveBeenCalledTimes(2);
     const [url, options] = fetch.mock.calls[1];
     expect(url).toBe("https://api.resend.com/emails");

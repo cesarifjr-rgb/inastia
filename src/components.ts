@@ -16,7 +16,7 @@ export function header(locale: Locale, slug: string): string {
   const care = slug === intendanceSlug;
   const partnership = slug === partnersSlug;
   const audit = slug === "audit-gratuit-potentiel-locatif";
-  const cta = audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Demander ma proposition de gestion", "Request my management proposal");
+  const cta = audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Confier la gestion de mon bien", "Have my property managed");
   const ctaHref = partnership ? partnerMail(locale) : contactPath(locale, audit ? "audit" : care ? "intendance" : "gestion");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
@@ -31,9 +31,12 @@ export function header(locale: Locale, slug: string): string {
   <header class="site-header"><div class="header-inner">
     <a class="wordmark" href="${path(locale)}">INASTIA <span class="brand-detail">CONCIERGERIE · CORSE</span></a>
     <nav class="desktop-nav" aria-label="${t(locale, "Navigation principale", "Main navigation")}">
-      <a href="${path(locale)}#services">${t(locale, "Gestion locative", "Rental management")}</a>
-      <a href="${path(locale)}#tarifs">${t(locale, "Honoraires", "Fees")}</a><a href="${path(locale)}#equipe">${t(locale, "L’équipe et les maisons", "Our team and homes")}</a>
+      <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
       <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
+      <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
+      <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
+      <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
+      <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
     </nav>
     <div class="header-actions">${motionButton}<a class="language-link" href="${alternate}" lang="${locale === "fr" ? "en" : "fr"}" aria-label="${locale === "fr" ? (["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "EN — Go to the English website" : "EN — View this page in English") : "FR — Voir cette page en français"}">${locale === "fr" ? "EN" : "FR"}</a>
       <a class="button button-small header-cta" href="${ctaHref}">${cta}${arrow}</a>
@@ -42,9 +45,12 @@ export function header(locale: Locale, slug: string): string {
   </div>
   <nav id="mobile-menu" class="mobile-menu" aria-label="${t(locale, "Navigation mobile", "Mobile navigation")}" hidden>
     <span class="eyebrow">${t(locale, "Votre maison, notre attention", "Your home, our care")}</span>
-    <a href="${path(locale)}#services">${t(locale, "Gestion locative", "Rental management")}</a>
-    <a href="${path(locale)}#tarifs">${t(locale, "Honoraires", "Fees")}</a><a href="${path(locale)}#equipe">${t(locale, "L’équipe et les maisons", "Our team and homes")}</a>
+    <a href="${path(locale)}#services">${t(locale, "Gestion complète", "Full management")}</a>
     <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
+    <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
+    <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
+    <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
+    <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
     <a class="button" href="${ctaHref}">${cta}${arrow}</a>
     <a class="menu-phone" href="tel:+33613812550">+33 6 13 81 25 50</a>
   </nav></header>`;
@@ -78,7 +84,7 @@ function measurementConsent(locale: Locale): string {
 
 export function contactCallout(locale: Locale, intent: "audit" | "gestion" = "gestion"): string {
   const audit = intent === "audit";
-  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${audit ? t(locale, "VOTRE AUDIT GRATUIT", "YOUR FREE PROPERTY REVIEW") : t(locale, "VOTRE PROPOSITION DE GESTION", "YOUR MANAGEMENT PROPOSAL")}</p><h2>${audit ? t(locale, "Identifiez ce qu’il faut préparer<br><em>avant de déléguer.</em>", "Know what to prepare<br><em>before handing over.</em>") : t(locale, "Parlons de la maison<br><em>que vous souhaitez nous confier.</em>", "Let’s talk about the home<br><em>you want us to look after.</em>")}</h2></div><div class="callout-action"><p>${audit ? t(locale, "Votre organisation actuelle, les points à améliorer et les prochaines étapes possibles : faisons le point sur votre projet. Indiquez vos disponibilités pour notre rappel sous 24 h, à un moment qui vous convient. Ce délai concerne le premier échange.", "Your current arrangements, priorities and possible next steps: let’s review your plans. Tell us when you are available for a callback within 24 hours, at a time that suits you. This time frame concerns the first conversation.") : t(locale, "Votre première saison se prépare, ou vous souhaitez passer le relais sur une location existante ? Présentez-nous votre bien et ce que vous souhaitez déléguer. Nous vérifierons les possibilités de prise en charge avant de préciser la proposition.", "Preparing your first season or looking to hand over an existing rental? Tell us about your property and what you would like to delegate. We will check whether we can take it on before working out a proposal.")}</p>${audit ? "" : `<p>${t(locale, "Vous examinez les conditions avant de décider.", "You review the terms before deciding.")}</p>`}<a class="button button-cream" href="${contactPath(locale, intent)}">${audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : t(locale, "Demander ma proposition de gestion", "Request my management proposal")}${arrow}</a>${audit ? "" : `<a class="callout-phone" href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Vous préparez encore votre projet ? Découvrez l’audit gratuit.", "Still considering your plans? Explore the free review.")}</a>`}<a class="callout-phone" href="tel:+33613812550">${t(locale, "Appelez-nous au", "Call us on")} +33 6 13 81 25 50</a></div></div></section>`;
+  return `<section class="contact-callout" id="contact"><div class="container callout-inner"><div><p class="eyebrow">${audit ? t(locale, "VOTRE AUDIT GRATUIT", "YOUR FREE PROPERTY REVIEW") : t(locale, "VOTRE PROPOSITION DE GESTION", "YOUR MANAGEMENT PROPOSAL")}</p><h2>${audit ? t(locale, "Identifiez ce qu’il faut préparer<br><em>avant de déléguer.</em>", "Know what to prepare<br><em>before handing over.</em>") : t(locale, "Confiez-nous les clés.<br><em>On gère votre location.</em>", "Hand us the keys.<br><em>We manage your rental.</em>")}</h2></div><div class="callout-action"><p>${audit ? t(locale, "Votre organisation actuelle, les points à améliorer et les prochaines étapes possibles : faisons le point sur votre projet. Indiquez vos disponibilités pour notre rappel sous 24 h, à un moment qui vous convient. Ce délai concerne le premier échange.", "Your current arrangements, priorities and possible next steps: let’s review your plans. Tell us when you are available for a callback within 24 hours, at a time that suits you. This time frame concerns the first conversation.") : t(locale, "Première saison ou location déjà en cours : notre équipe prend en charge les annonces, les voyageurs et votre maison de A à Z. Présentez-nous votre logement pour recevoir votre proposition de gestion complète.", "A first season or an existing rental: our team handles the listings, guests and your home from start to finish. Tell us about your property to receive your full management proposal.")}</p>${audit ? "" : `<p>${t(locale, "Vous examinez les conditions avant de décider.", "You review the terms before deciding.")}</p>`}<a class="button button-cream" href="${contactPath(locale, intent)}">${audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : t(locale, "Confier la gestion de mon bien", "Have my property managed")}${arrow}</a>${audit ? "" : `<a class="callout-phone" href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Vous préparez encore votre projet ? Découvrez l’audit gratuit.", "Still considering your plans? Explore the free review.")}</a>`}<a class="callout-phone" href="tel:+33613812550">${t(locale, "Appelez-nous au", "Call us on")} +33 6 13 81 25 50</a></div></div></section>`;
 }
 
 export function faq(

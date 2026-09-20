@@ -20,8 +20,7 @@ function crm() {
         Array.isArray(val) ? val : key === 'stage' ? [{ status: { title: val } }] : [{ value: val }]]));
     const create = (object, values) => {
         const record = { id: { workspace_id: workspace, record_id: object + '-' + (data[object].length + 1) }, values: wrap(values) };
-        if (object === 'people') record.values.email_addresses = (values.email_addresses || []).map(email_address => ({ email_address }));
-        if (object === 'people') record.values.phone_numbers = (values.phone_numbers || []).map(phone => typeof phone === 'string' ? { original_phone_number: phone } : phone);
+        if (object === 'people') record.values.email_addresses = values.email_addresses.map(email_address => ({ email_address }));
         data[object].push(record);
         if (object === 'biens') {
             for (const ref of values.proprietaires || []) {
@@ -40,7 +39,7 @@ function crm() {
             const [slug, key] = Object.entries(payload.filter)[0];
             return ok(data[object].filter(r => slug === 'email_addresses'
                 ? r.values[slug].some(v => v.email_address.toLowerCase() === key)
-                : slug === 'phone_numbers' ? (r.values[slug] || []).some(v => v.original_phone_number === key) : scalar(r, slug) === key).slice(0, payload.limit));
+                : scalar(r, slug) === key).slice(0, payload.limit));
         }
         if (options.method === 'POST' || options.method === 'PUT') return ok(create(object, payload.data.values));
         if (options.method === 'PATCH') {
@@ -89,7 +88,7 @@ describe('website to Attio (all network requests mocked)', () => {
         expect(Object.values(store.data).map(rows => rows.length)).toEqual([1, 1, 1]);
         const [person, property, deal] = Object.values(store.data).map(rows => rows[0]);
         expect(person.values.name[0].full_name).toBe('Test');
-        expect(scalar(person, 'site_derniere_demande')).toContain('Offres email : aucun choix fourni');
+        expect(scalar(person, 'site_derniere_demande')).toContain('Offres email : refusées');
         expect(scalar(property, 'chambres')).toBe(4);
         expect(scalar(property, 'role_demandeur')).toBe('Propriétaire');
         expect(property.values.proprietaires[0].target_record_id).toBe(person.id.record_id);
@@ -102,22 +101,6 @@ describe('website to Attio (all network requests mocked)', () => {
                 expect(record.values[key]).toBeUndefined();
             }
         }
-    });
-
-    it('uses a complete phone identity when email is absent and reuses it on retries', async () => {
-        const phoneInput = { ...input, email: '', phone: '06 00 00 00 00' };
-        await syncEnquiry(phoneInput, { ...context, contactPreference: 'phone' });
-        await syncEnquiry(phoneInput, { ...context, contactPreference: 'phone' });
-        expect(Object.values(store.data).map(rows => rows.length)).toEqual([1, 1, 1]);
-        expect(store.data.people[0].values.email_addresses).toEqual([]);
-        expect(store.data.people[0].values.phone_numbers).toEqual([{ original_phone_number: '+33600000000' }]);
-    });
-
-    it('does not merge ambiguous phone-only contacts or invent an email', async () => {
-        for (let i = 0; i < 2; i++) store.create('people', { phone_numbers: ['+33600000000'] });
-        await expect(syncEnquiry({ ...input, email: '', phone: '+33600000000' }, context)).rejects.toThrow('attio_ambiguous');
-        expect(store.data.people).toHaveLength(2);
-        expect(store.data.deals).toHaveLength(0);
     });
 
     it('preserves existing identity, additional addresses, original click, and manual opt-outs', async () => {

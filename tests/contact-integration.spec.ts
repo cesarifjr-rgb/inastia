@@ -97,16 +97,21 @@ for (const lostResponse of [false, true]) {
     await page.locator("#startTimeline").selectOption("prochainesaison");
     if (!care) await page.locator("#listingUrl").fill("https://example.com/listing?a=1&b=2");
     await page.locator("#firstName").fill("Exemple");
-    await expect(page.locator("#lastName")).not.toHaveAttribute("required", "");
-
-    if (!lostResponse) await page.locator("#email").fill("integration@example.com");
-    if (audit) await page.locator("#callbackAvailability").fill("Après 17 h <test>");
+    await expect(page.locator("#lastName")).toHaveAttribute("required", "");
+    await page.locator("#lastName").fill("Test");
+    await page.locator("#email").fill("integration@example.com");
     if (lostResponse || audit) {
       if (!audit) await page.locator("#contactPreference").selectOption("phone");
       await page.locator("#phone").fill("+33 6 00 00 00 00");
     }
     await page.locator("#message").fill("Synthetic integration enquiry — never delivered.");
-    await expect(page.locator("#contact-preferences")).toBeHidden();
+    if (lostResponse) {
+      await page.locator("#marketingEmail").check();
+      await page.locator("#marketingPhone").check();
+    }
+    const presentedEmail = await page.locator('label[for="marketingEmail"]').innerText();
+    const presentedPhone = await page.locator('label[for="marketingPhone"]').innerText();
+    const presentedHelp = await page.locator("#commercial-consent-help").innerText();
     await page.evaluate("window.__integrationSolve()");
     await page.locator("#submit-contact").click();
 
@@ -114,7 +119,7 @@ for (const lostResponse of [false, true]) {
       await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
       await expect(page.locator("#form-status")).toContainText("confirmation");
       expect(replies[0]).toMatchObject({ status: 500, body: { success: false, uncertain: true } });
-      await expect(page.locator("#email")).toHaveValue(lostResponse ? "" : "integration@example.com");
+      await expect(page.locator("#email")).toHaveValue("integration@example.com");
       await page.evaluate("window.__integrationSolve()");
       await page.locator("#submit-contact").click();
     }
@@ -123,10 +128,8 @@ for (const lostResponse of [false, true]) {
     const emails = providerCalls.filter((call) => call.url === "https://api.resend.com/emails");
     expect(emails).toHaveLength(lostResponse ? 2 : 1);
     expect(emails[0]?.key).toBe("contact/" + clientPayloads[0]?.requestId);
-    expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ to: "contact@inastia.fr" });
+    expect(JSON.parse(emails[0]?.body || "{}")).toMatchObject({ reply_to: "integration@example.com", to: "contact@inastia.fr" });
     const mail = JSON.parse(emails[0]?.body || "{}");
-    expect(mail.reply_to).toBe(lostResponse ? undefined : "integration@example.com");
-    await expect(page.locator("#contact-preferences")).toBeVisible();
     expect(clientPayloads[0]).toMatchObject({ propertyArea: 'Quartier <test> & voisinage', decisionRole: "mandataire", rentalSituation: care ? "" : "changement", startTimeline: "prochainesaison", listingUrl: care ? "" : "https://example.com/listing?a=1&b=2" });
     for (const value of ["Quartier &lt;test&gt; &amp; voisinage", "Mandataire autorisé", "Pour la prochaine saison"]) expect(mail.html).toContain(value);
     if (care) {
@@ -139,10 +142,9 @@ for (const lostResponse of [false, true]) {
       expect(mail.html).toContain("https://example.com/listing?a=1&amp;b=2");
     }
     expect(mail.html).not.toContain("<test>");
-    expect(clientPayloads[0]).toMatchObject({ intent, contactPreference: lostResponse || audit ? "phone" : "email", lastName: "", phone: lostResponse || audit ? "+33 6 00 00 00 00" : "", locale });
+    expect(clientPayloads[0]).toMatchObject({ intent, contactPreference: lostResponse || audit ? "phone" : "email", lastName: "Test", phone: lostResponse || audit ? "+33 6 00 00 00 00" : "", marketingEmail: lostResponse, marketingPhone: lostResponse, consentVersion: "commercial-2026-09-06-v1", consentLocale: locale });
     if (audit) {
       expect(mail.subject).toContain("demande d’audit gratuit");
-      expect(mail.html).toContain("Après 17 h &lt;test&gt;");
       expect(mail.html).toContain("Audit gratuit");
       await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "demande d’audit gratuit" : "free review request");
       await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "ne vous engagez pas" : "not committing");
@@ -151,13 +153,16 @@ for (const lostResponse of [false, true]) {
       await expect(page.locator("#contact-intent")).toHaveValue("audit");
       await expect(page.locator("#phone")).toHaveAttribute("required", "");
     }
-    expect(clientPayloads[0]?.marketingEmail).toBeUndefined();
-    expect(clientPayloads[0]?.marketingPhone).toBeUndefined();
-    expect(mail.html).toContain("Aucun choix commercial fourni");
+    expect(mail.html).toContain(presentedEmail);
+    expect(mail.html).toContain(presentedPhone);
+    expect(mail.html).toContain(presentedHelp);
+    expect(mail.html).toContain(clientPayloads[0]?.consentCollectedAt);
+    expect(mail.html).toContain(`Email : <strong>${lostResponse ? "Oui" : "Non"}</strong>`);
+    expect(mail.html).toContain(`Téléphone : <strong>${lostResponse ? "Oui, pendant un an au maximum" : "Non</strong>"}`);
     if (lostResponse) {
       expect(clientPayloads[1]?.requestId).toBe(clientPayloads[0]?.requestId);
       expect(clientPayloads[1]?.turnstileToken).not.toBe(clientPayloads[0]?.turnstileToken);
-
+      expect(clientPayloads[1]?.consentCollectedAt).toBe(clientPayloads[0]?.consentCollectedAt);
       expect(emails[1]?.key).toBe(emails[0]?.key);
       expect(emails[1]?.body).toBe(emails[0]?.body);
     }
