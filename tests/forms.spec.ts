@@ -140,7 +140,7 @@ for (const locale of ["fr", "en"] as const) {
         await expect(page.locator("#contact-intent")).toHaveValue("gestion");
         await expect(page.locator("#contact-intent")).toBeVisible();
         await expect(page.locator('select[name="intent"]')).toHaveCount(1);
-        await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Présentez-nous votre bien" : "Tell us about your property");
+        await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Présentez-nous votre logement" : "Tell us about your property");
         await expect(page.locator("#submit-contact-label")).toHaveText(label);
         await expect(page.locator("#contact-title")).toHaveText(locale === "fr" ? "Parlons de votre projet de gestion" : "Let’s talk about managing your property");
         await expect(page.locator("#contact-lead")).not.toContainText("24");
@@ -166,7 +166,7 @@ for (const locale of ["fr", "en"] as const) {
       await page.locator(".language-link").click();
       await expect(page).toHaveURL(new URL(`${locale === "fr" ? "/en/contact" : "/contact"}?intent=gestion`, base).href);
       await expect(page.locator("#contact-intent")).toHaveValue("gestion");
-      await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Tell us about your property" : "Présentez-nous votre bien");
+      await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Tell us about your property" : "Présentez-nous votre logement");
       await expect(page.locator("#phone")).toBeHidden();
     });
 
@@ -178,7 +178,7 @@ for (const locale of ["fr", "en"] as const) {
         await expect(page.locator('select[name="intent"]')).toHaveCount(1);
         await expect(page.locator("#contact-intent")).toHaveValue("");
         await expect(page.locator('#contact-intent option[value="audit"]')).toHaveText(locale === "fr" ? "Audit gratuit" : "Free property review");
-        await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Présentez-nous votre bien" : "Tell us about your property");
+        await expect(page.locator("#contact-form-title")).toHaveText(locale === "fr" ? "Présentez-nous votre logement" : "Tell us about your property");
       } finally {
         await context.close();
       }

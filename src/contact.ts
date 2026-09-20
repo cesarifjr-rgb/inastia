@@ -89,9 +89,9 @@ export function initContact(): void {
     const care = intentField?.value === "intendance";
     const audit = intentField?.value === "audit";
     const text = (fr: string, en: string): string => locale === "fr" ? fr : en;
-    const label = audit ? text("Demander mon audit gratuit", "Request my free review") : care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Parlons de votre bien", "Let’s talk about your property");
+    const label = audit ? text("Demander mon audit gratuit", "Request my free review") : care ? text("Demander une proposition d’intendance", "Request a home-care proposal") : text("Parlons de votre logement", "Let’s talk about your property");
     const formTitle = document.getElementById("contact-form-title");
-    if (formTitle) formTitle.textContent = audit || care ? label : text("Présentez-nous votre bien", "Tell us about your property");
+    if (formTitle) formTitle.textContent = audit || care ? label : text("Présentez-nous votre logement", "Tell us about your property");
     const submitLabel = document.getElementById("submit-contact-label");
     if (submitLabel) submitLabel.textContent = audit || care ? label : text("Envoyer ma demande", "Send my enquiry");
     for (const link of document.querySelectorAll<HTMLAnchorElement>(".header-cta, #mobile-menu .button")) {
@@ -107,7 +107,7 @@ export function initContact(): void {
     const nextStep = document.querySelector(".contact-next-steps li:nth-child(2)");
     if (nextStep) nextStep.textContent = audit ? text("Nous vous rappelons sous 24 h, selon vos disponibilités, pour préparer l’audit gratuit.", "We call you back within 24 hours, taking your availability into account, to prepare the free review.") : care ? text("Nous échangeons sur vos habitudes et le rythme de visite adapté.", "We discuss your routines and the right visit schedule.") : text("Nous échangeons pour préciser votre projet de gestion complète.", "We discuss your full management plans.");
     const finalStep = document.querySelector(".contact-next-steps li:nth-child(3)");
-    if (finalStep) finalStep.textContent = audit ? text("Vous décidez ensuite si vous souhaitez poursuivre. Une éventuelle gestion fait l’objet d’une proposition distincte.", "You then decide whether to continue. Any management service is covered by a separate proposal.") : text("Nous définissons ensemble les prestations et le devis adaptés à votre bien.", "Together, we define the services and quote suited to your property.");
+    if (finalStep) finalStep.textContent = audit ? text("Vous décidez ensuite si vous souhaitez poursuivre. Une éventuelle gestion fait l’objet d’une proposition distincte.", "You then decide whether to continue. Any management service is covered by a separate proposal.") : text("Nous définissons ensemble les prestations et le devis adaptés à votre logement.", "Together, we define the services and quote suited to your property.");
     const preferenceGroup = document.getElementById("contact-preference-field");
     if (preferenceGroup) preferenceGroup.hidden = audit;
     if (contactPreference) contactPreference.disabled = audit;
