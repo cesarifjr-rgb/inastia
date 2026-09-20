@@ -8,6 +8,28 @@ const local = ["localhost", "127.0.0.1", "[::1]"].includes(base.hostname);
 
 for (const locale of ["fr", "en"]) {
   const prefix = locale === "fr" ? "" : "/en";
+  for (const plan of ["essentielle", "serenite", "surmesure", ""]) {
+    test(`${locale}: ${plan || "undecided"} care plan keeps its context when language and service change`, async ({ page }) => {
+      await page.goto(`${prefix}/contact?intent=intendance&formule=${plan}`);
+      await expect(page.locator("#intendancePlan")).toHaveValue(plan);
+      await expect(page.locator("#intendancePlan")).toBeVisible();
+      await expect(page.locator(".intendance-form-note")).toContainText("120");
+      await expect(page.locator("#contact-fees")).toBeHidden();
+      await expect(page.locator("#callbackAvailability")).toBeHidden();
+      await page.locator(".language-link").click();
+      await expect(page.locator("#contact-intent")).toHaveValue("intendance");
+      await expect(page.locator("#intendancePlan")).toHaveValue(plan);
+      await page.locator("#contact-intent").selectOption("gestion");
+      await expect(page.locator(".intendance-form-note")).toBeHidden();
+      await expect(page.locator("#contact-fees")).toBeVisible();
+      await expect(page.locator("#contact-fees")).toContainText("20");
+      await page.locator("#contact-intent").selectOption("audit");
+      await expect(page.locator("#contact-fees")).toBeHidden();
+      await expect(page.locator("#callbackAvailability")).toBeVisible();
+      await expect(page.locator("#email")).not.toHaveAttribute("required", "");
+      await expect(page.locator("#phone")).toHaveAttribute("required", "");
+    });
+  }
   test(`${locale}: care form selection, reset and separate conversion attribution`, async ({ page }) => {
     test.skip(!local, "Synthetic form submission runs locally only.");
     await page.addInitScript(() => {
