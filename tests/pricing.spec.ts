@@ -14,6 +14,7 @@ for (const locale of ["fr", "en"] as const) {
 
   test(`20% commission uses accommodation before platform fees (${locale})`, async ({ page }) => {
     await page.goto(`${prefix}/`);
+    await page.locator(".pricing-calculator > summary").click();
     const revenue = page.locator("#pricing-revenue");
     const rate = page.locator("#pricing-platform-rate");
     await expect(revenue).toBeEnabled();
@@ -33,6 +34,7 @@ for (const locale of ["fr", "en"] as const) {
 
   test(`edited amounts preserve cent rounding and local currency formatting (${locale})`, async ({ page }) => {
     await page.goto(`${prefix}/gestion-airbnb-corse-du-sud`);
+    await page.locator(".pricing-calculator > summary").click();
     const revenue = page.locator("#pricing-revenue");
     const rate = page.locator("#pricing-platform-rate");
     await expect(revenue).toBeEnabled();
@@ -56,6 +58,7 @@ for (const locale of ["fr", "en"] as const) {
 
 test("invalid or incomplete inputs clear the previous result and recover when corrected", async ({ page }) => {
   await page.goto("/");
+  await page.locator(".pricing-calculator > summary").click();
   const revenue = page.locator("#pricing-revenue");
   const rate = page.locator("#pricing-platform-rate");
   const error = page.locator("[data-pricing-error]");
@@ -86,6 +89,7 @@ test("invalid or incomplete inputs clear the previous result and recover when co
 
 test("zero and permitted upper bounds remain valid, including a negative balance", async ({ page }) => {
   await page.goto("/en/");
+  await page.locator(".pricing-calculator > summary").click();
   const revenue = page.locator("#pricing-revenue");
   const rate = page.locator("#pricing-platform-rate");
   await expect(revenue).toBeEnabled();
@@ -106,6 +110,7 @@ test("without JavaScript the fixed example, explanation and management link rema
     for (const prefix of ["", "/en"]) {
       for (const route of ["/", "/gestion-airbnb-corse-du-sud"]) {
         await page.goto(`${prefix}${route}`);
+        await page.locator(".pricing-calculator > summary").click();
         const calculator = page.locator("[data-pricing-calculator]");
         await expect(calculator).toHaveCount(1);
         await expect(calculator).toBeVisible();
@@ -141,6 +146,7 @@ test("home and service pricing are accessible on mobile and the keyboard CTA sel
   for (const prefix of ["", "/en"]) {
     for (const route of ["/", "/gestion-airbnb-corse-du-sud"]) {
       await page.goto(`${prefix}${route}`);
+      await page.locator(".pricing-calculator > summary").click();
       const calculator = page.locator("[data-pricing-calculator]");
       await expect(calculator).toHaveCount(1);
       const revenue = calculator.getByLabel(prefix ? "Accommodation amount" : "Montant des nuitées", { exact: true });
@@ -162,7 +168,7 @@ test("home and service pricing are accessible on mobile and the keyboard CTA sel
       await expect(rate).toBeFocused();
       await expect(rate).toHaveCSS("outline-style", "solid");
       await page.keyboard.press("Tab");
-      const cta = calculator.getByRole("link", { name: prefix ? "Have my property managed" : "Confier la gestion de mon bien" });
+      const cta = calculator.getByRole("link", { name: prefix ? "Request my management proposal" : "Demander ma proposition de gestion" });
       await expect(cta).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(page).toHaveURL(new RegExp(`${prefix}/contact\\?intent=gestion$`));

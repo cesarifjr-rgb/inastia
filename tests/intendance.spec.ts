@@ -48,10 +48,7 @@ for (const locale of ["fr", "en"]) {
     await page.locator("#email").fill("care@example.invalid");
     await page.evaluate("window.__careSolve()");
     await page.locator("#submit-contact").click();
-    await expect(page.locator("#lastName")).toBeFocused();
-    expect(payload).toBeUndefined();
-    await page.locator("#lastName").fill("Test");
-    await page.locator("#submit-contact").click();
+    await expect(page.locator("#lastName")).not.toHaveAttribute("required", "");
     await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
     expect(await page.evaluate(() => (window.dataLayer || []).filter(item => item[1] === "generate_lead"))).toHaveLength(0);
     expect(await page.evaluate(() => (window.dataLayer || []).filter(item => item[1] === "conversion"))).toHaveLength(0);
