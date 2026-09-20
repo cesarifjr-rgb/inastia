@@ -86,7 +86,7 @@ export function initContact(): void {
   const requestedPlan = params.get("formule") ?? "";
   if (planField && ["essentielle", "serenite", "surmesure"].includes(requestedPlan)) planField.value = requestedPlan;
 
-  function updateIntent(): void {
+  function updateIntent(resetProject = false): void {
     const care = intentField?.value === "intendance";
     const audit = intentField?.value === "audit";
     const text = (fr: string, en: string): string => locale === "fr" ? fr : en;
@@ -128,7 +128,7 @@ export function initContact(): void {
       const fieldLabel = form!.querySelector('label[for="' + name + '"]');
       if (fieldLabel) fieldLabel.textContent = text(fr!, en!) + (required ? " *" : text(" (facultatif)", " (optional)"));
     }
-    if (project) project.open = audit || care;
+    if (project && resetProject) project.open = audit || care;
     const projectSummary = document.getElementById("contact-project-summary");
     if (projectSummary) projectSummary.textContent = audit || care ? text("Votre projet", "Your plans") : text("Votre projet (facultatif)", "Your plans (optional)");
     const projectHelp = document.getElementById("contact-project-help");
@@ -156,9 +156,9 @@ export function initContact(): void {
       ? phoneRequired ? "Téléphone *" : "Téléphone (facultatif)"
       : phoneRequired ? "Phone *" : "Phone (optional)";
   }
-  intentField?.addEventListener("change", updateIntent);
-  planField?.addEventListener("change", updateIntent);
-  updateIntent();
+  intentField?.addEventListener("change", () => updateIntent(true));
+  planField?.addEventListener("change", () => updateIntent());
+  updateIntent(true);
   contactPreference?.addEventListener("change", updatePhoneRequirement);
   marketingPhone?.addEventListener("change", updatePhoneRequirement);
   updatePhoneRequirement();
@@ -383,7 +383,7 @@ export function initContact(): void {
     } finally {
       window.clearTimeout(timer);
       disabledStates.forEach(({ field, disabled }) => { field.disabled = disabled; });
-      updateIntent();
+      updateIntent(completed);
       token = "";
       if (widgetId !== undefined) {
         try {
