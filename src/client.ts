@@ -4,12 +4,14 @@ import "./management-art.css";
 import "./pricing.css";
 import "./intendance.css";
 import "./partners.css";
+import "./first-rental.css";
 import "./ads-consent.css";
 import { initAdsConsent } from "./ads.ts";
 import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
 import { initManagementArt } from "./management-art-client.ts";
 import { initPricing } from "./pricing-client.ts";
+import { initFirstRental } from "./first-rental-client.ts";
 
 const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
 const menu = document.querySelector<HTMLElement>("#mobile-menu");
@@ -86,6 +88,7 @@ initContact();
 initMotion();
 initManagementArt();
 initPricing();
+initFirstRental();
 
 function openPartnerQuestion(): void {
   const question = document.getElementById(location.hash.slice(1));

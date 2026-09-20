@@ -27,7 +27,7 @@
 
 - Définir le résultat attendu et faire le changement le plus simple possible.
 - Respecter le style existant ; éviter les refontes sans rapport avec la demande.
-- Conserver 27 pages indexables (12 FR, 12 EN, trois légales FR) et la 404. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
+- Conserver 29 pages indexables (13 FR, 13 EN, trois légales FR) et la 404. La page `premiere-mise-en-location-corse` accompagne les propriétaires débutants dans la gestion complète ; ses contenus, présentation et checklist sont dans les fichiers `first-rental`. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
 - Maintenir les pages FR/EN en parallèle, avec canonical et hreflang cohérents.
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
 - Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.

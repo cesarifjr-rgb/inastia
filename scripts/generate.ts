@@ -7,6 +7,8 @@ import { intendance } from "../src/intendance.ts";
 import { intendanceSlug } from "../src/content/intendance.ts";
 import { partners } from "../src/partners.ts";
 import { partnersSlug } from "../src/content/partners.ts";
+import { firstRental } from "../src/first-rental.ts";
+import { firstRentalSlug } from "../src/content/first-rental.ts";
 import { path, t } from "../src/lib.ts";
 
 // Remove only obsolete generated offer files; Vercel preserves their URLs as redirects.
@@ -78,6 +80,13 @@ for (const locale of ["fr", "en"] as const) {
     t(locale, "Partenaires en Corse : recommandation et prestations | Inastia", "Partners in Corsica: referrals and home services | Inastia"),
     t(locale, "Recommander Inastia ou proposer vos prestations : échangeons sur la gestion locative et l’intendance, de Ghisonaccia à Porto-Vecchio. Présentez votre activité.", "Recommend Inastia or offer your services for rental management and second-home care, from Ghisonaccia to Porto-Vecchio. Tell us about your business."),
     partners(locale),
+  );
+  await output(
+    locale,
+    firstRentalSlug,
+    t(locale, "Première mise en location en Corse | Inastia", "Your first holiday rental in Corsica | Inastia"),
+    t(locale, "Mettre votre maison en location pour la première fois en Corse : préparation, équipements, photos, annonces et premiers voyageurs. Avancez avec Inastia.", "Prepare your first holiday rental in Corsica: equipment, photographs, listings and your first guests. A clear journey with the Inastia family team."),
+    firstRental(locale),
   );
   await output(
     locale,

@@ -3,6 +3,7 @@ import { arrow, contactPath, escape, path, t } from "./lib.ts";
 import { googleProfileUrl } from "./reviews.ts";
 import { intendanceSlug } from "./content/intendance.ts";
 import { partnerMail, partnersSlug } from "./content/partners.ts";
+import { firstRentalSlug } from "./content/first-rental.ts";
 
 export const zones = [
   ["Ghisonaccia", "conciergerie-ghisonaccia"],
@@ -61,6 +62,7 @@ export function footer(locale: Locale): string {
     <div class="footer-intro"><a class="wordmark" href="${path(locale)}">INASTIA</a><p>${t(locale, "L’hospitalité corse.<br>Le soin de votre maison.", "Corsican hospitality.<br>A home in good hands.")}</p><a class="text-link" href="mailto:contact@inastia.fr">contact@inastia.fr</a><a class="text-link" href="tel:+33613812550">+33 6 13 81 25 50</a></div>
     <div><h2 class="footer-heading">${t(locale, "Votre projet", "Your plans")}</h2><ul>
       <li><a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a></li>
+      <li><a href="${path(locale, firstRentalSlug)}">${t(locale, "Première mise en location", "Your first rental")}</a></li>
       <li><a href="${path(locale, intendanceSlug)}">${t(locale, "Intendance de résidence", "Second-home care")}</a></li>
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>

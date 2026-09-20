@@ -5,6 +5,7 @@ import { hospitalityArt } from "./art.ts";
 import { reviews } from "./reviews.ts";
 import { managementArt } from "./management-art.ts";
 import { pricing } from "./pricing.ts";
+import { firstRentalSlug } from "./content/first-rental.ts";
 
 export function home(locale: Locale): string {
   const questions = [
@@ -94,5 +95,6 @@ export function home(locale: Locale): string {
     ${reviews(locale)}
   </div></section>
   <section class="section process-section" id="processus"><div class="container"><div class="section-heading" data-reveal><div><p class="eyebrow">${t(locale, "DU PREMIER ÉCHANGE AU DÉMARRAGE", "FROM FIRST CONTACT TO GETTING STARTED")}</p><h2>${t(locale, "Ce qui se passe<br><em>après votre demande.</em>", "What happens<br><em>after your enquiry.</em>")}</h2></div><a class="text-link" href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Encore en réflexion ? Découvrez l’audit gratuit", "Still considering it? Explore the free review")}${arrow}</a></div><ol class="process-list">${steps.map(([title, text], index) => `<li data-reveal><span class="step-index">0${index + 1}</span><div><h3>${title}</h3><p>${text}</p></div></li>`).join("")}</ol><p class="process-note">${t(locale, "L’audit est une analyse qualitative, sans prévision de revenus. Le périmètre, le coût et les modalités de l’accompagnement sont précisés avant de commencer.", "The review is qualitative, not a rental income forecast. Scope, cost and arrangements are specified before work begins.")} <a href="/cgv" lang="fr">${t(locale, "Consulter les CGV", "Read the terms (French)")}</a>.</p></div></section>
+  <p class="container first-rental-entry"><span>${t(locale, "Vous préparez votre toute première saison ?", "Preparing for your very first season?")}</span><a class="text-link" href="${path(locale, firstRentalSlug)}">${t(locale, "Ouvrir le carnet de votre première location", "Open your first rental notebook")}${arrow}</a></p>
   ${faq(locale, questions)}${contactCallout(locale)}`;
 }
