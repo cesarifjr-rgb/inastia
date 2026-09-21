@@ -19,8 +19,9 @@
 .ads-consent h2 { margin: 0 0 .5rem; font-size: 1.125rem; }
 .ads-consent p { margin: 0 0 1rem; }
 .ads-consent a { text-decoration: underline; }
-.consent-preferences { margin-top: 1rem; }
-.consent-preferences summary { cursor: pointer; text-decoration: underline; padding: .4rem 0; }
+.consent-preferences { margin-top: .5rem; }
+.consent-preferences summary { cursor: pointer; text-decoration: underline; min-height: 44px; padding: .7rem 0; }
+.consent-preferences[open] summary { margin-bottom: .5rem; }
 .consent-preferences label { display: flex; align-items: flex-start; gap: .75rem; margin: .85rem 0; cursor: pointer; }
 .consent-preferences input { flex: 0 0 auto; width: 1.15rem; height: 1.15rem; margin: .1rem 0; accent-color: var(--blue); }
 .ads-consent .consent-retention { margin: 1rem 0 0; font-size: .75rem; }
@@ -46,3 +47,15 @@
   cursor: pointer;
 }
 .ads-consent :focus-visible, #ads-consent-settings:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+@media (max-width: 600px) {
+  .ads-consent {
+    inset: auto .75rem max(.75rem, env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 1.5rem - env(safe-area-inset-bottom));
+    padding: .875rem;
+  }
+  .ads-consent h2 { margin-bottom: .375rem; font-size: 1rem; }
+  .ads-consent p { margin-bottom: .75rem; }
+  .ads-consent-actions { gap: .5rem; }
+  .ads-consent-actions button { padding: .65rem .5rem; }
+}
