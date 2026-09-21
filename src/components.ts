@@ -73,14 +73,16 @@ export function footer(locale: Locale): string {
 
 function measurementConsent(locale: Locale): string {
   return `<section id="ads-consent" class="ads-consent" role="region" aria-labelledby="ads-consent-title" tabindex="-1" hidden>
-    <h2 id="ads-consent-title">${t(locale, "Mesurer les visites, avec votre accord", "Measure visits, with your consent")}</h2>
-    <p>${t(locale, "Avec votre accord, Google Analytics mesure les pages consultées et l’utilisation du formulaire ; Google Ads relie les demandes et leurs suites à nos annonces. Google reçoit des données de navigation et des identifiants, jamais les coordonnées ni le message de votre formulaire. Vous pouvez choisir séparément ces deux usages, ou tout refuser. Le site reste utilisable.", "With your consent, Google Analytics measures page visits and form usage; Google Ads links enquiries and their outcomes to our ads. Google receives browsing data and identifiers, never contact details or the message from your form. You can choose each purpose separately or reject both. The site remains usable.")} <a href="/privacy#mesure" lang="fr">${t(locale, "En savoir plus", "Learn more (French)")}</a>.</p>
+    <h2 id="ads-consent-title">${t(locale, "Vos choix de cookies", "Your cookie choices")}</h2>
+    <p>${t(locale, "Avec votre accord, Google Analytics mesure les visites et Google Ads l’efficacité des annonces. Le site reste utilisable si vous refusez.", "With your consent, Google Analytics measures visits and Google Ads measures ad performance. You can still use the site if you decline.")}</p>
     <div class="ads-consent-actions"><button type="button" data-ads-choice="reject">${t(locale, "Tout refuser", "Reject all")}</button><button type="button" data-ads-choice="accept">${t(locale, "Tout accepter", "Accept all")}</button></div>
-    <details class="consent-preferences"><summary>${t(locale, "Personnaliser mes choix", "Customize my choices")}</summary>
+    <details class="consent-preferences"><summary>${t(locale, "Détails et personnalisation", "Details and preferences")}</summary>
+      <p>${t(locale, "Google Analytics mesure les pages consultées et l’utilisation du formulaire ; Google Ads relie les demandes et leurs suites à nos annonces. Google reçoit des données de navigation et des identifiants, jamais les coordonnées ni le message de votre formulaire. Vous pouvez choisir séparément ces deux usages, ou tout refuser.", "Google Analytics measures page visits and form usage; Google Ads links enquiries and their outcomes to our ads. Google receives browsing data and identifiers, never contact details or the message from your form. You can choose each purpose separately or reject both.")} <a href="/privacy#mesure" lang="fr">${t(locale, "En savoir plus", "Learn more (French)")}</a>.</p>
       <label><input id="consent-analytics" type="checkbox"><span>${t(locale, "Statistiques de visite — Google Analytics", "Visit statistics — Google Analytics")}</span></label>
       <label><input id="consent-advertising" type="checkbox"><span>${t(locale, "Mesure des annonces — Google Ads", "Advertising measurement — Google Ads")}</span></label>
       <div class="ads-consent-actions"><button type="button" data-ads-choice="save">${t(locale, "Enregistrer mes choix", "Save my choices")}</button></div>
-    </details><p class="consent-retention">${t(locale, "Choix conservés 6 mois, modifiables à tout moment via « Gérer les cookies » en bas de page.", "Choices saved for 6 months. Change them at any time through ‘Cookie settings’ in the footer.")}</p>
+      <p class="consent-retention">${t(locale, "Choix conservés 6 mois, modifiables à tout moment via « Gérer les cookies » en bas de page.", "Choices saved for 6 months. Change them at any time through ‘Cookie settings’ in the footer.")}</p>
+    </details>
   </section>`;
 }
 
