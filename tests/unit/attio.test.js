@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { adsAttribution, listingIdentity, syncEnquiry } from '../../lib/attio.js';
+import { JOURNEY_VERSION, JOURNEY_LIFETIME, journeyAttribution, journeyPage } from '../../lib/journey.js';
 
 const workspace = '303b4287-37bc-4166-abcc-005574bbfa5a';
 const now = Date.parse('2026-09-09T12:00:00Z');
@@ -61,6 +62,38 @@ describe('website to Attio (all network requests mocked)', () => {
         vi.stubGlobal('fetch', vi.fn(store.request));
     });
     afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
+
+    it('drops missing consent, stale origins and arbitrary values without exposing extra fields', () => {
+        const journey = { consent: true, version: JOURNEY_VERSION, page: 'home', placement: 'hero', locale: 'fr', at: now - 1000 };
+        expect(journeyAttribution({ ...journey, email: 'private@example.invalid' }, now)).toEqual(journey);
+        for (const patch of [{ consent: false }, { consent: 'true' }, { version: 'old' }, { page: '/?email=private@example.invalid' },
+            { placement: 'private@example.invalid' }, { locale: 'unknown' }, { at: now + 1 }, { at: now - JOURNEY_LIFETIME }, { at: 'invalid' }]) {
+            expect(journeyAttribution({ ...journey, ...patch }, now)).toBeUndefined();
+        }
+        expect(journeyPage('/en/')).toBe('home');
+        expect(journeyPage('/en/gestion-airbnb-corse-du-sud')).toBe('gestion-airbnb-corse-du-sud');
+        expect(journeyPage('/private@example.invalid')).toBeUndefined();
+    });
+
+    it('keeps the initial CTA origin on a linked opportunity without resetting its commercial stage', async () => {
+        const enquiry = { ...input, listingUrl: 'https://www.airbnb.fr/rooms/123456' };
+        const journey = { consent: true, version: JOURNEY_VERSION, page: 'home', placement: 'pricing', locale: 'fr', at: now - 1000 };
+        await syncEnquiry(enquiry, { ...context, journey });
+        const deal = store.data.deals[0];
+        expect(scalar(deal, 'site_page_origine')).toBe('home');
+        expect(scalar(deal, 'site_emplacement_cta')).toBe('pricing');
+        expect(scalar(deal, 'site_langue_origine')).toBe('fr');
+        deal.values.stage = [{ status: { title: 'Proposition envoyée' } }];
+        await syncEnquiry(enquiry, { ...nextContext, journey: { ...journey, placement: 'header', locale: 'en' } });
+        expect(store.data.deals).toHaveLength(1);
+        expect(scalar(deal, 'site_emplacement_cta')).toBe('pricing');
+        expect(scalar(deal, 'site_langue_origine')).toBe('fr');
+        expect(deal.values.stage[0].status.title).toBe('Proposition envoyée');
+        expect(scalar(deal, 'derniere_demande')).toContain('home / header / en');
+        expect(scalar(deal, 'demande_initiale')).toContain('home / pricing / fr');
+        await syncEnquiry(input, nextContext);
+        expect(scalar(store.data.deals[1], 'site_page_origine')).toBeUndefined();
+    });
 
     it('requires fresh consent and a valid recent click', () => {
         expect(adsAttribution(consent, now)?.gclid).toBe(consent.googleAdsGclid);

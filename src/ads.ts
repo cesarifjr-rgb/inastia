@@ -1,4 +1,4 @@
-import { ANALYTICS_ID, initAnalyticsInteractions, trackAnalytics, updateAnalyticsConsent } from "./analytics.ts";
+import { ANALYTICS_ID, formAnalyticsParameters, initAnalyticsInteractions, trackAnalytics, updateAnalyticsConsent } from "./analytics.ts";
 
 const TAG_ID = "AW-18439914063";
 const CONVERSION = `${TAG_ID}/16GeCNTTh_IcEM-E69hE`;
@@ -215,6 +215,6 @@ export function trackEnquiry(requestId: string, intent: "audit" | "gestion" | "i
     recorded.add(requestId);
     // An exploratory audit must not count as a full-management Ads request.
     if (allowed && intent !== "audit") window.gtag?.("event", "conversion", { send_to: intent === "intendance" ? INTENDANCE_CONVERSION : CONVERSION, transaction_id: requestId });
-    trackAnalytics("generate_lead", { form_id: "contact-form", service: intent });
+    trackAnalytics("generate_lead", formAnalyticsParameters(intent));
   } catch { /* Ad blockers or a tag failure must not break the contact form. */ }
 }

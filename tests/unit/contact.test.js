@@ -1,5 +1,6 @@
 import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import handler from "../../api/contact.js";
+import * as attio from "../../lib/attio.js";
 const background = vi.hoisted(() => []);
 vi.mock('@vercel/functions', () => ({ waitUntil: promise => { background.push(promise); } }));
 
@@ -66,6 +67,20 @@ describe("contact API (all external requests mocked)", () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
+  });
+
+  it.each([true, false])("accepts the request but only forwards an allowed consented CTA origin: %s", async (allowed) => {
+    const sync = vi.spyOn(attio, 'syncEnquiry').mockResolvedValue({ status: 'synced' });
+    const journey = { consent: true, version: 'journey-2026-09-21-v1', page: allowed ? 'home' : 'private@example.invalid',
+      placement: 'pricing', locale: 'fr', at: Date.now() - 1000, ignored: 'private@example.invalid' };
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
+    fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: 'fa64e6ef-875e-4e75-b9a1-593bdedb2629' }) });
+    const res = await request({ ...valid, journey });
+    expect(res.status).toHaveBeenCalledWith(200);
+    const accepted = sync.mock.calls[0][1].journey;
+    expect(accepted).toEqual(allowed ? { consent: true, version: journey.version, page: 'home', placement: 'pricing', locale: 'fr', at: journey.at } : undefined);
+    // Optional measurement must not change the idempotent email body on a retry or withdrawal.
+    expect(JSON.parse(fetch.mock.calls[1][1].body).html).not.toContain('journey-');
   });
 
   it.each(["preview", "development"])("does not contact providers in %s even when credentials are configured", async (environment) => {

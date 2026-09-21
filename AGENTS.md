@@ -18,6 +18,7 @@
 - Vite compile les documents générés vers `dist/`.
 - Ne jamais corriger directement `.generated/` ou `dist/`.
 - `src/client.ts` gère l'interface ; `src/contact.ts` gère le formulaire.
+- `src/analytics.ts` et `lib/journey.js` portent la mesure consentie du parcours CTA. Préserver les catégories autorisées, la validité de 30 minutes, l'indépendance Analytics/Ads et l'attribution initiale des opportunités Attio. Ne jamais envoyer de texte du formulaire ou d'identifiant CRM à GA4. Voir `docs/journey-measurement.md`.
 - `src/pricing.ts`, `src/pricing-client.ts` et `src/pricing.css` présentent le tarif confirmé de 20 % TTC des nuitées avant frais de plateforme, hors ménage, linge et taxe de séjour. Le calculateur est arithmétique, sans prévision locative ; garder les opérations en centimes et points de base entiers et les versions FR/EN.
 - `api/contact.js` est la fonction serveur Vercel utilisant Turnstile et Resend.
 - `src/art.ts` fournit `hospitalityArt(locale)`, illustration SVG FR/EN intégrée au HTML ; `src/motion.ts` pilote GSAP, la pause CSS et la visibilité de l’illustration.

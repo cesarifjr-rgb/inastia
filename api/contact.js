@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { waitUntil } from '@vercel/functions';
 import { escapeHtml, isValidEmail, truncate } from '../utils.js';
 import { adsAttribution, syncEnquiry } from '../lib/attio.js';
+import { journeyAttribution } from '../lib/journey.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const receiptId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
@@ -317,7 +318,8 @@ export default async function handler(req, res) {
                 ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
                 ['Lien de l’annonce', listingUrl],
             ].filter(([, value]) => value),
-            marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt) })
+            marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt),
+            journey: journeyAttribution(req.body.journey, startedAt) })
             .then(result => {
                 if (result.status !== 'disabled') console.info(JSON.stringify({ event: 'contact_crm', requestId, status: result.status }));
             })

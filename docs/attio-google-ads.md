@@ -9,6 +9,13 @@ avec la demande, sa source documentée et une prochaine action à deux heures.
 Les emails et l’historique des attributs conservent les demandes antérieures.
 Aucune séquence ni relance n’est déclenchée par ce code.
 
+Depuis le 21 septembre 2026, une nouvelle opportunité peut aussi recevoir
+`site_page_origine`, `site_emplacement_cta` et `site_langue_origine` après accord
+Analytics et validation de l'origine du CTA (30 minutes maximum). Ces attributs
+texte existent dans Attio avant déploiement. Ils ne remplacent pas la source
+publicitaire et ne modifient pas une attribution initiale existante. Voir
+[le dispositif de mesure et ses limites](journey-measurement.md).
+
 L’audit gratuit conserve le motif `audit` du bouton jusqu’à la confirmation,
 à l’objet de l’email et aux textes de demande du contact et de l’opportunité.
 Une nouvelle opportunité porte le préfixe « Audit gratuit » et prévoit le rappel
