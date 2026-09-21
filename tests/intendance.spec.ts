@@ -62,7 +62,7 @@ for (const locale of ["fr", "en"]) {
     expect(payload).toMatchObject({ intent: "intendance", intendancePlan: "serenite", surface: "125", rentalSituation: "", listingUrl: "", phone: "" });
     const events = await page.evaluate(() => (window.dataLayer || []).map(item => Array.from(item)));
     expect(events.filter(item => item[1] === "conversion")).toEqual([["event", "conversion", { send_to: "AW-18439914063/nZIzCL6Ih_UcEM-E69hE", transaction_id: payload?.requestId }]]);
-    expect(events.filter(item => item[1] === "generate_lead")).toEqual([["event", "generate_lead", { send_to: ANALYTICS_ID, form_id: "contact-form", service: "intendance" }]]);
+    expect(events.filter(item => item[1] === "generate_lead")).toEqual([["event", "generate_lead", { send_to: ANALYTICS_ID, form_id: "contact-form", service: "intendance", origin_page: "contact", origin_locale: locale, contact_placement: "direct" }]]);
     await page.locator("#form-reset").click();
     await expect(page.locator("#contact-intent")).toHaveValue("intendance");
     await expect(page.locator("#intendancePlan")).toHaveValue("serenite");

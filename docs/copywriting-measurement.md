@@ -1,10 +1,10 @@
 # Mesurer les demandes qualifiées
 
-Procédure interne du 6 septembre 2026 pour le point 18 du rapport de copywriting. Elle complète [le diagnostic de réception et les règles de suivi humain](lead-operations.md). Elle peut être appliquée manuellement dès la prochaine demande, sans connexion du site à Hub Inastia.
+Procédure interne du 6 septembre 2026, actualisée le 21 septembre pour le suivi Analytics et Attio. Elle complète [le diagnostic de réception et les règles de suivi humain](lead-operations.md) et [la mesure des CTA et du parcours](journey-measurement.md). Hub Inastia reste indépendant.
 
 ## Ce qui est observable aujourd'hui
 
-Le site n'a ni mesure d'audience côté navigateur, ni CMP, ni base de prospects intégrée. Hub Inastia est indépendant du formulaire. Les journaux techniques et la boîte professionnelle OVH sont les points de départ du rapprochement ; ils ne qualifient pas automatiquement les projets.
+Le site dispose de choix de consentement séparés Analytics/Ads, d'événements navigateur et d'une copie des demandes dans Attio après acceptation par Resend. Les journaux techniques, la boîte professionnelle OVH et les dossiers Attio permettent le rapprochement ; ils ne qualifient pas automatiquement les projets.
 
 | Observation | Ce qu'elle établit |
 |---|---|
@@ -15,7 +15,7 @@ Le site n'a ni mesure d'audience côté navigateur, ni CMP, ni base de prospects
 
 L'événement d'acceptation porte aussi les catégories validées `intent` et `contactPreference`. `intent` vaut `gestion`, `audit`, une chaîne vide pour une demande générale, ou les anciennes valeurs compatibles `annonce`/`rotation`. Ces dernières ne constituent pas des offres de prestation seule : leur besoin doit être clarifié. `contactPreference` vaut `email` ou `phone`. Pour les anciennes requêtes sans ce champ, le serveur utilise `phone` pour l'audit et `email` pour les autres motifs. Cette préférence n'est pas un consentement commercial et une valeur par défaut ne prouve pas un choix explicite.
 
-Les visites, clics sur CTA et débuts de formulaire ne sont pas mesurés actuellement. Ne pas afficher de taux visite → demande ni inventer ces volumes à partir des journaux d'envoi. Aucun test auprès de visiteurs réels n'a été réalisé dans ce travail ; aucun résultat commercial attribuable à la réécriture n'est disponible.
+Les visites, clics, débuts de formulaire et demandes acceptées sont mesurés après accord Analytics. Depuis le 21 septembre, l'origine du CTA est conservée pendant le parcours et peut accompagner le dossier Attio. Ces volumes consentis ne représentent pas tous les visiteurs ; ne pas reconstituer les données manquantes à partir des journaux d'envoi. Aucun résultat commercial attribuable à la réécriture n'est démontré par cette configuration.
 
 ## Une fiche privée par demande
 
@@ -55,7 +55,7 @@ La personne chargée du suivi clôt le bilan de la semaine précédente, du lund
 
 Le bilan agrégé contient seulement la semaine d'entrée, la date du relevé, le parcours gestion/audit/à préciser, R, Q, P, C et les taux. Les statuts actuels « à préciser » et « non adapté » ainsi que leurs motifs peuvent être comptés séparément, sans les additionner aux étapes historiques du parcours. Ne pas y exporter `requestId`, identifiants de contrat, noms, coordonnées, adresses, messages ou verbatims. Les références du registre privé restent corrélables à des personnes ; elles ne sont pas anonymes et suivent les règles d'accès et de [conservation](data-retention.md).
 
-Comparer des groupes observés pendant une durée similaire, en signalant les dossiers encore ouverts et la saison. Les nombres de demandes reçues et qualifiées peuvent être suivis dès maintenant par cette procédure ; leur rapport au trafic du site reste inconnu sans mesure de visites.
+Comparer des groupes observés pendant une durée similaire, en signalant les dossiers encore ouverts et la saison. Les nombres de demandes reçues et qualifiées se rapprochent dans Attio. La mesure navigateur consentie et le suivi commercial ont des populations différentes : leur division directe ne constitue pas un taux de conversion individuel.
 
 ## Tests éditoriaux après stabilisation
 
@@ -68,7 +68,7 @@ Les modifications étendues de cette version ne sont pas une expérience isolant
 | Examiner la place de l'audit | Garder l'audit secondaire dans la version actuelle. Tester éventuellement sa visibilité une fois la version et le suivi stables, sans mener en même temps le test du titre. Comparer surtout les demandes qualifiées issues de gestion et d'audit. |
 | Témoignage propriétaire, cas réel, équipe nommée | Hors périmètre à la demande de l'utilisateur : points 09, 10 et 11 écartés. Le test avec témoignage propriétaire du rapport n'est pas planifié, et aucune collecte correspondante n'est lancée. |
 
-Avant toute mesure future des clics, débuts de formulaire ou visites, définir le besoin et le dispositif adapté. Leur ajout reste une décision ultérieure ; aucun événement navigateur, cookie, CMP ou intégration Hub n'est créé par ce document.
+Le dispositif actuellement autorisé est décrit dans [la mesure du parcours](journey-measurement.md). Il n'intègre pas Hub Inastia et n'automatise aucune qualification commerciale.
 
 ### Script d'entretien de compréhension
 

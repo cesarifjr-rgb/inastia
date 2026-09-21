@@ -1,4 +1,5 @@
 import { enquiryAttribution, trackEnquiry } from "./ads.ts";
+import { enquiryJourney } from "./analytics.ts";
 
 interface TurnstileAPI {
   render(
@@ -328,7 +329,7 @@ export function initContact(): void {
     }
     payload.requestId = enquiry.id;
     payload.consentCollectedAt = enquiry.collectedAt;
-    Object.assign(payload, enquiryAttribution());
+    Object.assign(payload, enquiryAttribution(), enquiryJourney());
     payload.turnstileToken = token;
     // Snapshot first: disabled controls are excluded from FormData.
     const controls = Array.from(form.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>("input, select, textarea"));

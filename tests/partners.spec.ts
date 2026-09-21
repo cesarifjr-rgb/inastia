@@ -32,7 +32,7 @@ for (const locale of ["fr", "en"]) {
     for (const profile of ["immobilier", "prestataire", "recommandation"]) {
       await page.locator(`.partner-profile [data-partner-profile="${profile}"]`).click();
       expect((await events()).at(-1)).toEqual(["event", "contact_click", {
-        send_to: ANALYTICS_ID, contact_method: "email", service: "partenariat", partner_profile: profile, contact_placement: "profile",
+        send_to: ANALYTICS_ID, contact_method: "email", service: "partenariat", partner_profile: profile, contact_placement: "profile", origin_page: "partenaires", origin_locale: locale,
       }]);
     }
     await page.locator('[data-contact-placement="phone"]').click();
