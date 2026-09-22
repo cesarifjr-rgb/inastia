@@ -14,6 +14,49 @@ export type PageContent = {
   faq: { question: string; answer: string }[];
 };
 
+export const managementHandoverContent = {
+  fr: {
+    eyebrow: "Préparer la reprise",
+    title: "Votre logement est déjà en location ?",
+    intro: "Que vous gériez vous-même votre location ou avec une conciergerie, nous préparons le relais à partir de votre organisation actuelle.",
+    steps: [
+      {
+        title: "Réservations et calendrier",
+        text: "Nous faisons le point sur les séjours confirmés, les arrivées à venir et vos périodes personnelles. Nous précisons qui suit chaque réservation pendant la transition.",
+      },
+      {
+        title: "Annonces et accès",
+        text: "Nous examinons vos annonces, les comptes qui les portent et les accès nécessaires à leur gestion. Les possibilités de reprise sont vérifiées avec vous avant toute modification.",
+      },
+      {
+        title: "Clés et date de relais",
+        text: "Nous préparons les accès au logement, la remise des clés et les consignes utiles. Nous convenons ensemble d’une date de démarrage et des tâches reprises par Inastia.",
+      },
+    ],
+    note: "Le transfert des comptes, des avis ou des réservations n’est pas automatique. Les modalités dépendent de votre situation et des plateformes utilisées.",
+  },
+  en: {
+    eyebrow: "Preparing the handover",
+    title: "Already renting out your property?",
+    intro: "Whether you manage your rental yourself or work with a management company, we plan the handover around your current arrangements.",
+    steps: [
+      {
+        title: "Bookings and calendar",
+        text: "We review confirmed stays, upcoming arrivals and your own time at the property. We agree who handles each booking during the transition.",
+      },
+      {
+        title: "Listings and access",
+        text: "We review your listings, the accounts that hold them and the access needed to manage them. We check the handover options with you before making any changes.",
+      },
+      {
+        title: "Keys and handover date",
+        text: "We prepare property access, the key handover and useful instructions. Together, we agree a start date and the tasks Inastia will take over.",
+      },
+    ],
+    note: "Accounts, reviews and bookings do not transfer automatically. The arrangements depend on your situation and the platforms you use.",
+  },
+};
+
 export const pages: Record<Locale, PageContent[]> = {
   fr: [
     {
