@@ -62,7 +62,7 @@ for (const locale of ["fr", "en"] as const) {
   }
   test(`${locale}: first rental is discoverable and translated`, async ({ page }) => {
     await page.goto(`${prefix}/`);
-    await page.locator(`.first-rental-entry a[href="${prefix}/${slug}"]`).click();
+    await page.locator(`.home-rental-paths a[href="${prefix}/${slug}"]`).click();
     await expect(page).toHaveURL(new RegExp(`${prefix}/${slug}$`));
     await page.locator(".language-link").click();
     await expect(page.locator("html")).toHaveAttribute("lang", locale === "fr" ? "en" : "fr");

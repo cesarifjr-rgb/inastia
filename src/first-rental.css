@@ -5,8 +5,6 @@
   --first-line: #cbd3c8;
   color: var(--first-green);
 }
-.first-rental-entry { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 26px; margin-bottom: 60px; border-block: 1px solid var(--line); font-size: 14px; }
-.first-rental-entry .text-link { font-size: 12px; }
 .first-rental-page em { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 400; color: var(--first-olive); letter-spacing: -.05em; }
 .first-rental-page .eyebrow { font-size: 10px; letter-spacing: .16em; color: var(--first-green); }
 .first-hero { display: grid; grid-template-columns: .95fr 1.05fr; max-width: 1700px; min-height: 745px; margin: 0 auto; }
@@ -159,7 +157,6 @@
   .first-fee { padding-left: 28px; }
 }
 @media (max-width: 599px) {
-  .first-rental-entry { flex-direction: column; align-items: flex-start; font-size: 13px; }
   .first-hero-copy .breadcrumb { font-size: 9px; gap: 9px; }
   .first-edition { font-size: 8px !important; letter-spacing: .12em !important; }
   .first-hero h1 { font-size: clamp(48px, 12.3vw, 67px); margin-block: 22px 23px; }
