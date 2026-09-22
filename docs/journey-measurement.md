@@ -10,7 +10,7 @@ Après accord Analytics, trois événements utilisent les mêmes catégories d'o
 |---|---|---|
 | `contact_click` | Clic sur un lien formulaire, téléphone ou email | Ne prouve ni appel effectué ni demande reçue. |
 | `form_start` | Première saisie du formulaire sur la page | Un seul événement par chargement ; pas une personne unique. |
-| `generate_lead` | Réponse positive de l'API après acceptation de l'email par Resend | Ne prouve ni livraison en boîte, ni copie CRM, ni qualification. |
+| `generate_lead` | Réponse positive de l'API après enregistrement durable de la demande (`202 registered`) ; acceptation Resend dans le mode historique | Ne prouve ni livraison en boîte, ni copie CRM, ni qualification. |
 
 Paramètres communs : `service` (gestion, audit, intendance ; partenariat pour les clics partenaires), `origin_page`, `origin_locale` et `contact_placement`. `contact_method` distingue form/phone/email pour les clics. Les débuts et envois portent aussi `form_id=contact-form`.
 
@@ -44,7 +44,7 @@ Elle affiche l'étape commerciale, la page, l'emplacement, la langue, la premiè
 
 Les trois attributs texte `site_page_origine`, `site_emplacement_cta`, `site_langue_origine` reçoivent l'origine consentie lors de la création d'une opportunité. L'API et la copie CRM contrôlent la même liste de catégories, version, date et accord. Une origine invalide est ignorée sans refuser la demande. Les dossiers existants gardent leur attribution initiale et leur étape ; le texte de la dernière demande peut documenter un nouveau CTA. Une valeur vide signifie origine inconnue, jamais référencement naturel présumé.
 
-L'origine facultative n'entre pas dans le corps de l'email Resend : un retrait de consentement ou une expiration entre deux tentatives ne doit pas modifier l'envoi idempotent. Les traces techniques `contact_crm` et l'email restent à rapprocher pour contrôler une copie CRM échouée.
+L'origine facultative n'entre pas dans le corps de l'email Resend : un retrait de consentement ou une expiration entre deux tentatives ne doit pas modifier l'envoi idempotent. La première demande enregistrée conserve son instantané validé. Les tâches durables et les traces `contact_delivery` permettent de contrôler une copie CRM échouée sans renvoyer l'email.
 
 | Étape commerciale | Preuve attendue |
 |---|---|

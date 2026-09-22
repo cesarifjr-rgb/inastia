@@ -57,6 +57,22 @@ async function fillContact(page: Page): Promise<void> {
 for (const locale of ["fr", "en"] as const) {
   const path = locale === "fr" ? "/contact" : "/en/contact";
   test.describe(`Contact ${locale}`, () => {
+    for (const intent of ["gestion", "audit", "intendance"]) {
+      test(`${intent}: confirms a durable 202 receipt without claiming email delivery`, async ({ page }) => {
+        await page.route("**/api/contact", route => route.fulfill({ status: 202, json: {
+          success: true, status: "registered", requestId: route.request().postDataJSON().requestId,
+        } }));
+        await page.goto(path + "?intent=" + intent);
+        await fillContact(page);
+        await page.evaluate(() => window.__solveChallenge());
+        await page.locator("#submit-contact").click();
+        await expect(page.locator("#form-status")).toHaveAttribute("data-state", "success");
+        await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "enregistrée" : "recorded");
+        await expect(page.locator("#email")).toHaveValue("");
+        await expect(page.locator("#contact-intent")).toHaveValue(intent);
+        if (intent === "audit") await expect(page.locator("#form-status")).toContainText(locale === "fr" ? "sous 24 h" : "within 24 hours");
+      });
+    }
     test("management keeps six essential answers and reveals invalid optional details", async ({ page }) => {
       let requests = 0;
       await page.route("**/api/contact", async route => {

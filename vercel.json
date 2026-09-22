@@ -3,7 +3,13 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "regions": ["cdg1"],
-  "functions": { "api/contact.js": { "maxDuration": 60 } },
+  "functions": {
+    "api/contact.js": { "maxDuration": 60 },
+    "api/cron/contact-deliveries.js": { "maxDuration": 120 },
+    "api/contact-status.js": { "maxDuration": 30 },
+    "api/webhooks/resend.js": { "maxDuration": 30 }
+  },
+  "crons": [{ "path": "/api/cron/contact-deliveries", "schedule": "*/15 * * * *" }],
   "redirects": [
     { "source": "/pack-lancement-airbnb", "destination": "/gestion-airbnb-corse-du-sud", "permanent": true },
     { "source": "/menage-airbnb-corse-du-sud", "destination": "/gestion-airbnb-corse-du-sud", "permanent": true },

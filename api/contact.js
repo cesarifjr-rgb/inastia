@@ -6,6 +6,8 @@ import { waitUntil } from '@vercel/functions';
 import { escapeHtml, isValidEmail, truncate } from '../utils.js';
 import { adsAttribution, syncEnquiry } from '../lib/attio.js';
 import { journeyAttribution } from '../lib/journey.js';
+import { durableEnabled, getContactStore } from '../lib/contact-store.js';
+import { processContactJobs } from '../lib/contact-delivery.js';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const receiptId = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
@@ -24,6 +26,7 @@ const consentLabels = {
 };
 
 export default async function handler(req, res) {
+    res.setHeader?.('Cache-Control', 'no-store');
     const startedAt = Date.now();
     const requestId = typeof req.body?.requestId === 'string' && uuid.test(req.body.requestId)
         ? req.body.requestId : randomUUID();
@@ -36,7 +39,7 @@ export default async function handler(req, res) {
                 event.providerId = providerId;
                 event.receivedAt = new Date(startedAt).toISOString();
             }
-            if (stage === 'provider_accepted') Object.assign(event, acceptedClassification);
+            if (stage === 'provider_accepted' || stage === 'registered') Object.assign(event, acceptedClassification);
             console[status >= 400 ? 'warn' : 'info'](JSON.stringify(event));
         } catch { /* Telemetry must not prevent the response. */ }
         return res.status(status).json({ ...body, requestId });
@@ -177,7 +180,8 @@ export default async function handler(req, res) {
     if (!turnstileToken) {
         return respond(403, { success: false, error: 'Veuillez effectuer la vérification anti-spam.' }, 'challenge_missing');
     }
-    if (!process.env.TURNSTILE_SECRET_KEY || !process.env.RESEND_API_KEY) {
+    if (!process.env.TURNSTILE_SECRET_KEY || (!durableEnabled() && !process.env.RESEND_API_KEY)
+        || (durableEnabled() && !process.env.CONTACT_DATABASE_URL)) {
         return respond(503, { success: false, uncertain: false, error: 'Service temporairement indisponible.' }, 'configuration_missing');
     }
     if (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'production') {
@@ -282,6 +286,37 @@ export default async function handler(req, res) {
       </div>
     </div>`;
 
+    const context = { requestId, receivedAt: startedAt, contactPreference,
+        qualification: [
+            ['Formule d’intendance', intendancePlanLabels[intendancePlan]],
+            ['Lieu-dit ou quartier', propertyArea],
+            ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
+            ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
+            ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
+            ['Lien de l’annonce', listingUrl],
+        ].filter(([, value]) => value),
+        marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt),
+        journey: journeyAttribution(req.body.journey, startedAt) };
+    if (durableEnabled()) {
+        try {
+            const store = getContactStore();
+            const result = await store.register(input, context, {
+                from: 'Inastia <noreply@inastia.fr>', to: 'contact@inastia.fr', reply_to: email,
+                subject, html: htmlBody, tags: [{ name: 'request_id', value: requestId }],
+            });
+            if (result.conflict) return respond(409, { success: false, uncertain: true,
+                error: 'Cet identifiant correspond déjà à une autre demande. Contactez-nous pour vérifier sa réception.' }, 'request_conflict');
+            // Only an acceleration: the committed jobs survive a killed waitUntil invocation.
+            waitUntil(processContactJobs({ store, requestId, maxJobs: 2, budgetMs: 35000 })
+                .catch(() => console.warn(JSON.stringify({ event: 'contact_worker_deferred', requestId }))));
+            return respond(202, { success: true, status: 'registered' }, 'registered');
+        } catch {
+            return respond(503, { success: false, uncertain: true,
+                error: 'La confirmation de votre demande n’a pas été reçue. Réessayez sans modifier vos informations ou contactez-nous.' }, 'registration_uncertain');
+        }
+    }
+
+    // Compatibility path while the durable pipeline is explicitly disabled.
     try {
         const emailRes = await fetch('https://api.resend.com/emails', {
             signal: AbortSignal.timeout(10000),
@@ -309,17 +344,7 @@ export default async function handler(req, res) {
         const emailData = await emailRes.json();
         if (!emailData || typeof emailData.id !== 'string' || !receiptId.test(emailData.id)) throw new Error('Missing provider receipt');
         // CRM availability must not affect delivery or trigger a duplicate email retry.
-        waitUntil(syncEnquiry(input, { requestId, receivedAt: startedAt, contactPreference,
-            qualification: [
-                ['Formule d’intendance', intendancePlanLabels[intendancePlan]],
-                ['Lieu-dit ou quartier', propertyArea],
-                ['Rôle du demandeur', qualificationLabels.decisionRole[decisionRole]],
-                ['Situation locative', qualificationLabels.rentalSituation[rentalSituation]],
-                ['Démarrage souhaité', qualificationLabels.startTimeline[startTimeline]],
-                ['Lien de l’annonce', listingUrl],
-            ].filter(([, value]) => value),
-            marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt),
-            journey: journeyAttribution(req.body.journey, startedAt) })
+        waitUntil(syncEnquiry(input, context)
             .then(result => {
                 if (result.status !== 'disabled') console.info(JSON.stringify({ event: 'contact_crm', requestId, status: result.status }));
             })
