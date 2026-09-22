@@ -1,6 +1,6 @@
 # Suivi des demandes et vérification de réception
 
-Le formulaire ne compte pas une ouverture de page ou un clic comme une demande reçue. La réponse `success: true` établit l'acceptation par Resend, après vérification Turnstile ; la réception en boîte et le traitement humain restent des étapes distinctes.
+Le formulaire ne compte pas une ouverture de page ou un clic comme une demande reçue. Avec le traitement durable activé, la réponse `202` / `success: true` / `status: registered` établit l'enregistrement en base après vérification Turnstile. L'acceptation Resend, sa livraison et la copie Attio sont des états séparés. Voir [le dispositif durable et sa procédure d'exploitation](contact-durability.md). Le mode historique retourne `200` après acceptation Resend.
 
 ## Diagnostic d'une tentative
 
@@ -14,6 +14,9 @@ L'API retourne un `requestId` opaque et journalise un événement JSON `contact`
 | `send_rejected` | Rejet explicite du fournisseur ; rechercher le statut côté Resend et corriger sa cause. |
 | `send_uncertain` | Réponse perdue, invalide, conflit ou erreur ambiguë ; rechercher la demande avant de conclure à son absence. |
 | `provider_accepted` | Acceptation confirmée avec identifiant fournisseur ; vérifier livraison et boîte/CRM séparément. |
+| `registered` | Demande et deux tâches enregistrées ; consulter le suivi durable pour leur avancement. |
+| `registration_uncertain` | Réponse de la base perdue ou indisponible ; reprendre avec le même identifiant et les mêmes informations. Aucun envoi direct de secours. |
+| `request_conflict` | Identifiant déjà utilisé avec des informations différentes ; vérifier le dossier avant tout nouvel envoi. |
 
 Dans le projet Vercel `inastia`, filtrer les journaux sur `/api/contact`, l'identifiant et la période. Dans Resend, retrouver `providerId`, puis consulter l'événement de livraison ou de rejet. Un événement `email.delivered` indique l'acceptation par le serveur destinataire, pas la lecture humaine. Confirmer ensuite la présence dans la boîte ou le CRM et l'attribution à un membre de l'équipe.
 
@@ -56,11 +59,12 @@ désactivée. Les options et limites de preuve sont consignées dans
 [le registre opérationnel](privacy-operations.md). Aucun abonnement supplémentaire
 n'a été souscrit ni réglage fournisseur modifié.
 
-Les pages Webhooks de Resend et Notifications de Cloudflare ne montrent aucune
+Lors du contrôle historique du 6 septembre, les pages Webhooks de Resend et Notifications de Cloudflare ne montraient aucune
 configuration existante lors du contrôle. Aucune notification automatique
 d'erreur de réception n'est donc attestée par ces interfaces. La création d'un
-webhook, d'un destinataire et d'un seuil d'alerte reste une décision d'exploitation
-à définir ; aucun nouvel envoi d'alerte n'a été activé.
+webhook est maintenant couverte par [le suivi durable](contact-durability.md) ;
+le destinataire et le seuil d'une éventuelle alerte restent à définir. Aucun
+nouvel envoi d'alerte n'a été activé.
 
 Le [suivi manuel des demandes qualifiées](copywriting-measurement.md) définit la grille privée, la déduplication et le bilan hebdomadaire des demandes reçues, qualifiées, proposées puis signées. Les acceptations techniques restent distinctes de ce bilan. Les clics et débuts de formulaire ne sont pas mesurés actuellement ; aucun traceur d'audience n'est ajouté pour remplir artificiellement ces indicateurs.
 

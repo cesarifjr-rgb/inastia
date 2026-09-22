@@ -1,7 +1,9 @@
 # Liaison du formulaire avec Attio
 
-Après validation Turnstile et acceptation de l’email par Resend, `api/contact.js`
-confie la copie CRM à `waitUntil`. L’email reste le canal de réception de secours.
+Après validation Turnstile, `api/contact.js` enregistre la demande et deux tâches
+dans la base dédiée Neon. L’email Resend et la copie CRM sont repris indépendamment
+par `lib/contact-delivery.js` ; `waitUntil` accélère leur premier passage, le cron
+assure la reprise durable. Voir [l’exploitation](contact-durability.md).
 `lib/attio.js` rapproche le contact par email, conserve son identité existante,
 ses autres adresses, ses oppositions et son attribution initiale, puis actualise
 la dernière demande du site. Il relie ensuite un Bien et une Opportunité au contact,

@@ -33,6 +33,8 @@ const messages = {
     sending: "Envoi de votre demande…",
     success:
       "Votre demande a bien été envoyée. Nous examinons votre projet et vous répondons par le canal choisi pour préparer notre premier échange.",
+    registered:
+      "Votre demande a bien été enregistrée. Nous examinons votre projet et vous répondons par le canal choisi pour préparer notre premier échange.",
     error:
       "Votre demande n’a pas pu être envoyée. Vos informations sont conservées. Réessayez ou contactez-nous par téléphone ou par e-mail.",
     timeout:
@@ -53,6 +55,8 @@ const messages = {
     sending: "Sending your enquiry…",
     success:
       "Your enquiry has been sent. We will review your plans and reply through your chosen channel to prepare our first conversation.",
+    registered:
+      "Your enquiry has been recorded. We will review your plans and reply through your chosen channel to prepare our first conversation.",
     error:
       "Your enquiry could not be sent. Your information has been kept. Please try again or contact us by phone or email.",
     timeout:
@@ -372,9 +376,12 @@ export function initContact(): void {
       if (contactPreference) contactPreference.value = String(payload.contactPreference);
       updatePhoneRequirement();
       if (reset) reset.hidden = false;
-      announce(payload.intent === "audit" ? (locale === "fr"
-        ? "Votre demande d’audit gratuit a bien été envoyée. Nous vous rappelons sous 24 h, selon vos disponibilités, pour préparer ce premier échange. Vous ne vous engagez pas dans une gestion complète."
-        : "Your free review request has been sent. We call you back within 24 hours, taking your availability into account, to prepare this first conversation. You are not committing to full management.") : copy.success, "success", true);
+      const registered = "status" in result && result.status === "registered";
+      const confirmation = registered ? copy.registered : copy.success;
+      const auditConfirmation = locale === "fr"
+        ? `Votre demande d’audit gratuit a bien été ${registered ? "enregistrée" : "envoyée"}. Nous vous rappelons sous 24 h, selon vos disponibilités, pour préparer ce premier échange. Vous ne vous engagez pas dans une gestion complète.`
+        : `Your free review request has been ${registered ? "recorded" : "sent"}. We call you back within 24 hours, taking your availability into account, to prepare this first conversation. You are not committing to full management.`;
+      announce(payload.intent === "audit" ? auditConfirmation : confirmation, "success", true);
     } catch {
       announce(
         requestExpired ? copy.requestExpired : controller.signal.aborted ? copy.timeout : uncertain ? copy.uncertain : copy.error,
