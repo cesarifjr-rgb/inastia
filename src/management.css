@@ -103,12 +103,45 @@
   font-size: 14px;
   line-height: 1.8;
 }
+.management-handover-jump { margin-top: 24px; }
+.management-handover {
+  background: var(--surface-up);
+  scroll-margin-top: calc(var(--header) + 24px);
+}
+.management-handover .eyebrow { color: var(--blue); margin-bottom: 20px; }
+.management-handover h2 { max-width: 740px; }
+.management-handover-intro { max-width: 720px; margin-top: 24px; color: var(--muted); }
+.management-handover-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.management-handover-steps > li { border-top: 1px solid var(--line); padding-top: 24px; }
+.management-handover-number { color: var(--blue); font-size: 13px; letter-spacing: 0.1em; }
+.management-handover-steps h3 { margin: 16px 0; font-size: 24px; line-height: 1.25; letter-spacing: -0.035em; }
+.management-handover-steps p { color: var(--muted); font-size: 15px; line-height: 1.8; }
+.management-handover-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.management-handover-footer p { max-width: 620px; color: var(--muted); font-size: 14px; }
+.management-handover-footer .button { flex-shrink: 0; }
 @media (min-width: 900px) and (max-width: 1100px) {
   .full-service-list { column-gap: 28px; }
   .full-service-list > li { grid-template-columns: 100px minmax(0, 1fr); column-gap: 14px; }
 }
 @media (max-width: 899px) {
   .full-service-list { grid-template-columns: 1fr; }
+  .management-handover-steps { grid-template-columns: 1fr; gap: 28px; }
+  .management-handover-footer { flex-direction: column; align-items: flex-start; gap: 24px; }
 }
 @media (max-width: 699px) {
   .hero-assistance { font-size: 12px; }
@@ -122,4 +155,6 @@
   .management-agreement dl { grid-template-columns: 1fr; gap: 24px; }
   .management-agreement dt { font-size: 20px; }
   .management-agreement .button { width: 100%; }
+  .management-handover h2 { font-size: 36px; }
+  .management-handover-footer .button { width: 100%; }
 }
