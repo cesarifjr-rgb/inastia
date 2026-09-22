@@ -1,11 +1,3 @@
-import "./styles.css";
-import "./management.css";
-import "./management-art.css";
-import "./pricing.css";
-import "./intendance.css";
-import "./partners.css";
-import "./first-rental.css";
-import "./ads-consent.css";
 import { initAdsConsent } from "./ads.ts";
 import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
