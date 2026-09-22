@@ -56,7 +56,9 @@ for (const locale of ["fr", "en"] as const) {
     expect(copy).not.toMatch(/trois offres|three offers|prestations convenues séparément|unless separate services are agreed/i);
     await services.locator(`a[href="${prefix}/gestion-airbnb-corse-du-sud#section-1"]`).click();
     for (let section = 1; section <= 7; section++) {
-      await expect(page.locator(`#section-${section} h2`)).toContainText(/\S+/);
+      const summary = page.locator(`#section-${section} > summary`);
+      await expect(summary).toBeVisible();
+      await expect(summary.locator(".management-service-title")).toContainText(/\S+/);
     }
     await expect(page.locator(".pricing-card-included li")).toHaveCount(9);
   });
