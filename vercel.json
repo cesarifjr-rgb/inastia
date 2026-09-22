@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "regions": ["cdg1"],
   "functions": { "api/contact.js": { "maxDuration": 60 } },
   "redirects": [
     { "source": "/pack-lancement-airbnb", "destination": "/gestion-airbnb-corse-du-sud", "permanent": true },
