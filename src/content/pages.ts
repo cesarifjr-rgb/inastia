@@ -62,17 +62,26 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-porto-vecchio",
       kind: "location",
-      title: "Conciergerie à Porto-Vecchio | Inastia",
+      title: "Conciergerie Porto-Vecchio : gestion locative | Inastia",
       description:
-        "Gestion de location saisonnière à Porto-Vecchio : annonces, accueil, ménage et suivi de votre bien avec Inastia. Parlons de votre projet.",
+        "Propriétaire à Porto-Vecchio ? Gestion complète de votre location saisonnière : annonces, voyageurs, ménage et linge. Première location ou reprise de gestion.",
       eyebrow: "Porto-Vecchio",
       heading:
-        "Votre location à Porto-Vecchio, sans tout coordonner vous-même.",
+        "Votre conciergerie pour la location saisonnière à Porto-Vecchio.",
       intro:
         "Annonce, réservations, messages voyageurs, passages sur place : la location demande un suivi régulier, même quand vous êtes loin. Notre équipe familiale en assure la gestion complète à Porto-Vecchio. Vous choisissez vos périodes personnelles et validez les interventions supplémentaires ; nous coordonnons le quotidien.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, une maison du portfolio Inastia à Pinarello",
       sections: [
+        {
+          title: "Porto-Vecchio : situer votre logement et ses accès",
+          text: "Pour étudier votre location à Porto-Vecchio, précisez le quartier ou le lieu-dit, pas seulement la commune. L’accès à la résidence, le stationnement, les escaliers éventuels et la remise des clés nous aident à organiser les arrivées et les passages de l’équipe. Pour un logement dans les environs, nous confirmons la prise en charge à partir de son adresse.",
+          items: [
+            "Quartier, lieu-dit ou adresse du logement",
+            "Accès, stationnement et consignes de la résidence, le cas échéant",
+            "Capacité d’accueil, séjours confirmés et périodes personnelles",
+          ],
+        },
         {
           title: "Une saison qui se prépare",
           text: "Avant les premières réservations, nous faisons le point sur votre annonce, vos prix et vos disponibilités. Vous définissez vos périodes personnelles ; nous organisons les prestations nécessaires au logement.",
@@ -106,7 +115,12 @@ export const pages: Record<Locale, PageContent[]> = {
           question:
             "Mon logement est déjà en location. Pouvez-vous reprendre le suivi ?",
           answer:
-            "Oui. Nous partons de votre annonce et de votre organisation existantes pour définir les ajustements et préparer le relais.",
+            "Oui. Nous examinons les réservations confirmées, les annonces, les accès aux comptes et les clés pour convenir d’une date de relais. Le transfert des comptes, des avis ou des réservations n’est pas automatique : les possibilités sont vérifiées selon votre situation et les plateformes.",
+        },
+        {
+          question: "Comment préparer une première location à Porto-Vecchio ?",
+          answer:
+            "Indiquez le secteur précis, le type de logement, sa capacité et les périodes où vous souhaitez le louer. L’audit gratuit peut se faire sans annonce existante. Il permet d’échanger sur les préparatifs et les conditions d’une gestion possible, sans prévision de revenus.",
         },
         {
           question: "Comment est établi le tarif ?",
@@ -126,7 +140,7 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Conciergerie à Solenzara et Sari-Solenzara | Inastia",
       description:
-        "Gestion complète de location saisonnière à Solenzara : annonce, voyageurs et coordination locale, selon les prestations convenues pour votre maison.",
+        "Conciergerie à Solenzara et Sari-Solenzara : gestion de votre location saisonnière, annonces, voyageurs et rotations. Secteur et accès étudiés avec vous.",
       eyebrow: "Solenzara · Sari-Solenzara",
       heading: "À Solenzara, déléguez toute votre location saisonnière.",
       intro:
@@ -135,8 +149,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Cala Lova, à Cala d’Oro, Solenzara",
       sections: [
         {
-          title: "Partir de votre logement",
-          text: "Les accès, les clés et le rythme des réservations déterminent l’organisation. Nous examinons ces détails avec vous pour prévoir les passages et préparer les arrivées dans les conditions propres à votre maison.",
+          title: "Solenzara, Cala d’Oro : partir de l’adresse exacte",
+          text: "La photo de cette page présente Cala Lova, une maison de notre portfolio à Cala d’Oro, Solenzara. Pour votre propre logement à Solenzara ou sur la commune de Sari-Solenzara, précisez le lieu-dit, les conditions d’accès et la remise des clés. Nous confirmons le secteur couvert et les passages possibles à partir de ces informations, avant de convenir de la gestion.",
         },
         {
           title: "Organiser les rotations",
@@ -153,6 +167,11 @@ export const pages: Record<Locale, PageContent[]> = {
         },
       ],
       faq: [
+        {
+          question: "Toute la commune de Sari-Solenzara est-elle couverte ?",
+          answer:
+            "La commune seule ne permet pas de confirmer une prise en charge. Indiquez l’adresse ou le lieu-dit et les contraintes d’accès : nous vérifions avec vous l’organisation des arrivées, du ménage et des passages prévus pour ce logement.",
+        },
         {
           question: "Pouvez-vous préparer une première mise en location ?",
           answer:
@@ -180,10 +199,10 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-zonza-pinarello",
       kind: "location",
-      title: "Conciergerie à Zonza et Pinarello | Inastia",
+      title: "Conciergerie Pinarello et Sainte-Lucie de Porto-Vecchio | Inastia",
       description:
-        "Gestion complète de location à Zonza et Pinarello. Inastia coordonne l’annonce, les voyageurs et les prestations convenues pour votre maison.",
-      eyebrow: "Pinarello · Zonza",
+        "Gestion de location à Pinarello et Sainte-Lucie-de-Porto-Vecchio, sur le littoral de Zonza : annonces, voyageurs et suivi du logement. Secteur à confirmer.",
+      eyebrow: "Pinarello · Sainte-Lucie-de-Porto-Vecchio · Zonza",
       heading: "Votre maison à Pinarello. Notre équipe pour la location.",
       intro:
         "Vous souhaitez louer votre maison tout en gardant des moments pour votre famille ? Nous suivons l’annonce, les réservations, les voyageurs et la préparation du logement dans le cadre de la gestion complète. Vos périodes personnelles s’organisent selon le calendrier et les modalités convenus.",
@@ -214,6 +233,11 @@ export const pages: Record<Locale, PageContent[]> = {
       ],
       faq: [
         {
+          question: "Pinarello, Pinarellu et le village de Zonza : quel secteur préciser ?",
+          answer:
+            "Pinarello, aussi appelé Pinarellu, est le village marin près de Sainte-Lucie-de-Porto-Vecchio. Le village de Zonza se trouve en montagne. Précisez le lieu-dit ou l’adresse du logement : notre présence sur le littoral ne signifie pas une couverture automatique de toute la commune.",
+        },
+        {
           question: "Accompagnez-vous les villas familiales ?",
           answer:
             "Oui. Nous prenons en compte la capacité, les chambres et les contraintes des extérieurs pour définir l’organisation adaptée.",
@@ -239,19 +263,28 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-lecci-saint-cyprien",
       kind: "location",
-      title: "Conciergerie à Lecci et Saint-Cyprien | Inastia",
+      title: "Conciergerie Lecci et Saint-Cyprien en Corse | Inastia",
       description:
-        "Gestion complète à Lecci et Saint-Cyprien : annonce, réservations et coordination des séjours. Un périmètre et des coûts définis pour votre bien.",
-      eyebrow: "Lecci · Saint-Cyprien",
-      heading: "À Lecci, une seule équipe pour suivre votre location.",
+        "Votre location de courte durée à Lecci ou Saint-Cyprien, en Corse : annonces, réservations, accueil, ménage et linge. Gestion complète avec Inastia.",
+      eyebrow: "Lecci · Saint-Cyprien · Corse-du-Sud",
+      heading: "Votre conciergerie à Lecci et Saint-Cyprien, en Corse.",
       intro:
         "Préparer l’annonce, répondre aux voyageurs et organiser la maison entre deux séjours : nous réunissons ces tâches dans notre gestion complète à Lecci et Saint-Cyprien. Vous n’avez plus à en coordonner chaque étape ; les prestations et leurs coûts sont définis ensemble.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, une maison du portfolio Inastia à Pinarello",
       sections: [
         {
+          title: "Saint-Cyprien, à Lecci : préciser le secteur de votre location",
+          text: "Cette page concerne Saint-Cyprien, aussi appelé San Ciprianu, sur le littoral de Lecci près de Porto-Vecchio. Pour une maison ou un appartement dans ce secteur, indiquez le lieu-dit ou le nom de la résidence et ses accès. Nous vérifions la prise en charge du logement avant de définir les prestations.",
+          items: [
+            "Adresse ou résidence et capacité d’accueil",
+            "Stationnement, clés et accès communs éventuels",
+            "Dates de location et séjours que vous souhaitez conserver",
+          ],
+        },
+        {
           title: "Une annonce qui dit l’essentiel",
-          text: "Les voyageurs doivent comprendre ce que votre maison propose. Nous revoyons la présentation, les équipements et les informations pratiques pour préciser l’annonce avant la saison.",
+          text: "À Saint-Cyprien, la situation par rapport à la plage doit être décrite à partir du logement et de son accès réel. Nous précisons les équipements, le stationnement et les espaces partagés lorsqu’il y en a. L’objectif : aider les voyageurs à choisir en connaissant les conditions du séjour, sans annoncer une distance ou un accès à pied non vérifiés.",
         },
         {
           title: "Un même suivi pour les prestations",
@@ -269,9 +302,19 @@ export const pages: Record<Locale, PageContent[]> = {
       ],
       faq: [
         {
+          question: "Votre conciergerie intervient-elle à Saint-Cyprien en Corse ?",
+          answer:
+            "Nous étudions les locations de courte durée à Saint-Cyprien, sur la commune de Lecci en Corse-du-Sud. Précisez la résidence ou le lieu-dit en plus de la commune. L’adresse et les conditions d’accès permettent de confirmer la prise en charge de votre logement.",
+        },
+        {
+          question: "Pouvez-vous reprendre une annonce déjà active à Lecci ?",
+          answer:
+            "Oui, après examen des réservations, du calendrier, des accès aux annonces et de l’organisation actuelle. Nous préparons la remise des clés et la date de relais avec vous. Le transfert des comptes et des avis dépend des plateformes et n’est pas automatique.",
+        },
+        {
           question: "Peut-on commencer par un audit avant la saison ?",
           answer:
-            "Oui. La commune, le type de bien, sa capacité et l’annonce existante nous donnent une première base pour étudier votre projet.",
+            "Oui, même sans annonce existante. La commune, le quartier ou la résidence, le type de logement et sa capacité nous donnent une première base pour échanger sur les préparatifs et une gestion possible.",
         },
         {
           question: "L’accueil peut-il être autonome ?",
@@ -305,8 +348,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Cala Lova, une maison du portfolio Inastia à Solenzara",
       sections: [
         {
-          title: "Connaître la maison pour la suivre",
-          text: "Nous partons des accès, des équipements et des besoins de votre logement. Ces informations permettent de cadrer les passages, les contrôles et les comptes rendus utiles après intervention.",
+          title: "Depuis Travo : préciser votre secteur autour de Ghisonaccia",
+          text: "Notre équipe est basée à Travo, sur la commune de Ventiseri. Pour une demande à Ghisonaccia, Ventiseri ou Prunelli-di-Fiumorbo, indiquez aussi le quartier ou le lieu-dit et les accès. Nous vérifions la possibilité d’organiser les arrivées, les rotations et les passages pour votre logement, puis précisons les modalités retenues dans la proposition.",
         },
         {
           title: "Faire progresser votre annonce",
@@ -600,14 +643,23 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Porto-Vecchio | Inastia",
       description:
-        "Inastia looks after listings, guest arrivals, cleaning and property coordination in Porto-Vecchio. Tell us about your holiday home.",
+        "Own a home in Porto-Vecchio? Full holiday rental management: listings, guests, cleaning and linen. Plan your first rental or a management handover.",
       eyebrow: "Porto-Vecchio",
-      heading: "Your Porto-Vecchio rental, without coordinating every detail.",
+      heading: "Holiday rental management for your Porto-Vecchio home.",
       intro:
         "Listings, bookings, guest messages and property visits need regular attention, even when you are away. Our family team provides full management in Porto-Vecchio. You choose your own stays and approve additional work; we coordinate the day-to-day tasks.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, an Inastia portfolio home in Pinarello",
       sections: [
+        {
+          title: "Porto-Vecchio: identify your property and its access",
+          text: "When discussing your Porto-Vecchio rental, tell us the neighbourhood or locality as well as the municipality. Residence access, parking, any stairs and key arrangements help us organise arrivals and team visits. For a property in the surrounding area, we confirm management availability using its address.",
+          items: [
+            "Neighbourhood, locality or property address",
+            "Access, parking and residence instructions where applicable",
+            "Guest capacity, confirmed bookings and your own stays",
+          ],
+        },
         {
           title: "Prepare before the season",
           text: "We review your listing, prices and availability before the first bookings. You set aside your own stays; we organise the services your property needs.",
@@ -640,7 +692,12 @@ export const pages: Record<Locale, PageContent[]> = {
         {
           question: "Can you take over an existing rental?",
           answer:
-            "Yes. We review your current listing and arrangements to identify any adjustments and prepare the handover.",
+            "Yes. We review confirmed bookings, listings, account access and keys to agree a handover date. Accounts, reviews and bookings are not transferred automatically: we check the options for your situation and the platforms involved.",
+        },
+        {
+          question: "How do I prepare a first rental in Porto-Vecchio?",
+          answer:
+            "Tell us the exact area, property type, guest capacity and when you would like to rent. The free review is available even without an existing listing. It helps us discuss preparations and possible management, without forecasting rental income.",
         },
         {
           question: "How is the price calculated?",
@@ -660,7 +717,7 @@ export const pages: Record<Locale, PageContent[]> = {
       kind: "location",
       title: "Holiday rental management in Solenzara | Inastia",
       description:
-        "Full holiday rental management in Solenzara: listings, guests and local coordination, within the services agreed for your home.",
+        "Holiday rental management in Solenzara and Sari-Solenzara: listings, guests and changeovers. We review the exact area and property access with you.",
       eyebrow: "Solenzara · Sari-Solenzara",
       heading: "Delegate your entire Solenzara holiday rental.",
       intro:
@@ -669,8 +726,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Cala Lova in Cala d’Oro, Solenzara",
       sections: [
         {
-          title: "Start with the property",
-          text: "Access, keys and the booking calendar shape the arrangements. We work through these details with you to plan visits and prepare arrivals around your home’s requirements.",
+          title: "Solenzara and Cala d’Oro: start with the exact address",
+          text: "The photograph on this page shows Cala Lova, a portfolio home in Cala d’Oro, Solenzara. For your own property in Solenzara or the municipality of Sari-Solenzara, specify the locality, access arrangements and key handover. We use these details to confirm coverage and possible visits before agreeing management.",
         },
         {
           title: "Coordinate each changeover",
@@ -687,6 +744,11 @@ export const pages: Record<Locale, PageContent[]> = {
         },
       ],
       faq: [
+        {
+          question: "Do you cover the whole municipality of Sari-Solenzara?",
+          answer:
+            "The municipality name alone is not enough to confirm management availability. Share the address or locality and access requirements: together, we check how arrivals, cleaning and planned visits can be organised for that property.",
+        },
         {
           question: "Can you help with a first rental launch?",
           answer:
@@ -713,10 +775,10 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-zonza-pinarello",
       kind: "location",
-      title: "Holiday rental management in Zonza and Pinarello | Inastia",
+      title: "Pinarello & Sainte-Lucie holiday rental management | Inastia",
       description:
-        "Full rental management in Zonza and Pinarello. Inastia coordinates the listing, guests and services agreed for your home.",
-      eyebrow: "Pinarello · Zonza",
+        "Rental management in Pinarello and Sainte-Lucie-de-Porto-Vecchio, on Zonza’s coast: listings, guests and property care. Exact coverage confirmed with you.",
+      eyebrow: "Pinarello · Sainte-Lucie-de-Porto-Vecchio · Zonza",
       heading: "Your Pinarello home. Our team for the rental.",
       intro:
         "Want to rent out your home while keeping time there with your family? We manage the listing, bookings, guest communication and property preparation as part of full management. Your personal stays are arranged within the agreed calendar and terms.",
@@ -747,6 +809,11 @@ export const pages: Record<Locale, PageContent[]> = {
       ],
       faq: [
         {
+          question: "Pinarello, Pinarellu and Zonza village: which area should I specify?",
+          answer:
+            "Pinarello, also called Pinarellu, is the seaside village near Sainte-Lucie-de-Porto-Vecchio. Zonza village is in the mountains. Share the locality or property address: our coastal presence does not automatically mean coverage throughout the municipality.",
+        },
+        {
           question: "Do you look after family villas?",
           answer:
             "Yes. We consider guest capacity, bedrooms and outdoor requirements to agree suitable arrangements for the property.",
@@ -772,19 +839,28 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-lecci-saint-cyprien",
       kind: "location",
-      title: "Holiday rental management in Lecci and Saint-Cyprien | Inastia",
+      title: "Lecci & Saint-Cyprien, Corsica: rental management | Inastia",
       description:
-        "Full rental management in Lecci and Saint-Cyprien: listings, bookings and stay coordination, with scope and costs agreed for your home.",
-      eyebrow: "Lecci · Saint-Cyprien",
-      heading: "One team to look after your Lecci rental.",
+        "Your short-term rental in Lecci or Saint-Cyprien, Corsica: listings, bookings, guest arrivals, cleaning and linen. Full management with Inastia.",
+      eyebrow: "Lecci · Saint-Cyprien · Southern Corsica",
+      heading: "Rental management in Lecci and Saint-Cyprien, Corsica.",
       intro:
         "Preparing the listing, responding to guests and arranging the home between stays: we bring these tasks together in full management in Lecci and Saint-Cyprien. You no longer have to coordinate each step; we agree the services and costs together.",
       image: "villa_amichi",
       imageAlt: "Villa d’Amichi, an Inastia portfolio home in Pinarello",
       sections: [
         {
+          title: "Saint-Cyprien in Lecci: locate your rental precisely",
+          text: "This page covers Saint-Cyprien, also called San Ciprianu, on the coast of Lecci near Porto-Vecchio. For a house or apartment in this area, share the locality or residence name and access arrangements. We check management availability for the property before agreeing the services.",
+          items: [
+            "Address or residence and guest capacity",
+            "Parking, keys and any shared access",
+            "Rental dates and stays you want to keep for yourself",
+          ],
+        },
+        {
           title: "A listing that makes things clear",
-          text: "Guests need to understand what your home offers. We review the presentation, amenities and practical information to clarify the listing before the season.",
+          text: "In Saint-Cyprien, the location in relation to the beach should reflect the property and its actual access. We describe amenities, parking and any shared spaces. The aim is to help guests understand the stay before booking, using verified details about distances and walking access.",
         },
         {
           title: "Services coordinated together",
@@ -802,9 +878,19 @@ export const pages: Record<Locale, PageContent[]> = {
       ],
       faq: [
         {
+          question: "Do you manage rentals in Saint-Cyprien, Corsica?",
+          answer:
+            "We consider short-term rentals in Saint-Cyprien, within the municipality of Lecci in Southern Corsica. Share the residence or locality as well as the municipality. The exact address and access arrangements let us confirm whether we can manage your property.",
+        },
+        {
+          question: "Can you take over an active listing in Lecci?",
+          answer:
+            "Yes, after reviewing bookings, the calendar, listing access and current arrangements. We prepare key handover and a start date with you. Account and review transfers depend on the platforms and are not automatic.",
+        },
+        {
           question: "Can we start with a review before the season?",
           answer:
-            "Yes. The location, property type, guest capacity and any existing listing give us a starting point to review your project.",
+            "Yes, even without an existing listing. The municipality, neighbourhood or residence, property type and guest capacity give us a starting point to discuss preparations and possible management.",
         },
         {
           question: "Is self check-in possible?",
@@ -838,8 +924,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Cala Lova, an Inastia portfolio home in Solenzara",
       sections: [
         {
-          title: "Know the home before planning the work",
-          text: "We start with access, amenities and your property’s needs. These details help define visits, checks and the information worth sharing after each intervention.",
+          title: "Based in Travo: identify your area around Ghisonaccia",
+          text: "Our team is based in Travo, in the municipality of Ventiseri. For a property in Ghisonaccia, Ventiseri or Prunelli-di-Fiumorbo, also tell us the neighbourhood or locality and access arrangements. We check how arrivals, changeovers and property visits can be organised, then specify the agreed arrangements in the proposal.",
         },
         {
           title: "Give your listing a fresh perspective",
