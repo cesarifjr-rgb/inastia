@@ -123,6 +123,52 @@
   font-size: 14px;
   line-height: 1.8;
 }
+.management-services-intro { align-self: start; position: sticky; top: calc(var(--header) + 40px); }
+.management-services-intro .eyebrow { color: var(--blue); margin-bottom: 20px; }
+.management-services-intro h2 { font-size: 32px; line-height: 1.2; }
+.management-services-intro > p:not(.eyebrow) { color: var(--muted); font-size: 14px; margin-top: 20px; }
+.management-services-intro .text-link { margin-top: 24px; }
+.management-service { border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header) + 24px); }
+.management-service:last-of-type { border-bottom: 1px solid var(--line); }
+.management-service > summary {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 32px;
+  align-items: start;
+  gap: 20px;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.management-service > summary::-webkit-details-marker { display: none; }
+.management-service-number { color: var(--blue); font-size: 12px; padding-top: 4px; }
+.management-service-title { display: block; color: var(--ink); font: 500 23px/1.3 var(--display); letter-spacing: -0.035em; }
+.management-service-summary { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+.management-service-toggle { position: relative; width: 32px; height: 32px; border: 1px solid var(--line); border-radius: 50%; color: var(--blue); }
+.management-service-toggle::before,
+.management-service-toggle::after { content: ""; position: absolute; background: currentColor; inset: 14px 9px; height: 2px; }
+.management-service-toggle::after { transform: rotate(90deg); }
+.management-service[open] .management-service-toggle::after { display: none; }
+.management-service > summary:hover .management-service-title { color: var(--blue); }
+.management-service > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; border-radius: 4px; }
+.management-service-content { padding: 0 52px 28px 44px; color: var(--muted); font-size: 15px; line-height: 1.75; }
+.management-service-content p { margin: 0; }
+.management-service-content ul { padding-left: 20px; margin: 20px 0 0; }
+.management-service-content li { padding-left: 4px; margin-top: 8px; }
+.management-service-content li::marker { color: var(--blue); }
+.management-services .related-links { margin-top: 28px; }
+@media (max-width: 899px) {
+  .management-services { grid-template-columns: 1fr; gap: 28px; }
+  .management-services-intro { position: static; }
+  .management-services-intro h2 { font-size: 30px; }
+}
+@media (max-width: 599px) {
+  .management-service > summary { grid-template-columns: 20px minmax(0, 1fr) 28px; gap: 12px; padding-block: 22px; }
+  .management-service-title { font-size: 20px; }
+  .management-service-toggle { width: 28px; height: 28px; }
+  .management-service-toggle::before,
+  .management-service-toggle::after { inset: 12px 7px; }
+  .management-service-content { padding: 0 0 24px 32px; font-size: 14px; }
+}
 .management-handover-jump { margin-top: 24px; }
 .management-handover {
   background: var(--surface-up);

@@ -10,7 +10,7 @@ export type PageContent = {
   intro: string;
   image: "villa_amichi" | "villa_lova" | "casa_verde";
   imageAlt: string;
-  sections: { title: string; text: string; items?: string[] }[];
+  sections: { title: string; summary?: string; text: string; items?: string[] }[];
   faq: { question: string; answer: string }[];
 };
 
@@ -403,7 +403,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa d’Amichi, à Pinarello, Zonza",
       sections: [
         {
-          title: "Annonces et diffusion : votre logement prêt à être réservé",
+          title: "Annonces et diffusion",
+          summary: "Photos, annonces et diffusion sur Airbnb, Booking et Abritel.",
           text: "Nous organisons les photos et la mise en valeur de votre logement, rédigeons son descriptif et renseignons les équipements, les règles de séjour et les informations pratiques. Nous créons ou améliorons vos annonces sur Airbnb, Booking et Abritel, puis les mettons à jour. Vous nous confiez la présentation et la diffusion de votre location de A à Z.",
           items: [
             "Photos et mise en valeur du logement",
@@ -412,7 +413,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Réservations et voyageurs : nous prenons le relais",
+          title: "Réservations et voyageurs",
+          summary: "Demandes et échanges suivis avant, pendant et après le séjour.",
           text: "Nous traitons les demandes de réservation, examinons les informations de profil et les avis disponibles, et expliquons les règles de la maison. Nous répondons aux voyageurs avant, pendant et après leur séjour, préparons les informations utiles et suivons leurs avis après le départ. Vous déléguez les échanges et le suivi des réservations à notre équipe.",
           items: [
             "Suivi des demandes, profils et avis disponibles",
@@ -421,7 +423,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Ménage, linge et consommables : la maison prête entre deux séjours",
+          title: "Ménage, linge et consommables",
+          summary: "Des rotations coordonnées ; ménage, linge et consommables facturés séparément aux voyageurs.",
           text: "Nous prenons en charge le ménage entre les séjours, la fourniture du linge et le réassort des consommables. Nous organisons chaque passage autour du calendrier des arrivées, puis vérifions la préparation avec une checklist et des photos de fin d’intervention. La coordination fait partie de la gestion ; le ménage, le linge et les consommables sont facturés séparément aux voyageurs selon le devis.",
           items: [
             "Ménage entre les séjours et fourniture du linge",
@@ -430,7 +433,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Tarification dynamique : optimiser les prix de votre location",
+          title: "Tarification et calendrier",
+          summary: "Des prix ajustés au marché et vos périodes personnelles intégrées au calendrier.",
           text: "Nous analysons le marché local, la saison et la demande pour ajuster les prix de vos nuitées et favoriser les réservations. Nous tenons à jour les disponibilités et organisons le calendrier. Vous choisissez vos séjours personnels ; nous bloquons ces dates en tenant compte des réservations déjà confirmées.",
           items: [
             "Prix ajustés selon la saison, la demande et le marché",
@@ -439,7 +443,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Arrivées, départs et clés : chaque séjour organisé",
+          title: "Arrivées, départs et clés",
+          summary: "Consignes, accueil et clés organisés, puis contrôle du logement après le départ.",
           text: "Nous préparons les consignes d’accès et le guide du logement, organisons l’accueil et gérons la remise des clés. L’arrivée est personnalisée ou autonome selon la maison et ses accès. Au départ, nous récupérons les clés ou vérifions leur restitution, contrôlons le logement et signalons les anomalies. Vous n’avez pas à organiser chaque arrivée et chaque départ.",
           items: [
             "Consignes d’accès et guide voyageur",
@@ -448,7 +453,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Assistance voyageurs 24 h/24, 7 j/7 et maintenance",
+          title: "Assistance et maintenance",
+          summary: "Une assistance voyageurs 24 h/24, 7 j/7 ; réparations et achats soumis à votre accord.",
           text: "Notre équipe est joignable par les voyageurs 24 h/24 et 7 j/7. Nous évaluons le problème avec eux, apportons les premières indications et organisons les intervenants nécessaires. Vous êtes informé des anomalies et validez les réparations et achats à votre charge. L’assistance est continue ; le délai d’une intervention sur place dépend du problème, des accès et de la disponibilité de l’intervenant.",
           items: [
             "Une équipe joignable 24 h/24 et 7 j/7",
@@ -457,7 +463,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Cautions et dommages : les démarches sont suivies",
+          title: "Cautions et dommages",
+          summary: "Constats et démarches suivis, selon les conditions du dépôt ou de la couverture applicable.",
           text: "Nous suivons le dispositif de dépôt de garantie prévu par la plateforme ou le canal de réservation utilisé. En cas de dommage constaté, nous réunissons les constats, photos et justificatifs, puis suivons les démarches auprès de la plateforme et des assureurs concernés. Vous êtes informé de l’avancement et des décisions à prendre. Le traitement et l’indemnisation dépendent des conditions du dépôt ou de la couverture applicable.",
           items: [
             "Suivi du dépôt de garantie selon le canal de réservation",
@@ -979,7 +986,8 @@ export const pages: Record<Locale, PageContent[]> = {
       imageAlt: "Villa d’Amichi in Pinarello, Zonza",
       sections: [
         {
-          title: "Listings and distribution: your home ready for bookings",
+          title: "Listings and distribution",
+          summary: "Photographs, listings and distribution on Airbnb, Booking and Abritel.",
           text: "We arrange photographs and presentation of your home, write its description and add amenities, house rules and practical information. We create or improve your listings on Airbnb, Booking and Abritel, then keep them up to date. You hand over your rental’s presentation and distribution from start to finish.",
           items: [
             "Property photographs and presentation",
@@ -988,7 +996,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Bookings and guests: our team takes over",
+          title: "Bookings and guests",
+          summary: "Enquiries and guest messages handled before, during and after each stay.",
           text: "We handle booking enquiries, review available profile information and guest reviews, and explain the house rules. We answer guests before, during and after their stay, prepare useful information and follow up on their reviews after departure. Our team handles the conversations and booking follow-up for you.",
           items: [
             "Booking enquiries, available profiles and reviews",
@@ -997,7 +1006,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Cleaning, linen and supplies: ready for the next stay",
+          title: "Cleaning, linen and supplies",
+          summary: "Coordinated changeovers; cleaning, linen and supplies charged separately to guests.",
           text: "We take care of cleaning between stays, supplying linen and replenishing consumables. We schedule each visit around arrivals, then check preparation using a checklist and photographs at the end of the visit. Coordination is part of management; cleaning, linen and supplies are charged separately to guests as quoted.",
           items: [
             "Cleaning between stays and linen provision",
@@ -1006,7 +1016,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Dynamic pricing: getting the most from your nightly rates",
+          title: "Pricing and calendar",
+          summary: "Rates adjusted to the market, with your own stays included in the calendar.",
           text: "We analyse the local market, season and demand to adjust your nightly prices and encourage bookings. We keep availability up to date and organise the calendar. You choose your own stays; we block those dates while taking confirmed bookings into account.",
           items: [
             "Rates adjusted for the season, demand and local market",
@@ -1015,7 +1026,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Arrivals, departures and keys: each stay organised",
+          title: "Arrivals, departures and keys",
+          summary: "Access, arrivals and keys organised, followed by checks after departure.",
           text: "We prepare access instructions and the property guide, organise arrivals and handle key handovers. Check-in is personal or self-service depending on the home and its access. After departure, we collect the keys or check their return, inspect the property and report any issues. You no longer have to organise every arrival and departure.",
           items: [
             "Access instructions and a guest guide",
@@ -1024,7 +1036,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "24/7 guest assistance and maintenance",
+          title: "Assistance and maintenance",
+          summary: "24/7 guest assistance; repairs and purchases subject to your approval.",
           text: "Our team can be reached by guests 24 hours a day, 7 days a week. We assess the problem with them, provide initial guidance and arrange the people needed to address it. We report issues to you, and you approve repairs and purchases at your expense. Assistance is available around the clock; the timing of an on-site visit depends on the problem, access and the contractor’s availability.",
           items: [
             "A team guests can reach 24 hours a day, 7 days a week",
@@ -1033,7 +1046,8 @@ export const pages: Record<Locale, PageContent[]> = {
           ],
         },
         {
-          title: "Deposits and damage: following the process through",
+          title: "Deposits and damage",
+          summary: "Evidence and claims followed up under the terms of the deposit or applicable cover.",
           text: "We follow the security deposit arrangements provided by the platform or booking channel used. If damage is found, we gather records, photographs and supporting documents, then follow up with the platform and relevant insurers. We keep you informed of progress and the decisions needed. Processing and compensation depend on the terms of the deposit or applicable cover.",
           items: [
             "Deposit follow-up through the relevant booking channel",
