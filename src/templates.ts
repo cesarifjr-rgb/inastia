@@ -54,7 +54,7 @@ export function secondary(locale: Locale, page: PageContent): string {
     <div class="management-handover-footer"><p>${escape(handover.note)}</p><a class="button" href="${contactPath(locale, "gestion")}">${t(locale, "Parlons de votre logement", "Let’s talk about your property")}${arrow}</a></div>
   </div></section>` : "";
   const ownerLanding = ["conciergerie-airbnb-zonza-pinarello", "conciergerie-location-saisonniere-solenzara", "conciergerie-airbnb-porto-vecchio"].includes(page.slug);
-  const feeNote = ownerLanding ? `<p class="summary-note">${t(locale, "Gestion complète : 20 % TTC des nuitées avant frais de plateforme, hors ménage, linge et taxe de séjour.", "Full management: 20% including VAT of accommodation charges before platform fees, excluding cleaning, linen and tourist tax.")} <a href="${path(locale, "gestion-airbnb-corse-du-sud")}#tarifs">${t(locale, "Voir le détail du tarif", "See pricing details")}</a></p>` : "";
+  const feeNote = ownerLanding || page.kind === "service" ? `<p class="summary-note${page.kind === "service" ? " management-fee-note" : ""}">${t(locale, "Gestion complète : 20 % TTC des nuitées avant frais de plateforme, hors ménage, linge et taxe de séjour.", "Full management: 20% including VAT of accommodation charges before platform fees, excluding cleaning, linen and tourist tax.")} <a href="${path(locale, "gestion-airbnb-corse-du-sud")}#tarifs">${t(locale, "Voir le détail du tarif", "See pricing details")}</a></p>` : "";
   const summaryTitle = page.kind === "audit"
     ? t(locale, "Un rappel sous 24 h, selon votre convenance.", "A callback within 24 hours, at a time that suits you.")
     : page.kind === "about"
