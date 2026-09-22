@@ -90,6 +90,15 @@ initManagementArt();
 initPricing();
 initFirstRental();
 
+function openManagementService(): void {
+  const service = document.getElementById(location.hash.slice(1));
+  if (service instanceof HTMLDetailsElement && service.classList.contains("management-service")) service.open = true;
+}
+if (document.querySelector(".management-services")) {
+  openManagementService();
+  window.addEventListener("hashchange", openManagementService);
+}
+
 function openPartnerQuestion(): void {
   const question = document.getElementById(location.hash.slice(1));
   if (question instanceof HTMLDetailsElement && question.closest(".partners-faq")) question.open = true;
