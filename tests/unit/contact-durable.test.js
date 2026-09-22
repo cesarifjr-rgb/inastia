@@ -241,6 +241,9 @@ describe('durable contact pipeline, real PostgreSQL engine and fake providers', 
         await store.cleanup();
         expect((await db.query('SELECT payload FROM contact_enquiries')).rows[0].payload).not.toBeNull();
         await db.query("UPDATE contact_enquiries SET received_at = now() - interval '91 days' WHERE request_id = $1", [id]);
+        const send = vi.fn(); const sync = vi.fn();
+        await run({ send, sync });
+        expect(send).not.toHaveBeenCalled(); expect(sync).not.toHaveBeenCalled();
         await store.cleanup();
         expect((await db.query('SELECT payload FROM contact_enquiries')).rows[0].payload).toBeNull();
         expect((await jobs(id)).every(job => job.last_error === 'retention_expired')).toBe(true);
