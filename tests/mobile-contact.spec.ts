@@ -60,6 +60,9 @@ test("reminder yields to the menu, existing CTAs, footer, keyboard focus and des
   await readOn();
   await expect(reminder).toBeHidden();
   await page.locator('[data-ads-choice="reject"]').click();
+  // Reopened cookie settings return keyboard focus to their footer trigger.
+  await expect(page.locator("#ads-consent-settings")).toBeFocused();
+  await readOn();
   await expect(reminder).toBeVisible();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await expect(reminder).toBeHidden();
