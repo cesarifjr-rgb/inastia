@@ -1,9 +1,5 @@
 import { initAdsConsent } from "./ads.ts";
-import { initContact } from "./contact.ts";
 import { initMotion } from "./motion.ts";
-import { initManagementArt } from "./management-art-client.ts";
-import { initPricing } from "./pricing-client.ts";
-import { initFirstRental } from "./first-rental-client.ts";
 import { initMobileContact } from "./mobile-contact.ts";
 
 const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
@@ -77,27 +73,5 @@ matchMedia("(min-width:1024px)").addEventListener("change", (event) => {
   if (event.matches) closeMenu();
 });
 initAdsConsent();
-initContact();
 initMotion();
-initManagementArt();
-initPricing();
-initFirstRental();
 initMobileContact();
-
-function openManagementService(): void {
-  const service = document.getElementById(location.hash.slice(1));
-  if (service instanceof HTMLDetailsElement && service.classList.contains("management-service")) service.open = true;
-}
-if (document.querySelector(".management-services")) {
-  openManagementService();
-  window.addEventListener("hashchange", openManagementService);
-}
-
-function openPartnerQuestion(): void {
-  const question = document.getElementById(location.hash.slice(1));
-  if (question instanceof HTMLDetailsElement && question.closest(".partners-faq")) question.open = true;
-}
-if (document.querySelector(".partners-page")) {
-  openPartnerQuestion();
-  window.addEventListener("hashchange", openPartnerQuestion);
-}
