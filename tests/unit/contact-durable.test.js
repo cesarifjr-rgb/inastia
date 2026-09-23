@@ -37,7 +37,11 @@ function signedRequest(event, id = 'msg_' + randomUUID(), timestamp = new Date()
 beforeAll(async () => {
     db = new PGlite();
     await db.exec(await readFile(new URL('../../db/contact.sql', import.meta.url), 'utf8'));
-    store = new ContactStore(async (query, values) => (await db.query(query, values)).rows);
+    await db.exec(await readFile(new URL('../../db/contact-access.sql', import.meta.url), 'utf8'));
+    store = new ContactStore((query, values) => db.transaction(async tx => {
+        await tx.exec('SET LOCAL ROLE contact_app');
+        return (await tx.query(query, values)).rows;
+    }));
 }, 30000);
 afterAll(async () => { await db.close(); });
 beforeEach(async () => {
@@ -61,6 +65,53 @@ afterEach(async () => {
 });
 
 describe('durable contact pipeline, real PostgreSQL engine and fake providers', () => {
+    it('can reapply the grants but rejects an elevated or owning contact role', async () => {
+        const migration = await readFile(new URL('../../db/contact-access.sql', import.meta.url), 'utf8');
+        await db.exec(migration);
+        await db.exec('ALTER ROLE contact_backup CREATEDB');
+        await expect(db.exec(migration)).rejects.toThrow('elevated attributes');
+        await db.exec('ALTER ROLE contact_backup NOCREATEDB');
+        await db.exec('ALTER TABLE contact_worker OWNER TO contact_backup');
+        await expect(db.exec(migration)).rejects.toThrow('must not own');
+        await db.exec('ALTER TABLE contact_worker OWNER TO postgres');
+        await db.exec(migration);
+    });
+
+    it('runs the application without owner, schema creation or role administration privileges', async () => {
+        const [role] = await store.query(`SELECT current_user, rolsuper, rolcreatedb, rolcreaterole, rolreplication, rolbypassrls
+            FROM pg_roles WHERE rolname = current_user`, []);
+        expect(role).toEqual({ current_user: 'contact_app', rolsuper: false, rolcreatedb: false,
+            rolcreaterole: false, rolreplication: false, rolbypassrls: false });
+        for (const query of [
+            'CREATE TABLE public.unwanted (id integer)',
+            'CREATE TEMP TABLE unwanted (id integer)',
+            'ALTER TABLE contact_enquiries ADD COLUMN unwanted text',
+            'TRUNCATE contact_enquiries CASCADE',
+            'DELETE FROM contact_worker',
+            'DELETE FROM contact_email_events',
+            'CREATE ROLE unwanted',
+        ]) await expect(store.query(query, [])).rejects.toMatchObject({ code: '42501' });
+    });
+
+    it('limits the backup role to reading the four contact tables', async () => {
+        await register();
+        const queryAsBackup = query => db.transaction(async tx => {
+            await tx.exec('SET LOCAL ROLE contact_backup');
+            return (await tx.query(query)).rows;
+        });
+        expect(await queryAsBackup('SELECT request_id FROM contact_enquiries')).toHaveLength(1);
+        expect(await queryAsBackup('SELECT kind FROM contact_jobs')).toHaveLength(2);
+        expect(await queryAsBackup('SELECT event_id FROM contact_email_events')).toHaveLength(0);
+        expect(await queryAsBackup('SELECT id FROM contact_worker')).toHaveLength(1);
+        for (const query of [
+            'DELETE FROM contact_enquiries',
+            'UPDATE contact_jobs SET attempts = 0',
+            'UPDATE contact_worker SET locked_until = NULL',
+            'CREATE TABLE public.unwanted (id integer)',
+            'CREATE ROLE unwanted',
+        ]) await expect(queryAsBackup(query)).rejects.toMatchObject({ code: '42501' });
+    });
+
     it('atomically registers once, keeps the original snapshot and excludes Turnstile', async () => {
         const id = randomUUID();
         await Promise.all([register(id), register(id)]);

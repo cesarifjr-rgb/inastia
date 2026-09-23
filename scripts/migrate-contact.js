@@ -3,8 +3,8 @@ import { neon } from '@neondatabase/serverless';
 
 // Pass an explicit env file with node --env-file=...; never print credentials/errors.
 try {
-    if (!process.env.CONTACT_DATABASE_URL) throw new Error('Missing database');
-    const sql = neon(process.env.CONTACT_DATABASE_URL);
+    if (!process.env.CONTACT_ADMIN_DATABASE_URL) throw new Error('Missing admin database');
+    const sql = neon(process.env.CONTACT_ADMIN_DATABASE_URL);
     const source = await readFile(new URL('../db/contact.sql', import.meta.url), 'utf8');
     const statements = source.split(';').map(statement => statement.trim()).filter(Boolean);
     await sql.transaction(statements.map(statement => sql.query(statement)));

@@ -58,7 +58,12 @@ de lecture humaine. Un rebond ou un échec n'entraîne pas un nouvel envoi autom
   plus des clés Turnstile, Resend et Attio existantes. Les trois secrets ajoutés
   doivent rester confidentiels ; ne pas afficher leur contenu dans les logs.
 - Appliquer `node --env-file=<fichier privé> scripts/migrate-contact.js` une fois
-  avant activation. Le schéma est idempotent ; aucune table Hub n'est modifiée.
+  avant activation, avec `CONTACT_ADMIN_DATABASE_URL` dans ce fichier privé.
+  Le schéma est idempotent ; aucune table Hub n'est modifiée.
+  Appliquer ensuite `scripts/migrate-contact-access.js` avec le même fichier.
+  Cette migration atomique crée les rôles sans connexion, refuse les attributs
+  élevés, appartenances et objets possédés, puis accorde les droits ci-dessous.
+  Configurer leurs mots de passe séparément ; ne jamais les versionner.
 - Créer dans le compte Resend qui possède `inastia.fr` un webhook vers
   `https://www.inastia.fr/api/webhooks/resend`, avec les sept événements ci-dessus.
   Reporter sa clé de signature dans la variable Sensitive de production.
@@ -157,15 +162,32 @@ et une expiration courte. Aucun worker ni webhook applicatif n'est connecté à
 cette branche. Vérifier les données après récupération, pas seulement le succès
 de l'opération dans la console. Une branche de test n'est pas une sauvegarde.
 
-Les accès opérateur passent par le compte Vercel existant et son SSO Neon. Les
-secrets applicatifs restent Sensitive, Production uniquement. Le rôle initial
-Neon est un rôle propriétaire : son utilisation par l'application ne constitue
-pas un cloisonnement SQL au moindre privilège. Pour le remplacer, créer un rôle
-via SQL (pas via la console/API Neon, qui ajoute `neon_superuser`), lui accorder
-uniquement les opérations nécessaires sur les quatre tables, tester le flux
-complet, puis remplacer la connexion et retirer les connexions administrateur
-du déploiement. Garder l'accès de migration séparé. Ne pas supprimer le rôle
-propriétaire ni tourner son mot de passe avant la bascule vérifiée.
+Les accès opérateur passent par le compte Vercel existant et son SSO Neon.
+`db/contact-access.sql` définit deux rôles créés par SQL, sans `neon_superuser`,
+propriété d'objet, création de schéma/table temporaire ni administration de rôles :
+
+| Rôle | Droits |
+| --- | --- |
+| `contact_app` | Lire les quatre tables ; insérer et modifier les demandes et tâches ; supprimer les demandes pour la conservation ; insérer les événements ; modifier le verrou du worker. |
+| `contact_backup` | Lire uniquement les quatre tables, sans écriture. |
+
+La suppression d'une demande entraîne ses tâches et événements en cascade.
+Les futures tables n'obtiennent aucun droit automatique. Le compte de sauvegarde
+n'est pas une sauvegarde : aucun export périodique n'est activé par cette migration.
+
+Seule la connexion `contact_app` doit être installée dans `CONTACT_DATABASE_URL`,
+Sensitive et Production uniquement. Déconnecter la liaison de variables de la
+ressource Marketplace du projet Vercel (sans supprimer la ressource Neon) pour
+retirer toutes les variantes de connexion propriétaire et empêcher leur
+réinjection. Conserver Neon, sa facturation et son SSO dans la même intégration.
+Garder la connexion administrative de migration et celle de sauvegarde hors du
+runtime Vercel. Un ancien déploiement conserve ses anciennes variables ; ne pas
+supprimer le propriétaire ni tourner son mot de passe avant une bascule vérifiée.
+
+Avant la bascule, tester les droits refusés et le traitement avec fournisseurs
+simulés sur une branche isolée. Après CI et promotion, vérifier l'état privé
+et le cron. Un retour temporaire peut réinstaller la connexion propriétaire
+conservée localement puis redéployer ; il doit rester exceptionnel et suivi.
 
 Tests locaux : moteur PostgreSQL PGlite réel, fournisseurs simulés, reprises,
 arrêts de worker, concurrence, conflits d'identifiant, signatures/rejeu,
