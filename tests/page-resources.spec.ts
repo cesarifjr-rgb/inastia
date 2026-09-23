@@ -1,8 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 // Cold-page budgets include every same-origin script and stylesheet fetched by the browser.
-// Reduced motion isolates page functionality from the separately tested GSAP animations.
-test.use({ reducedMotion: "reduce" });
+// Exercise both preferences so animation dependencies cannot escape the page budgets.
 
 const pages = [
   { slug: "", js: 21_000, css: 68_000 },
@@ -18,8 +17,17 @@ const routes = [
   { route: "/privacy", js: 18_000, css: 50_000 },
 ];
 
-for (const { route, js, css } of routes) {
-  test(`${route}: only necessary page resources fit the cold-load budget`, async ({ page, baseURL }) => {
+const animatedRoutes = ["/", "/en/", "/premiere-mise-en-location-corse", "/en/premiere-mise-en-location-corse",
+  "/intendance-residence-secondaire-corse", "/en/intendance-residence-secondaire-corse",
+  "/audit-gratuit-potentiel-locatif", "/en/audit-gratuit-potentiel-locatif"];
+const cases = [
+  ...routes.map(route => ({ ...route, reducedMotion: "reduce" as const })),
+  ...routes.filter(({ route }) => animatedRoutes.includes(route)).map(route => ({ ...route, reducedMotion: "no-preference" as const })),
+];
+
+for (const { route, js, css, reducedMotion } of cases) {
+  test(`${route} (${reducedMotion}): only necessary page resources fit the cold-load budget`, async ({ page, baseURL }) => {
+    await page.emulateMedia({ reducedMotion });
     const assets = new Map<string, number>();
     const pending: Promise<void>[] = [];
     page.on("response", response => {

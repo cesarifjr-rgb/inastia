@@ -288,6 +288,51 @@ test("scrolling reveals editorial sections instead of leaving hidden content", a
   }
 });
 
+test("entrance motion yields to keyboard focus and the pause control", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => {
+    const animate = Element.prototype.animate;
+    Element.prototype.animate = function (keyframes, options) {
+      const animation = animate.call(this, keyframes, options);
+      // Hold the short entrance so focus and pause are tested before it finishes.
+      animation.pause();
+      return animation;
+    };
+  });
+  await page.goto("/");
+  const block = page.locator(".presence-copy[data-reveal]");
+  await block.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }));
+  await expect.poll(() => block.evaluate(element => element.getAnimations().length)).toBe(1);
+  await expect(block).toHaveCSS("opacity", "1");
+  await block.locator("a").focus();
+  await expect.poll(() => block.evaluate(element => element.getAnimations().length)).toBe(0);
+  await expect(block).toHaveCSS("transform", "none");
+
+  const next = page.locator(".property-row[data-reveal]").first();
+  await next.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }));
+  await expect.poll(() => next.evaluate(element => element.getAnimations().length)).toBe(1);
+  await page.locator("#motion-toggle").evaluate(element => (element as HTMLButtonElement).click());
+  await expect.poll(() => next.evaluate(element => element.getAnimations().length)).toBe(0);
+  await expect(next).toHaveCSS("transform", "none");
+  await expect(next).toHaveCSS("opacity", "1");
+});
+
+test("content remains usable when the optional Web Animations API is unavailable", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => Object.defineProperty(Element.prototype, "animate", { value: undefined, configurable: true }));
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/");
+  await expect(page.locator("h1")).toBeVisible();
+  const block = page.locator(".presence-copy[data-reveal]");
+  await block.scrollIntoViewIfNeeded();
+  await expect(block).toHaveClass(/\bis-visible\b/);
+  await expect(block).toHaveCSS("opacity", "1");
+  await block.locator("a").click();
+  await expect(page).toHaveURL(/\/about$/);
+  expect(errors).toEqual([]);
+});
+
 test("BFCache history return resumes native CSS animation and preserves pause controls", async ({
   baseURL,
 }, testInfo) => {

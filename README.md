@@ -46,7 +46,7 @@ scripts/generate.ts        Génération HTML, sitemap et robots.txt
 .generated/                HTML intermédiaires, non versionnés
 src/client.ts              Navigation et comportements d'interface
 src/art.ts                 Illustrations SVG/CSS et hospitalityArt(locale) FR/EN
-src/motion.ts              GSAP, pause CSS et visibilité de l’illustration
+src/motion.ts              Entrées natives, pause CSS et visibilité de l’illustration
 src/contact.ts             Vérification anti-spam et états du formulaire
 src/styles.css             Styles et tokens de la version sauvegardée
 src/management.css         Composition de l’offre unique
@@ -97,7 +97,7 @@ npx tsx scripts/render-share.ts
 
 Ce script réutilise le SVG français, le compose avec le texte de la carte et produit `public/images/inastia-share.png` en 1200 × 630 avec Sharp. La génération est manuelle et ne fait pas partie du build Vercel.
 
-`src/motion.ts` charge GSAP/ScrollTrigger pour les entrées et révélations. Les mouvements de la clé, du porte-clés et des vagues sont définis en CSS. Le bouton « Animations » permet la pause/reprise ; `prefers-reduced-motion` initialise la pause, avec reprise explicite possible. Un observateur de visibilité et les événements de page suspendent les mouvements de l’illustration hors écran, lorsque l’onglet est masqué et pendant une suspension BFCache. Ils reprennent selon l’état courant au retour. Sans JavaScript, le contenu HTML et le SVG restent disponibles. L’illustration est décorative et ne porte aucune information indispensable.
+`src/motion.ts` utilise Web Animations et IntersectionObserver pour les entrées et révélations, sans bibliothèque à télécharger. Les mouvements de la clé, du porte-clés et des vagues sont définis en CSS. Le bouton « Animations » permet la pause/reprise ; `prefers-reduced-motion` initialise la pause, avec reprise explicite possible. Un observateur de visibilité et les événements de page suspendent les mouvements de l’illustration hors écran, lorsque l’onglet est masqué et pendant une suspension BFCache. Ils reprennent selon l’état courant au retour. Les entrées restent lisibles et cessent dès que leur contenu reçoit le focus. Sans JavaScript ou sans Web Animations, le contenu reste disponible. L’illustration est décorative et ne porte aucune information indispensable.
 
 ## Formulaire et configuration
 
