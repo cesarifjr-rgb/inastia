@@ -1721,6 +1721,14 @@ html[data-motion] #motion-toggle {
   padding-top: 20px;
   margin-bottom: 20px;
 }
+.intendance-form-fields {
+  display: contents;
+}
+.intendance-form-note {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
 .contact-project {
   margin-top: 24px;
   padding: 16px;

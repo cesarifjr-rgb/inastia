@@ -113,11 +113,8 @@
 .intendance-teaser-price { margin: 22px 0 25px; }
 .intendance-teaser-price strong { color: var(--ink); font: 400 30px var(--display); letter-spacing: -.035em; margin-inline: 5px; }
 .intendance-teaser-price > span { display: block; font-size: 11px; margin-top: 7px; }
-.intendance-form-fields { display: contents; }
-.field[data-rental-field][hidden], .intendance-form-fields[hidden] { display: none; }
 .contact-service-selector { padding-bottom: 18px; margin-bottom: 4px; border-bottom: 1px solid var(--line); }
 .contact-service-selector select { font-weight: 600; }
-.intendance-form-note { font-size: 12px; color: var(--muted); }
 @media (min-width: 1024px) and (max-width: 1320px) {
   .desktop-nav { gap: 16px; }
   .desktop-nav > a { font-size: 12px; }
