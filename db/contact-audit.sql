@@ -25,6 +25,6 @@ SELECT kind, status, count(*) AS count FROM contact_jobs GROUP BY kind, status O
 SELECT rolname, rolcreatedb, rolcreaterole, rolbypassrls,
     has_schema_privilege(rolname, 'public', 'CREATE') AS can_create_in_public,
     pg_has_role(rolname, 'pg_database_owner', 'MEMBER') AS database_owner
-FROM pg_roles WHERE rolcanlogin AND rolname NOT LIKE 'cloud_%' AND rolname NOT LIKE 'neon_%';
+FROM pg_roles WHERE rolcanlogin AND rolname !~ '^(cloud_|neon_)';
 
 COMMIT;
