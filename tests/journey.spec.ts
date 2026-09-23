@@ -34,6 +34,9 @@ for (const locale of ["fr", "en"]) {
     await page.locator(".menu-toggle").click();
     await page.locator('#mobile-menu a[href*="/contact"]').click();
     expect((await events(page)).at(-1)?.[2]).toMatchObject({ contact_placement: "mobile_menu" });
+    await page.locator(".presence-section").evaluate(element => element.scrollIntoView({ behavior: "instant", block: "start" }));
+    await page.locator(".mobile-contact a").click();
+    expect((await events(page)).at(-1)?.[2]).toMatchObject({ contact_placement: "mobile_sticky", service: "gestion" });
     expect(JSON.stringify(await events(page))).not.toContain("private@example.invalid");
   });
 

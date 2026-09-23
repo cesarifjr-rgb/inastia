@@ -4,6 +4,7 @@ import { initMotion } from "./motion.ts";
 import { initManagementArt } from "./management-art-client.ts";
 import { initPricing } from "./pricing-client.ts";
 import { initFirstRental } from "./first-rental-client.ts";
+import { initMobileContact } from "./mobile-contact.ts";
 
 const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
 const menu = document.querySelector<HTMLElement>("#mobile-menu");
@@ -81,6 +82,7 @@ initMotion();
 initManagementArt();
 initPricing();
 initFirstRental();
+initMobileContact();
 
 function openManagementService(): void {
   const service = document.getElementById(location.hash.slice(1));
