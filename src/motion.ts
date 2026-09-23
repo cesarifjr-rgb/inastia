@@ -5,7 +5,6 @@ export function initMotion(): void {
   const hero = document.querySelector(".hero-copy");
   let paused = reduced.matches;
   let cleanup: (() => void) | undefined;
-  let generation = 0;
   const illustration = document.querySelector<HTMLElement>(
     "[data-hospitality-scene]",
   );
@@ -35,8 +34,7 @@ export function initMotion(): void {
     document.addEventListener("visibilitychange", updateIllustration);
   }
 
-  async function update(): Promise<void> {
-    const current = ++generation;
+  function update(): void {
     cleanup?.();
     cleanup = undefined;
     root.dataset.motion = paused ? "paused" : "running";
@@ -56,74 +54,57 @@ export function initMotion(): void {
       return;
     }
     if (!hero && targets.length === 0) return;
-    try {
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
-        import("gsap"),
-        import("gsap/ScrollTrigger"),
-      ]);
-      if (current !== generation || paused) return;
-      gsap.registerPlugin(ScrollTrigger);
-      const context = gsap.context(() => {
-        // Keep the title readable immediately; only the illustration enters gently.
-        if (hero && window.scrollY < 30) {
-          gsap.fromTo(
-            ".hero-visual",
-            { y: 12, opacity: 1 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.22,
-              ease: "power2.out",
-              clearProps: "all",
-            },
-          );
-        }
-        targets.forEach((element) => {
-          // Already visible content is never hidden on a pause/resume transition.
-          if (element.classList.contains("is-visible")) return;
-          gsap.fromTo(
-            element,
-            { y: 12, opacity: 1 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.22,
-              ease: "power3.out",
-              scrollTrigger: { trigger: element, start: "top 94%", once: true },
-              onStart: () => element.classList.add("is-visible"),
-              clearProps: "transform,opacity",
-            },
-          );
-        });
-      });
-      const onFocus = (event: FocusEvent): void => {
-        if (!(event.target instanceof HTMLElement)) return;
-        const block = event.target.closest<HTMLElement>("[data-reveal]");
-        if (block) {
-          gsap.killTweensOf(block);
-          gsap.set(block, { clearProps: "transform,opacity" });
-          block.classList.add("is-visible");
-        }
-      };
-      document.addEventListener("focusin", onFocus);
-      cleanup = () => {
-        context.revert();
-        document.removeEventListener("focusin", onFocus);
-      };
-    } catch {
-      // Static HTML remains the functional fallback if an optional animation fails to load.
-      targets.forEach((element) => element.classList.add("is-visible"));
+    const animations = new Map<Element, Animation>();
+    function enter(element: Element, easing: string): void {
+      // Content is always readable, including when Web Animations is unavailable.
+      if (typeof element.animate !== "function") return;
+      const animation = element.animate(
+        [{ transform: "translateY(12px)" }, { transform: "translateY(0)" }],
+        { duration: 220, easing },
+      );
+      animations.set(element, animation);
+      animation.addEventListener("finish", () => animations.delete(element), { once: true });
     }
+    const visual = document.querySelector(".hero-visual");
+    if (hero && visual && window.scrollY < 30) enter(visual, "cubic-bezier(0.215, 0.61, 0.355, 1)");
+    const observer = new IntersectionObserver(entries => {
+      if (paused || suspended) return;
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        if (entry.target.classList.contains("is-visible")) continue;
+        entry.target.classList.add("is-visible");
+        enter(entry.target, "cubic-bezier(0.165, 0.84, 0.44, 1)");
+      }
+    }, { rootMargin: "0px 0px -6% 0px" });
+    targets.forEach(element => {
+      if (!element.classList.contains("is-visible")) observer.observe(element);
+    });
+    const onFocus = (event: FocusEvent): void => {
+      if (!(event.target instanceof HTMLElement)) return;
+      const block = event.target.closest<HTMLElement>("[data-reveal]");
+      if (!block) return;
+      observer.unobserve(block);
+      animations.get(block)?.cancel();
+      animations.delete(block);
+      block.classList.add("is-visible");
+    };
+    document.addEventListener("focusin", onFocus);
+    cleanup = () => {
+      observer.disconnect();
+      animations.forEach(animation => animation.cancel());
+      document.removeEventListener("focusin", onFocus);
+    };
   }
   toggle?.addEventListener("click", () => {
     paused = !paused;
-    void update();
+    update();
   });
   reduced.addEventListener("change", () => {
     paused = reduced.matches;
-    void update();
+    update();
   });
-  void update();
+  update();
   window.addEventListener("pagehide", (event) => {
     suspended = true;
     updateIllustration();
@@ -131,7 +112,6 @@ export function initMotion(): void {
       illustrationObserver?.disconnect();
       document.removeEventListener("visibilitychange", updateIllustration);
     }
-    generation++;
     cleanup?.();
     cleanup = undefined;
   });
@@ -139,7 +119,7 @@ export function initMotion(): void {
     if (event.persisted) {
       suspended = false;
       updateIllustration();
-      void update();
+      update();
     }
   });
 }

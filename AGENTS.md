@@ -22,7 +22,7 @@
 - `src/pricing.ts`, `src/pricing-client.ts` et `src/pricing.css` présentent le tarif confirmé de 20 % TTC des nuitées avant frais de plateforme, hors ménage, linge et taxe de séjour. Le calculateur est arithmétique, sans prévision locative ; garder les opérations en centimes et points de base entiers et les versions FR/EN.
 - `api/contact.js` est la fonction serveur Vercel utilisant Turnstile et Resend.
 - La réception durable utilise `lib/contact-store.js`, `lib/contact-delivery.js` et la base dédiée décrite dans `docs/contact-durability.md`. Préserver l'écriture atomique, les clés d'idempotence, les reprises indépendantes email/Attio, les verrous, les signatures webhook et les durées de conservation. Ne pas utiliser la base du Hub pour cette file. Une réponse `202 registered` confirme l'enregistrement, pas la livraison email ni la copie CRM. Ne jamais connecter les tests locaux aux fournisseurs réels.
-- `src/art.ts` fournit `hospitalityArt(locale)`, illustration SVG FR/EN intégrée au HTML ; `src/motion.ts` pilote GSAP, la pause CSS et la visibilité de l’illustration.
+- `src/art.ts` fournit `hospitalityArt(locale)`, illustration SVG FR/EN intégrée au HTML ; `src/motion.ts` pilote les entrées natives (Web Animations et IntersectionObserver), la pause CSS et la visibilité de l’illustration. Ne pas ajouter de bibliothèque d'animation au chargement initial pour ces mouvements courts.
 - `npx tsx scripts/render-share.ts` génère la carte sociale PNG depuis le SVG avec Sharp. Le site ne nécessite pas de Blender ni de rendu 3D.
 
 ## Modifications

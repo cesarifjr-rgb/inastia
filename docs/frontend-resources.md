@@ -19,11 +19,14 @@ l'initialisation du client. Les fichiers partagés restent réutilisables en cac
 entre pages. Vite traite les entrées HTML et leurs modules dans son
 [build multipage](https://vite.dev/guide/features#html).
 
-GSAP et ScrollTrigger conservent leur chargement conditionnel existant. Aucune
-animation n'est supprimée. Les styles du formulaire restent dans la base commune,
-y compris les champs spécifiques à l'intendance.
+Les entrées utilisent désormais les [animations natives du navigateur](https://developer.mozilla.org/en-US/docs/Web/API/Element/animate)
+et [IntersectionObserver](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API).
+Elles gardent un mouvement de 12 px sur 220 ms, toujours lisible, annulé au focus
+ou à la pause. Les mouvements CSS de l'illustration et leur suspension sont
+conservés. Les styles du formulaire restent dans la base commune, y compris les
+champs spécifiques à l'intendance.
 
-## Comparaison du 23 septembre 2026
+## Première étape : séparation des ressources, 23 septembre 2026
 
 Référence : `10cb12e9fb37ddc8c764681c5eaf0d4aeadb7273`. Version comparée :
 séparation des entrées et des styles décrite ci-dessus, sans changement de contenu.
@@ -62,11 +65,34 @@ augmente de 880 octets, car deux fichiers se compressent moins bien qu'un seul.
 Le total JS + CSS reste inférieur à la référence, et les pages suivantes
 réutilisent la feuille commune sans charger les styles de gestion inutiles.
 
+## Deuxième étape : entrées natives, 23 septembre 2026
+
+Référence : `b4c8006904d4153f343c0d975a1e9271e93eae0a`, après la séparation
+des ressources. GSAP et ScrollTrigger servaient uniquement aux courtes entrées
+de contenu : leur suppression enlève 112 714 octets de JavaScript minifié et
+deux requêtes au chargement des pages animées. La bibliothèque est également
+retirée des dépendances. Les consentements et les fonctionnalités des pages
+gardent leur initialisation immédiate.
+
+La comparaison Lighthouse locale utilise les deux builds de production sur
+deux ports du même ordinateur, Chrome 153, émulation mobile, réseau et processeur
+ralentis par les réglages Lighthouse par défaut. Les passages sont alternés
+avant/après puis après/avant. Ces mesures de laboratoire servent à détecter
+une régression et à comparer la modification ; elles ne mesurent pas le
+75e percentile des visites réelles.
+
+| Accueil, laboratoire local | Avant (2 passages) | Après (2 passages) |
+| --- | ---: | ---: |
+| LCP | 3,059–3,063 s | 2,268–2,284 s |
+| Score performance | 92/100 | 97/100 |
+| Temps de blocage total | 33–35,5 ms | 0 ms |
+| CLS | 0 | 0 |
+
 ## Vérification
 
 `tests/page-resources.spec.ts` impose des budgets de ressources réellement
-chargées sur les principales pages FR/EN et une page légale. La réduction des
-animations y isole les fonctionnalités du chargement GSAP, testé séparément.
+chargées sur les principales pages FR/EN et une page légale. Les pages animées
+sont aussi contrôlées avec les animations actives, dans le même budget.
 Exécuter après `npm run build` :
 
 ```sh
