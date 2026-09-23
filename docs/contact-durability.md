@@ -100,12 +100,72 @@ envoyé. Le téléphone et l'adresse email du site restent accessibles.
 
 ## Conservation et contrôles
 
-Le cron efface les contenus après 30 jours quand les deux tâches ont réussi,
-ou après 90 jours dans les autres cas. Les tâches encore inachevées à 90 jours
-passent en `attention / retention_expired`. Les références, empreintes et états
+Le cron efface les contenus 30 jours après la réception quand les deux tâches
+ont réussi, ou 90 jours après la réception dans les autres cas. Les tâches encore
+inachevées à 90 jours passent en `attention / retention_expired`. Les références, empreintes et états
 techniques sont conservés au plus un an, puis supprimés en cascade. Ces règles
 ne purgent ni la messagerie OVH, ni Attio, ni le Hub. Une demande d'effacement
 doit aussi traiter cette copie technique dans l'espace privé habilité.
+
+Le contrôle `db/contact-audit.sql` est intégralement en lecture seule. Il vérifie
+les volumes, les paires de tâches, les contenus et références hors délai, ainsi
+que les rôles SQL. Il ne restitue aucun contenu ni aucune coordonnée. Les quatre
+compteurs d'anomalies doivent être nuls après un passage réussi du cron ; sinon,
+contrôler d'abord son authentification, ses logs et l'accès à la base.
+
+## Sauvegarde et restauration
+
+L'historique Neon est distinct de la conservation applicative ci-dessus. Le
+23 septembre 2026, la console de `contact-inastia-db` confirme une fenêtre de
+restauration de **6 heures** sur l'offre Free. Cela couvre une erreur détectée
+rapidement, pas une suppression découverte le lendemain ni la perte du projet
+ou du compte. Aucun export indépendant ni sauvegarde quotidienne n'est configuré.
+Les sauvegardes planifiées proposées par la console nécessitent une offre payante.
+Ne pas présenter cette configuration comme une sauvegarde de plusieurs jours.
+
+En cas d'incident :
+
+1. Noter l'heure UTC et conserver les logs/références disponibles. Si la base
+   répond encore, suspendre les écritures de contact et le worker avant toute
+   bascule. Ne pas utiliser `CONTACT_DURABLE_ENABLED=false` pour cela : ce réglage
+   réactive l'envoi historique. Bloquer temporairement les routes de contact,
+   worker et webhook dans Vercel, avec une réponse d'indisponibilité, et garder
+   les autres pages disponibles.
+2. Dans Neon, sélectionner le projet dédié, puis créer une branche depuis un
+   point antérieur à l'incident, à l'intérieur de la fenêtre affichée. Conserver
+   la branche actuelle. Ne pas restaurer aveuglément `main` en place.
+3. Garder la copie isolée de Vercel, de Resend et d'Attio. Exécuter le contrôle SQL
+   ci-dessus et vérifier les références utiles en accès privé. Une restauration
+   de base ne restaure ni les emails déjà envoyés ni les opérations CRM : les
+   traitements intervenus après le point choisi doivent être rapprochés avec
+   les fournisseurs avant toute reprise.
+4. Sur la copie, mettre les tâches non terminées en `attention`, avec
+   `last_error='restore_reconciliation'`, et libérer leurs verrous ainsi que celui
+   de `contact_worker`. Ne remettre en `pending` que les tâches réconciliées.
+   Conserver les UUID, corps email et identifiants fournisseurs ; ne jamais
+   rejouer un email ambigu après la fenêtre d'idempotence Resend.
+5. Réappliquer les effacements et la conservation avant remise en service : une
+   copie ancienne peut réintroduire un contenu purgé ou un consentement retiré.
+   Les choix commerciaux courants restent à vérifier dans Attio.
+6. Après validation, modifier uniquement la connexion du site vers la branche
+   récupérée, attendre CI et promotion, vérifier l'état privé, puis réouvrir les
+   routes. Conserver la branche précédente pendant la vérification, puis retirer
+   les copies temporaires selon leur expiration et la politique de conservation.
+
+Un exercice utilise uniquement une branche temporaire, des données synthétiques
+et une expiration courte. Aucun worker ni webhook applicatif n'est connecté à
+cette branche. Vérifier les données après récupération, pas seulement le succès
+de l'opération dans la console. Une branche de test n'est pas une sauvegarde.
+
+Les accès opérateur passent par le compte Vercel existant et son SSO Neon. Les
+secrets applicatifs restent Sensitive, Production uniquement. Le rôle initial
+Neon est un rôle propriétaire : son utilisation par l'application ne constitue
+pas un cloisonnement SQL au moindre privilège. Pour le remplacer, créer un rôle
+via SQL (pas via la console/API Neon, qui ajoute `neon_superuser`), lui accorder
+uniquement les opérations nécessaires sur les quatre tables, tester le flux
+complet, puis remplacer la connexion et retirer les connexions administrateur
+du déploiement. Garder l'accès de migration séparé. Ne pas supprimer le rôle
+propriétaire ni tourner son mot de passe avant la bascule vérifiée.
 
 Tests locaux : moteur PostgreSQL PGlite réel, fournisseurs simulés, reprises,
 arrêts de worker, concurrence, conflits d'identifiant, signatures/rejeu,
@@ -116,4 +176,6 @@ de confirmer ensemble livraison OVH et présence dans Attio.
 
 Sources : [idempotence Resend](https://resend.com/docs/dashboard/emails/idempotency-keys),
 [signatures](https://resend.com/docs/webhooks/verify-webhooks-requests),
-[offre Neon](https://neon.com/docs/introduction/plans).
+[offre Neon](https://neon.com/docs/introduction/plans),
+[sauvegardes Neon](https://neon.com/docs/manage/backups),
+[rôles Neon](https://neon.com/docs/manage/roles).
