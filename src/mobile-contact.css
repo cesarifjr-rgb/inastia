@@ -1,0 +1,33 @@
+.mobile-contact {
+  display: none;
+}
+@media (max-width: 699px) {
+  .mobile-contact:not([hidden]) {
+    display: block;
+    position: fixed;
+    z-index: 35;
+    inset: auto 16px max(12px, env(safe-area-inset-bottom));
+    max-width: 420px;
+    margin-inline: auto;
+  }
+  .mobile-contact .button {
+    width: 100%;
+    min-height: 52px;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px 10px 18px;
+    border: 1px solid #fffaf359;
+    box-shadow: 0 4px 20px #17455b26;
+    text-align: left;
+    font-size: 14px;
+  }
+  .mobile-contact .button > svg {
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+  html:has(.mobile-contact:not([hidden])) {
+    scroll-padding-bottom: 96px;
+  }
+}

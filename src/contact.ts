@@ -134,7 +134,7 @@ export function initContact(): void {
       if (fieldLabel) fieldLabel.textContent = text(fr!, en!) + (required ? " *" : text(" (facultatif)", " (optional)"));
     }
     if (project && resetProject) project.open = audit || care;
-    const projectSummary = document.getElementById("contact-project-summary");
+    const projectSummary = document.getElementById("contact-project-label");
     if (projectSummary) projectSummary.textContent = audit || care ? text("Votre projet", "Your plans") : text("Votre projet (facultatif)", "Your plans (optional)");
     const projectHelp = document.getElementById("contact-project-help");
     if (projectHelp) projectHelp.hidden = audit || care;

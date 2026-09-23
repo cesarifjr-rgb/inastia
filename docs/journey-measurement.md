@@ -18,6 +18,7 @@ Paramètres communs : `service` (gestion, audit, intendance ; partenariat pour l
 |---|---|
 | Introduction de page | `hero` |
 | Menu ordinateur / mobile | `header` / `mobile_menu` |
+| Rappel mobile après le CTA principal | `mobile_sticky` |
 | Honoraires / formules | `pricing` |
 | Bloc final / pied de page | `callout` / `footer` |
 | FAQ / autre contenu | `faq` / `content` |

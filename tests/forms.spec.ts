@@ -84,7 +84,8 @@ for (const locale of ["fr", "en"] as const) {
       const project = page.locator("#contact-project");
       const summary = page.locator("#contact-project-summary");
       await expect(project).not.toHaveAttribute("open", "");
-      await expect(summary).toHaveText(locale === "fr" ? "Votre projet (facultatif)" : "Your plans (optional)");
+      await expect(page.locator("#contact-project-label")).toHaveText(locale === "fr" ? "Votre projet (facultatif)" : "Your plans (optional)");
+      await expect(page.locator("#contact-project-help")).toBeVisible();
       for (const intent of ["audit", "intendance"]) {
         await page.locator("#contact-intent").selectOption(intent);
         await expect(project).toHaveAttribute("open", "");
