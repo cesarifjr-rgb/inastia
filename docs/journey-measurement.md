@@ -2,6 +2,8 @@
 
 Configuration du 21 septembre 2026. Elle complète [le suivi des demandes qualifiées](copywriting-measurement.md) et [la liaison Attio / Google Ads](attio-google-ads.md).
 
+Depuis le 24 septembre, [le suivi Google Business Profile](google-business-profile-measurement.md) conserve aussi la provenance du lien balisé, avec le consentement Analytics, jusqu’à la demande et à sa source initiale dans Attio.
+
 ## Du CTA à la demande
 
 Après accord Analytics, trois événements utilisent les mêmes catégories d'origine :

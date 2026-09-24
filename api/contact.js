@@ -6,6 +6,7 @@ import { waitUntil } from '@vercel/functions';
 import { escapeHtml, isValidEmail, truncate } from '../utils.js';
 import { adsAttribution, syncEnquiry } from '../lib/attio.js';
 import { journeyAttribution } from '../lib/journey.js';
+import { acquisitionAttribution } from '../lib/acquisition.js';
 import { durableEnabled, getContactStore } from '../lib/contact-store.js';
 import { processContactJobs } from '../lib/contact-delivery.js';
 
@@ -296,7 +297,8 @@ export default async function handler(req, res) {
             ['Lien de l’annonce', listingUrl],
         ].filter(([, value]) => value),
         marketingEmail, marketingPhone, ads: adsAttribution(req.body, startedAt),
-        journey: journeyAttribution(req.body.journey, startedAt) };
+        journey: journeyAttribution(req.body.journey, startedAt),
+        acquisition: acquisitionAttribution(req.body.acquisition, startedAt) };
     if (durableEnabled()) {
         try {
             const store = getContactStore();

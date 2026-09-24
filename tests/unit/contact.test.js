@@ -186,12 +186,14 @@ describe("contact API (all external requests mocked)", () => {
       return Response.json({ data: record });
     });
     const audit = intent === 'audit';
-    const res = await request({ ...valid, intent, phone: audit ? '+33600000000' : '', decisionRole: audit ? 'coproprietaire' : '', rentalSituation: audit ? 'reflexion' : '', startTimeline: audit ? 'adefinir' : '', ...consentRecord() });
+    const acquisition = { consent: true, version: 'acquisition-2026-09-24-v1', source: 'google_business_profile', at: Date.now() - 1000 };
+    const res = await request({ ...valid, intent, acquisition, phone: audit ? '+33600000000' : '', decisionRole: audit ? 'coproprietaire' : '', rentalSituation: audit ? 'reflexion' : '', startTimeline: audit ? 'adefinir' : '', ...consentRecord() });
     expect(res.status).toHaveBeenCalledWith(200);
     await Promise.all(background);
     expect(console.info).toHaveBeenCalledWith(expect.stringContaining('"status":"synced"'));
     const deal = writes.find(write => write.object === 'deals' && write.values.demande_initiale).values;
     expect(deal.demande_initiale).toContain('Motif : ' + intent);
+    expect(deal.source_acquisition).toBe('Google Business Profile — inastia.fr');
     if (audit) {
       expect(deal.name).toMatch(/^Audit gratuit/);
       expect(deal.demande_initiale).toContain('Projet encore en réflexion');
