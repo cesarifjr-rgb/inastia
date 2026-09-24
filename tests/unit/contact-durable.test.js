@@ -262,6 +262,28 @@ describe('durable contact pipeline, real PostgreSQL engine and fake providers', 
         expect(background).toHaveLength(0);
     });
 
+    it('persists sanitised GBP attribution and keeps the first snapshot through a retry without attribution', async () => {
+        globalThis.fetch.mockResolvedValue({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
+        // Inspect durable registration independently of worker scheduling and provider delivery.
+        vi.spyOn(store, 'acquireWorker').mockResolvedValue(null);
+        const acquisition = { consent: true, version: 'acquisition-2026-09-24-v1', source: 'google_business_profile', at: Date.now() - 1000 };
+        const body = { ...input, requestId: randomUUID(), acquisition: { ...acquisition, private: 'never-persist-this' } };
+        const first = res();
+        await contact({ method: 'POST', headers: {}, body }, first);
+        expect(first.status).toHaveBeenCalledWith(202);
+        const payload = (await db.query('SELECT payload FROM contact_enquiries')).rows[0].payload;
+        expect(payload.context.acquisition).toEqual(acquisition);
+        expect(JSON.stringify(payload)).not.toContain('never-persist-this');
+        const retry = res();
+        await contact({ method: 'POST', headers: {}, body: { ...body, acquisition: { ...acquisition, consent: false } } }, retry);
+        expect(retry.status).toHaveBeenCalledWith(202);
+        expect((await db.query('SELECT payload FROM contact_enquiries')).rows[0].payload).toEqual(payload);
+        const sync = vi.fn().mockResolvedValue({ status: 'synced' });
+        store.acquireWorker.mockRestore();
+        await run({ sync });
+        expect(sync.mock.calls[0][1].acquisition).toEqual(acquisition);
+    });
+
     it('protects operations from public callers and disables preview workers', async () => {
         for (const handler of [statusHandler, cronHandler]) {
             const response = res();

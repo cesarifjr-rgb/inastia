@@ -1,5 +1,7 @@
 import { CONTACT_PLACEMENTS, JOURNEY_LIFETIME, JOURNEY_VERSION, journeyAttribution, journeyPage } from "../lib/journey.js";
 import type { Journey } from "../lib/journey.js";
+import { GBP_PARAMETERS, isGbpCampaign } from "../lib/acquisition.js";
+import { updateAcquisitionConsent } from "./acquisition.ts";
 
 export const ANALYTICS_ID = "G-ZQWEB3WMM4";
 const JOURNEY_KEY = "inastia-contact-journey-v1";
@@ -67,6 +69,9 @@ function contactPlacement(link: HTMLAnchorElement): string {
 function pageLocation(advertising: boolean): string {
   const url = new URL(window.location.href);
   const clean = new URL(url.origin + url.pathname);
+  if (isGbpCampaign(url.searchParams)) {
+    for (const [key, value] of Object.entries(GBP_PARAMETERS)) clean.searchParams.set(key, value);
+  }
   // Keep only validated advertising identifiers, never form values or arbitrary query strings.
   if (advertising) {
     for (const key of ["gclid", "gbraid", "wbraid"]) {
@@ -87,6 +92,7 @@ function pageReferrer(): string {
 export function updateAnalyticsConsent(accepted: boolean, advertising: boolean, expiry: number): void {
   enabled = accepted && Date.now() < expiry;
   expiresAt = expiry;
+  updateAcquisitionConsent(enabled, expiry);
   window[`ga-disable-${ANALYTICS_ID}`] = !enabled;
   if (!enabled) { clearJourney(); return; }
   expireJourney();

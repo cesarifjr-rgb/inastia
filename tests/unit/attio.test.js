@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { adsAttribution, listingIdentity, syncEnquiry } from '../../lib/attio.js';
 import { JOURNEY_VERSION, JOURNEY_LIFETIME, journeyAttribution, journeyPage } from '../../lib/journey.js';
+import { ACQUISITION_VERSION } from '../../lib/acquisition.js';
 
 const workspace = '303b4287-37bc-4166-abcc-005574bbfa5a';
 const now = Date.parse('2026-09-09T12:00:00Z');
@@ -62,6 +63,33 @@ describe('website to Attio (all network requests mocked)', () => {
         vi.stubGlobal('fetch', vi.fn(store.request));
     });
     afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
+
+    it('attributes a GBP enquiry and preserves the initial source on repeat enquiries', async () => {
+        const enquiry = { ...input, listingUrl: 'https://www.airbnb.fr/rooms/123456' };
+        const acquisition = { consent: true, version: ACQUISITION_VERSION, source: 'google_business_profile', at: now - 1000 };
+        await syncEnquiry(enquiry, { ...context, acquisition, ads: adsAttribution(consent, now) });
+        const person = store.data.people[0], deal = store.data.deals[0];
+        expect(scalar(person, 'source_acquisition')).toBe('Google Business Profile — inastia.fr');
+        expect(scalar(deal, 'source_acquisition')).toBe('Google Business Profile — inastia.fr');
+        expect(scalar(deal, 'demande_initiale')).toContain('Google Business Profile — lien balisé');
+        await syncEnquiry(enquiry, { ...nextContext, ads: adsAttribution(consent, now) });
+        expect(store.data.deals).toHaveLength(1);
+        expect(scalar(person, 'source_acquisition')).toBe('Google Business Profile — inastia.fr');
+        expect(scalar(deal, 'source_acquisition')).toBe('Google Business Profile — inastia.fr');
+        expect(scalar(person, 'site_source')).toBe('Google Ads — inastia.fr');
+    });
+
+    it('documents a later GBP visit without overwriting an existing source or accepting stale attribution', async () => {
+        const enquiry = { ...input, listingUrl: 'https://www.airbnb.fr/rooms/123456' };
+        await syncEnquiry(enquiry, { ...context, ads: adsAttribution(consent, now) });
+        const acquisition = { consent: true, version: ACQUISITION_VERSION, source: 'google_business_profile', at: now };
+        await syncEnquiry(enquiry, { ...nextContext, acquisition });
+        const deal = store.data.deals[0];
+        expect(scalar(deal, 'source_acquisition')).toBe('Google Ads — inastia.fr');
+        expect(scalar(deal, 'derniere_demande')).toContain('Google Business Profile — lien balisé');
+        await syncEnquiry({ ...input, email: 'second@example.invalid' }, { ...nextContext, acquisition: { ...acquisition, consent: false } });
+        expect(scalar(store.data.deals[1], 'source_acquisition')).toBe('inastia.fr — canal non attribué');
+    });
 
     it('drops missing consent, stale origins and arbitrary values without exposing extra fields', () => {
         const journey = { consent: true, version: JOURNEY_VERSION, page: 'home', placement: 'hero', locale: 'fr', at: now - 1000 };
