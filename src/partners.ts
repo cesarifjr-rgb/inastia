@@ -3,8 +3,8 @@ import { partnerFaq, partnerMail, partnerProfiles } from "./content/partners.ts"
 import { intendanceSlug } from "./content/intendance.ts";
 import { arrow, escape, path, t } from "./lib.ts";
 
-function partnerPhoto(name: string, alt: string, priority = false): string {
-  return `<picture><source type="image/avif" srcset="/images/${name}-480.avif 480w, /images/${name}-800.avif 800w, /images/${name}-1200.avif 1200w" sizes="(min-width: 1024px) 54vw, 100vw"><img src="/images/${name}-800.webp" srcset="/images/${name}-480.webp 480w, /images/${name}-800.webp 800w, /images/${name}-1200.webp 1200w" sizes="(min-width: 1024px) 54vw, 100vw" width="1200" height="805" alt="${escape(alt)}" loading="${priority ? "eager" : "lazy"}" ${priority ? 'fetchpriority="high"' : ""} decoding="async"></picture>`;
+function partnerHeroIllustration(locale: Locale): string {
+  return `<picture><source type="image/avif" srcset="/images/inastia-partners-hero-480.avif 480w, /images/inastia-partners-hero-800.avif 800w, /images/inastia-partners-hero-1254.avif 1254w" sizes="(min-width: 1024px) 51vw, calc(100vw - 48px)"><img src="/images/inastia-partners-hero-800.webp" srcset="/images/inastia-partners-hero-480.webp 480w, /images/inastia-partners-hero-800.webp 800w, /images/inastia-partners-hero-1254.webp 1254w" sizes="(min-width: 1024px) 51vw, calc(100vw - 48px)" width="1254" height="1254" alt="${t(locale, "Illustration d’une terrasse corse sous un olivier, avec une table, deux fauteuils et une vue sur la mer", "Illustration of a Corsican terrace beneath an olive tree, with a table, two chairs and a sea view")}" loading="eager" fetchpriority="high" decoding="async"></picture>`;
 }
 
 function partnerIllustration(locale: Locale): string {
@@ -36,10 +36,9 @@ export function partners(locale: Locale): string {
         <p class="partners-hero-location">${t(locale, "UNE ÉQUIPE FAMILIALE, INSTALLÉE À TRAVO.", "A FAMILY TEAM, BASED IN TRAVO.")}<span>Ghisonaccia — Porto-Vecchio</span></p>
       </div>
       <figure class="partners-hero-visual">
-        ${partnerPhoto("villa_amichi", t(locale, "La terrasse en pierre et la piscine de la Villa d’Amichi, à Pinarello", "The stone terrace and pool at Villa d’Amichi in Pinarello"), true)}
+        ${partnerHeroIllustration(locale)}
         <div class="partners-photo-label">${t(locale, "CORSE ORIENTALE", "CORSICA’S EAST COAST")} <span>42° N · 09° E</span></div>
         <div class="partners-photo-note">${connectionMark}<p>${t(locale, "Un même territoire.<br><em>Une attention commune.</em>", "A place we share.<br><em>A care we have in common.</em>")}</p></div>
-        <figcaption>Villa d’Amichi · Pinarello<span>${t(locale, "Une maison du portfolio Inastia", "A home from the Inastia portfolio")}</span></figcaption>
       </figure>
     </section>
 
