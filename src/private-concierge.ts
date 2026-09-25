@@ -2,8 +2,8 @@ import type { Locale } from "./content/pages.ts";
 import { privateConciergeMail, privateFaq, privateServices } from "./content/private-concierge.ts";
 import { arrow, escape, path, t } from "./lib.ts";
 
-function photo(name: string, alt: string, priority = false): string {
-  return `<picture><source type="image/avif" srcset="/images/${name}-480.avif 480w, /images/${name}-800.avif 800w, /images/${name}-1200.avif 1200w" sizes="(min-width: 900px) 55vw, 100vw"><img src="/images/${name}-800.webp" srcset="/images/${name}-480.webp 480w, /images/${name}-800.webp 800w, /images/${name}-1200.webp 1200w" sizes="(min-width: 900px) 55vw, 100vw" width="1200" height="805" alt="${escape(alt)}" ${priority ? 'fetchpriority="high" loading="eager"' : 'loading="lazy"'} decoding="async"></picture>`;
+function illustration(locale: Locale): string {
+  return `<picture><source type="image/avif" srcset="/images/inastia-private-concierge-480.avif 480w, /images/inastia-private-concierge-800.avif 800w, /images/inastia-private-concierge-1122.avif 1122w" sizes="(min-width: 761px) 52vw, calc(100vw - 48px)"><img src="/images/inastia-private-concierge-800.webp" srcset="/images/inastia-private-concierge-480.webp 480w, /images/inastia-private-concierge-800.webp 800w, /images/inastia-private-concierge-1122.webp 1122w" sizes="(min-width: 761px) 52vw, calc(100vw - 48px)" width="1122" height="1402" alt="${t(locale, "Illustration d’une terrasse corse : table dressée, panier de courses et voilier sur la mer", "Illustration of a Corsican terrace with a set table, a grocery basket and a sailboat at sea")}" fetchpriority="high" loading="eager" decoding="async"></picture>`;
 }
 
 export function privateConcierge(locale: Locale): string {
@@ -16,7 +16,7 @@ export function privateConcierge(locale: Locale): string {
         <a class="button" href="#prestations">${t(locale, "Découvrir les prestations", "Explore the services")}${arrow}</a>
         <p class="private-season">${t(locale, "Catalogue en préparation pour 2027. Vous pouvez déjà nous présenter vos envies ; chaque prestation sera confirmée sur devis, selon les professionnels et les disponibilités.", "Our catalogue is being prepared for 2027. Share your wishes now; each service will be confirmed in a quote, subject to providers and availability.")}</p>
       </div>
-      <figure class="private-hero-photo">${photo("villa_lova", t(locale, "Cala Lova, une maison du portfolio Inastia à Cala d’Oro, Solenzara", "Cala Lova, a home in the Inastia portfolio in Cala d’Oro, Solenzara"), true)}<figcaption>Cala Lova <span>Cala d’Oro · Solenzara</span></figcaption><span class="private-photo-note">${t(locale, "Les vacances se savourent.", "Holidays to savour.")}</span></figure>
+      <figure class="private-hero-art">${illustration(locale)}</figure>
     </section>
 
     <nav class="private-contents container" aria-label="${t(locale, "Explorer la conciergerie privée", "Explore private concierge services")}"><a href="#prestations">01 ${t(locale, "Les prestations", "The services")}${arrow}</a><a href="#vos-sejours">02 ${t(locale, "Pour vos séjours", "For your stays")}${arrow}</a><a href="#sur-mesure">03 ${t(locale, "Sur mesure", "Your way")}${arrow}</a></nav>
