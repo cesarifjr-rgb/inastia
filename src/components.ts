@@ -19,7 +19,7 @@ export function header(locale: Locale, slug: string): string {
   const privateConcierge = slug === privateConciergeSlug;
   const partnership = slug === partnersSlug;
   const audit = slug === "audit-gratuit-potentiel-locatif";
-  const cta = privateConcierge ? t(locale, "Préparer mon séjour 2027", "Plan my 2027 stay") : audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Parlons de votre logement", "Let’s talk about your property");
+  const cta = privateConcierge ? t(locale, "Préparer mon séjour", "Plan my stay") : audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Parlons de votre logement", "Let’s talk about your property");
   const ctaHref = privateConcierge ? "#votre-projet" : partnership ? partnerMail(locale) : contactPath(locale, audit ? "audit" : care ? "intendance" : "gestion");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
@@ -68,7 +68,7 @@ export function footer(locale: Locale): string {
       <li><a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a></li>
       <li><a href="${path(locale, firstRentalSlug)}">${t(locale, "Première mise en location", "Your first rental")}</a></li>
       <li><a href="${path(locale, intendanceSlug)}">${t(locale, "Intendance de résidence", "Second-home care")}</a></li>
-      <li><a href="${path(locale, privateConciergeSlug)}">${t(locale, "Conciergerie privée · 2027", "Private concierge · 2027")}</a></li>
+      <li><a href="${path(locale, privateConciergeSlug)}">${t(locale, "Conciergerie privée", "Private concierge")}</a></li>
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>
     <div><h2 class="footer-heading">${t(locale, "Notre territoire", "Our region")}</h2><ul>${zones.map(([name, slug]) => `<li><a href="${path(locale, slug)}">${name}</a></li>`).join("")}</ul></div>
