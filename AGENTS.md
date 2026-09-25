@@ -29,7 +29,8 @@
 
 - Définir le résultat attendu et faire le changement le plus simple possible.
 - Respecter le style existant ; éviter les refontes sans rapport avec la demande.
-- Conserver 29 pages indexables (13 FR, 13 EN, trois légales FR) et la 404. La page `premiere-mise-en-location-corse` accompagne les propriétaires débutants dans la gestion complète ; ses contenus, présentation et checklist sont dans les fichiers `first-rental`. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
+- Conserver 31 pages indexables (14 FR, 14 EN, trois légales FR) et la 404. La page `premiere-mise-en-location-corse` accompagne les propriétaires débutants dans la gestion complète ; ses contenus, présentation et checklist sont dans les fichiers `first-rental`. Préserver les quatre anciennes URLs annonce/rotation par les redirections de `vercel.json`, sans réintroduire leurs pages commerciales.
+- La demande du 25 septembre 2026 autorise la publication de `conciergerie-privee-corse` pour préparer la saison 2027, avec deux offres propriétaires/voyageurs. Les fichiers `private-concierge` portent ses contenus et sa présentation FR/EN. Les prestataires restent à constituer : présenter les services comme en préparation, sur proposition et selon disponibilités, sans réservation garantie ni tarifs non validés. Les CTA ouvrent un email prérempli propre à chaque profil ; le formulaire de gestion conserve son périmètre.
 - Maintenir les pages FR/EN en parallèle, avec canonical et hreflang cohérents.
 - Les trois pages légales sont françaises ; l'interface anglaise doit le préciser.
 - Conserver les coordonnées, le lien médiateur et les informations légales sourcées. Ne pas supprimer les clauses contractuelles historiques des trois fragments légaux.

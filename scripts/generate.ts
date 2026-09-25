@@ -9,6 +9,8 @@ import { partners } from "../src/partners.ts";
 import { partnersSlug } from "../src/content/partners.ts";
 import { firstRental } from "../src/first-rental.ts";
 import { firstRentalSlug } from "../src/content/first-rental.ts";
+import { privateConcierge } from "../src/private-concierge.ts";
+import { privateConciergeSlug } from "../src/content/private-concierge.ts";
 import { path, t } from "../src/lib.ts";
 
 // Remove only obsolete generated offer files; Vercel preserves their URLs as redirects.
@@ -102,6 +104,13 @@ for (const locale of ["fr", "en"] as const) {
       "Discuss your home in Corsica: full rental management or second-home care. Tell us about your property to prepare a detailed proposal.",
     ),
     contact(locale),
+  );
+  await output(
+    locale,
+    privateConciergeSlug,
+    t(locale, "Conciergerie privée en Corse · Saison 2027 | Inastia", "Private concierge in Corsica · Season 2027 | Inastia"),
+    t(locale, "Propriétaires et voyageurs : préparez vos séjours 2027 en Corse. Maison, chef, bien-être et sorties, selon disponibilités. De Ghisonaccia à Porto-Vecchio.", "Homeowners and guests: plan your 2027 stays in Corsica. Home preparation, chefs, relaxation and outings, subject to availability. Ghisonaccia to Porto-Vecchio."),
+    privateConcierge(locale),
   );
 }
 for (const [slug, title, description] of [
