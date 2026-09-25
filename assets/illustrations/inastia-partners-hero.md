@@ -1,0 +1,10 @@
+# Illustration d’ouverture de la page Partenaires
+
+Création originale générée le 25 septembre 2026 avec l’outil intégré imagegen, à la demande du propriétaire du site. Terrasse corse imaginaire ; elle ne représente pas une propriété du portfolio.
+
+Source : `inastia-partners-hero.png` (1254 × 1254 px).
+Variantes web : AVIF et WebP en 480, 800 et 1254 px, générées par `scripts/render-partners-hero.ts`.
+
+## Prompt utilisé
+
+Use case: illustration-story. Asset type: original hero illustration for the Inastia partnerships website page. Create a sublime hand-painted gouache editorial painting, square 1:1 composition, full bleed, no border. Scene: a welcoming terrace of an imagined Corsican stone villa overlooking a luminous Mediterranean bay, elegant pale limestone arch and sage shutters at the right, a light reed pergola filtering the warm afternoon sun above, a graceful old olive tree framing the left side, a small round ivory stone table and two refined natural woven chairs in the middle ground. A closed linen notebook and a simple brass house key rest discreetly on the table, suggesting local collaboration and care for a home. In the background, vivid but tasteful turquoise water, rugged Corsican coastal mountains and Mediterranean vegetation. The central scene must read beautifully when cropped to a portrait on desktop or a landscape on tablet: keep the table, chairs and sea view within the central 60 percent, use foliage, pale stone and soft shadows around the edges. Soft golden light, calm sophisticated hospitality, tactile mineral surfaces and expressive fine gouache brushstrokes, subtly textured painterly paper, sand and ivory tones, muted olive green and deep sea blue. Expensive travel magazine illustration, beautifully balanced architectural composition, richly crafted details with restraint. The lower 20 percent is a quiet stone terrace with dappled shadows suitable for a small website text overlay. Clearly a painted imagined scene, not a photograph, no pool, no people, no lettering or writing, no logo, no label, no watermark, no collage, no UI, no cartoon outlines. Deliver only the painting.
