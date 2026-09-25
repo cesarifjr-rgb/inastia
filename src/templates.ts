@@ -34,6 +34,7 @@ export function document(options: DocumentOptions): string {
     "intendance-residence-secondaire-corse": ["intendance"],
     partenaires: ["partners"],
     "premiere-mise-en-location-corse": ["first-rental"],
+    "conciergerie-privee-corse": ["private-concierge"],
   };
   const styles = ["common", ...(pageStyles[slug] ?? [])]
     .map((name) => `<link rel="stylesheet" href="/src/${name}.css">`).join("");

@@ -4,6 +4,7 @@ import { googleProfileUrl } from "./reviews.ts";
 import { intendanceSlug } from "./content/intendance.ts";
 import { partnerMail, partnersSlug } from "./content/partners.ts";
 import { firstRentalSlug } from "./content/first-rental.ts";
+import { privateConciergeSlug } from "./content/private-concierge.ts";
 
 export const zones = [
   ["Ghisonaccia", "conciergerie-ghisonaccia"],
@@ -15,10 +16,11 @@ export const zones = [
 
 export function header(locale: Locale, slug: string): string {
   const care = slug === intendanceSlug;
+  const privateConcierge = slug === privateConciergeSlug;
   const partnership = slug === partnersSlug;
   const audit = slug === "audit-gratuit-potentiel-locatif";
-  const cta = audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Parlons de votre logement", "Let’s talk about your property");
-  const ctaHref = partnership ? partnerMail(locale) : contactPath(locale, audit ? "audit" : care ? "intendance" : "gestion");
+  const cta = privateConcierge ? t(locale, "Préparer mon séjour 2027", "Plan my 2027 stay") : audit ? t(locale, "Demander mon audit gratuit", "Request my free review") : partnership ? t(locale, "Parlons partenariat", "Let’s work together") : care ? t(locale, "Confier l’intendance de ma maison", "Arrange care for my home") : t(locale, "Parlons de votre logement", "Let’s talk about your property");
+  const ctaHref = privateConcierge ? "#votre-projet" : partnership ? partnerMail(locale) : contactPath(locale, audit ? "audit" : care ? "intendance" : "gestion");
   const alternate = path(
     locale === "fr" ? "en" : "fr",
     ["privacy", "cgv", "mentions-legales", "404"].includes(slug) ? "" : slug,
@@ -36,6 +38,7 @@ export function header(locale: Locale, slug: string): string {
       <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
       <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
       <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
+      <a href="${path(locale, privateConciergeSlug)}" ${privateConcierge ? 'aria-current="page"' : ""}>${t(locale, "Conciergerie privée", "Private concierge")}</a>
       <a href="${path(locale, "about")}" ${slug === "about" ? 'aria-current="page"' : ""}>${t(locale, "L’esprit Inastia", "About Inastia")}</a>
       <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
     </nav>
@@ -50,6 +53,7 @@ export function header(locale: Locale, slug: string): string {
     <a href="${path(locale, intendanceSlug)}" ${slug === intendanceSlug ? 'aria-current="page"' : ""}>${t(locale, "Intendance", "Home care")}</a>
     <a href="${path(locale)}#portfolio">${t(locale, "Nos maisons", "Our homes")}</a>
     <a href="${path(locale)}#zone">${t(locale, "Le territoire", "Our region")}</a>
+    <a href="${path(locale, privateConciergeSlug)}" ${privateConcierge ? 'aria-current="page"' : ""}>${t(locale, "Conciergerie privée", "Private concierge")}</a>
     <a href="${path(locale, "about")}">${t(locale, "L’esprit Inastia", "About Inastia")}</a>
     <a href="${path(locale, partnersSlug)}" ${partnership ? 'aria-current="page"' : ""}>${t(locale, "Partenaires", "Partners")}</a>
     <a class="button" href="${ctaHref}">${cta}${arrow}</a>
@@ -64,6 +68,7 @@ export function footer(locale: Locale): string {
       <li><a href="${path(locale, "gestion-airbnb-corse-du-sud")}">${t(locale, "Gestion complète", "Full management")}</a></li>
       <li><a href="${path(locale, firstRentalSlug)}">${t(locale, "Première mise en location", "Your first rental")}</a></li>
       <li><a href="${path(locale, intendanceSlug)}">${t(locale, "Intendance de résidence", "Second-home care")}</a></li>
+      <li><a href="${path(locale, privateConciergeSlug)}">${t(locale, "Conciergerie privée · 2027", "Private concierge · 2027")}</a></li>
       <li><a href="${path(locale, "audit-gratuit-potentiel-locatif")}">${t(locale, "Audit gratuit", "Free property review")}</a></li>
     </ul></div>
     <div><h2 class="footer-heading">${t(locale, "Notre territoire", "Our region")}</h2><ul>${zones.map(([name, slug]) => `<li><a href="${path(locale, slug)}">${name}</a></li>`).join("")}</ul></div>

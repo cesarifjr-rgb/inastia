@@ -49,9 +49,9 @@ async function noOverflow(page: Page): Promise<void> {
   );
 }
 
-test("sitemap has 29 distinct published routes and excludes redirected offers", () => {
-  expect(routes).toHaveLength(29);
-  expect(new Set(routes).size).toBe(29);
+test("sitemap has 31 distinct published routes and excludes redirected offers", () => {
+  expect(routes).toHaveLength(31);
+  expect(new Set(routes).size).toBe(31);
   for (const prefix of ["", "/en"]) {
     expect(routes).not.toContain(`${prefix}/pack-lancement-airbnb`);
     expect(routes).not.toContain(`${prefix}/menage-airbnb-corse-du-sud`);
