@@ -20,15 +20,15 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator(".header-cta")).toHaveAttribute("href", "#votre-projet");
       await page.locator(".private-hero .button").click();
       await expect(page.locator("#prestations")).toBeInViewport();
-      for (const [index, audience] of (locale === "fr" ? ["propriétaire", "voyageur"] : ["homeowner", "guest"]).entries()) {
-        const href = await page.locator(".private-actions a").nth(index).getAttribute("href");
-        const url = new URL(href!);
-        expect(url.protocol).toBe("mailto:");
-        expect(url.pathname).toBe("contact@inastia.fr");
-        expect(url.searchParams.get("subject")).toContain(audience);
-        expect(url.searchParams.get("subject")).toContain("2027");
-        expect(url.searchParams.get("body")).toContain(locale === "fr" ? "Services souhaités" : "Services of interest");
-      }
+      await expect(page.locator(".private-actions a")).toHaveCount(1);
+      await expect(page.locator("#proprietaires")).toHaveCount(0);
+      const href = await page.locator(".private-actions a").getAttribute("href");
+      const url = new URL(href!);
+      expect(url.protocol).toBe("mailto:");
+      expect(url.pathname).toBe("contact@inastia.fr");
+      expect(url.searchParams.get("subject")).toContain(locale === "fr" ? "voyageur" : "guest");
+      expect(url.searchParams.get("subject")).toContain("2027");
+      expect(url.searchParams.get("body")).toContain(locale === "fr" ? "Services souhaités" : "Services of interest");
       await page.locator(".faq-list summary").first().click();
       await expect(page.locator(".faq-answer").first()).toBeVisible();
       for (const img of await page.locator("main img").all()) {
@@ -70,7 +70,9 @@ for (const locale of ["fr", "en"] as const) {
       expect(url.pathname).toBe("contact@inastia.fr");
       expect(url.searchParams.get("subject")).toContain(title);
       expect(url.searchParams.get("body")).toContain(title);
-      expect(url.searchParams.get("body")).toContain(locale === "fr" ? "propriétaire / voyageur" : "homeowner / guest");
+      expect(url.searchParams.get("subject")).toContain(locale === "fr" ? "voyageur" : "guest");
+      expect(url.searchParams.get("body")).toContain(locale === "fr" ? "mon séjour" : "my stay");
+      expect(url.searchParams.get("body")).not.toMatch(/propriétaire|homeowner|Profil|Profile/);
     }
     expect(await page.locator("#prestations").evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector("#vos-sejours")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
   });

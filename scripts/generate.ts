@@ -108,8 +108,8 @@ for (const locale of ["fr", "en"] as const) {
   await output(
     locale,
     privateConciergeSlug,
-    t(locale, "Conciergerie privée en Corse · Saison 2027 | Inastia", "Private concierge in Corsica · Season 2027 | Inastia"),
-    t(locale, "Chef à domicile, baby-sitting, massage, bateau, courses et événements privés en Corse. Découvrez les prestations en préparation pour 2027, sur devis.", "Private chefs, babysitting, massage, boats, groceries and private events in Corsica. Explore the services being prepared for 2027, by quotation."),
+    t(locale, "Conciergerie privée pour voyageurs en Corse | Inastia", "Private concierge for guests in Corsica | Inastia"),
+    t(locale, "Chef, baby-sitting, massage, bateau et courses pour vos vacances en Corse. Découvrez nos services pour voyageurs en préparation pour 2027, sur devis.", "Private chefs, babysitting, massage, boats and groceries for your holiday in Corsica. Explore our guest services being prepared for 2027, by quotation."),
     privateConcierge(locale),
   );
 }
