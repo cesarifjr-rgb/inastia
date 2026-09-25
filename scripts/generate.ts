@@ -109,7 +109,7 @@ for (const locale of ["fr", "en"] as const) {
     locale,
     privateConciergeSlug,
     t(locale, "Conciergerie privée pour voyageurs en Corse | Inastia", "Private concierge for guests in Corsica | Inastia"),
-    t(locale, "Chef, baby-sitting, massage, bateau et courses pour vos vacances en Corse. Découvrez nos services pour voyageurs en préparation pour 2027, sur devis.", "Private chefs, babysitting, massage, boats and groceries for your holiday in Corsica. Explore our guest services being prepared for 2027, by quotation."),
+    t(locale, "Chef, baby-sitting, massage, bateau et courses pour vos vacances en Corse. Services de conciergerie privée disponibles dès maintenant, sur devis.", "Private chefs, babysitting, massage, boats and groceries for your holiday in Corsica. Private concierge services available now, by quotation."),
     privateConcierge(locale),
   );
 }

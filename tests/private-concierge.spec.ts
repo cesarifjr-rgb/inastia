@@ -7,7 +7,7 @@ mkdirSync(".codex-work/private-concierge", { recursive: true });
 for (const locale of ["fr", "en"] as const) {
   const prefix = locale === "fr" ? "" : "/en";
   for (const width of [320, 390, 768, 1024, 1280, 1440]) {
-    test(`${locale}: private concierge 2027 at ${width}px`, async ({ page }) => {
+    test(`${locale}: private concierge available now at ${width}px`, async ({ page }) => {
       await page.setViewportSize({ width, height: 950 });
       const errors: string[] = [];
       page.on("pageerror", error => errors.push(error.message));
@@ -16,7 +16,8 @@ for (const locale of ["fr", "en"] as const) {
       page.on("response", response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); });
       expect((await page.goto(`${prefix}/${slug}`))?.status()).toBe(200);
       await page.getByRole("button", { name: locale === "fr" ? "Tout refuser" : "Reject all", exact: true }).click();
-      await expect(page.locator(".private-season")).toContainText("2027");
+      await expect(page.locator(".private-season")).toContainText(locale === "fr" ? "disponible dès maintenant" : "available now");
+      await expect(page.locator("body")).not.toContainText(/2027|en préparation|being prepared|in preparation/);
       await expect(page.locator(".header-cta")).toHaveAttribute("href", "#votre-projet");
       await page.locator(".private-hero .button").click();
       await expect(page.locator("#prestations")).toBeInViewport();
@@ -27,10 +28,12 @@ for (const locale of ["fr", "en"] as const) {
       expect(url.protocol).toBe("mailto:");
       expect(url.pathname).toBe("contact@inastia.fr");
       expect(url.searchParams.get("subject")).toContain(locale === "fr" ? "voyageur" : "guest");
-      expect(url.searchParams.get("subject")).toContain("2027");
+      expect(url.searchParams.get("subject")).not.toContain("2027");
+      expect(url.searchParams.get("body")).not.toContain("2027");
       expect(url.searchParams.get("body")).toContain(locale === "fr" ? "Services souhaités" : "Services of interest");
       await page.locator(".faq-list summary").first().click();
       await expect(page.locator(".faq-answer").first()).toBeVisible();
+      await expect(page.locator(".faq-answer").first()).toContainText(locale === "fr" ? "disponible dès maintenant" : "available now");
       for (const img of await page.locator("main img").all()) {
         await img.scrollIntoViewIfNeeded();
         await expect(img).toHaveJSProperty("complete", true);
@@ -53,6 +56,7 @@ for (const locale of ["fr", "en"] as const) {
   }
   test(`${locale}: private concierge discovery and language switch`, async ({ page }) => {
     await page.goto(`${prefix}/`);
+    await expect(page.locator(`.site-footer a[href="${prefix}/${slug}"]`)).not.toContainText("2027");
     await page.locator(`.site-footer a[href="${prefix}/${slug}"]`).click();
     await expect(page.locator(".private-page")).toBeVisible();
     await page.locator(".language-link").click();
@@ -73,6 +77,8 @@ for (const locale of ["fr", "en"] as const) {
       expect(url.searchParams.get("subject")).toContain(locale === "fr" ? "voyageur" : "guest");
       expect(url.searchParams.get("body")).toContain(locale === "fr" ? "mon séjour" : "my stay");
       expect(url.searchParams.get("body")).not.toMatch(/propriétaire|homeowner|Profil|Profile/);
+      expect(url.searchParams.get("subject")).not.toContain("2027");
+      expect(url.searchParams.get("body")).not.toContain("2027");
     }
     expect(await page.locator("#prestations").evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector("#vos-sejours")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
   });
