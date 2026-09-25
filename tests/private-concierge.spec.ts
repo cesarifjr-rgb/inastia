@@ -19,7 +19,7 @@ for (const locale of ["fr", "en"] as const) {
       await expect(page.locator(".private-season")).toContainText("2027");
       await expect(page.locator(".header-cta")).toHaveAttribute("href", "#votre-projet");
       await page.locator(".private-hero .button").click();
-      await expect(page.locator("#votre-projet")).toBeInViewport();
+      await expect(page.locator("#prestations")).toBeInViewport();
       for (const [index, audience] of (locale === "fr" ? ["propriétaire", "voyageur"] : ["homeowner", "guest"]).entries()) {
         const href = await page.locator(".private-actions a").nth(index).getAttribute("href");
         const url = new URL(href!);
@@ -59,13 +59,28 @@ for (const locale of ["fr", "en"] as const) {
     await expect(page.locator("html")).toHaveAttribute("lang", locale === "fr" ? "en" : "fr");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://inastia.fr${locale === "fr" ? "/en" : ""}/${slug}`);
   });
+  test(`${locale}: private concierge quote identifies the selected service`, async ({ page }) => {
+    await page.goto(`${prefix}/${slug}`);
+    const services = page.locator(".private-services-grid article");
+    await expect(services).toHaveCount(12);
+    for (const service of await services.all()) {
+      const title = await service.locator("h3").innerText();
+      const url = new URL((await service.getByRole("link").getAttribute("href"))!);
+      expect(url.protocol).toBe("mailto:");
+      expect(url.pathname).toBe("contact@inastia.fr");
+      expect(url.searchParams.get("subject")).toContain(title);
+      expect(url.searchParams.get("body")).toContain(title);
+      expect(url.searchParams.get("body")).toContain(locale === "fr" ? "propriétaire / voyageur" : "homeowner / guest");
+    }
+    expect(await page.locator("#prestations").evaluate(element => Boolean(element.compareDocumentPosition(document.querySelector("#vos-sejours")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  });
 }
 
 test("private concierge remains usable without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ baseURL: process.env.BASE_URL || "http://127.0.0.1:4100", javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto(`/${slug}`);
-  await expect(page.locator(".private-services-grid article")).toHaveCount(6);
+  await expect(page.locator(".private-services-grid article")).toHaveCount(12);
   await page.locator(".faq-list summary").first().click();
   await expect(page.locator(".faq-answer").first()).toBeVisible();
   await expect(page.locator(".private-actions a").first()).toHaveAttribute("href", /^mailto:/);
