@@ -89,6 +89,10 @@ function pageReferrer(): string {
   } catch { return ""; }
 }
 
+export function measurementPageContext(advertising: boolean): Record<string, string> {
+  return { page_location: pageLocation(advertising), page_referrer: pageReferrer() };
+}
+
 export function updateAnalyticsConsent(accepted: boolean, advertising: boolean, expiry: number): void {
   enabled = accepted && Date.now() < expiry;
   expiresAt = expiry;
@@ -96,7 +100,7 @@ export function updateAnalyticsConsent(accepted: boolean, advertising: boolean, 
   window[`ga-disable-${ANALYTICS_ID}`] = !enabled;
   if (!enabled) { clearJourney(); return; }
   expireJourney();
-  const page = { page_location: pageLocation(advertising), page_referrer: pageReferrer() };
+  const page = measurementPageContext(advertising);
   // Update URL context without reconfiguring the stream or counting another page view.
   window.gtag?.("set", page);
   if (configured) return;
@@ -109,9 +113,16 @@ export function updateAnalyticsConsent(accepted: boolean, advertising: boolean, 
   });
 }
 
-export function trackAnalytics(name: "form_start" | "generate_lead" | "contact_click", parameters: Record<string, string> = {}): void {
+export function trackAnalytics(name: "form_start" | "form_error" | "generate_lead" | "contact_click", parameters: Record<string, string> = {}): void {
   if (!enabled || Date.now() >= expiresAt) return;
   window.gtag?.("event", name, { send_to: ANALYTICS_ID, ...parameters });
+}
+
+export type FormErrorCategory = "validation" | "spam_unavailable" | "spam_expired" | "spam_required" | "timeout" | "unconfirmed" | "server" | "retry_expired";
+
+export function trackFormError(category: FormErrorCategory): void {
+  // Measurement must never prevent validation or display of a useful error.
+  try { trackAnalytics("form_error", { ...formAnalyticsParameters(), error_category: category }); } catch { /* Optional measurement. */ }
 }
 
 export function initAnalyticsInteractions(): void {

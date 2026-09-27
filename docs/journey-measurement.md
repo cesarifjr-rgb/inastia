@@ -6,15 +6,30 @@ Depuis le 24 septembre, [le suivi Google Business Profile](google-business-profi
 
 ## Du CTA à la demande
 
-Après accord Analytics, trois événements utilisent les mêmes catégories d'origine :
+Après accord Analytics, quatre événements utilisent les mêmes catégories d'origine :
 
 | Événement | Déclenchement | Limite |
 |---|---|---|
 | `contact_click` | Clic sur un lien formulaire, téléphone ou email | Ne prouve ni appel effectué ni demande reçue. |
 | `form_start` | Première saisie du formulaire sur la page | Un seul événement par chargement ; pas une personne unique. |
+| `form_error` | Validation refusée, anti-spam indisponible ou envoi non confirmé | Catégorie technique fixe uniquement ; aucune valeur de champ, référence de demande ou erreur brute. Une validation native compte une tentative, pas chaque champ invalide. |
 | `generate_lead` | Réponse positive de l'API après enregistrement durable de la demande (`202 registered`) ; acceptation Resend dans le mode historique | Ne prouve ni livraison en boîte, ni copie CRM, ni qualification. |
 
 Paramètres communs : `service` (gestion, audit, intendance ; partenariat pour les clics partenaires), `origin_page`, `origin_locale` et `contact_placement`. `contact_method` distingue form/phone/email pour les clics. Les débuts et envois portent aussi `form_id=contact-form`.
+
+Les erreurs utilisent également `form_id` et `error_category` : `validation`,
+`spam_unavailable`, `spam_expired`, `spam_required`, `timeout`, `unconfirmed`,
+`server` ou `retry_expired`. Une erreur ne déclenche ni `generate_lead` ni une
+conversion Ads. Le refus et le retrait Analytics arrêtent cette mesure.
+La dimension événement GA4 « Catégorie erreur formulaire » (`error_category`)
+a été créée et relue dans la propriété Inastia le 27 septembre 2026.
+Les données collectées après publication doivent encore être traitées par GA4
+avant de devenir disponibles dans les explorations.
+
+Depuis le contrôle de septembre 2026, le contexte d'URL nettoyé est défini avant
+la première configuration Google Ads, y compris lorsque Analytics est refusé.
+Seuls les identifiants publicitaires validés sont conservés après accord Ads.
+Les paramètres arbitraires, fragments et paramètres du référent sont retirés.
 
 | Emplacement | Valeur |
 |---|---|
@@ -35,7 +50,7 @@ Le dernier CTA vers le formulaire est gardé dans `sessionStorage`, avec accord 
 
 Propriété Inastia : `553577581`, flux `G-ZQWEB3WMM4`. Les dimensions personnalisées d'événement sont configurées pour `contact_placement`, `contact_method`, `service`, `partner_profile`, `origin_page` et `origin_locale`.
 
-Dans une exploration libre : lignes **Page origine du contact**, **Emplacement du contact** ; colonnes **Nom de l'événement** ; valeur **Nombre d'événements** ; filtre du nom d'événement correspondant à `^(contact_click|form_start|generate_lead)$`. Ventiler par service/langue et appareil si les volumes le permettent. Pour les clics, isoler `contact_method=form` avant comparaison au formulaire ; téléphone et email n'ont pas de confirmation de réception côté site.
+Dans une exploration libre : lignes **Page origine du contact**, **Emplacement du contact** ; colonnes **Nom de l'événement** ; valeur **Nombre d'événements** ; filtre du nom d'événement correspondant à `^(contact_click|form_start|form_error|generate_lead)$`. Ventiler par service/langue et appareil si les volumes le permettent. Pour les clics, isoler `contact_method=form` avant comparaison au formulaire ; téléphone et email n'ont pas de confirmation de réception côté site.
 
 Les nouvelles dimensions peuvent demander [24 à 48 heures de traitement](https://support.google.com/analytics/answer/14240153?hl=en). L'historique sans ces paramètres reste non renseigné. Les volumes consentis ne représentent pas tous les visiteurs. Une division des nombres d'événements n'est pas un taux individuel : clics répétés, refus, bloqueurs, accès directs et parcours interrompus existent. Pour un entonnoir individuel, utiliser une exploration séquentielle sur une période et un service identiques, puis vérifier le faible effectif avant toute conclusion.
 

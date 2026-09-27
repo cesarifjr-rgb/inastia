@@ -81,6 +81,24 @@ test("all-purpose consent preserves validated click attribution and configures G
   expect(await page.evaluate(() => localStorage.getItem("inastia-ads-click-v1"))).toBeNull();
 });
 
+for (const choice of ["ads", "both"]) {
+  test(`${choice}: sanitized page context precedes the first Ads configuration`, async ({ page }) => {
+    await page.goto("/?email=private@example.invalid&gclid=synthetic_click_12345#private-fragment");
+    if (choice === "ads") {
+      await page.locator(".consent-preferences summary").click();
+      await page.locator("#consent-advertising").check();
+      await page.locator('[data-ads-choice="save"]').click();
+    } else await page.locator('[data-ads-choice="accept"]').click();
+    const commands = await queue(page);
+    const configuration = commands.findIndex(item => item[0] === "config" && item[1] === "AW-18439914063");
+    const context = commands.findIndex(item => item[0] === "set" && typeof item[1] === "object");
+    expect(context).toBeGreaterThanOrEqual(0);
+    expect(context).toBeLessThan(configuration);
+    expect(commands[context]?.[1]).toEqual({ page_location: `${base.origin}/?gclid=synthetic_click_12345`, page_referrer: "" });
+    expect(JSON.stringify(commands)).not.toContain("private");
+  });
+}
+
 test("Analytics-only enquiry records a lead only after confirmed success and never sends an Ads conversion", async ({ page }) => {
   await page.addInitScript((key) => {
     localStorage.setItem(key, JSON.stringify({ ads: false, analytics: true, at: Date.now() }));
@@ -128,3 +146,50 @@ test("withdrawal in another tab stops Analytics on the current page", async ({ p
   await expect.poll(() => page.evaluate((id) => window[`ga-disable-${id}`], ANALYTICS_ID)).toBe(true);
   expect((await queue(page)).filter(item => item[0] === "consent").at(-1)?.[2]).toMatchObject({ analytics_storage: "denied", ad_storage: "denied" });
 });
+
+for (const locale of ["fr", "en"]) {
+  test(`${locale}: errors count each failed attempt without values or a lead and stop after refusal`, async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.assign(window, { turnstile: {
+        render: (_element: HTMLElement, options: { callback: (token: string) => void }) => {
+          Object.assign(window, { __solve: () => options.callback("synthetic-token") });
+          return "synthetic-widget";
+        }, reset: () => {},
+      } });
+    });
+    await page.goto(`${locale === "fr" ? "" : "/en"}/contact?intent=gestion`);
+    await page.locator(".consent-preferences summary").click();
+    await page.locator("#consent-analytics").check();
+    await page.locator('[data-ads-choice="save"]').click();
+    const errors = async () => (await queue(page)).filter(item => item[1] === "form_error");
+    await page.locator("#submit-contact").click();
+    expect(await errors()).toHaveLength(1);
+    expect((await errors())[0]?.[2]).toMatchObject({ error_category: "validation", service: "gestion", origin_locale: locale });
+    await page.locator("#firstName").fill("Privé");
+    await page.locator("#lastName").fill("D’Essai");
+    await page.locator("#email").fill("private+test@example.invalid");
+    await page.locator("#location").fill("Solenzara");
+    await page.locator("#propertyArea").fill("Private address");
+    await page.locator("#propertyType").selectOption("Villa");
+    await page.route("**/api/contact", route => route.fulfill({ status: 400, contentType: "application/json",
+      body: JSON.stringify({ success: false, uncertain: false }) }));
+    await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
+    await page.locator("#submit-contact").click();
+    await expect(page.locator("#form-status")).toHaveAttribute("data-state", "error");
+    expect((await errors()).at(-1)?.[2]).toMatchObject({ error_category: "server" });
+    await page.route("**/api/contact", route => route.abort("internetdisconnected"));
+    await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
+    await page.locator("#submit-contact").click();
+    await expect.poll(async () => (await errors()).length).toBe(3);
+    expect((await errors()).at(-1)?.[2]).toMatchObject({ error_category: "unconfirmed" });
+    await expect(page.locator("#email")).toHaveValue("private+test@example.invalid");
+    expect(JSON.stringify(await errors())).not.toMatch(/Privé|Essai|private|address|example|requestId/);
+    expect((await queue(page)).filter(item => item[1] === "generate_lead" || item[1] === "conversion")).toHaveLength(0);
+    await page.locator("#ads-consent-settings").click();
+    await page.locator('[data-ads-choice="reject"]').click();
+    await page.evaluate(() => (window as unknown as { __solve: () => void }).__solve());
+    await page.locator("#submit-contact").click();
+    await expect(page.locator("#submit-contact")).toBeEnabled();
+    expect(await errors()).toHaveLength(3);
+  });
+}

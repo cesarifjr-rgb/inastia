@@ -1,5 +1,5 @@
 import { enquiryAttribution, trackEnquiry } from "./ads.ts";
-import { enquiryJourney } from "./analytics.ts";
+import { enquiryJourney, trackFormError, type FormErrorCategory } from "./analytics.ts";
 import { enquiryAcquisition } from "./acquisition.ts";
 
 interface TurnstileAPI {
@@ -188,12 +188,27 @@ export function initContact(): void {
     }
   }
   form.addEventListener("input", validateFields);
+  let invalidReported = false;
   // Reveal invalid optional input (for example a listing URL) before native focus.
   form.addEventListener("invalid", (event) => {
     if (project && event.target instanceof Node && project.contains(event.target)) project.open = true;
+    // Native validation reports every invalid field synchronously: count the attempt once.
+    if (!invalidReported) {
+      invalidReported = true;
+      trackFormError("validation");
+      window.setTimeout(() => { invalidReported = false; }, 0);
+    }
   }, true);
 
   function announce(message: string, state: string, focus = false): void {
+    if (state === "error" && (status!.dataset.state !== state || status!.textContent !== message)) {
+      const categories: Record<string, FormErrorCategory> = {
+        [copy.unavailable]: "spam_unavailable", [copy.expired]: "spam_expired", [copy.challenge]: "spam_required",
+        [copy.timeout]: "timeout", [copy.uncertain]: "unconfirmed", [copy.error]: "server", [copy.requestExpired]: "retry_expired",
+      };
+      const category = categories[message];
+      if (category) trackFormError(category);
+    }
     status!.textContent = message;
     status!.dataset.state = state;
     if (focus) status!.focus();
