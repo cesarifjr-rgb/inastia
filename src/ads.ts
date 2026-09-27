@@ -1,4 +1,4 @@
-import { ANALYTICS_ID, formAnalyticsParameters, initAnalyticsInteractions, trackAnalytics, updateAnalyticsConsent } from "./analytics.ts";
+import { ANALYTICS_ID, formAnalyticsParameters, initAnalyticsInteractions, measurementPageContext, trackAnalytics, updateAnalyticsConsent } from "./analytics.ts";
 
 const TAG_ID = "AW-18439914063";
 const CONVERSION = `${TAG_ID}/16GeCNTTh_IcEM-E69hE`;
@@ -122,6 +122,9 @@ function applyConsent(): void {
   window[`ga-disable-${ANALYTICS_ID}`] = !analyticsAllowed;
   if (loaded) window.gtag?.("consent", "update", consentState());
   else if (allowed || analyticsAllowed) loadTag();
+  // Ads config sends its first page signal immediately, including when Analytics is refused.
+  // Set the sanitized URL/referrer before configuring either destination.
+  if (allowed || analyticsAllowed) window.gtag?.("set", measurementPageContext(allowed));
   if (allowed) {
     captureClick();
     if (!adsConfigured) {
