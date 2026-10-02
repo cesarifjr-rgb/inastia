@@ -11,9 +11,11 @@ function housePhoto(name: string, alt: string, priority = false): string {
 const sun = `<svg class="first-sun" viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="50" cy="50" r="20"/><circle cx="50" cy="50" r="7"/><path d="M50 4v14m0 64v14M4 50h14m64 0h14M17.5 17.5l10 10m45 45 10 10M17.5 82.5l10-10m45-45 10-10M32.4 7.5l5.4 13m24.4 59 5.4 13M7.5 32.4l13 5.4m59 24.4 13 5.4M7.5 67.6l13-5.4m59-24.4 13-5.4M32.4 92.5l5.4-13m24.4-59 5.4-13"/></svg>`;
 
 export function firstRental(locale: Locale): string {
+  const checklist = firstRentalChecklist[locale];
+  const checklistCount = checklist.reduce((count, group) => count + group.items.length, 0);
   const chapters = [
     ["le-parcours", t(locale, "Les étapes", "The journey")],
-    ["les-reperes", t(locale, "Votre carnet", "Your notebook")],
+    ["les-reperes", t(locale, "Votre checklist", "Your checklist")],
     ["le-cadre", t(locale, "L’accompagnement", "Our support")],
     ["faq", t(locale, "Vos questions", "Your questions")],
   ];
@@ -46,13 +48,13 @@ export function firstRental(locale: Locale): string {
     </section>
 
     <section class="first-notebook" id="les-reperes" aria-labelledby="first-notebook-title"><div class="container first-notebook-grid">
-      <div class="first-notebook-intro"><p class="eyebrow">${t(locale, "02 / VOTRE CARNET DE DÉPART", "02 / YOUR STARTING NOTES")}</p><h2 id="first-notebook-title">${t(locale, "Quelques repères.<br> <em>Un premier pas.</em>", "A few notes.<br> <em>A first step.</em>")}</h2><p>${t(locale, "Cochez les points que vous avez déjà en tête. Vous pouvez nous contacter même si tout n’est pas encore défini.", "Tick the things you already have in mind. You can contact us even if some details are still undecided.")}</p>
-      <figure class="first-notebook-photo">${housePhoto("casa_verde", t(locale, "Casa Verde, une maison du portfolio Inastia à Pinarello, Zonza", "Casa Verde, a home in the Inastia portfolio in Pinarello, Zonza"))}<figcaption>Casa Verde · Pinarello · Zonza</figcaption></figure></div>
+      <div class="first-notebook-intro"><p class="eyebrow">${t(locale, "02 / VOTRE CHECKLIST AVANT DE LOUER", "02 / YOUR CHECKLIST BEFORE RENTING")}</p><h2 id="first-notebook-title">${t(locale, "Préparer sa première<br> <em>location en Corse.</em>", "Prepare your first<br> <em>rental in Corsica.</em>")}</h2><p>${t(locale, "Du premier projet à l’arrivée des voyageurs, cochez les points préparés pour votre maison. Cette liste sert de fil conducteur : vous pouvez nous contacter à n’importe quelle étape.", "From the first idea to your guests’ arrival, tick the points you have prepared for your home. Use this list as a guide: you can contact us at any stage.")}</p></div>
+      <figure class="first-notebook-photo">${housePhoto("casa_verde", t(locale, "Casa Verde, une maison du portfolio Inastia à Pinarello, Zonza", "Casa Verde, a home in the Inastia portfolio in Pinarello, Zonza"))}<figcaption>Casa Verde · Pinarello · Zonza</figcaption></figure>
       <div class="first-checklist" data-first-checklist>
-        <div class="first-checklist-heading"><span>${t(locale, "MON PROJET DE LOCATION", "MY RENTAL PLANS")}</span>${sun}</div>
-        <fieldset><legend class="sr-only">${t(locale, "Les repères pour notre premier échange", "Notes for our first conversation")}</legend>${firstRentalChecklist[locale].map((item, i) => `<label class="first-check"><input type="checkbox" name="first-rental-${i + 1}"><span class="first-check-box" aria-hidden="true"></span><span><strong>${escape(item.title)}</strong><span>${escape(item.detail)}</span></span></label>`).join("")}</fieldset>
-        <div class="first-checklist-progress" hidden><progress max="6" value="0" aria-label="${t(locale, "Repères préparés", "Notes prepared")}"></progress><p role="status" aria-live="polite" aria-atomic="true" data-count-label="${t(locale, "repères préparés", "notes prepared")}"></p></div>
-        <p class="first-checklist-note">${t(locale, "Le bon moment pour en parler ? Dès que l’envie est là.", "The right time to talk? As soon as the idea takes shape.")}</p>
+        <div class="first-checklist-heading"><span>${checklistCount} ${t(locale, "POINTS POUR PRÉPARER MA LOCATION", "POINTS TO PREPARE MY RENTAL")}</span>${sun}</div>
+        <div class="first-checklist-groups">${checklist.map((group, groupIndex) => `<fieldset><legend><span aria-hidden="true">0${groupIndex + 1}</span>${escape(group.title)}</legend>${group.items.map((item, itemIndex) => `<label class="first-check"><input type="checkbox" name="first-rental-${groupIndex + 1}-${itemIndex + 1}"><span class="first-check-box" aria-hidden="true"></span><span><strong>${escape(item.title)}</strong><span>${escape(item.detail)}</span></span></label>`).join("")}</fieldset>`).join("")}</div>
+        <div class="first-checklist-progress" hidden><progress max="${checklistCount}" value="0" aria-label="${t(locale, "Points préparés", "Points prepared")}"></progress><p role="status" aria-live="polite" aria-atomic="true" data-count-label="${t(locale, "points préparés", "points prepared")}"></p></div>
+        <p class="first-checklist-note">${t(locale, "Un point encore en suspens ? C’est aussi le bon moment pour en parler.", "Something still undecided? That is a good time to talk, too.")}</p>
       </div>
     </div></section>
 
