@@ -64,6 +64,23 @@ describe('website to Attio (all network requests mocked)', () => {
     });
     afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
+    it('records an organic source and landing without overwriting initial commercial attribution', async () => {
+        const enquiry = { ...input, listingUrl: 'https://www.airbnb.fr/rooms/123456' };
+        const acquisition = { consent: true, version: ACQUISITION_VERSION, source: 'google_organic', at: now - 1000,
+            page: 'conciergerie-airbnb-porto-vecchio', locale: 'fr' };
+        await syncEnquiry(enquiry, { ...context, acquisition, ads: adsAttribution(consent, now) });
+        const person = store.data.people[0], deal = store.data.deals[0];
+        expect(scalar(person, 'source_acquisition')).toBe('Google naturel — référent détecté — inastia.fr');
+        expect(scalar(deal, 'source_acquisition')).toBe('Google naturel — référent détecté — inastia.fr');
+        expect(scalar(deal, 'demande_initiale')).toContain('Page d’entrée (mesure consentie) : conciergerie-airbnb-porto-vecchio / fr');
+        await syncEnquiry(enquiry, { ...nextContext, acquisition: { ...acquisition, source: 'bing_organic' } });
+        expect(store.data.deals).toHaveLength(1);
+        expect(scalar(deal, 'source_acquisition')).toBe('Google naturel — référent détecté — inastia.fr');
+        expect(scalar(person, 'site_source')).toBe('Bing naturel — référent détecté — inastia.fr');
+        expect(scalar(deal, 'derniere_demande')).toContain('Bing naturel — référent détecté');
+        expect(deal.values.stage[0].status.title).toBe('Nouveau lead');
+    });
+
     it('attributes a GBP enquiry and preserves the initial source on repeat enquiries', async () => {
         const enquiry = { ...input, listingUrl: 'https://www.airbnb.fr/rooms/123456' };
         const acquisition = { consent: true, version: ACQUISITION_VERSION, source: 'google_business_profile', at: now - 1000 };

@@ -1,5 +1,6 @@
-import { ACQUISITION_LIFETIME, ACQUISITION_VERSION, acquisitionAttribution, isGbpCampaign } from "../lib/acquisition.js";
+import { ACQUISITION_LIFETIME, ACQUISITION_VERSION, acquisitionAttribution, hasCampaign, isGbpCampaign, organicSearchSource } from "../lib/acquisition.js";
 import type { Acquisition } from "../lib/acquisition.js";
+import { journeyPage } from "../lib/journey.js";
 
 const KEY = "inastia-acquisition-v1";
 const landingAt = Date.now();
@@ -28,16 +29,24 @@ export function updateAcquisitionConsent(accepted: boolean, expiry: number): voi
   expiresAt = expiry;
   if (!enabled) { clear(); return; }
   try {
-    if (!captured) {
+    const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (!captured && navigation?.type !== "reload" && navigation?.type !== "back_forward") {
       captured = true;
       const params = new URLSearchParams(location.search);
-      if (isGbpCampaign(params)) {
-        // A reload or a consent update must not extend an existing landing's lifetime.
-        const previous = sessionStorage.getItem(KEY);
-        if (!previous) sessionStorage.setItem(KEY, JSON.stringify({ consent: true, version: ACQUISITION_VERSION,
-          source: "google_business_profile", at: landingAt }));
-      } else if ([...params.keys()].some(key => key.startsWith("utm_") || ["gclid", "gbraid", "wbraid"].includes(key))) {
-        clear(); // A different tagged campaign supersedes the earlier GBP visit.
+      const source = isGbpCampaign(params) ? "google_business_profile"
+        : !hasCampaign(params) ? organicSearchSource(document.referrer) : undefined;
+      let external = false;
+      try { external = new URL(document.referrer).origin !== location.origin; } catch { /* Direct or unavailable. */ }
+      if (source) {
+        const previous = acquisitionAttribution(JSON.parse(sessionStorage.getItem(KEY) || "null"));
+        // Internal navigation/reloads cannot renew the landing's 30-minute lifetime.
+        if (!previous || previous.source !== source || external) {
+          const page = journeyPage(location.pathname);
+          sessionStorage.setItem(KEY, JSON.stringify({ consent: true, version: ACQUISITION_VERSION,
+            source, at: landingAt, ...(page ? { page, locale: location.pathname.startsWith("/en/") ? "en" : "fr" } : {}) }));
+        }
+      } else if (hasCampaign(params) || external) {
+        clear(); // A new campaign or external referral supersedes the earlier acquisition.
       }
     }
     const { acquisition } = enquiryAcquisition();

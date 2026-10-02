@@ -4,6 +4,8 @@ Configuration du 21 septembre 2026. Elle complète [le suivi des demandes qualif
 
 Depuis le 24 septembre, [le suivi Google Business Profile](google-business-profile-measurement.md) conserve aussi la provenance du lien balisé, avec le consentement Analytics, jusqu’à la demande et à sa source initiale dans Attio.
 
+Depuis le 2 octobre, [le suivi du référencement naturel](seo-measurement.md) distingue aussi les référents Google, Bing et DuckDuckGo sans balisage de campagne, avec les mêmes règles de consentement et de durée.
+
 ## Du CTA à la demande
 
 Après accord Analytics, quatre événements utilisent les mêmes catégories d'origine :

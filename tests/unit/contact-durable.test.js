@@ -266,7 +266,8 @@ describe('durable contact pipeline, real PostgreSQL engine and fake providers', 
         globalThis.fetch.mockResolvedValue({ ok: true, json: async () => ({ success: true, hostname: 'inastia.fr' }) });
         // Inspect durable registration independently of worker scheduling and provider delivery.
         vi.spyOn(store, 'acquireWorker').mockResolvedValue(null);
-        const acquisition = { consent: true, version: 'acquisition-2026-09-24-v1', source: 'google_business_profile', at: Date.now() - 1000 };
+        const acquisition = { consent: true, version: 'acquisition-2026-09-24-v1', source: 'google_organic', at: Date.now() - 1000,
+            page: 'conciergerie-airbnb-porto-vecchio', locale: 'fr' };
         const body = { ...input, requestId: randomUUID(), acquisition: { ...acquisition, private: 'never-persist-this' } };
         const first = res();
         await contact({ method: 'POST', headers: {}, body }, first);
