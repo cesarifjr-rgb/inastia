@@ -58,17 +58,20 @@
 .first-step-roles dt { font-size: 9px; font-weight: 700; letter-spacing: .12em; margin-bottom: 6px; }
 .first-step-roles dd { margin: 0; font-size: 12px; line-height: 1.8; color: #53645f; }
 .first-notebook { background: var(--first-light); padding-block: 75px; }
-.first-notebook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 7vw, 110px); align-items: center; }
+.first-notebook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 45px clamp(40px, 7vw, 110px); align-items: center; }
 .first-notebook h2 { margin: 20px 0 24px; font-size: clamp(35px, 3.7vw, 52px); }
 .first-notebook-intro > p:not(.eyebrow) { max-width: 385px; color: #53645f; font-size: 14px; line-height: 1.9; }
-.first-notebook-photo { position: relative; margin-top: 35px; }
+.first-notebook-photo { position: relative; margin: 0; }
 .first-notebook-photo img { width: 100%; aspect-ratio: 1.75; object-fit: cover; }
 .first-notebook-photo figcaption { font-size: 9px; margin-top: 9px; color: #53645f; }
-.first-checklist { background: var(--surface); padding: 30px 36px 24px; box-shadow: 0 10px 40px #29443808; border-top: 3px solid var(--first-green); }
+.first-checklist { grid-column: 1 / -1; background: var(--surface); padding: 30px 36px 24px; box-shadow: 0 10px 40px #29443808; border-top: 3px solid var(--first-green); }
 .first-checklist-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 12px; }
 .first-checklist-heading > span { font-size: 10px; font-weight: 600; letter-spacing: .12em; }
 .first-checklist-heading .first-sun { width: 40px; height: 40px; }
 .first-checklist fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.first-checklist-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 35px 50px; padding-top: 15px; }
+.first-checklist legend { padding: 0 0 8px; font-size: 21px; font-weight: 500; letter-spacing: -.035em; }
+.first-checklist legend > span { margin-right: 12px; font: 400 25px/1 Georgia, "Times New Roman", serif; color: var(--first-olive); }
 .first-check { position: relative; display: flex; gap: 15px; align-items: flex-start; padding: 19px 0; border-bottom: 1px solid var(--first-line); cursor: pointer; }
 .first-check input { position: absolute; left: 0; top: 21px; width: 21px; height: 21px; opacity: 0; margin: 0; }
 .first-check-box { pointer-events: none; flex-shrink: 0; width: 21px; height: 21px; margin-top: 2px; border: 1px solid #89988a; display: grid; place-items: center; }
@@ -76,7 +79,7 @@
 .first-check input:checked + .first-check-box::after { content: ""; width: 10px; height: 6px; border-left: 1.5px solid white; border-bottom: 1.5px solid white; transform: translateY(-1px) rotate(-45deg); }
 .first-check input:focus-visible + .first-check-box { outline: 3px solid #22739b; outline-offset: 4px; }
 .first-check strong { display: block; font-size: 13px; font-weight: 600; line-height: 1.5; }
-.first-check > span:last-child > span { display: block; color: #53645f; font-size: 11px; line-height: 1.75; margin-top: 4px; }
+.first-check > span:last-child > span { display: block; color: #53645f; font-size: 12px; line-height: 1.8; margin-top: 5px; }
 .first-checklist-progress { padding-top: 22px; }
 .first-checklist-progress progress { display: block; appearance: none; width: 100%; height: 3px; border: 0; background: #dce2d7; color: var(--first-green); }
 .first-checklist-progress progress::-webkit-progress-bar { background: #dce2d7; }
@@ -151,6 +154,7 @@
   .first-step-roles { grid-column: 2; padding: 0; border-left: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
   .first-step-roles div + div { margin-top: 0; }
   .first-notebook-grid { gap: 35px; }
+  .first-checklist-groups { gap: 30px; }
   .first-checklist { padding-inline: 22px; }
   .first-notebook-photo img { aspect-ratio: 1; }
   .first-framework-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
@@ -190,9 +194,9 @@
   .first-notebook { padding-block: 56px; }
   .first-notebook-grid { grid-template-columns: 1fr; }
   .first-notebook h2 { font-size: 39px; }
-  .first-notebook-photo { margin-top: 25px; }
   .first-notebook-photo img { aspect-ratio: 1.7; }
   .first-checklist { padding: 23px 20px; }
+  .first-checklist-groups { grid-template-columns: 1fr; }
   .first-checklist-heading > span { font-size: 9px; }
   .first-check strong { font-size: 12px; }
   .first-checklist-note { font-size: 14px; }

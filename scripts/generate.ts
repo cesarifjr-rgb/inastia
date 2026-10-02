@@ -87,7 +87,7 @@ for (const locale of ["fr", "en"] as const) {
     locale,
     firstRentalSlug,
     t(locale, "Première mise en location en Corse | Inastia", "Your first holiday rental in Corsica | Inastia"),
-    t(locale, "Mettre votre maison en location pour la première fois en Corse : préparation, équipements, photos, annonces et premiers voyageurs. Avancez avec Inastia.", "Prepare your first holiday rental in Corsica: equipment, photographs, listings and your first guests. A clear journey with the Inastia family team."),
+    t(locale, "Préparez votre première location saisonnière en Corse : une checklist de 16 points, des démarches au premier accueil, avec l’accompagnement Inastia.", "Prepare your first holiday rental in Corsica: a 16-point checklist covering formalities, equipment, listings and the first arrival, with support from Inastia."),
     firstRental(locale),
   );
   await output(
