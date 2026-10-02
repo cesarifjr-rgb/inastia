@@ -17,8 +17,8 @@ test.beforeEach(async ({ page }) => {
     ? route.continue() : route.fulfill({ contentType: "application/javascript", body: "" }));
 });
 
-for (const locale of ["fr", "en"]) {
-  test(`${locale}: GBP survives a service-page visit and language change through a confirmed form`, async ({ page }) => {
+for (const locale of ["fr", "en"]) for (const source of ["google_business_profile", "google_organic"]) {
+  test(`${locale}: ${source} survives a service-page visit and language change through a confirmed form`, async ({ page }) => {
     await page.addInitScript(() => Object.assign(window, { turnstile: {
       render: (_element: HTMLElement, options: { callback: (token: string) => void }) => {
         Object.assign(window, { __gbpSolve: () => options.callback("synthetic-token") });
@@ -31,12 +31,15 @@ for (const locale of ["fr", "en"]) {
       return route.fulfill({ status: 202, json: { success: true, status: "registered" } });
     });
     const prefix = locale === "en" ? "/en" : "";
-    await page.goto(`${prefix}/?${campaign}&email=private@example.invalid&utm_content=private-name#private`);
+    const query = source === "google_business_profile" ? `${campaign}&utm_content=private-name&` : "";
+    await page.goto(`${prefix}/?${query}email=private@example.invalid#private`,
+      source === "google_organic" ? { referer: "https://www.google.fr/search?q=private@example.invalid" } : {});
     expect(await saved(page)).toBeNull();
     await consent(page);
     const initial = await saved(page);
-    expect(initial).toMatchObject({ consent: true, source: "google_business_profile" });
-    expect((await commands(page)).find(item => item[0] === "set" && typeof item[1] === "object")?.[1]).toMatchObject({ page_location: `${base.origin}${prefix}/?${campaign}` });
+    expect(initial).toMatchObject({ consent: true, source, page: "home", locale });
+    expect((await commands(page)).find(item => item[0] === "set" && typeof item[1] === "object")?.[1]).toMatchObject({
+      page_location: `${base.origin}${prefix}/${source === "google_business_profile" ? `?${campaign}` : ""}` });
     expect(JSON.stringify(await commands(page))).not.toContain("private");
     await page.locator(`.site-footer a[href='${prefix}/gestion-airbnb-corse-du-sud']`).click();
     expect(await saved(page)).toEqual(initial);
@@ -111,5 +114,44 @@ test("unavailable session storage does not prevent navigation to the form", asyn
   await consent(page);
   await page.locator(".header-cta").click();
   await expect(page.locator("#contact-form")).toBeVisible();
+  expect(await saved(page)).toBeNull();
+});
+
+test("organic entry requires Analytics consent, expires, and is cleared on withdrawal", async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/conciergerie-airbnb-porto-vecchio', { referer: 'https://www.google.com/' });
+  expect(await saved(page)).toBeNull();
+  await page.locator(".consent-preferences summary").click();
+  await page.locator("#consent-advertising").check();
+  await page.locator('[data-ads-choice="save"]').click();
+  expect(await saved(page)).toBeNull();
+  await page.locator("#ads-consent-settings").click();
+  await page.locator("#consent-analytics").check();
+  await page.locator('[data-ads-choice="save"]').click();
+  const initial = await saved(page);
+  expect(initial).toMatchObject({ source: 'google_organic', page: 'conciergerie-airbnb-porto-vecchio', locale: 'fr' });
+  await page.locator('.header-cta').click();
+  await page.reload();
+  expect(await saved(page)).toEqual(initial);
+  await page.clock.fastForward(30 * 60 * 1000);
+  expect(await saved(page)).toBeNull();
+  await page.goto('/', { referer: 'https://www.bing.com/' });
+  expect(await saved(page)).toMatchObject({ source: 'bing_organic' });
+  await page.locator("#ads-consent-settings").click();
+  await page.locator('[data-ads-choice="reject"]').click();
+  expect(await saved(page)).toBeNull();
+});
+
+test("paid campaigns and unrelated external referrers cannot inherit an organic origin", async ({ page }) => {
+  await page.goto('/', { referer: 'https://www.google.fr/' });
+  await consent(page);
+  for (const next of ['gclid=synthetic_click_12345', 'msclkid=synthetic', 'utm_source=newsletter&utm_medium=email']) {
+    await page.goto('/', { referer: 'https://www.google.fr/' });
+    expect(await saved(page)).toMatchObject({ source: 'google_organic' });
+    await page.goto(`/?${next}`, { referer: 'https://www.google.fr/' });
+    expect(await saved(page)).toBeNull();
+  }
+  await page.goto('/', { referer: 'https://www.google.fr/' });
+  await page.goto('/contact?intent=gestion', { referer: 'https://example.invalid/' });
   expect(await saved(page)).toBeNull();
 });
