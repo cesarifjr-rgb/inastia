@@ -62,7 +62,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-porto-vecchio",
       kind: "location",
-      title: "Conciergerie Porto-Vecchio : gestion locative | Inastia",
+      title: "Conciergerie Porto-Vecchio : location saisonnière | Inastia",
       description:
         "Propriétaire à Porto-Vecchio ? Gestion complète de votre location saisonnière : annonces, voyageurs, ménage et linge. Première location ou reprise de gestion.",
       eyebrow: "Porto-Vecchio",
@@ -263,7 +263,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-lecci-saint-cyprien",
       kind: "location",
-      title: "Conciergerie Lecci et Saint-Cyprien en Corse | Inastia",
+      title: "Conciergerie Saint-Cyprien et Lecci, Corse | Inastia",
       description:
         "Votre location de courte durée à Lecci ou Saint-Cyprien, en Corse : annonces, réservations, accueil, ménage et linge. Gestion complète avec Inastia.",
       eyebrow: "Lecci · Saint-Cyprien · Corse-du-Sud",
@@ -337,7 +337,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-ghisonaccia",
       kind: "location",
-      title: "Conciergerie à Ghisonaccia et Ventiseri | Inastia",
+      title: "Conciergerie Ghisonaccia : gestion saisonnière | Inastia",
       description:
         "Gestion complète de location à Ghisonaccia, Ventiseri et Prunelli-di-Fiumorbo : annonce, voyageurs et suivi local avec Inastia.",
       eyebrow: "Ghisonaccia · Ventiseri · Prunelli-di-Fiumorbo",
@@ -530,7 +530,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "about",
       kind: "about",
-      title: "Une conciergerie familiale en Corse | Inastia",
+      title: "À propos d’Inastia : conciergerie familiale en Corse",
       description:
         "Découvrez Inastia, une entreprise familiale de conciergerie sur la côte orientale de la Corse. Un lien direct avec les propriétaires, une attention au séjour.",
       eyebrow: "L’esprit Inastia",
@@ -648,7 +648,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-porto-vecchio",
       kind: "location",
-      title: "Holiday rental management in Porto-Vecchio | Inastia",
+      title: "Porto-Vecchio: full holiday rental management | Inastia",
       description:
         "Own a home in Porto-Vecchio? Full holiday rental management: listings, guests, cleaning and linen. Plan your first rental or a management handover.",
       eyebrow: "Porto-Vecchio",
@@ -846,7 +846,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-airbnb-lecci-saint-cyprien",
       kind: "location",
-      title: "Lecci & Saint-Cyprien, Corsica: rental management | Inastia",
+      title: "Saint-Cyprien & Lecci, Corsica: rental management | Inastia",
       description:
         "Your short-term rental in Lecci or Saint-Cyprien, Corsica: listings, bookings, guest arrivals, cleaning and linen. Full management with Inastia.",
       eyebrow: "Lecci · Saint-Cyprien · Southern Corsica",
@@ -920,7 +920,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "conciergerie-ghisonaccia",
       kind: "location",
-      title: "Holiday rental management in Ghisonaccia and Ventiseri | Inastia",
+      title: "Ghisonaccia: holiday rental management | Inastia",
       description:
         "Full rental management in Ghisonaccia, Ventiseri and Prunelli-di-Fiumorbo: listings, guests and local coordination with Inastia.",
       eyebrow: "Ghisonaccia · Ventiseri · Prunelli-di-Fiumorbo",
@@ -1113,7 +1113,7 @@ export const pages: Record<Locale, PageContent[]> = {
     {
       slug: "about",
       kind: "about",
-      title: "A family-run rental concierge in Corsica | Inastia",
+      title: "About Inastia: family-run rental management in Corsica",
       description:
         "Meet Inastia, a family-run concierge on Corsica’s east coast. Direct relationships with owners and thoughtful attention to every stay.",
       eyebrow: "The Inastia approach",
