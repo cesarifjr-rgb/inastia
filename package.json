@@ -20,7 +20,7 @@
     "@electric-sql/pglite": "^0.5.8",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.6.2",
     "eslint": "^10.10.0",
     "lighthouse": "^13.4.1",
     "sharp": "^0.35.4",
